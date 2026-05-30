@@ -44,7 +44,7 @@ Keylogger-Project/
 └── README.md
 ```
 
-![Project Structure Diagram](assets\images\posts\project-structure.png)
+![Project Structure](/assets/images/posts/project-structure.png)
 
 ## Building the Keylogger
 
@@ -304,7 +304,7 @@ if __name__ == "__main__":
         keylogger.stop_monitoring()
 ```
 
-![Code Running Demo](assets\images\posts\keylogger-running.png)
+![Running](/assets/images/posts/keylogger-running.png)
 
 ## Testing Your Keylogger
 
@@ -320,7 +320,7 @@ python keylogger.py
 5. Check the log file in the `logs` folder
 6. Press `Ctrl+C` to stop
 
-![Log File Output](assets\images\posts\log-file-output.png)
+![Logs](/assets/images/posts/log-file-output.png)
 
 The log file records each keystroke along with the exact timestamp, allowing analysis of user input behavior and key events such as special keys (`SHIFT`, `WIN`, `ENTER`, `ESC`).
 
