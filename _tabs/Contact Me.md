@@ -4,6 +4,7 @@ icon: fas fa-envelope
 order: 5
 title: Contact Me
 image: /assets/images/preview.jpg
+hide_stats: true
 ---
 
 <style>

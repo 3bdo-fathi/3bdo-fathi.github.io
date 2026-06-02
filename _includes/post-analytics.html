@@ -1,0 +1,76 @@
+{% comment %}
+  Page views & visits: GoatCounter (global) when configured, else browser-local counts.
+{% endcomment %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const NS = '0x3bdo-blog';
+    const path = location.pathname.replace(/\/$/, '') || '/';
+    const viewsEl = document.getElementById('pageviews');
+    const visitsEl = document.getElementById('pagevisits');
+    const viewsStat = document.getElementById('stat-views');
+    const visitsStat = document.getElementById('stat-visits');
+
+    const fmt = (n) => new Intl.NumberFormat().format(n);
+
+    const setViews = (n, loading) => {
+      if (!viewsEl) return;
+      viewsEl.innerHTML = '<em>' + fmt(n) + '</em>';
+      if (viewsStat) viewsStat.classList.toggle('is-loading', !!loading);
+    };
+
+    const setVisits = (n, loading) => {
+      if (!visitsEl) return;
+      visitsEl.innerHTML = '<em>' + fmt(n) + '</em>';
+      if (visitsStat) visitsStat.classList.toggle('is-loading', !!loading);
+    };
+
+    /* Local fallback: reads (every load) + visits (once per session) */
+    const readsKey = NS + ':reads:' + path;
+    const visitsKey = NS + ':visits:' + path;
+    const sessionKey = NS + ':sess:' + path;
+
+    let localReads = parseInt(localStorage.getItem(readsKey) || '0', 10) + 1;
+    localStorage.setItem(readsKey, String(localReads));
+
+    let localVisits = parseInt(localStorage.getItem(visitsKey) || '0', 10);
+    if (!sessionStorage.getItem(sessionKey)) {
+      sessionStorage.setItem(sessionKey, '1');
+      localVisits += 1;
+      localStorage.setItem(visitsKey, String(localVisits));
+    }
+
+    const useGoat = {% if site.pageviews.provider == 'goatcounter' and site.analytics.goatcounter.id %}true{% else %}false{% endif %};
+
+    if (useGoat) {
+      const gcId = '{{ site.analytics.goatcounter.id }}';
+      const gcUrl =
+        'https://' + gcId + '.goatcounter.com/counter/' + encodeURIComponent(path) + '.json';
+
+      fetch(gcUrl)
+        .then((r) => r.json())
+        .then((data) => {
+          const count = parseInt(String(data.count).replace(/\D/g, ''), 10) || localReads;
+          setViews(count, false);
+          setVisits(localVisits, false);
+        })
+        .catch(() => {
+          setViews(localReads, false);
+          setVisits(localVisits, false);
+        });
+    } else {
+      setViews(localReads, false);
+      setVisits(localVisits, false);
+    }
+
+    /* Mini counters on home/archive cards */
+    document.querySelectorAll('[data-post-path]').forEach((el) => {
+      const p = el.getAttribute('data-post-path');
+      const r = parseInt(localStorage.getItem(NS + ':reads:' + p) || '0', 10);
+      if (r > 0) {
+        const viewsSpan = el.querySelector('.mini-views');
+        if (viewsSpan) viewsSpan.textContent = fmt(r);
+      }
+    });
+  });
+</script>

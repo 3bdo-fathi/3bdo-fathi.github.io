@@ -1,0 +1,10 @@
+{% comment %}
+  Output reading time in minutes. Usage: {% include calc-read-time.html content=post.content %}
+{% endcomment %}
+{% assign words = include.content | strip_html | number_of_words: 'auto' %}
+{% assign wpm = include.wpm | default: 180 %}
+{% assign read_time = words | divided_by: wpm %}
+{% unless read_time > 0 %}
+  {% assign read_time = 1 %}
+{% endunless %}
+{{ read_time }}

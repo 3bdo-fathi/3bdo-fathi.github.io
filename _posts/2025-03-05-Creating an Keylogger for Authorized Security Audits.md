@@ -392,4 +392,4 @@ Have a question, suggestion, or topic you'd like to discuss?
 
 Feel free to get in touch:
 
-https://3bdo-fathi.github.io/contact/
+https://3bdo-fathi.github.io/Contact-Me/

@@ -1,0 +1,182 @@
+<style>
+  .taxonomy-intro {
+    max-width: 720px;
+    margin: 0 auto 1.75rem;
+    padding: 0 0.25rem;
+  }
+
+  .taxonomy-intro .lead-text {
+    color: var(--text-muted-color, #8b949e);
+    font-size: 0.95rem;
+    line-height: 1.65;
+    margin-bottom: 1.25rem;
+  }
+
+  .taxonomy-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-bottom: 1rem;
+  }
+
+  .taxonomy-stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.85rem;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    background: #161b22;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #e6edf3;
+  }
+
+  .taxonomy-stat i {
+    color: #58a6ff;
+    font-size: 0.8rem;
+  }
+
+  .taxonomy-stat span {
+    font-weight: 400;
+    color: #8b949e;
+  }
+
+  .taxonomy-hint {
+    font-size: 0.82rem;
+    color: #8b949e;
+    margin: 0;
+  }
+
+  .taxonomy-hint i {
+    margin-right: 0.35rem;
+    color: #58a6ff;
+  }
+
+  .archive-year-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #30363d;
+  }
+
+  .archive-year-nav a {
+    display: inline-block;
+    padding: 0.25rem 0.65rem;
+    border: 1px solid #30363d;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #58a6ff;
+    text-decoration: none;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .archive-year-nav a:hover {
+    background: rgba(88, 166, 255, 0.12);
+    border-color: #58a6ff;
+  }
+
+  #archives.taxonomy-archives li {
+    padding: 0.35rem 0;
+    border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+  }
+
+  #archives.taxonomy-archives li:last-child {
+    border-bottom: none;
+  }
+
+  #archives.taxonomy-archives .year {
+    scroll-margin-top: 5rem;
+    padding-top: 0.5rem;
+    margin-top: 1.25rem;
+    color: #58a6ff;
+  }
+
+  #archives.taxonomy-archives li a {
+    font-weight: 500;
+    transition: color 0.15s ease;
+  }
+
+  #archives.taxonomy-archives li a:hover {
+    color: #58a6ff;
+  }
+
+  #tags.taxonomy-tags .tag {
+    padding: 0.4rem 0.75rem;
+    margin: 0.25rem;
+    border-radius: 6px;
+    border: 1px solid #30363d;
+    background: #161b22;
+    font-weight: 500;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  #tags.taxonomy-tags .tag:hover {
+    border-color: #58a6ff;
+    background: rgba(88, 166, 255, 0.08);
+  }
+
+  #tags.taxonomy-tags .tag .text-muted {
+    margin-left: 0.25rem;
+    font-size: 0.8em;
+  }
+
+  .taxonomy-categories .card.categories {
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    margin-bottom: 0.85rem;
+    overflow: hidden;
+    background: #0d1117;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .taxonomy-categories .card.categories:hover {
+    border-color: #484f58;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  }
+
+  .taxonomy-categories .card-header {
+    background: #161b22;
+    border-bottom: 1px solid #30363d;
+  }
+
+  .taxonomy-categories .card-header a {
+    font-weight: 600;
+  }
+
+  .taxonomy-categories .list-group-item {
+    background: #0d1117;
+    border-color: #21262d;
+  }
+
+  [data-mode="light"] .taxonomy-stat {
+    background: #f6f8fa;
+    border-color: #d0d7de;
+    color: #24292f;
+  }
+
+  [data-mode="light"] .taxonomy-stat span {
+    color: #656d76;
+  }
+
+  [data-mode="light"] .taxonomy-intro .lead-text {
+    color: #656d76;
+  }
+
+  [data-mode="light"] #tags.taxonomy-tags .tag {
+    background: #f6f8fa;
+    border-color: #d0d7de;
+  }
+
+  [data-mode="light"] .taxonomy-categories .card.categories {
+    background: #ffffff;
+    border-color: #d0d7de;
+  }
+
+  [data-mode="light"] .taxonomy-categories .card-header {
+    background: #f6f8fa;
+  }
+</style>

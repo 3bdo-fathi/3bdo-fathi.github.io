@@ -63,7 +63,7 @@ analytics:
   google:
     id: # fill in your Google Analytics ID
   goatcounter:
-    id: # fill in your GoatCounter ID
+    id: abdulrahmanmohamed
   umami:
     id: # fill in your Umami ID
     domain: # fill in your Umami domain
@@ -75,9 +75,9 @@ analytics:
   fathom:
     id: # fill in your Fathom Site ID
 
-# Page views settings
+# Page views — display counts from GoatCounter on posts/pages
 pageviews:
-  provider: # now only supports 'goatcounter'
+  provider: goatcounter
 
 # Prefer color scheme setting.
 #
