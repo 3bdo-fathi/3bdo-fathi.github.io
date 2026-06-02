@@ -16,7 +16,7 @@ timezone: Africa/Cairo
 
 title: 0x3bdo # the main title
 
-tagline: Cyber Security Engineer  # it will display as the subtitle
+tagline: Cyber Security Engineer | Penetration Tester # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
   Personal cybersecurity blog covering penetration testing, security research,

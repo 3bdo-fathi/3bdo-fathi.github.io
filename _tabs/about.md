@@ -1,71 +1,71 @@
 ---
 # the default layout is 'page'
-icon: fas fa-info-circle
+icon: fas fa-user
 order: 4
+title: Who Am I?
+image: /assets/images/preview.jpg
 ---
-
- Who Am I?
 
 ![preview](/assets/images/preview.jpg)  
 
-Hello, I'm Abdulrahman Fathi.
+### Hello, I'm Abdulrahman M. Fathi
 
-I'm a Cyber Security Engineer, Penetration Tester, and Cyber Security Instructor based in Cairo, Egypt.
+**Cyber Security Engineer | Penetration Tester | Security Instructor**  
+Based in Cairo, Egypt.
 
-My journey in cybersecurity started with a simple curiosity about how systems work, how they can be broken, and more importantly, how they can be secured. What began as a personal interest quickly evolved into a career focused on offensive security, vulnerability research, security education, and continuous learning.
+---
 
-Today, I work as a Penetration Tester within the FinTech sector, where I assess the security of web applications, mobile applications, APIs, networks, and Active Directory environments. My work involves identifying vulnerabilities, validating security weaknesses, performing secure code reviews, and helping organizations improve their overall security posture through practical and actionable recommendations.
+My journey in cybersecurity started with a simple question: *“How do systems actually work, and how can they be broken or protected?”*  
 
-Over the years, I have developed hands-on experience across multiple areas of cybersecurity, including:
+What began as curiosity quickly grew into a deep passion and eventually a full-time career in offensive security. Today, I help organizations strengthen their defenses by thinking like an attacker.
 
-* Web Application Security
-* API Security Testing
-* Mobile Application Security
-* Network Penetration Testing
-* Active Directory Security Assessments
-* Secure Code Review
-* Vulnerability Research
-* Linux & Windows Privilege Escalation
-* Security Automation with Python
+### Current Role
 
-I have worked extensively with common and advanced security vulnerabilities, including XSS, CSRF, SSRF, IDOR, SSTI, RCE, LFI/RFI, CORS Misconfigurations, Authentication and Authorization flaws, and Business Logic Vulnerabilities.
+I work as a **Penetration Tester** in the FinTech sector, where I perform in-depth security assessments on:
 
-Mobile application security is another area that greatly interests me. I enjoy analyzing Android applications, studying application behavior, bypassing security controls such as SSL Pinning and Root Detection, and performing dynamic analysis using tools such as Frida, Objection, and Medusa.
+- Web Applications
+- Mobile Applications (Android & iOS)
+- APIs & Backend Systems
+- Networks & Infrastructure
+- Active Directory Environments
 
-Beyond offensive security, I am passionate about cybersecurity education and community contribution. As an instructor and mentor, I enjoy helping others understand complex security concepts and develop practical skills through hands-on labs, technical discussions, and real-world scenarios.
+My goal is not just to find vulnerabilities, but to deliver clear, practical, and actionable recommendations that genuinely improve security posture.
 
-Throughout my journey, I have participated in training programs, hackathons, Capture The Flag (CTF) competitions, mentoring initiatives, and various cybersecurity projects that have helped shape my technical skills and problem-solving mindset. I strongly believe that cybersecurity is a field where learning never stops, and I continuously dedicate time to researching new attack techniques, studying emerging technologies, and expanding my knowledge.
+### Core Expertise
 
-## Why This Blog Exists
+- Web Application Security (OWASP Top 10)
+- API Security Testing
+- Mobile Application Security (Android)
+- Network Penetration Testing
+- Active Directory Attacks & Defense
+- Secure Code Review
+- Vulnerability Research & Exploit Development
+- Linux & Windows Privilege Escalation
+- Security Automation & Tooling (Python)
+- Red Teaming
 
-This blog is my personal space on the internet.
+I have extensive hands-on experience with modern vulnerabilities including **XSS, SSRF, IDOR, SSTI, RCE, Business Logic Flaws**, Authentication/Authorization issues, and more.
 
-I created it to document my journey, organize my knowledge, share my experiences, and contribute back to the cybersecurity community that has helped me grow over the years.
+On the mobile side, I specialize in Android app security — reverse engineering, bypassing protections (SSL Pinning, Root Detection, etc.), and dynamic analysis using **Frida, Objection, and Medusa**.
 
-Everything I learn, research, build, teach, or discover will eventually find its way here.
+### Beyond Technical Work
 
-Through this blog, I will share:
+I’m deeply passionate about **cybersecurity education** and community growth. I enjoy mentoring aspiring security professionals, creating hands-on labs, and breaking down complex topics into practical, easy-to-understand content.
 
-* Penetration Testing Write-ups
-* Web Application Security Research
-* Mobile Security Assessments
-* API Security Notes
-* Active Directory Research
-* Network Security Topics
-* CTF Walkthroughs
-* Security Tools & Automation Projects
-* Bug Hunting Methodologies
-* Technical Learning Resources
-* Study Notes & Training Materials
-* Security Experiments & Proof of Concepts
-* Personal Experiences and Lessons Learned
-* Career Development Insights
-* Thoughts on Cybersecurity Trends and Technologies
+Whether through training, CTFs, write-ups, or one-on-one mentoring — seeing others level up is one of the most rewarding parts of what I do.
 
-Rather than treating this blog as a portfolio, I see it as a living knowledge base that grows alongside my career. My goal is to create valuable content that helps students, security enthusiasts, and professionals learn something useful, avoid common mistakes, and continue improving their skills.
+### Why This Blog Exists
 
-Whether you're just starting your cybersecurity journey or already working in the field, I hope you'll find something here that is useful, practical, or inspiring.
+This blog is my personal space on the internet — a living knowledge base where I document my journey, share what I learn, and give back to the community that helped me grow.
 
-Thank you for visiting.
+Here you will find real-world penetration testing write-ups, mobile and web security research, CTF solutions, security tools, automation scripts, career insights, and lessons learned from the field.
 
-This is where I document the journey.
+This is not just a portfolio. It’s a **growing archive** of knowledge, experiments, and experiences in cybersecurity.
+
+---
+
+**Thank you for visiting.**  
+Whether you're just starting your journey or already deep in the field, I hope you find something valuable here.
+
+*Abdulrahman M. Fathi*
+
