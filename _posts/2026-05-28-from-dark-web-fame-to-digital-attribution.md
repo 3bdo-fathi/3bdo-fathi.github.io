@@ -40,14 +40,14 @@ The actor frequently collaborated with other threat actors, including CrowSteale
 
 ### Notable Activities Attributed to Quellostanco:
 
-| Date | Target | Activity |
-|------|--------|----------|
-| 9 February | EgyptAir | Advertised database of ~104,000 records from HR and recruitment systems |
-| 23 February | Egyptalum | Defaced website and claimed full control over systems |
-| 25 February | General Authority for Roads and Bridges | Breached Contract Extract System |
-| 10 May | Mansoura University | ~989,000 student records (2012-2026), photographs, internal documents |
-| 14 May | mutreasury Payment Gateway | Claimed breach affecting 28+ universities with zero-day vulnerability |
-| 17 May | pat.edu.eg | Compromised and defaced platform |
+| Date        | Target                                  | Activity                                                                |
+| ----------- | --------------------------------------- | ----------------------------------------------------------------------- |
+| 9 February  | EgyptAir                                | Advertised database of ~104,000 records from HR and recruitment systems |
+| 23 February | Egyptalum                               | Defaced website and claimed full control over systems                   |
+| 25 February | General Authority for Roads and Bridges | Breached Contract Extract System                                        |
+| 10 May      | Mansoura University                     | ~989,000 student records (2012-2026), photographs, internal documents   |
+| 14 May      | mutreasury Payment Gateway              | Claimed breach affecting 28+ universities with zero-day vulnerability   |
+| 17 May      | pat.edu.eg                              | Compromised and defaced platform                                        |
 
 ## The OSINT Methodology: How Attribution Really Works
 
@@ -183,9 +183,13 @@ Until the next article, stay curious and keep learning.
 
 — Abdulrahman Mohamed
 
-## Connect With Me
+## Let's Connect
 
-* [LinkedIn Profile](https://www.linkedin.com/in/3bdo-fathi)
+Have a question, suggestion, or topic you'd like to discuss?
+
+* [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) · [Contact Page](/contact-me/)
+
+*Abdulrahman M. Fathi*
 
 
 
@@ -194,6 +198,3 @@ Until the next article, stay curious and keep learning.
 ## Resources and Further Reading
 
 * [Unmasking Quellostanco - DeXpose (Official Article)](https://www.dexpose.io/unmasking-quellostanco-how-a-git-commit-exposed-a-threat-actor-targeting-egyptian-infrastructure/)
-
-
-

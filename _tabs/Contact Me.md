@@ -3,6 +3,7 @@ layout: page
 icon: fas fa-envelope
 order: 5
 title: Contact Me
+permalink: /contact-me/
 image: /assets/images/preview.jpg
 hide_stats: true
 ---

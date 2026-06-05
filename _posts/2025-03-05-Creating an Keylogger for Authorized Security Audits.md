@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Creating an Keylogger for Authorized Security Audits."
 date: 2025-03-05 12:02:00 +0300
 categories: [Scripts, Python]
@@ -390,6 +390,6 @@ Until the next article, stay curious and keep learning.
 
 Have a question, suggestion, or topic you'd like to discuss?
 
-Feel free to get in touch:
+* [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) · [Contact Page](/contact-me/)
 
-https://3bdo-fathi.github.io/Contact-Me/
+*Abdulrahman M. Fathi*
