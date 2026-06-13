@@ -3,6 +3,7 @@ title: "Building a Python-Based System Information Gathering Tool"
 date: 2025-05-30 16:03:00 +0300
 categories: [Cyber Security, Network Security]
 tags: [python, reconnaissance, pentesting, nmap]
+description: "Build a Python reconnaissance tool that automates system information gathering, network scanning, port enumeration, and OS detection using nmap and standard libraries."
 image:
   path: /assets/images/python-script.jpg
   alt: Python Script Recon

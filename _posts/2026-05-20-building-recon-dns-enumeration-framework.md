@@ -1,8 +1,9 @@
-﻿---
+---
 title: "Building an Advanced Reconnaissance & DNS Enumeration Framework"
 date: 2026-05-20 12:06:00 +0300
 categories: [Scripts, Bash]
-tags: [automation, reconnaissance, dns, subdomain-enumeration, httpx, amass, nuclei, pentesting]
+tags: [reconnaissance, dns, pentesting, automation]
+description: "A Bash-based reconnaissance framework automating DNS enumeration, subdomain discovery, HTTP probing, WAF detection, and vulnerability scanning for penetration testers."
 image:
   path: /assets/images/Reconnaissance Framework.jpg
   alt: Reconnaissance Framework

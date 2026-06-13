@@ -8,15 +8,9 @@ categories:
 tags:
   - cloudflare
   - networking
-  - linux-kernel
-  - ebpf
-  - xdp
-  - bgp
-  - anycast
-  - pingora
-  - tls
   - ddos
-  - proxy-architecture
+  - infrastructure
+description: "A deep technical breakdown of Cloudflare's infrastructure: BGP Anycast routing, XDP/eBPF packet processing, Pingora proxy framework, Keyless SSL, and origin hardening strategies."
 image:
   path: /assets/images/posts/cloudflare.png
   alt: Cloudflare Architecture Overview
