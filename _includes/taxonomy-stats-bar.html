@@ -1,0 +1,50 @@
+{% assign visible_tag_count = 0 %}
+{% for t in site.tags %}
+  {% unless t[0] == 'placeholder' %}
+    {% assign visible_tag_count = visible_tag_count | plus: 1 %}
+  {% endunless %}
+{% endfor %}
+
+{% assign primary_cat_count = 0 %}
+{% assign sort_categories = site.categories | sort %}
+{% for category in sort_categories %}
+  {% assign category_name = category | first %}
+  {% assign posts_of_category = category | last %}
+  {% assign first_post = posts_of_category | first %}
+  {% if category_name == first_post.categories[0] %}
+    {% assign primary_cat_count = primary_cat_count | plus: 1 %}
+  {% endif %}
+{% endfor %}
+
+{% assign total_words = 0 %}
+{% for post in site.posts %}
+  {% assign w = post.content | strip_html | number_of_words: 'auto' %}
+  {% assign total_words = total_words | plus: w %}
+{% endfor %}
+{% assign total_read_mins = total_words | divided_by: 180 %}
+{% unless total_read_mins > 0 %}
+  {% assign total_read_mins = 1 %}
+{% endunless %}
+
+<div class="taxonomy-stats">
+  <div class="taxonomy-stat">
+    <i class="fas fa-file-alt"></i>
+    {{ site.posts.size }}
+    <span>posts</span>
+  </div>
+  <div class="taxonomy-stat">
+    <i class="fas fa-folder"></i>
+    {{ primary_cat_count }}
+    <span>topics</span>
+  </div>
+  <div class="taxonomy-stat">
+    <i class="fas fa-tags"></i>
+    {{ visible_tag_count }}
+    <span>tags</span>
+  </div>
+  <div class="taxonomy-stat">
+    <i class="fas fa-book-open"></i>
+    {{ total_read_mins }}
+    <span>min total read</span>
+  </div>
+</div>

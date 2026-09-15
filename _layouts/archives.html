@@ -1,0 +1,64 @@
+---
+layout: page
+# The Archives of posts.
+---
+
+{% include lang.html %}
+
+{% assign df_strftime_m = site.data.locales[lang].df.archives.strftime | default: '/ %m' %}
+{% assign df_dayjs_m = site.data.locales[lang].df.archives.dayjs | default: '/ MM' %}
+
+{% assign archive_years = '' | split: '' %}
+{% for post in site.posts %}
+  {% assign y = post.date | date: '%Y' %}
+  {% unless archive_years contains y %}
+    {% assign archive_years = archive_years | push: y %}
+  {% endunless %}
+{% endfor %}
+
+{% if content != '' %}
+<div class="taxonomy-intro">{{ content }}</div>
+{% endif %}
+
+{% if archive_years.size > 1 %}
+<nav class="archive-year-nav pl-xl-3" aria-label="Jump to year">
+  {% for y in archive_years %}
+    <a href="#year-{{ y }}">{{ y }}</a>
+  {% endfor %}
+</nav>
+{% endif %}
+
+<div id="archives" class="taxonomy-archives pl-xl-3">
+  {% for post in site.posts %}
+    {% assign cur_year = post.date | date: '%Y' %}
+
+    {% if cur_year != last_year %}
+      {% unless forloop.first %}</ul>{% endunless %}
+
+      <time class="year lead d-block" id="year-{{ cur_year }}">{{ cur_year }}</time>
+      {{ '<ul class="list-unstyled">' }}
+
+      {% assign last_year = cur_year %}
+    {% endif %}
+
+    <li>
+      {% assign ts = post.date | date: '%s' %}
+      <span class="date day" data-ts="{{ ts }}" data-df="DD">{{ post.date | date: '%d' }}</span>
+      <span class="date month small text-muted ms-1" data-ts="{{ ts }}" data-df="{{ df_dayjs_m }}">
+        {{ post.date | date: df_strftime_m }}
+      </span>
+      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      <span class="archive-read-time" data-post-path="{{ post.url }}">
+        <i class="fas fa-clock" aria-hidden="true"></i>{% include calc-read-time.html content=post.content %} min
+        <span class="post-meta-mini" style="margin-left:0.35rem">
+          <i class="fas fa-eye" aria-hidden="true"></i><span class="mini-views">—</span>
+        </span>
+      </span>
+    </li>
+
+    {% if forloop.last %}</ul>{% endif %}
+  {% endfor %}
+</div>
+
+{% include post-stats-styles.html %}
+{% include post-analytics.html %}
