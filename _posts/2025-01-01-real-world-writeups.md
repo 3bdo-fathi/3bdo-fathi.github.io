@@ -39,7 +39,7 @@ This article outlines the methodology, phase progression, vulnerability chaining
 
 ## References & Industry Standards
 
-1. [Penetration Testing Execution Standard (PTES)](http://www.pentest-standard.org/)
+1. [Penetration Testing Execution Standard (PTES)](https://www.pentest-standard.org/)
 2. [OWASP Web Security Testing Guide (WSTG)](https://owasp.org/www-project-web-security-testing-guide/)
 3. [NIST SP 800-115 — Technical Guide to Information Security Testing and Assessment](https://csrc.nist.gov/publications/detail/sp/800-115/final)
 4. [FIRST — Common Vulnerability Scoring System (CVSS) Specification](https://www.first.org/cvss/)
