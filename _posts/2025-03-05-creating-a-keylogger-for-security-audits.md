@@ -1,5 +1,5 @@
 ---
-title: "Creating an Keylogger for Authorized Security Audits."
+title: "Creating a Keylogger for Authorized Security Audits"
 date: 2025-03-05 12:02:00 +0300
 categories: [Scripts, Python]
 tags: [keylogger, security-audit, python, ethical-hacking]
@@ -382,15 +382,20 @@ Until the next article, stay curious and keep learning.
 
 ---
 
-## Resources
+## References & Further Reading
 
-* [pynput Documentation](https://pynput.readthedocs.io/)
-* [Python Logging Guide](https://docs.python.org/3/howto/logging.html)
+1. [Python `pynput` Library Documentation](https://pynput.readthedocs.io/)
+2. [Python Standard Library — `logging.handlers.RotatingFileHandler`](https://docs.python.org/3/library/logging.handlers.html#rotatingfilehandler)
+3. [MITRE ATT&CK Framework — T1056.001: Input Capture: Keylogging](https://attack.mitre.org/techniques/T1056/001/)
+4. [NIST SP 800-92 — Guide to Computer Security Log Management](https://csrc.nist.gov/publications/detail/sp/800-92/final)
+5. [CISA — Endpoint Detection and Response (EDR) Guidance](https://www.cisa.gov/resources-tools/services/endpoint-detection-and-response)
+
+---
 
 ## Let's Connect
 
-Have a question, suggestion, or topic you'd like to discuss?
+Have a question, suggestion, or topic you'd like to discuss? Feel free to reach out or connect:
 
-* [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) · [Contact Page](/contact-me/)
+* [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) · [GitHub](https://github.com/3bdo-fathi) · [Contact Page](/contact-me/)
 
-*Abdulrahman M. Fathi*
+*— Abdulrahman M. Fathi*

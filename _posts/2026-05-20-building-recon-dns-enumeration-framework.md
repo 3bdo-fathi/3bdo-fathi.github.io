@@ -426,11 +426,20 @@ Until the next article, stay curious and keep learning.
 
 ---
 
+## References & Further Reading
+
+1. [RFC 1035 — Domain Names: Implementation and Specification](https://datatracker.ietf.org/doc/html/rfc1035)
+2. [OWASP Web Security Testing Guide (WSTG) — Subdomain Enumeration (WSTG-INFO-006)](https://owasp.org/www-project-web-security-testing-guide/v42/4-Web_Application_Security_Testing/01-Information_Gathering/06-Identify_Subdomains)
+3. [ProjectDiscovery Toolchain (httpx, subfinder, nuclei, naabu)](https://projectdiscovery.io/)
+4. [OWASP Amass — In-Depth Subdomain & Attack Surface Mapping Project](https://github.com/owasp-amass/amass)
+5. [dnsrecon — Python DNS Enumeration Script](https://github.com/darkoperator/dnsrecon)
+
+---
+
 ## Let's Connect
 
-Have a question, suggestion, or topic you'd like to discuss?
+Have a question, suggestion, or topic you'd like to discuss? Feel free to reach out or connect:
 
-* [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) · [Contact Page](/contact-me/)
+* [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) · [GitHub](https://github.com/3bdo-fathi) · [Contact Page](/contact-me/)
 
-*Abdulrahman M. Fathi*
-
+*— Abdulrahman M. Fathi*

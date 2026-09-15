@@ -163,21 +163,22 @@ Until the next article, stay curious and keep learning.
 
 — Abdulrahman Mohamed
 
-ء
+---
+
 ## References & Further Reading
 
-1. [Cloudflare Blog: How we built Pingora](https://blog.cloudflare.com/pingora-open-source)
-2. [Cloudflare Blog: Keyless SSL](https://blog.cloudflare.com/keyless-ssl-the-nitty-gritty-technical-details)
-3. [Cloudflare Blog: eBPF and XDP](https://blog.cloudflare.com/ebpf-and-xdp)
-4. [Cloudflare Docs: Authenticated Origin Pulls](https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull)
-5. [Cloudflare IP Ranges](https://www.cloudflare.com/ips/)
+1. [Cloudflare Blog — How We Built Pingora, the Rust-based HTTP Proxy](https://blog.cloudflare.com/pingora-open-source)
+2. [Cloudflare Engineering — Keyless SSL: The Technical Details](https://blog.cloudflare.com/keyless-ssl-the-nitty-gritty-technical-details)
+3. [Cloudflare Engineering — Fast Packet Processing with eBPF and XDP](https://blog.cloudflare.com/ebpf-and-xdp)
+4. [Cloudflare Docs — Authenticated Origin Pulls (mTLS Configuration)](https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull)
+5. [Cloudflare IP Ranges — Official IPv4 & IPv6 Subnet Lists](https://www.cloudflare.com/ips/)
 
 ---
 
 ## Let's Connect
 
-Have a question, suggestion, or topic you'd like to discuss?
+Have a question, suggestion, or topic you'd like to discuss? Feel free to reach out or connect:
 
-* [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) · [Contact Page](/contact-me/)
+* [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) · [GitHub](https://github.com/3bdo-fathi) · [Contact Page](/contact-me/)
 
-*Abdulrahman M. Fathi*
+*— Abdulrahman M. Fathi*

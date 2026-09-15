@@ -511,6 +511,10 @@ Until the next article, stay curious and keep learning.
 
 ---
 
-## Connect With Me
+## Let's Connect
 
-* [LinkedIn Profile](https://www.linkedin.com/in/3bdo-fathi)
+Have a question, suggestion, or topic you'd like to discuss? Feel free to reach out or connect:
+
+* [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) · [GitHub](https://github.com/3bdo-fathi) · [Contact Page](/contact-me/)
+
+*— Abdulrahman M. Fathi*

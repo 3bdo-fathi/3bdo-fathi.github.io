@@ -3,6 +3,7 @@ title: "Building a Python-Based System Information Gathering Tool"
 date: 2025-05-30 16:03:00 +0300
 categories: [Cyber Security, Network Security]
 tags: [python, reconnaissance, pentesting, nmap]
+description: "A comprehensive guide to automating network reconnaissance, port scanning, system enumeration, and service discovery using Python and Nmap."
 image:
   path: /assets/images/python-script.jpg
   alt: Python Script Recon
@@ -255,7 +256,20 @@ Until the next article, stay curious and keep learning.
 
 ---
 
-## Connect With Me
+## References & Further Reading
 
-* [LinkedIn Profile](https://www.linkedin.com/in/3bdo-fathi)
+1. [Nmap Reference Guide — Official Network Mapper Documentation](https://nmap.org/book/man.html)
+2. [Python Standard Library — `socket` & `subprocess` Modules](https://docs.python.org/3/library/socket.html)
+3. [OWASP Web Security Testing Guide (WSTG) — Information Gathering (WSTG-INFO)](https://owasp.org/www-project-web-security-testing-guide/v41/4-Web_Application_Security_Testing/01-Information_Gathering/)
+4. [RFC 791 — Internet Protocol (IP) Specification](https://datatracker.ietf.org/doc/html/rfc791)
+5. [RFC 793 — Transmission Control Protocol (TCP) Specification](https://datatracker.ietf.org/doc/html/rfc793)
 
+---
+
+## Let's Connect
+
+Have a question, suggestion, or topic you'd like to discuss? Feel free to reach out or connect:
+
+* [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) · [GitHub](https://github.com/3bdo-fathi) · [Contact Page](/contact-me/)
+
+*— Abdulrahman M. Fathi*

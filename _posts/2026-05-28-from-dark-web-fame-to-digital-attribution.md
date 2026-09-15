@@ -1,8 +1,9 @@
-﻿---
+---
 title: "From Dark Web Fame to Digital Attribution: The Story of How OPSEC Failures Can Destroy Years of Anonymity"
 date: 2026-05-28 12:14:00 +0300
 categories: [Research, Security News]
 tags: [INT3X, OPSEC, Threat Intelligence, OSINT, Quellostanco, Cyber Attribution, BlueKeep, Egyptian Cyber Threat]
+description: "A real-world case study on threat actor attribution, OSINT methodologies, and how operational security (OPSEC) failures exposed the INT3X cybercrime group."
 image:
   path: /assets/images/posts/int3x-opsec-cover.jpg  
   alt: int3x-opsec-cover
@@ -183,17 +184,22 @@ Until the next article, stay curious and keep learning.
 
 — Abdulrahman Mohamed
 
-## Connect With Me
+---
 
-* [LinkedIn Profile](https://www.linkedin.com/in/3bdo-fathi)
+## References & Further Reading
 
-
+1. [DeXpose Research — Unmasking Quellostanco: How a Git Commit Exposed a Threat Actor](https://www.dexpose.io/unmasking-quellostanco-how-a-git-commit-exposed-a-threat-actor-targeting-egyptian-infrastructure/)
+2. [MITRE ATT&CK — T1589: Gather Victim Identity Information](https://attack.mitre.org/techniques/T1589/)
+3. [Bellingcat — Online Open Source Investigation Methods & OPSEC](https://www.bellingcat.com/resources/)
+4. [SANS Institute — Operational Security (OPSEC) for Security Researchers](https://www.sans.org/white-papers/)
+5. [CISA — Cyber Threat Intelligence & Attribution Guidelines](https://www.cisa.gov/cybersecurity-best-practices)
 
 ---
 
-## Resources and Further Reading
+## Let's Connect
 
-* [Unmasking Quellostanco - DeXpose (Official Article)](https://www.dexpose.io/unmasking-quellostanco-how-a-git-commit-exposed-a-threat-actor-targeting-egyptian-infrastructure/)
+Have a question, suggestion, or topic you'd like to discuss? Feel free to reach out or connect:
 
+* [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) · [GitHub](https://github.com/3bdo-fathi) · [Contact Page](/contact-me/)
 
-
+*— Abdulrahman M. Fathi*
