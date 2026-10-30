@@ -1,71 +1,78 @@
 ---
-# the default layout is 'page'
 icon: fas fa-user
 order: 4
-title: Who Am I?
-image: /assets/images/preview.jpg
+title: About Me
+image: /assets/images/avatar.jpg
 ---
 
-![preview](/assets/images/preview.jpg)  
-
-### Hello, I'm Abdulrahman M. Fathi
-
-**Cyber Security Engineer | Penetration Tester | Security Instructor**  
-Based in Cairo, Egypt.
-
----
-
-My journey in cybersecurity started with a simple question: *“How do systems actually work, and how can they be broken or protected?”*  
-
-What began as curiosity quickly grew into a deep passion and eventually a full-time career in offensive security. Today, I help organizations strengthen their defenses by thinking like an attacker.
-
-### Current Role
-
-I work as a **Penetration Tester** in the FinTech sector, where I perform in-depth security assessments on:
-
-- Web Applications
-- Mobile Applications (Android & iOS)
-- APIs & Backend Systems
-- Networks & Infrastructure
-- Active Directory Environments
-
-My goal is not just to find vulnerabilities, but to deliver clear, practical, and actionable recommendations that genuinely improve security posture.
-
-### Core Expertise
-
-- Web Application Security (OWASP Top 10)
-- API Security Testing
-- Mobile Application Security (Android)
-- Network Penetration Testing
-- Active Directory Attacks & Defense
-- Secure Code Review
-- Vulnerability Research & Exploit Development
-- Linux & Windows Privilege Escalation
-- Security Automation & Tooling (Python)
-- Red Teaming
-
-I have extensive hands-on experience with modern vulnerabilities including **XSS, SSRF, IDOR, SSTI, RCE, Business Logic Flaws**, Authentication/Authorization issues, and more.
-
-On the mobile side, I specialize in Android app security — reverse engineering, bypassing protections (SSL Pinning, Root Detection, etc.), and dynamic analysis using **Frida, Objection, and Medusa**.
-
-### Beyond Technical Work
-
-I’m deeply passionate about **cybersecurity education** and community growth. I enjoy mentoring aspiring security professionals, creating hands-on labs, and breaking down complex topics into practical, easy-to-understand content.
-
-Whether through training, CTFs, write-ups, or one-on-one mentoring — seeing others level up is one of the most rewarding parts of what I do.
-
-### Why This Blog Exists
-
-This blog is my personal space on the internet — a living knowledge base where I document my journey, share what I learn, and give back to the community that helped me grow.
-
-Here you will find real-world penetration testing write-ups, mobile and web security research, CTF solutions, security tools, automation scripts, career insights, and lessons learned from the field.
-
-This is not just a portfolio. It’s a **growing archive** of knowledge, experiments, and experiences in cybersecurity.
+<div class="row align-items-center mb-4">
+  <div class="col-md-4 text-center">
+    <img src="/assets/images/avatar.jpg" alt="Abdulrahman M. Fathi" class="rounded-circle img-fluid shadow" style="max-width: 220px; border: 3px solid var(--sidebar-active-color);">
+  </div>
+  <div class="col-md-8">
+    <h2 class="mt-3 mt-md-0">Abdulrahman M. Fathi</h2>
+    <p class="text-muted mb-2"><strong>Cyber Security Engineer | Penetration Tester | Security Researcher</strong></p>
+    <p>Cairo, Egypt</p>
+    <p class="mb-0">
+      <a href="https://www.linkedin.com/in/3bdo-fathi" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm me-2"><i class="fab fa-linkedin"></i> LinkedIn</a>
+      <a href="https://github.com/3bdo-fathi" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark btn-sm me-2"><i class="fab fa-github"></i> GitHub</a>
+      <a href="/contact-me/" class="btn btn-outline-secondary btn-sm"><i class="fas fa-envelope"></i> Contact</a>
+    </p>
+  </div>
+</div>
 
 ---
 
-**Thank you for visiting.**  
-Whether you're just starting your journey or already deep in the field, I hope you find something valuable here.
+### Professional Overview
 
-*Abdulrahman M. Fathi*
+Offensive security professional specializing in **Web & Mobile Application Penetration Testing**, **Active Directory Exploitation**, and **Security Research**. With extensive experience assessing high-risk environments in FinTech and enterprise sectors, I focus on identifying critical business logic vulnerabilities, authorization bypasses, and complex attack chains before malicious actors can exploit them.
 
+Beyond offensive assessments, I am deeply dedicated to security education—sharing real-world research, authoring technical breakdowns, and mentoring aspiring security practitioners.
+
+---
+
+### Core Areas of Expertise
+
+#### 1. Web & API Penetration Testing
+* In-depth assessment of OWASP Top 10 vulnerabilities (IDOR, SSRF, SSTI, RCE, Business Logic Flaws).
+* RESTful, GraphQL, and SOAP API security testing, authentication/authorization validation, and rate-limiting bypasses.
+* Token security analysis (JWT vulnerabilities, OAuth2 implementation flaws, session hijacking).
+
+#### 2. Mobile Security (Android & iOS)
+* Static & dynamic analysis of Android applications (APK reverse engineering with Jadx/Ghidra).
+* Runtime hooking and security controls bypass (SSL Pinning, Root Detection, Integrity Checks) using **Frida**, **Objection**, and **Medusa**.
+* Insecure data storage, IPC mechanisms, and deep link security verification.
+
+#### 3. Network & Active Directory Security
+* Internal and external network penetration testing and infrastructure auditing.
+* Active Directory enumeration and exploitation (Kerberoasting, AS-REP Roasting, Pass-the-Hash/Ticket, BloodHound attack path analysis).
+* AD CS (Active Directory Certificate Services) misconfiguration identification and privilege escalation.
+
+#### 4. Security Automation & Tooling
+* Developing custom exploitation scripts, reconnaissance frameworks, and security automation using **Python** and **Bash**.
+* Automated OSINT correlation and attack surface discovery.
+
+---
+
+### Professional Experience & Philosophy
+
+My methodology goes beyond automated scanning tools. True adversary simulation requires thinking critically like an attacker—correlating seemingly minor low-severity findings into impactful end-to-end compromise scenarios.
+
+Every assessment concludes not just with a vulnerability report, but with clear, actionable remediation roadmaps that engineering and development teams can seamlessly integrate into their SDLC.
+
+---
+
+### Community & Continuous Learning
+
+* **Technical Research**: Authoring detailed book summaries, vulnerability write-ups, and CTF analyses on this blog.
+* **Mentorship**: Helping developers and entry-level security enthusiasts grasp complex offensive security concepts.
+
+---
+
+### Let's Connect
+
+Whether you want to discuss a penetration test, collaborate on security research, or talk tech:
+
+* **LinkedIn**: [linkedin.com/in/3bdo-fathi](https://www.linkedin.com/in/3bdo-fathi)
+* **GitHub**: [github.com/3bdo-fathi](https://github.com/3bdo-fathi)
+* **Email / Direct Message**: [Contact Page](/contact-me/)

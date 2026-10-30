@@ -295,7 +295,7 @@ In the next installment of this series, we will examine [Chapter 2: Information 
 4. Ekman, Paul. *Emotions Revealed: Recognizing Faces and Feelings to Improve Communication and Emotional Life*. Times Books, 2003.
 5. [Social-Engineer.org Official Framework & Knowledge Repository](https://www.social-engineer.org/)
 6. [NIST SP 800-53 Rev. 5: Security and Privacy Controls (AT: Awareness and Training)](https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final)
-
+   
 ---
 
 ## Let's Connect
