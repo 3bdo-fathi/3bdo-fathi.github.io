@@ -208,6 +208,7 @@ compress_html:
     envs: [development]
 
 exclude:
+  - "3bdo-fathi.github.io"
   - "*.gem"
   - "*.gemspec"
   - docs
