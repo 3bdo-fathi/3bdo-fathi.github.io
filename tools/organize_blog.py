@@ -105,3 +105,4 @@ if os.path.exists(old_contact):
     print(f"Renamed {old_contact} -> {new_contact}")
 
 print("\nBlog organization script executed successfully!")
+

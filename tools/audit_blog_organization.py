@@ -22,3 +22,4 @@ for p in posts:
     cats = cats_match.group(1) if cats_match else "None"
     
     print(f"{date:<12} | {fname:<45} | {cats:<35} | {title[:40]}")
+

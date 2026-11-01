@@ -44,3 +44,4 @@ print(f"\nMissing images: {len(missing_images)}")
 if missing_images:
     for p, img in missing_images:
         print(f"  {p} -> {img}")
+

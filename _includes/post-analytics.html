@@ -40,6 +40,10 @@
       localStorage.setItem(visitsKey, String(localVisits));
     }
 
+    // Set immediate initial count to eliminate spinner delay
+    setViews(localReads, false);
+    setVisits(localVisits, false);
+
     const useGoat = {% if site.pageviews.provider == 'goatcounter' and site.analytics.goatcounter.id %}true{% else %}false{% endif %};
 
     if (useGoat) {
