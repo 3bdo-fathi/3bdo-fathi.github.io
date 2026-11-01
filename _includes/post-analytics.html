@@ -2,6 +2,14 @@
   Page views & visits: GoatCounter (global) when configured, else browser-local counts.
 {% endcomment %}
 
+{% if site.analytics.goatcounter.id %}
+  <script
+    async
+    src="https://gc.zgo.at/count.js"
+    data-goatcounter="https://{{ site.analytics.goatcounter.id }}.goatcounter.com/count"
+  ></script>
+{% endif %}
+
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const NS = '0x3bdo-blog';

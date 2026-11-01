@@ -11,7 +11,7 @@ permalink: /about/
     <strong style="color: #58a6ff;">0x3bdo</strong> | Cyber Security Engineer & Penetration Tester
   </p>
   <p class="text-secondary mb-3" style="font-size: 0.95rem;">
-    Cairo, Egypt &nbsp;|&nbsp; Application, Mobile & Infrastructure Security Assessments
+    Cairo, Egypt &nbsp;|&nbsp; Web, Mobile, API & Infrastructure Security Assessments
   </p>
   <div class="d-flex flex-wrap gap-2">
     <a href="https://www.linkedin.com/in/3bdo-fathi" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm">
@@ -24,15 +24,15 @@ permalink: /about/
       <i class="fas fa-envelope me-1"></i> Email
     </a>
     <a href="/contact-me/" class="btn btn-outline-secondary btn-sm">
-      <i class="fas fa-paper-plane me-1"></i> Contact Form
+      <i class="fas fa-paper-plane me-1"></i> Contact Page
     </a>
   </div>
 </div>
 
 ---
 
-### Core Purpose: Ongoing Charity & Enduring Knowledge
-#### الغاية والرسالة: صَدَقَةٌ جَارِيَةٌ وَعِلْمٌ يُنْتَفَعُ بِهِ
+### الغاية والرسالة: صدقةٌ جارية وعِلمٌ يُنتَفَعُ به
+#### Core Purpose: Enduring Knowledge & Ongoing Charity
 
 > عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ، أَنَّ رَسُولَ اللَّهِ ﷺ قَالَ:  
 > **«إِذَا مَاتَ الْإِنْسَانُ انْقَطَعَ عَنْهُ عَمَلُهُ إِلَّا مِنْ ثَلَاثَةٍ: إِلَّا مِنْ صَدَقَةٍ جَارِيَةٍ، أَوْ عِلْمٍ يُنْتَفَعُ بِهِ، أَوْ وَلَدٍ صَالِحٍ يَدْعُو لَهُ»**  
@@ -44,96 +44,64 @@ permalink: /about/
 > **"When a human being dies, all their deeds come to an end except for three: an ongoing charity, beneficial knowledge, or a righteous child who prays for them."**  
 > *(Narrated by Muslim)*
 
-Everything published across this blog—every research paper, book breakdown, architectural diagram, vulnerability analysis, and security script—is created with one sincere and primary intention: **to serve as enduring beneficial knowledge (عِلْمٌ يُنْتَفَعُ بِهِ) and an ongoing charity (صَدَقَةٌ جَارِيَةٌ)** that remains useful to students, engineers, and researchers long after my time in this world.
+كل ما يُنشر في هذه المدونة — من أبحاث تقنية، وتلخيصات للكتب التخصصية، ومخططات معمارية، وتحليلات أمنية، وأدوات برمجية — تم إعداده بنية خالصة وصادقة: **أن يكون عِلْمًا يُنتَفَعُ به وصَدَقَةً جاريةً عني وعن والديّ وأهلي**، ليبقى هذا المحتوى أثرًا طيبًا ومرجعًا نافعًا لكل باحث وطالب علم في هذا المجال حتى بعد أن ألقى الله وانقطاع عملي.
 
-Information security shouldn't be hidden behind paywalls or obscure silos. Documenting and sharing technical knowledge unconditionally is my personal mission and lasting contribution. If you ever benefit from any content on this site or use these write-ups in your assessments, please remember me and my family in your sincere prayers.
-
----
-
-### Professional Summary
-
-Cyber Security Engineer and Penetration Tester with practical, hands-on experience in **Web Application**, **API**, **Android Mobile**, and **Network Penetration Testing**. Experienced in vulnerability assessments, offensive security testing, secure code review, and identifying critical security weaknesses across complex applications and enterprise infrastructure. Skilled in vulnerability analysis, exploitation, and comprehensive technical reporting, with a strong focus on application security and practical security assessments.
+إن زكاة العلم نشره وبذله للناس، ومجال الأمن السيبراني يجب ألا يُحتكر أو يُحجب خلف أسوار مادية. ورجائي الوحيد من كل قارئ وباحث يستفيد من أي محتوى أو تحليل كُتب هنا أن يذكرني وأهلي بصالح الدعاء بظهر الغيب.
 
 ---
 
-### Education
+Everything published across this blog—every technical breakdown, architectural diagram, exploit analysis, and security guide—is shared with a singular, sincere intention: **to serve as enduring beneficial knowledge and an ongoing charity (Sadaqah Jariyah)** that continues to assist students, engineers, and researchers long after my time in this world.
 
-* **Bachelor of Computer and Information Technology**  
-  *Egyptian E-Learning University (EELU)* | 2022 – 2026
-
----
-
-### Work Experience
-
-#### Cyber Security Engineer (Penetration Tester) — Full-time
-* **Axis Pay** | *Apr 2025 – Present | Cairo, Egypt (Hybrid)*
-  * Conduct web application and API security testing to identify and validate security vulnerabilities.
-  * Perform mobile application penetration testing to assess application security controls and potential weaknesses.
-  * Execute network penetration testing and vulnerability assessments across relevant infrastructure.
-  * Conduct secure code reviews to identify potential security flaws and support engineering remediation efforts.
-  * Perform Active Directory security assessments to identify misconfigurations and potential attack paths.
-  * Document security findings, assess their impact, and provide clear, actionable remediation recommendations.
-
-#### Cyber Security Instructor — Part-time
-* **Instant** | *Jun 2024 – Present | Cairo, Egypt (Hybrid)*
-  * Deliver cybersecurity training sessions and practical hands-on labs for students.
-  * Explain penetration testing and defensive security concepts through practical exercises.
-  * Engage learners through dynamic teaching methodologies to foster proficiency in cybersecurity practices and principles.
-
-#### Penetration Tester / Vulnerability Analyst Intern
-* **ZeroSploit & DEPI** | *Aug 2024 – Apr 2025*
-  * Solved CTF challenges related to penetration testing, forensics, and cryptography.
-  * Practiced vulnerability assessment and practical security testing techniques.
-  * Participated in hands-on cybersecurity training activities and simulation labs.
-
-#### Mobile Application Penetration Testing Hackathon Mentor
-* **Orange Digital Center Egypt** | *Jan 2026 – Feb 2026 | Cairo, Egypt*
-  * Mentored students in mobile application penetration testing basics and Android security assessment.
-  * Assisted participants during hands-on exercises using common mobile security tools.
+Information security shouldn't be hidden behind paywalls or obscure corporate silos. Documenting and sharing knowledge unconditionally is my personal mission and lasting contribution. If you ever find value in this research, please remember me and my family in your sincere prayers.
 
 ---
 
-### Certifications & Courses
+### Hello, I'm Abdulrahman M. Fathi
 
-* **eCPPTv3** — eLearnSecurity Certified Professional Penetration Tester
-* **eJPTv1 & eJPTv2** — Netriders Academy
-* **CompTIA Security+**
-* **Cisco CCNA v7**
-* **Cisco CyberOps Associate**
-* **HCIA-Security** — Huawei Certified ICT Associate
-* **Web Application Penetration Testing** — Security Meter
-* **Network Penetration Testing** — Security Meter
-* **Mobile Application Penetration Testing** — Security Meter, Hextree & GreenArmor
+My journey in cybersecurity started with a fundamental question: *"How do complex digital systems actually work under the hood, and how can they be broken or resiliently defended?"*
+
+What began as an insatiable curiosity quickly transformed into a deep, lasting passion and a full-time commitment to offensive security. Today, I operate as an offensive security engineer and penetration tester, focusing on uncovering hidden attack vectors, understanding complex application workflows, and helping organizations fortify their defenses by actively thinking like an adversary.
 
 ---
 
-### Technical Skills Matrix
+### Philosophy & The Offensive Mindset
 
-| Domain | Key Capabilities & Frameworks |
-| :--- | :--- |
-| **Application Security** | Web Application & API Penetration Testing, Vulnerability Assessment & Exploitation, Secure Code Review, OWASP Top 10, Business Logic Vulnerabilities, XSS, CSRF, SSRF, IDOR, RCE, LFI/RFI, CORS, SSTI |
-| **Mobile Security** | Android Application Penetration Testing, SSL Pinning & Root Detection Bypass, Android Component Security Testing, Frida, Objection, MobSF, JADX, Medusa |
-| **Network & Infrastructure** | Network Penetration Testing, Active Directory Security Assessment, Linux & Windows Privilege Escalation, Network Traffic Analysis with Wireshark |
-| **Tools & Scripting** | Burp Suite, Kali Linux, Wireshark, Nmap, Python for Penetration Testing, JavaScript, PHP Fundamentals, Bash Automation |
-| **Security Reporting** | Vulnerability Analysis, Risk Assessment (CVSS), Technical Report Writing, Actionable Remediation Guidance |
+True security cannot be evaluated through automated point-and-click scanners or superficial compliance checklists. Automated tools identify known signatures and superficial misconfigurations; real human adversaries understand context, business logic, system architecture, and trust boundaries.
+
+My objective on every assessment is to adopt the perspective of a creative, persistent adversary—identifying subtle, overlooked anomalies, chaining seemingly minor logic flaws into full-impact compromises, and treating systems as interconnected living architectures rather than isolated endpoints.
+
+Every assessment concludes not merely with a list of vulnerabilities, but with practical, engineering-driven remediation roadmaps designed to help developers and infrastructure teams eliminate security weaknesses at their architectural root.
 
 ---
 
-### Key Projects & Research
+### What Drives My Technical Work
 
-* **Bug Bounty & Vulnerability Research**: Conducting web application security testing to identify, analyze, and validate potential security vulnerabilities as part of responsible disclosure and bug bounty programs.
-* **Technical Write-ups & Research**: Publishing in-depth security breakdowns, CTF walkthroughs, and vulnerability analyses on this blog and GitHub.
-* **Book Breakdown Series on this Blog**:
-  * **[Android Security Internals](/posts/android-security-internals-chapter-1/) (13 Chapters)**: In-depth technical guide to Android's kernel sandbox, Binder IPC, package signing, SELinux, and KeyStore hardware binding.
-  * **[Social Engineering: The Art of Human Hacking](/posts/social-engineering-art-of-human-hacking-chapter-1/) (9 Chapters)**: Complete breakdown of psychological models, elicitation, pretexting, and defensive human firewalls.
-* **Software Development**:
-  * *Bus Booking Web Application*: Developed using Node.js, Express.js, React.js, and MySQL.
-  * *Shop Management System*: Developed using Java and Object-Oriented Programming (OOP).
+My technical focus spans the full spectrum of offensive security, driven by hands-on experimentation, reverse engineering, and deep protocol analysis:
+
+* **Mobile Security & Binary Dissection**: A profound fascination with mobile operating system internals, primarily Android architecture and iOS ecosystems. I spend extensive time analyzing compiled DEX bytecode, reading Smali, auditing native shared libraries (`.so`), and understanding low-level IPC mechanics (such as Android Binder and Content Providers). Utilizing dynamic instrumentation frameworks like **Frida**, **Objection**, and **Medusa**, I examine application behavior at runtime, bypass SSL Pinning, defeat integrity and root detection mechanisms, and audit cryptographic implementations.
+* **Web Applications & Modern API Ecosystems**: In-depth security assessments of complex web applications, microservices architectures, and modern API endpoints (REST, GraphQL, OAuth 2.0). My focus lies in uncovering nuanced business logic flaws, Broken Object-Level Authorization (BOLA/IDOR), Server-Side Request Forgery (SSRF) targeting cloud metadata services, and subtle session management vulnerabilities.
+* **Enterprise Infrastructure & Active Directory Red Teaming**: Dissecting corporate enterprise environments through graph-based attack path analysis, identity exploitation (such as Kerberoasting, AS-REP Roasting, and Pass-the-Hash), and enumerating Active Directory Certificate Services (AD CS) template misconfigurations to understand how adversaries maneuver across complex networks.
+* **Offensive Tooling & Automation**: Crafting purpose-built automation pipelines and reconnaissance tools in **Python** and **Bash** to streamline discovery, automate repetitive assessment tasks, and map wide attack surfaces.
 
 ---
 
-### Additional Information
+### Beyond Technical Assessments: Education & Mentorship
 
-* **Military Status**: Exempt (Final Exemption)
-* **Languages**: Arabic (Native), English (Professional Working Proficiency)
-* **Direct Contact**: [Contact Page](/contact-me/) &nbsp;|&nbsp; [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) &nbsp;|&nbsp; [GitHub](https://github.com/3bdo-fathi)
+Beyond performing penetration tests and vulnerability research, one of the most rewarding dimensions of my work is **cybersecurity education and mentorship**.
+
+I actively dedicate time to designing and delivering cybersecurity training courses, creating realistic hands-on simulation labs, and mentoring aspiring practitioners and developers. Demystifying complex technical topics—whether it is mobile reverse engineering, memory hooking, or network exploitation—and helping others develop their technical intuition and break into offensive security is a continuous source of inspiration.
+
+---
+
+### Why This Blog Exists
+
+This blog is my personal technical workshop and living digital garden—a space where I document real-world penetration testing insights, chapter-by-chapter dissections of classic cybersecurity texts (such as *Android Security Internals* and *Social Engineering: The Art of Human Hacking*), vulnerability research, automation scripts, and practical lessons learned from the field.
+
+This is not a commercial portfolio. It is an enduring, growing archive of knowledge, open unconditionally to anyone seeking to learn, build, and defend.
+
+---
+
+**Thank you for visiting.**  
+Whether you are just taking your first steps into cybersecurity or are already deep in the field, I hope you find something here that inspires your journey and sharpens your craft.
+
+*Abdulrahman M. Fathi (0x3bdo)*
