@@ -2,8 +2,8 @@
 title: "Android Security Internals: Chapter 10 - Device Security"
 date: 2026-11-01 18:00:00 +0300
 categories: [Cyber Security, Android Security]
-tags: [android, mobile security, internals, full-disk-encryption, fde, dm-crypt, dm-verity, verified-boot]
-description: "An exhaustive technical breakdown of Chapter 10 of Nikolay Elenkov's 'Android Security Internals', covering Full Disk Encryption (dm-crypt), crypto_footer layout, Keymaster key derivation, and Verified Boot (dm-verity) hash trees."
+tags: [android, mobile security, internals, full-disk-encryption, fde, fbe, dm-crypt, dm-verity, verified-boot, direct-boot]
+description: "An exhaustive technical breakdown of Chapter 10 of Nikolay Elenkov's 'Android Security Internals', covering Full Disk Encryption (dm-crypt), File-Based Encryption (FBE), Direct Boot, crypto_footer layout, Keymaster key derivation, and Verified Boot (dm-verity) hash trees."
 image:
   path: /assets/images/posts/android-security/chapter-10-cover.png
   alt: "Android Security Internals Chapter 10 Cover"
@@ -15,13 +15,11 @@ schema:
 
 Hello everyone,
 
-Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**.
-
-In [Chapter 9](/posts/android-security-internals-chapter-9/), we analyzed enterprise administration, containerization, and MDM policy enforcement. In this installment, we explore **Chapter 10: Device Security**, examining the low-level cryptographic mechanisms that protect the device when it is powered off, in transit, or subject to physical forensics.
+Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**, enriched with storage encryption analysis, File-Based Encryption (FBE), Direct Boot architecture, and Android Verified Boot (AVB 2.0).
 
 Operating system access controls (such as Linux UIDs and SELinux policies) only protect data while the Android kernel is running. If an adversary steals a physical smartphone, connects high-speed hardware programmers to the eMMC flash chip, or boots a custom recovery kernel, all software-level protections vanish.
 
-To counter physical and hardware attacks, Android implements two formidable defenses: **Full Disk Encryption (FDE)** via `dm-crypt`, and **Verified Boot** via `dm-verity`.
+To counter physical and hardware attacks, Android implements two formidable defenses: **Storage Encryption** (Full Disk Encryption via `dm-crypt` and File-Based Encryption via `fscrypt`), and **Verified Boot** via `dm-verity`.
 
 ![Android Security Internals Chapter 10](/assets/images/posts/android-security/chapter-10-cover.png)
 
@@ -40,8 +38,9 @@ To counter physical and hardware attacks, Android implements two formidable defe
 * **The Physical Attack Threat**: Software sandboxes are irrelevant if an attacker can read raw flash memory sectors via chip-off forensics, JTAG debugging, or unauthorized bootloader flashing.
 * **Full Disk Encryption (FDE)**: Android leverages the Linux kernel's `dm-crypt` subsystem to transparently encrypt the entire `/data` partition at the block level using AES-CBC-ESSIV or AES-XTS.
 * **The `crypto_footer` Layout**: Metadata required to decrypt the volume resides in a 16 KB footer located at the physical end of the `/data` partition. It contains the encrypted Volume Encryption Key (VEK), salt, and KDF parameters.
+* **Evolution to File-Based Encryption (FBE)**: In Android 7.0+, FDE was superseded by FBE, enabling **Direct Boot mode**. Storage is split into Credential Encrypted (CE) and Device Encrypted (DE) areas.
 * **Hardware-Bound Key Derivation**: The encryption key is derived by passing the user's PIN/password through scrypt or PBKDF2, then signing or binding the result inside ARM TrustZone via the Keymaster HAL. Offline dictionary attacks on stolen flash chips are rendered impossible without the physical device silicon.
-* **Verified Boot & `dm-verity`**: While FDE ensures confidentiality of user data at rest, `dm-verity` guarantees the cryptographic integrity of the read-only `/system` partition using a tree of SHA-256 hashes (Merkle Tree). Any byte modified on `/system` halts the device immediately.
+* **Verified Boot & `dm-verity`**: While FDE/FBE ensures confidentiality of user data at rest, `dm-verity` guarantees the cryptographic integrity of the read-only `/system` partition using a tree of SHA-256 hashes (Merkle Tree). Any byte modified on `/system` halts the device immediately.
 
 ---
 
@@ -109,72 +108,49 @@ struct crypt_footer {
 
 ---
 
-## 4. Cryptographic Key Derivation & Hardware Binding
+## 4. Modern Evolution: File-Based Encryption (FBE) & Direct Boot
 
-Early Android releases (Android 3.0 to 4.3) derived the KEK purely in software using standard PBKDF2 with a fixed iteration count (2048 iterations). This made encrypted flash images vulnerable to rapid GPU-based offline dictionary attacks if an attacker dumped the partition.
+In Android 7.0, Google introduced **File-Based Encryption (FBE)**, solving a major usability flaw of FDE: in FDE, the device could not perform basic functions (sound alarms, receive phone calls) after rebooting until the user entered their PIN.
 
-Modern Android completely mitigates this vulnerability through **Hardware-Bound Key Derivation**:
+### The Two FBE Storage Domains
 
-```text
-User Password / PIN
-       |
-       v
-scrypt / PBKDF2 (Memory-Hard KDF + 16-byte Salt)
-       |
-       v
-Intermediate Key Material
-       |
-       v (SMC Call into ARM TrustZone)
-Keymaster HAL (Running inside TEE)
-       |
-       +---> Cryptographically signed by Device-Unique Hardware Key
-       |     (Fused into CPU silicon eFuse; cannot be extracted)
-       v
-Final Key Encryption Key (KEK)
-       |
-       v Decrypts encrypted_key from crypto_footer
-Volume Encryption Key (VEK)
-       |
-       v
-Loaded into Linux dm-crypt driver -> /dev/block/dm-0 mounted!
+1. **Credential Encrypted (CE) Storage**:
+   * Encrypted using a key derived from the user's lockscreen PIN/password.
+   * Path: `/data/user/0/<pkg>`
+   * Inaccessible until the user unlocks the screen after boot.
+2. **Device Encrypted (DE) Storage**:
+   * Encrypted using a key tied exclusively to hardware secrets (accessible immediately on boot).
+   * Path: `/data/user_de/0/<pkg>`
+   * Enables **Direct Boot mode**: alarms, incoming calls, and accessibility services operate seamlessly before user unlock!
+
+```xml
+<!-- Supporting Direct Boot mode in AndroidManifest.xml -->
+<receiver
+    android:name=".AlarmReceiver"
+    android:directBootAware="true"
+    android:exported="false">
+    <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED" />
+    </intent-filter>
+</receiver>
 ```
-
-Because the hardware key never leaves the TrustZone processor silicon, an attacker cannot copy the encrypted `/data` partition to a powerful external cracking rig. Any password guessing attempt **must** be executed on the physical device itself, where the hardware enforces rate-limiting delays and triggers automatic factory wipes after consecutive failures.
 
 ---
 
-## 5. Verified Boot & `dm-verity`
+## 5. Verified Boot: `dm-verity` & AVB 2.0
 
-While Full Disk Encryption guarantees data privacy, it does not prevent an adversary from tampering with the operating system binaries in `/system` (e.g., installing a rootkit or trojaned system libraries).
+While Full Disk Encryption guarantees data privacy, it does not prevent an adversary from tampering with the operating system binaries in `/system`.
 
 Android solves this using **Verified Boot** powered by the kernel's **`dm-verity`** block integrity driver.
 
 ### The Merkle Hash Tree Architecture
 
-Instead of calculating a single hash over the entire multi-gigabyte `/system` partition (which would cause severe boot delays), `dm-verity` organizes hashes into a hierarchical **Merkle Tree**:
+Instead of calculating a single hash over the entire multi-gigabyte `/system` partition, `dm-verity` organizes hashes into a hierarchical **Merkle Tree**:
 
 1. **Layer 0**: The `/system` partition is divided into 4096-byte (4 KB) blocks. A SHA-256 hash is computed for every individual block.
-2. **Intermediate Layers**: Hashes from Layer 0 are grouped into 4 KB blocks, and each block is hashed again. This process repeats hierarchically.
-3. **The Root Hash**: At the apex of the tree sits a single 32-byte cryptographic hash: the **Root Hash**.
-4. **OEM Signature**: The Root Hash is signed using the device manufacturer's private RSA signing key and stored inside the signed `/boot` partition.
-
-### Read-Time Verification & Tamper Response
-
-When any process reads a file from `/system`:
-* The Linux kernel loads the target 4 KB sector.
-* `dm-verity` hashes the sector and validates it against the corresponding branch of the Merkle tree up to the verified Root Hash.
-* **If a single bit on `/system` has been altered**: The computed hash mismatches. The driver immediately halts the read operation and returns an I/O error (`EIO`) to userspace.
-* Depending on device policy, the system either reboots into recovery or enters a hard halt, preventing modified system code from executing!
-
----
-
-## 6. Bootloader Security & OEM Unlocking
-
-The security of both FDE and Verified Boot is anchored in the **Bootloader**:
-
-* **Locked Bootloader**: Verifies the digital signature of the `/boot` and `/recovery` partitions before executing them. Only OEM-signed kernels can boot.
-* **`fastboot oem unlock`**: Unlocks the bootloader to permit flashing custom kernels or aftermarket ROMs.
-* **The Anti-Theft Reset**: Executing `fastboot oem unlock` triggers an automatic, mandatory cryptographic wipe of the `/data` partition. This guarantees that an attacker who steals a locked device cannot unlock the bootloader to read the victim's encrypted private data.
+2. **Intermediate Layers**: Hashes from Layer 0 are grouped into 4 KB blocks, and each block is hashed again.
+3. **The Root Hash**: At the apex sits a single 32-byte cryptographic hash: the **Root Hash**.
+4. **AVB 2.0 (`vbmeta`)**: In modern Android Verified Boot 2.0, the root hash and partition descriptors are signed and packed into a dedicated `vbmeta` partition, verified directly by the hardware bootloader.
 
 ---
 

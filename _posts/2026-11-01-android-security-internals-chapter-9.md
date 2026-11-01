@@ -2,7 +2,7 @@
 title: "Android Security Internals: Chapter 9 - Enterprise Security"
 date: 2026-11-01 17:00:00 +0300
 categories: [Cyber Security, Android Security]
-tags: [android, mobile security, internals, enterprise, mdm, devicepolicy, knox, managed-profiles]
+tags: [android, mobile security, internals, enterprise, mdm, devicepolicy, knox, managed-profiles, ransomware]
 description: "An in-depth review of Chapter 9 of Nikolay Elenkov's 'Android Security Internals', evaluating Device Administration APIs, DevicePolicyManagerService, enterprise containerization, Samsung KNOX, and MDM policy enforcement."
 image:
   path: /assets/images/posts/android-security/chapter-9-cover.png
@@ -15,7 +15,7 @@ schema:
 
 Hello everyone,
 
-Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**.
+Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**, enriched with enterprise mobile architecture and threat intelligence analysis on mobile banking trojans and ransomware.
 
 In [Chapter 8](/posts/android-security-internals-chapter-8/), we explored online account management and authentication token delegation. In this installment, we explore **Chapter 9: Enterprise Security**, examining the architecture designed to allow corporate IT administrators and Mobile Device Management (MDM) solutions to enforce security baselines on corporate and Bring Your Own Device (BYOD) hardware.
 
@@ -49,19 +49,7 @@ In this deep dive, we dissect the **Device Administration API**, examine how `De
 
 The enterprise administration architecture consists of three core components:
 
-```text
-MDM Agent App (DeviceAdminReceiver)
-             |
-             v
-DevicePolicyManager (Client API)
-             |
-             v (Binder IPC)
-DevicePolicyManagerService (system_server)
-   ├── Enforces policies via KeyguardViewMediator
-   ├── Configures disk encryption via vold
-   ├── Disables camera via CameraService
-   └── Persists state in /data/system/device_policies.xml
-```
+![Android Enterprise & Dual-Persona Containerization Architecture](/assets/images/posts/android-security/ch9-enterprise-knox.png)
 
 ### 1. `DevicePolicyManager` (DPM)
 The public framework class used by enterprise applications to query policy states and issue commands (e.g., `lockNow()`, `wipeData()`).
@@ -105,8 +93,6 @@ To become a Device Administrator, an application must declare a `DeviceAdminRece
 
 ### Declaring Policies: `res/xml/device_admin.xml`
 
-The XML resource declares exactly which administrative capabilities the application requests:
-
 ```xml
 <device-admin xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-policies>
@@ -122,17 +108,6 @@ The XML resource declares exactly which administrative capabilities the applicat
 </device-admin>
 ```
 
-### The Policy Enforcement Matrix
-
-| Policy Tag | Method in `DevicePolicyManager` | System Enforcement Mechanism |
-| :--- | :--- | :--- |
-| `<limit-password>` | `setPasswordQuality()`, `setPasswordMinimumLength()` | `LockSettingsService` rejects weaker PINs/passwords entered by the user. |
-| `<force-lock>` | `lockNow()` | `WindowManagerService` immediately drops display focus and triggers the Keyguard lockscreen. |
-| `<reset-password>` | `resetPassword()` | Modifies the lockscreen PIN/password without requiring the old credential. |
-| `<wipe-data>` | `wipeData(flags)` | Sends a command to `vold` and the Recovery OS to factory-reset the device and wipe `/data` and `/cache`. |
-| `<disable-camera>` | `setCameraDisabled()` | `CameraService` rejects connection requests from any app running on the device. |
-| `<encrypted-storage>`| `setStorageEncryption()` | Instructs `vold` to trigger Full Disk Encryption (dm-crypt). |
-
 ---
 
 ## 3. Containerization: Samsung KNOX & Managed Profiles
@@ -145,7 +120,7 @@ To solve this, the industry shifted toward **dual-persona containerization**.
 
 Samsung developed KNOX to provide enterprise containerization backed by hardware security:
 * **TrustZone-based Integrity Measurement Architecture (TIMA)**: Monitored the Linux kernel in real-time. If the kernel was exploited or rooted, TIMA permanently blew an electronic hardware fuse (eFuse / KNOX warranty bit), permanently revoking access to the encrypted enterprise container.
-* **Dual Persona**: Created a dedicated, encrypted container on the filesystem accessible only via a separate container password.
+* **Real-time Kernel Protection (RKP)**: Executes at ARM exception level 2 (EL2 hypervisor), trapping unauthorized modifications to kernel page tables.
 
 ### Android for Work (Managed Profiles)
 
@@ -174,12 +149,6 @@ Between 2014 and 2018, the Device Administration API became the weapon of choice
    Android blocks uninstallation of active Device Admin packages!
 ```
 
-### Why Uninstallation Was Blocked
-
-By design, Android prevents any application from being uninstalled while it is registered as an active Device Administrator. To uninstall it, the user must first navigate to `Settings -> Security -> Device Administrators` and deactivate it.
-
-Ransomware developers countered this by monitoring system events. Whenever the user attempted to open the deactivation screen, the malware spawned a rapid loop of overlay windows or called `lockNow()`, effectively locking the user out of the settings interface!
-
 ### Defense: Booting into Safe Mode
 
 The primary countermeasure against Device Admin ransomware is **Safe Mode**:
@@ -194,7 +163,7 @@ The primary countermeasure against Device Admin ransomware is **Safe Mode**:
 In [Chapter 10: Device Security](/posts/android-security-internals-chapter-10/), we will analyze:
 
 * The physical partition layout and boot sequence.
-* Full Disk Encryption (FDE) internals and `dm-crypt`.
+* Full Disk Encryption (FDE) vs. File-Based Encryption (FBE) and Direct Boot mode.
 * The `crypto_footer` structure and Keymaster key derivation.
 * Verified Boot architecture and `dm-verity` Merkle hash trees.
 

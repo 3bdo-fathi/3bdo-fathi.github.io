@@ -2,8 +2,8 @@
 title: "Android Security Internals: Chapter 2 - Permissions Architecture"
 date: 2026-11-01 10:00:00 +0300
 categories: [Cyber Security, Android Security]
-tags: [android, mobile security, internals, permissions, packagemanager, binder, access-control]
-description: "An in-depth technical analysis of Chapter 2 of Nikolay Elenkov's 'Android Security Internals', detailing manifest definitions, protection levels, kernel GID mapping, runtime Binder checks, and content provider URI permissions."
+tags: [android, mobile security, internals, permissions, packagemanager, binder, access-control, strandhogg, mastg]
+description: "An in-depth technical analysis of Chapter 2 of Nikolay Elenkov's 'Android Security Internals', detailing manifest definitions, protection levels, kernel GID mapping, runtime Binder checks, StrandHogg task hijacking, and content provider URI permissions."
 image:
   path: /assets/images/posts/android-security/chapter-2-cover.png
   alt: "Android Security Internals Chapter 2 Cover"
@@ -15,7 +15,7 @@ schema:
 
 Hello everyone,
 
-Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**.
+Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**, enriched with real-world vulnerability research and offensive testing methodologies from the **OWASP Mobile Application Security Testing Guide (MASTG)**.
 
 In [Chapter 1](/posts/android-security-internals-chapter-1/), we dissected Android's kernel sandbox, UID allocation, and Binder IPC mechanics. In this installment, we explore **Chapter 2: Permissions**, the primary mechanism Android employs to restrict access to sensitive device APIs, hardware sensors, network interfaces, and private user datasets.
 
@@ -42,6 +42,7 @@ Let's dive into the technical internals of Android's permission framework.
 * **Hardware & Network Isolation via Kernel GIDs**: Permissions that touch sockets (`INTERNET`) or physical storage (`WRITE_EXTERNAL_STORAGE`) are mapped directly to Linux kernel GIDs (`AID_INET`, `AID_SDCARD_RW`) during process forking.
 * **IPC Hook Enforcement**: System services enforce permissions inside Binder stubs using `checkCallingPermission()` and `enforceCallingPermission()`, extracting verified caller credentials via `Binder.getCallingUid()`.
 * **Transient Capability Delegation**: Content Provider URI permissions (`grantUriPermission`) allow an application to pass temporary read/write access to specific data objects without granting global database permissions.
+* **Offensive Attack Surfaces**: Architectural permission vulnerabilities manifest through **Confused Deputy** bypasses, **PendingIntent hijacking**, and **StrandHogg task hijacking (CVE-2019-8660)**.
 
 ---
 
@@ -275,16 +276,23 @@ context.startActivity(viewIntent);
 
 ---
 
-## 6. Attack Surfaces & Exploitation Vectors
+## 6. Advanced Exploitation: StrandHogg & PendingIntent Hijacking
 
-### 1. Confused Deputy Vulnerabilities
-A confused deputy occurs when an unprivileged application (App A) cannot access a sensitive resource directly, but tricks a privileged exported component (App B) into fetching or modifying the resource on its behalf. If App B accepts an Intent containing an arbitrary URI and forwards it without checking permissions, App A can read private files or trigger system changes.
+### 1. StrandHogg Task Hijacking (CVE-2019-8660)
 
-### 2. Signature Spoofing
-Custom ROMs or compromised system frameworks that disable signature validation in `PackageManagerService.checkSignatures()` allow malicious applications to declare arbitrary signature-protected permissions, completely compromising enterprise and OEM security boundaries.
+Discovered by Promon, **StrandHogg** exploited a fundamental design flaw in Android's task management control flags:
+* An attacker app configured its manifest with `android:taskAffinity` matching a legitimate banking application.
+* When the victim launched the banking app, Android placed the attacker's malicious activity on top of the legitimate task stack.
+* The attacker displayed a forged permission dialog: *"WhatsApp requires Microphone permission to send voice messages."*
+* When the victim clicked "Allow", the permission prompt granted sensitive capabilities directly to the attacker's background package!
 
-### 3. Permission Hijacking / Pre-grant Races
-In older Android versions, if an unprivileged app was installed *before* a system app that declared a custom permission, the unprivileged app could declare the permission first with a `normal` protection level. Subsequent apps requesting the permission would receive it automatically, hijacking the permission namespace. Modern Android strictly rejects duplicate permission declarations from different signing certificates.
+### 2. PendingIntent Mutability Hijacking (CVE-2021-0309)
+
+In Android, a `PendingIntent` is a token granted to an external application allowing it to execute an Intent with the original sender's permissions and UID.
+* Prior to Android 12, `PendingIntent` instances were **mutable by default**.
+* An untrusted recipient could modify the inner Intent (changing the action, component, or destination URI) before invoking `send()`.
+* **The Exploit**: An attacker modified a mutable PendingIntent received from `system_server` to point to a private system broadcast or unexported content provider, executing privileged actions under UID `1000`.
+* **The Defense**: Android 12 mandated explicit mutability declarations: `PendingIntent.FLAG_IMMUTABLE` or `FLAG_MUTABLE`.
 
 ---
 
@@ -294,19 +302,19 @@ In [Chapter 3: Package Management](/posts/android-security-internals-chapter-3/)
 
 * The anatomy of the APK archive and compiled binary XML formats.
 * Dalvik Executable (DEX) bytecode structure and verification algorithms.
-* The v1 JAR signing scheme (`MANIFEST.MF`, `CERT.SF`, `CERT.RSA`).
+* The v1 JAR signing scheme vs. modern v2, v3, and v4 APK signature schemes.
 * The package installation lifecycle and the native `installd` daemon.
-* The historic Master Key vulnerabilities (CVE-2013-4787) that allowed silent payload injection.
+* Historic signature tampering exploits: FakeID (CVE-2014-4451) and Janus (CVE-2017-13156).
 
 ---
 
 ## References & Authoritative Reading
 
 1. Elenkov, Nikolay. *Android Security Internals*. No Starch Press, 2015. Chapter 2: "Permissions," pp. 21–50.
-2. [AOSP Documentation - System Permissions Architecture](https://source.android.com/docs/core/permissions)
-3. [Android Developers - Permissions Overview & Guidelines](https://developer.android.com/guide/topics/permissions/overview)
-4. Enck, William, et al. *Understanding Android Security*. IEEE Security & Privacy, 2009.
-5. [Android Security Team - Reviewing Android Platform Permissions](https://source.android.com/docs/security/features)
+2. Promon Security Research. *StrandHogg: A Critical Vulnerability in Android's Task Navigation*. Promon Labs, 2019.
+3. [Android Developers - PendingIntent Mutability & Security Best Practices](https://developer.android.com/about/versions/12/behavior-changes-12#pending-intent-mutability)
+4. [OWASP Mobile Security Testing Guide - Testing App Permissions (MASTG-PLATFORM-1)](https://mas.owasp.org/)
+5. Enck, William, et al. *Understanding Android Security*. IEEE Security & Privacy, 2009.
 
 ---
 

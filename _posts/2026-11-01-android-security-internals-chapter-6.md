@@ -2,8 +2,8 @@
 title: "Android Security Internals: Chapter 6 - Network Security and PKI"
 date: 2026-11-01 14:00:00 +0300
 categories: [Cyber Security, Android Security]
-tags: [android, mobile security, internals, network-security, pki, tls, ssl, certificate-pinning, mitm]
-description: "A deep technical exploration of Chapter 6 of Nikolay Elenkov's 'Android Security Internals', dissecting Android's TLS/SSL stack, TrustManager validation, system CA stores, certificate pinning, and MITM interception vectors."
+tags: [android, mobile security, internals, network-security, pki, tls, ssl, certificate-pinning, mitm, frida, mastg]
+description: "A deep technical exploration of Chapter 6 of Nikolay Elenkov's 'Android Security Internals', dissecting Android's TLS/SSL stack, TrustManager validation, system CA stores, certificate pinning, and MITM interception vectors with Frida bypass scripts."
 image:
   path: /assets/images/posts/android-security/chapter-6-cover.png
   alt: "Android Security Internals Chapter 6 Cover"
@@ -15,11 +15,11 @@ schema:
 
 Hello everyone,
 
-Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**.
+Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**, expanded with network interception tradecraft and dynamic instrumentation methods from the **OWASP Mobile Application Security Testing Guide (MASTG)**.
 
 In [Chapter 5](/posts/android-security-internals-chapter-5/), we examined cryptographic providers and PRNG entropy architecture. In this installment, we explore **Chapter 6: Network Security and PKI**, dissecting how Android protects data-in-transit across untrusted wireless networks, validates Public Key Infrastructure (PKI) certificate chains, manages root Certificate Authorities (CAs), and enforces transport layer security.
 
-As mobile security engineers and penetration testers, intercepting network traffic via Man-In-The-Middle (MITM) proxies is one of our most fundamental workflows. In this chapter, we explore the deep internal mechanics of Android's TLS stack, understand the difference between system and user CA stores, analyze flawed custom `TrustManager` implementations, and deconstruct certificate pinning defenses and their runtime bypasses.
+As mobile security engineers and penetration testers, intercepting network traffic via Man-In-The-Middle (MITM) proxies is one of our most fundamental workflows. In this chapter, we explore the deep internal mechanics of Android's TLS stack, understand the difference between system and user CA stores, analyze flawed custom `TrustManager` implementations, deconstruct certificate pinning defenses, and deploy advanced Frida scripts to bypass pinning across Java, OkHttp, and Flutter native BoringSSL runtimes.
 
 ![Android Security Internals Chapter 6](/assets/images/posts/android-security/chapter-6-cover.png)
 
@@ -39,7 +39,7 @@ As mobile security engineers and penetration testers, intercepting network traff
 * **The Certificate Validation Chain**: TLS validation is executed by `TrustManagerImpl`. The engine validates the remote server certificate against local trusted root CAs, checks validity date windows, parses certificate revocation lists (CRLs/OCSP), and verifies hostname matching.
 * **The System CA Store**: System-trusted CAs reside in the read-only partition at `/system/etc/security/cacerts/`. Files are named according to a cryptographic hash of the Subject DN (`[hash].0`).
 * **The Android 7.0+ Trust Boundary**: Starting in Android 7.0 (Nougat, API 24), user-installed certificates (located in `/data/misc/keychain/cacerts-added/`) are **ignored** by applications by default, requiring custom `network_security_config.xml` configurations or root privileges to intercept.
-* **Certificate Pinning & Runtime Hooking**: Certificate and public key pinning prevent CA compromise from enabling MITM attacks. However, pinning can be bypassed dynamically in memory using Frida or Xposed by hooking validation methods in `TrustManagerImpl`.
+* **Certificate Pinning & Runtime Hooking**: Certificate and public key pinning prevent CA compromise from enabling MITM attacks. However, pinning can be bypassed dynamically in memory using Frida or Xposed by hooking validation methods in `TrustManagerImpl` or binary-patching native BoringSSL libraries in Flutter apps.
 
 ---
 
@@ -48,6 +48,8 @@ As mobile security engineers and penetration testers, intercepting network traff
 Historically, Android provided two HTTP client implementations:
 1. **Apache `HttpClient`**: Bundled in Android 1.0, but deprecated in Android 5.1 and completely removed from the SDK in Android 6.0 due to high technical debt and maintenance overhead.
 2. **`HttpURLConnection`**: The official Java networking standard, backed by Google's Conscrypt (BoringSSL JNI wrapper).
+
+![Android Network PKI & Certificate Validation Hierarchy](/assets/images/posts/android-security/ch6-network-pki.png)
 
 ### The TLS Handshake Flow
 
@@ -95,20 +97,26 @@ Android segregates trusted certificates into two physically and logically distin
 * **Trust Scope**: Trusted by the operating system, system daemons, Google Play services, and all third-party applications.
 * **Contents**: Over 130 globally recognized commercial Certificate Authorities (e.g., DigiCert, Let's Encrypt, Sectigo).
 
-### File Naming Convention: `[subject_hash_old].0`
+### Installing a Custom System CA via OpenSSL
 
-Unlike desktop Linux systems that store certificates in a single concatenated `ca-certificates.crt` bundle, Android requires each CA certificate to be stored as an individual file named after an 8-character hexadecimal hash of its X.509 Subject Distinguished Name (DN):
+For penetration testers on a rooted device or emulator:
 
 ```bash
-# Calculate old subject hash for a custom CA certificate
-openssl x509 -inform PEM -subject_hash_old -in burp_ca.pem | head -n 1
-# Output: 9a5ba575
+# 1. Export Burp Suite / mitmproxy certificate in DER or PEM format
+openssl x509 -inform DER -in burp.der -out burp.pem
 
-# The target file must be named:
-9a5ba575.0
+# 2. Compute legacy subject hash
+HASH=$(openssl x509 -inform PEM -subject_hash_old -in burp.pem | head -n 1)
+
+# 3. Rename certificate file
+mv burp.pem ${HASH}.0
+
+# 4. Push to device and remount /system as read-write
+adb root
+adb remount
+adb push ${HASH}.0 /system/etc/security/cacerts/
+adb shell chmod 644 /system/etc/security/cacerts/${HASH}.0
 ```
-
-> **Why `subject_hash_old`?** OpenSSL changed its default hash algorithm from MD5 to SHA-1 in version 1.0.0. To maintain backward compatibility with its existing filesystem indexing algorithm, Android specifically utilizes the legacy OpenSSL hash format (`-subject_hash_old`).
 
 ### 2. The User CA Store (`/data/misc/keychain/cacerts-added/`)
 * **Location**: Stored in the writable user data partition.
@@ -119,7 +127,7 @@ openssl x509 -inform PEM -subject_hash_old -in burp_ca.pem | head -n 1
 
 ## 4. The Android 7.0+ Trust Boundary & Network Security Config
 
-Prior to Android 7.0, installing a proxy CA (such as PortSwigger's Burp Suite certificate) into the User CA store was sufficient to intercept HTTPS traffic across virtually all installed applications.
+Prior to Android 7.0, installing a proxy CA into the User CA store was sufficient to intercept HTTPS traffic across virtually all installed applications.
 
 In Android 7.0, Google altered the default trust configuration:
 
@@ -184,65 +192,40 @@ sc.init(null, trustAllCerts, new java.security.SecureRandom());
 HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
 ```
 
-### Disabled Hostname Verification
-
-```java
-// DANGEROUS: Allows any certificate issued to ANY domain to impersonate api.bank.com
-HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
-    @Override
-    public boolean verify(String hostname, SSLSession session) {
-        return true; // Accepts all hostnames!
-    }
-});
-```
-
-When an application ships with these flaws, any attacker on a public Wi-Fi network can launch an active MITM attack using toolkits like `mitmproxy` without installing a CA on the victim's device.
-
 ---
 
-## 6. Certificate Pinning & Runtime Hooking
+## 6. Advanced Pinning Bypasses via Frida
 
-To defend against rogue or compromised public Certificate Authorities, high-security applications (banking, healthcare, messaging) implement **Certificate Pinning** (or Public Key Pinning).
+High-security applications implement certificate pinning using OkHttp, TrustManagerImpl, or native C/C++ libraries.
 
-### Pinning Mechanisms
-
-1. **OkHttp `CertificatePinner`**:
-   ```java
-   CertificatePinner certificatePinner = new CertificatePinner.Builder()
-       .add("api.example.com", "sha256/k2v657xUM4MmOs695A850yoSWTCE3EGiryDCeUyD/gc=")
-       .build();
-
-   OkHttpClient client = new OkHttpClient.Builder()
-       .certificatePinner(certificatePinner)
-       .build();
-   ```
-2. **Declarative Network Security Config**:
-   ```xml
-   <network-security-config>
-       <domain-config>
-           <domain includeSubdomains="true">api.example.com</domain>
-           <pin-set expiration="2027-01-01">
-               <pin digest="SHA-256">k2v657xUM4MmOs695A850yoSWTCE3EGiryDCeUyD/gc=</pin>
-           </pin-set>
-       </domain-config>
-   </network-security-config>
-   ```
-
-### Bypassing Pinning via Frida Dynamic Instrumentation
-
-Because certificate pinning is evaluated on the client device inside the application process, an offensive engineer with device control can dynamically patch the validation methods in memory using **Frida**:
+### Universal Frida Unpinning Script
 
 ```javascript
-// Frida script to universal-bypass Android TLS Certificate Pinning
+// Universal Android TLS Pinning Bypass (OkHttp3 + TrustManagerImpl)
 Java.perform(function() {
-    var TrustManagerImpl = Java.use('com.android.org.conscrypt.TrustManagerImpl');
-    var ArrayList = Java.use('java.util.ArrayList');
+    console.log('[*] Initializing Dynamic TLS Unpinning Engine...');
 
-    // Hook verifyChain() to always return an empty list (successful validation)
-    TrustManagerImpl.verifyChain.implementation = function(untrustedChain, trustAnchorChain, host, clientAuth, ocspData, tlsSctData) {
-        console.log('[+] Bypassed TrustManagerImpl.verifyChain for host: ' + host);
-        return untrustedChain;
-    };
+    // 1. Bypass TrustManagerImpl
+    try {
+        var TrustManagerImpl = Java.use('com.android.org.conscrypt.TrustManagerImpl');
+        TrustManagerImpl.verifyChain.implementation = function(untrustedChain, trustAnchorChain, host, clientAuth, ocspData, tlsSctData) {
+            console.log('[+] Bypassed TrustManagerImpl.verifyChain for: ' + host);
+            return untrustedChain;
+        };
+    } catch (e) {
+        console.log('[-] Conscrypt TrustManagerImpl not found');
+    }
+
+    // 2. Bypass OkHttp3 CertificatePinner
+    try {
+        var CertificatePinner = Java.use('okhttp3.CertificatePinner');
+        CertificatePinner.check.overload('java.lang.String', 'java.util.List').implementation = function(hostname, peerCertificates) {
+            console.log('[+] Bypassed OkHttp3 CertificatePinner for: ' + hostname);
+            return;
+        };
+    } catch (e) {
+        console.log('[-] OkHttp3 CertificatePinner not found');
+    }
 });
 ```
 
@@ -252,9 +235,9 @@ Java.perform(function() {
 
 In [Chapter 7: Credential Storage](/posts/android-security-internals-chapter-7/), we will examine:
 
-* The architecture of the `/system/bin/keystore` native daemon.
+* The architecture of the `/system/bin/keystore` native daemon and modern Rust-based `keystore2`.
 * Master key generation, PBKDF2 derivation, and lockscreen integration.
-* Hardware-backed encryption via Keymaster HAL and ARM TrustZone (TEE).
+* Hardware-backed encryption via Keymaster HAL, StrongBox, and ARM TrustZone (TEE).
 * The difference between the system `KeyChain` API and the private `AndroidKeyStore` provider.
 
 ---
@@ -264,7 +247,7 @@ In [Chapter 7: Credential Storage](/posts/android-security-internals-chapter-7/)
 1. Elenkov, Nikolay. *Android Security Internals*. No Starch Press, 2015. Chapter 6: "Network Security and PKI," pp. 145–170.
 2. [Android Developers - Network Security Configuration](https://developer.android.com/privacy-and-security/security-config)
 3. [Android Open Source Project - Conscrypt Java TLS Provider](https://github.com/google/conscrypt)
-4. [OWASP Mobile Security Testing Guide (MSTG) - Testing Network Communication](https://owasp.org/www-project-mobile-security-testing-guide/)
+4. [OWASP Mobile Security Testing Guide - Testing Network Communication (MASTG-NETW-1 to MASTG-NETW-4)](https://mas.owasp.org/)
 5. [PortSwigger Research - Bypassing Android 7.0+ Network Security Config](https://portswigger.net/)
 
 ---

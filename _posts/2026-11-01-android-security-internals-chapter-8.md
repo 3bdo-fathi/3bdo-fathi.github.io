@@ -2,8 +2,8 @@
 title: "Android Security Internals: Chapter 8 - Online Account Management"
 date: 2026-11-01 16:00:00 +0300
 categories: [Cyber Security, Android Security]
-tags: [android, mobile security, internals, accountmanager, oauth, authentication, sso, access-control]
-description: "A technical breakdown of Chapter 8 of Nikolay Elenkov's 'Android Security Internals', focusing on AccountManagerService, AbstractAccountAuthenticator, token delegation protocols, and OAuth security boundaries."
+tags: [android, mobile security, internals, accountmanager, oauth, authentication, sso, access-control, mastg]
+description: "A technical breakdown of Chapter 8 of Nikolay Elenkov's 'Android Security Internals', focusing on AccountManagerService, AbstractAccountAuthenticator, token delegation protocols, OAuth security boundaries, and PKCE."
 image:
   path: /assets/images/posts/android-security/chapter-8-cover.png
   alt: "Android Security Internals Chapter 8 Cover"
@@ -15,7 +15,7 @@ schema:
 
 Hello everyone,
 
-Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**.
+Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**, enriched with identity security research, OAuth 2.0 mobile security profiles, and auditing tradecraft from the **OWASP Mobile Application Security Verification Standard (MASVS-AUTH)**.
 
 In [Chapter 7](/posts/android-security-internals-chapter-7/), we explored credential storage, master key derivation, and ARM TrustZone integration. In this installment, we explore **Chapter 8: Online Account Management**, analyzing how Android centralizes identity, manages authentication tokens, and provides seamless Single Sign-On (SSO) across applications.
 
@@ -47,22 +47,7 @@ Rather than forcing every application to implement its own login screens, store 
 
 Android's online account management framework is organized around three primary actors:
 
-```text
-Third-Party App (Client)
-          |
-          | 1. getAuthToken(account, "oauth2:scope")
-          v
-AccountManagerService (system_server)
-   ├── 2. Checks permissions & caller signature
-   ├── 3. Queries cache in /data/system/users/0/accounts.db
-   └── 4. If token missing/expired, invokes Authenticator
-          |
-          v
-Authenticator Service (e.g., Google Play Services)
-   ├── 5. Prompts user login if needed
-   ├── 6. Exchanges credentials with remote OAuth server
-   └── 7. Returns token to AccountManagerService -> Client
-```
+![AccountManager Authentication & Token Delegation Flow](/assets/images/posts/android-security/ch8-account-manager.png)
 
 ### Core Components
 
@@ -92,8 +77,6 @@ To register a custom account type (e.g., `com.example.corporate.account`), a dev
 
 ### The Authenticator Metadata: `res/xml/authenticator.xml`
 
-This XML configuration binds the service to an account type:
-
 ```xml
 <account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
     android:accountType="com.example.corporate.account"
@@ -103,110 +86,31 @@ This XML configuration binds the service to an account type:
     android:accountPreferences="@xml/account_preferences" />
 ```
 
-### The `AbstractAccountAuthenticator` Implementation
-
-The authenticator overrides core lifecycle methods:
-
-```java
-public class CorporateAuthenticator extends AbstractAccountAuthenticator {
-    @Override
-    public Bundle getAuthToken(AccountAuthenticatorResponse response, 
-                               Account account, 
-                               String authTokenType, 
-                               Bundle options) {
-        // 1. Check if token exists in internal cache
-        AccountManager am = AccountManager.get(mContext);
-        String authToken = am.peekAuthToken(account, authTokenType);
-
-        if (!TextUtils.isEmpty(authToken)) {
-            Bundle result = new Bundle();
-            result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
-            result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
-            result.putString(AccountManager.KEY_AUTHTOKEN, authToken);
-            return result;
-        }
-
-        // 2. If no valid token exists, return an Intent to launch LoginActivity
-        Intent intent = new Intent(mContext, AuthenticatorActivity.class);
-        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
-        
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(AccountManager.KEY_INTENT, intent);
-        return bundle;
-    }
-}
-```
-
 ---
 
 ## 3. Storage and Token Persistence: `accounts.db`
 
 The internal state of all registered accounts is managed by `AccountManagerService` inside `/data/system/users/[userId]/accounts.db`.
 
-### Database Schema Structure
+```bash
+# Inspect registered accounts via ADB shell
+dumpsys account
 
-The SQLite database contains several critical tables:
-* `accounts`: Stores `_id`, `name`, `type`, and an optional `password` field.
-* `authtokens`: Stores `_id`, `accounts_id`, `type`, and the actual cached `authtoken` string.
-* `grants`: Tracks which application UIDs have received user consent to access specific accounts.
-* `extras`: Key-value configuration pairs associated with accounts.
-
-```sql
--- SQLite table schema for authtokens
-CREATE TABLE authtokens (
-    _id INTEGER PRIMARY KEY AUTOINCREMENT,
-    accounts_id INTEGER NOT NULL,
-    type TEXT NOT NULL,
-    authtoken TEXT,
-    UNIQUE (accounts_id, type)
-);
+# Inspecting accounts.db directly (requires root)
+sqlite3 /data/system/users/0/accounts.db "SELECT _id, name, type FROM accounts;"
 ```
 
-> **Security Warning**: Although `AccountManager.setPassword()` exists in the API, storing plaintext user passwords in `accounts.db` is an egregious security anti-pattern. Modern authenticators store **only** short-lived OAuth access tokens and refresh tokens in `authtokens`.
-
 ---
 
-## 4. Security Access Controls & Delegation Boundaries
+## 4. Modern OAuth 2.0 & Proof Key for Code Exchange (PKCE)
 
-How does Android prevent an untrusted game or flashlight application from stealing corporate email authentication tokens?
+In modern enterprise mobile architectures, authenticators avoid storing static credentials and rely strictly on **OAuth 2.0 with PKCE (RFC 7636)**:
 
-### 1. Platform Permissions
-
-To interact with `AccountManager`, applications historically required manifest permissions:
-* `android.permission.GET_ACCOUNTS`: Required to query the list of active account names.
-* `android.permission.USE_CREDENTIALS`: Required to request auth tokens for existing accounts.
-* `android.permission.MANAGE_ACCOUNTS`: Required to create or remove accounts.
-
-### 2. Signature Matching (Zero-Prompt Trust)
-
-When App A requests an authentication token from Authenticator B:
-1. `AccountManagerService` extracts the calling UID using `Binder.getCallingUid()`.
-2. PMS retrieves the cryptographic signing certificates for both App A and Authenticator B.
-3. If both packages are signed with the **exact same developer certificate**, `AccountManagerService` immediately returns the token. No prompt is displayed to the user!
-4. This allows a suite of applications from the same vendor (e.g., Google Maps, YouTube, Gmail) to share identity seamlessly.
-
-### 3. Interactive Consent (Third-Party Delegation)
-
-If App A and Authenticator B are signed with different certificates:
-1. `AccountManagerService` checks the `grants` table in `accounts.db`.
-2. If no explicit grant exists, the framework halts the request and displays a system dialog:
-   ```text
-   "Allow [App A] to access your [Corporate] account?"
-   ```
-3. Only if the user explicitly approves does `AccountManagerService` write an authorization record into `grants` and release the auth token to App A.
-
----
-
-## 5. Attack Surfaces & Exploitation Vectors
-
-### 1. Token Harvesting via Overprivileged Permissions
-In early Android versions, applications possessing `android.permission.USE_CREDENTIALS` could request authentication tokens for third-party accounts. Flaws in intent filtering allowed malicious apps to trigger silent token deliveries without proper user consent prompts.
-
-### 2. Rogue Authenticator Spoofing
-If an application declares an authenticator for a generic account type (e.g., `com.custom.auth`) that is not pre-installed on the device, the rogue application can capture user credentials entered into system account settings screens.
-
-### 3. Unchecked Invalidation Attacks
-An unprivileged application with access to an account can call `AccountManager.invalidateAuthToken()`. If executed in a continuous loop, it can trigger a Denial-of-Service (DoS) against legitimate background synchronization adapters by constantly invalidating cached tokens.
+1. **Code Verifier**: The client generates a high-entropy cryptographic random string $V$.
+2. **Code Challenge**: The client computes $C = 	ext{BASE64URL}(	ext{SHA256}(V))$.
+3. **Authorization Request**: Sends $C$ to the authorization server via an in-app browser tab (Chrome Custom Tabs).
+4. **Token Exchange**: When exchanging the authorization code, the client sends the original $V$. The server computes $	ext{SHA256}(V)$ and validates that it matches $C$.
+5. **Security Defense**: Even if an attacker registers a rogue URI scheme handler to intercept the authorization code, they cannot exchange it for an access token without the secret code verifier $V$ stored in client memory!
 
 ---
 
@@ -225,8 +129,8 @@ In [Chapter 9: Enterprise Security](/posts/android-security-internals-chapter-9/
 
 1. Elenkov, Nikolay. *Android Security Internals*. No Starch Press, 2015. Chapter 8: "Online Account Management," pp. 191–214.
 2. [Android Developers - AccountManager API Guide](https://developer.android.com/reference/android/accounts/AccountManager)
-3. [Android Developers - Creating a Custom Account Authenticator](https://developer.android.com/training/sync-adapters/creating-authenticator)
-4. RFC 6749: *The OAuth 2.0 Authorization Framework*. IETF, 2012.
+3. RFC 7636: *Proof Key for Code Exchange by OAuth Public Clients (PKCE)*. IETF, 2015.
+4. [OWASP Mobile Application Security Verification Standard (MASVS-AUTH)](https://mas.owasp.org/)
 5. Chin, Erika, et al. *Analyzing Inter-Application Communication in Android*. ACM MobiSys, 2011.
 
 ---

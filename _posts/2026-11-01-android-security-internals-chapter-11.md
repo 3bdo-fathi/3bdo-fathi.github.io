@@ -2,7 +2,7 @@
 title: "Android Security Internals: Chapter 11 - NFC and Secure Elements"
 date: 2026-11-01 19:00:00 +0300
 categories: [Cyber Security, Android Security]
-tags: [android, mobile security, internals, nfc, hce, secure-element, contactless, smart-cards, apdu]
+tags: [android, mobile security, internals, nfc, hce, secure-element, contactless, smart-cards, apdu, emv]
 description: "A technical dissection of Chapter 11 of Nikolay Elenkov's 'Android Security Internals', examining the NFC architecture stack, Host-based Card Emulation (HCE), ISO 7816-4 APDU routing, and hardware Secure Elements (UICC/eSE)."
 image:
   path: /assets/images/posts/android-security/chapter-11-cover.png
@@ -15,7 +15,7 @@ schema:
 
 Hello everyone,
 
-Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**.
+Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**, enriched with EMV contactless payment specifications and wireless security research.
 
 In [Chapter 10](/posts/android-security-internals-chapter-10/), we examined physical device security, full disk encryption, and verified boot integrity. In this installment, we explore **Chapter 11: NFC and Secure Elements**, dissecting the short-range wireless radio stack that powers contactless mobile payments, transit ticketing, access control badges, and cryptographic identity tokens.
 
@@ -49,18 +49,7 @@ In this deep dive, we trace the evolution from hardware-bound Secure Elements (U
 
 Android's Near Field Communication stack spans from the physical radio controller chip to high-level framework services:
 
-```text
-NFC Radio Controller (e.g., NXP PN547 / Broadcom BCM2079x)
-                       |
-                       v (NFC Controller Interface - NCI)
-Native Driver & Userspace HAL (libnfc-nci.so)
-                       |
-                       v
-NfcService (Running inside system_server)
-   ├── CardEmulationManager (AID Routing Table)
-   ├── P2pLinkManager (Peer-to-Peer / Android Beam)
-   └── Registered HostApduService Endpoints (HCE Apps)
-```
+![Host-based Card Emulation & ISO 7816-4 APDU Routing](/assets/images/posts/android-security/ch11-hce-apdu.png)
 
 ### The Three NFC Operating Modes
 
@@ -112,8 +101,6 @@ Bank / Payment Application (HostApduService)
    └── Computes cryptogram and returns Response APDU
 ```
 
-Under HCE, the NFC controller is configured to route incoming smart card packets directly up the Android operating system stack to an active, sandboxed application process!
-
 ---
 
 ## 4. ISO 7816-4 APDU Protocol & AID Routing
@@ -139,8 +126,6 @@ SW1 SW2 = 0x90 0x00  (Success / OK)
 
 ### Implementing a `HostApduService`
 
-An application that provides card emulation implements `HostApduService` and declares an AID filter:
-
 ```xml
 <!-- In AndroidManifest.xml -->
 <service android:name=".PaymentService"
@@ -154,9 +139,8 @@ An application that provides card emulation implements `HostApduService` and dec
 </service>
 ```
 
-### Declaring Application Identifiers: `res/xml/apduservice.xml`
-
 ```xml
+<!-- res/xml/apduservice.xml -->
 <host-apdu-service xmlns:android="http://schemas.android.com/apk/res/android"
     android:description="@string/service_desc"
     android:requireDeviceUnlock="true">
@@ -169,50 +153,19 @@ An application that provides card emulation implements `HostApduService` and dec
 </host-apdu-service>
 ```
 
-### Processing APDUs in Java
-
-```java
-public class PaymentService extends HostApduService {
-    @Override
-    public byte[] processCommandApdu(byte[] commandApdu, Bundle extras) {
-        if (isSelectAidCommand(commandApdu)) {
-            // Return Select Response with Application File Locator (AFL)
-            return SELECT_RESPONSE_OK;
-        }
-        // Process financial challenge and return dynamic transaction cryptogram
-        return generateDynamicCryptogram(commandApdu);
-    }
-
-    @Override
-    public void onDeactivated(int reason) {
-        // Link lost or terminal communication finished
-    }
-}
-```
-
 ---
 
-## 5. Security Comparison: HCE vs. Secure Element
+## 5. EMV Transaction Flow & Cloud Tokenization
 
-| Security Vector | Hardware Secure Element (UICC / eSE) | Host-based Card Emulation (HCE) |
-| :--- | :--- | :--- |
-| **Physical Tamper Resistance** | Hardware-certified (EAL5+ silicon); resistant to DPA and physical decapping | No hardware enclosure; software runs on application processor |
-| **Root Compromise Impact** | Private keys remain secure inside the SE; attacker cannot dump silicon RAM | Attacker with kernel root can read memory of `HostApduService` |
-| **Deployment Agility** | Extremely slow; requires carrier/OEM partnerships | Instant; downloadable via Google Play Store |
-| **Mitigation for Key Theft** | Static master card keys stored permanently | **Cloud Tokenization**: Disposable single-use tokens (LUKs) |
+In a real-world contactless EMV transaction, the terminal and the phone exchange several standardized APDUs:
 
----
+1. `SELECT PPSE`: Terminal queries the Proximity Payment System Environment (`2PAY.SYS.DDF01`).
+2. `SELECT AID`: Terminal selects the specific payment network (Visa or MasterCard AID).
+3. `GET PROCESSING OPTIONS (GPO)`: Phone supplies Application Interchange Profile (AIP) and Application File Locator (AFL).
+4. `READ RECORDS`: Terminal extracts card metadata.
+5. `GENERATE AC`: Phone generates an Application Cryptogram using a **Limited-Use Key (LUK)** provided by a cloud Token Service Provider (TSP).
 
-## 6. Contactless Attack Surfaces & Vulnerabilities
-
-### 1. NFC Relay Attacks
-In a relay attack, an attacker places a rogue reader near a victim's smartphone (e.g., in a crowded subway) and relays APDUs across a high-speed Wi-Fi/LTE connection to a rogue emulator positioned at an expensive retail POS terminal. Because NFC specifications permit generous response timeouts, the payment terminal approves the transaction, charging the victim's phone remotely.
-
-### 2. Rogue AID Registration & Hijacking
-Multiple applications can declare the same non-payment AID. If a malicious application registers an AID used by a corporate building access system or loyalty rewards app, `NfcService` displays an interactive disambiguation dialog or routes the transaction to the rogue app, allowing it to harvest access credentials.
-
-### 3. Malicious APDU Injection
-Because `HostApduService` parses raw byte arrays received from external RF fields, memory corruption vulnerabilities in native C/C++ APDU parsing libraries can allow remote code execution via proximity wireless transmission.
+Even if a malicious root app dumps memory, it only compromises a single-use token that cannot be used for subsequent unauthorized payments!
 
 ---
 
@@ -223,7 +176,7 @@ In [Chapter 12: SELinux in Android](/posts/android-security-internals-chapter-12
 * Mandatory Access Control (MAC) vs. Discretionary Access Control (DAC).
 * The SEAndroid architecture, kernel security server, and Access Vector Cache (AVC).
 * Compiling policy files (`sepolicy`, `file_contexts`, `seapp_contexts`, `mac_permissions.xml`).
-* Domain transitions, neverallow assertions, and SELinux bypass exploitation.
+* Project Treble split policies (`plat_sepolicy` vs `vendor_sepolicy`) and SELinux bypass exploitation.
 
 ---
 
@@ -231,7 +184,7 @@ In [Chapter 12: SELinux in Android](/posts/android-security-internals-chapter-12
 
 1. Elenkov, Nikolay. *Android Security Internals*. No Starch Press, 2015. Chapter 11: "NFC and Secure Elements," pp. 289–318.
 2. [Android Developers - Host-based Card Emulation Overview](https://developer.android.com/develop/connectivity/nfc/hce)
-3. ISO/IEC 7816-4: *Identification cards - Integrated circuit cards - Part 4: Organization, security and commands for interchange*.
+3. ISO/IEC 7816-4: *Identification cards - Integrated circuit cards*.
 4. EMVCo: *EMV Contactless Specifications for Payment Systems*.
 5. Francis, Lishoy, et al. *Practical Relay Attack on Contactless POS Terminals*. IEEE RFID, 2012.
 

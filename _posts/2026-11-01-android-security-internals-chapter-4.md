@@ -2,7 +2,7 @@
 title: "Android Security Internals: Chapter 4 - User Management"
 date: 2026-11-01 12:00:00 +0300
 categories: [Cyber Security, Android Security]
-tags: [android, mobile security, internals, multi-user, usermanager, storage, namespaces, access-control]
+tags: [android, mobile security, internals, multi-user, usermanager, storage, namespaces, access-control, enterprise]
 description: "A technical dissection of Chapter 4 of Nikolay Elenkov's 'Android Security Internals', covering Android multi-user architecture, UID mathematical mapping formulas, per-user storage virtualization, and UserManagerService internals."
 image:
   path: /assets/images/posts/android-security/chapter-4-cover.png
@@ -15,13 +15,13 @@ schema:
 
 Hello everyone,
 
-Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**.
+Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**, expanded with multi-tenant architecture analysis and enterprise container research.
 
-In [Chapter 3](/posts/android-security-internals-chapter-3/), we examined APK anatomy, DEX bytecode structure, and the v1 JAR code signing scheme. In this installment, we explore **Chapter 4: User Management**, analyzing how Android implemented genuine multi-user support on top of an operating system that had already hijacked the Linux multi-user model for application sandboxing.
+In [Chapter 3](/posts/android-security-internals-chapter-3/), we examined APK anatomy, DEX bytecode structure, the evolution of APK signature schemes (v1 through v4), and historic vulnerabilities like FakeID and Janus. In this installment, we explore **Chapter 4: User Management**, analyzing how Android implemented genuine multi-user support on top of an operating system that had already hijacked the Linux multi-user model for application sandboxing.
 
 When Google introduced multi-user functionality in Android 4.2 (initially for tablets, and later in Android 5.0 for phones), they faced an architectural challenge: **If Linux UIDs were already assigned to individual apps (UIDs 10000+), how could multiple human users coexist on the same filesystem without breaking process sandboxing?**
 
-The solution was an elegant mathematical range allocation formula combined with kernel-level storage virtualization.
+The solution was an elegant mathematical range allocation formula combined with kernel-level storage virtualization and Linux mount namespaces.
 
 ![Android Security Internals Chapter 4](/assets/images/posts/android-security/chapter-4-cover.png)
 
@@ -39,7 +39,7 @@ The solution was an elegant mathematical range allocation formula combined with 
 
 * **The Multi-User Formula**: Android maps multiple human users to distinct Linux UID spaces using the deterministic formula: `UID = (User_ID * 100000) + App_ID`.
 * **Primary vs. Secondary Users**: User `0` is the primary owner account that boots the device and runs core system daemons. Additional users (`10`, `11`, etc.) represent secondary profiles, guest accounts, or managed enterprise work profiles.
-* **Storage Virtualization**: Physical internal storage is partitioned into per-user directories (`/data/user/[userId]`). Filesystem isolation is enforced via Discretionary Access Control (DAC) and Linux mount namespaces.
+* **Storage Virtualization**: Physical internal storage is partitioned into per-user directories (`/data/user/[userId]`). Filesystem isolation is enforced via Discretionary Access Control (DAC) and Linux mount namespaces (`CLONE_NEWNS`).
 * **Shared Binaries, Isolated State**: When multiple users install the same application, only a single APK binary is stored in `/data/app`. However, each user receives a completely isolated data sandbox and private SQLite databases.
 * **`UserManagerService`**: The centralized framework service running inside `system_server` that manages user creation, lifecycle transitions, state serialization (`/data/system/users/`), and restricted profile policy enforcement.
 
@@ -54,6 +54,8 @@ $$	ext{Linux UID} = (	ext{User\_ID} 	imes 100000) + 	ext{App\_ID}$$
 Where:
 * `User_ID`: Integer identifying the human user profile (starting at `0` for the primary owner, followed by `10`, `11`, `12` for secondary accounts).
 * `App_ID`: The application's base identifier (ranging from `10000` to `19999`).
+
+![Android Multi-User Storage & UID Translation Architecture](/assets/images/posts/android-security/ch4-multiuser-storage.png)
 
 ### The Multi-User UID Allocation Matrix
 
@@ -130,30 +132,27 @@ SystemServer
             └── /data/system/users/10/           (User 10 wallpaper, accounts)
 ```
 
-### User Types & Roles
+### Useful ADB Shell Commands for Multi-User Inspection
 
-Android supports multiple distinct user categories:
+Security analysts can inspect and manipulate user profiles directly:
 
-| User Type | Flags | Capabilities |
-| :--- | :--- | :--- |
-| **Owner (Primary)** | `FLAG_PRIMARY \| FLAG_ADMIN` | Boots first; cannot be deleted; can configure global hardware, Wi-Fi, and create new users. |
-| **Secondary User** | `FLAG_FULL` | Independent user account; can install apps and customize settings; cannot configure device-wide radios. |
-| **Guest User** | `FLAG_GUEST \| FLAG_EPHEMERAL` | Temporary session; displays a prompt to wipe all user data upon logout. |
-| **Restricted Profile** | `FLAG_RESTRICTED` | Parentally-controlled or kiosk account; app access is whitelisted by User 0. |
-| **Managed Profile (Work)** | `FLAG_MANAGED_PROFILE` | Enterprise container coexisting alongside User 0; governed by an MDM Device Policy Controller. |
+```bash
+# List all active users on the device
+pm list users
 
-### The User Switching Flow
+# Create a new secondary user profile
+pm create-user "TestUser"
 
-When the device switches from User 0 to User 10:
-1. `ActivityManagerService` pauses and stops User 0's foreground activities.
-2. Broadcasts `Intent.ACTION_USER_BACKGROUND` to registered User 0 services.
-3. Mounts User 10's virtualized storage namespaces.
-4. Broadcasts `Intent.ACTION_USER_FOREGROUND` and `Intent.ACTION_USER_SWITCHED` to User 10 processes.
-5. Restores User 10's window manager focus and personal wallpaper.
+# Switch display focus to User 10
+am switch-user 10
+
+# Inspect detailed user manager state
+dumpsys user
+```
 
 ---
 
-## 4. Multi-User Broadcast Routing & IPC Mediation
+## 4. Multi-User Broadcast Routing & Work Profile Interaction
 
 When an event occurs in the operating system (e.g., `ACTION_BATTERY_LOW` or `ACTION_PACKAGE_ADDED`), how does Android route the broadcast across multiple users?
 

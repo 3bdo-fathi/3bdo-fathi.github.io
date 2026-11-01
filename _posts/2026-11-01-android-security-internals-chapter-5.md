@@ -2,7 +2,7 @@
 title: "Android Security Internals: Chapter 5 - Cryptographic Providers"
 date: 2026-11-01 13:00:00 +0300
 categories: [Cyber Security, Android Security]
-tags: [android, mobile security, internals, cryptography, jca, openssl, prng, bouncy-castle]
+tags: [android, mobile security, internals, cryptography, jca, openssl, prng, bouncy-castle, ecdsa, mastg]
 description: "An exhaustive analysis of Chapter 5 of Nikolay Elenkov's 'Android Security Internals', investigating the Java Cryptography Architecture (JCA), AndroidOpenSSL, Bouncy Castle, SecureRandom entropy flaws, and CVE-2013-7372."
 image:
   path: /assets/images/posts/android-security/chapter-5-cover.png
@@ -15,11 +15,11 @@ schema:
 
 Hello everyone,
 
-Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**.
+Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**, expanded with mathematical cryptanalysis and real-world mobile vulnerability research from **Google Project Zero** and the **OWASP Mobile Application Security Verification Standard (MASVS)**.
 
 In [Chapter 4](/posts/android-security-internals-chapter-4/), we explored multi-user architecture and storage virtualization. In this installment, we explore **Chapter 5: Cryptographic Providers**, investigating the engine that powers encryption, digital signatures, message integrity, and pseudorandom number generation across the Android platform.
 
-Cryptography on Android is built atop the **Java Cryptography Architecture (JCA)**. However, Android deviates significantly from standard desktop Oracle Java. In this deep dive, we examine how Android transitioned from Apache Harmony and Bouncy Castle to high-performance native OpenSSL/BoringSSL C engines, analyze how the system collects entropy, and dissect the infamous 2013 Android PRNG flaw that resulted in the mass theft of Bitcoin wallets worldwide.
+Cryptography on Android is built atop the **Java Cryptography Architecture (JCA)**. However, Android deviates significantly from standard desktop Oracle Java. In this deep dive, we examine how Android transitioned from Apache Harmony and Bouncy Castle to high-performance native OpenSSL/BoringSSL C engines, analyze how the system collects entropy, mathematically deconstruct the infamous 2013 Android PRNG flaw that resulted in the mass theft of Bitcoin wallets worldwide, and audit common mobile cryptographic anti-patterns.
 
 ![Android Security Internals Chapter 5](/assets/images/posts/android-security/chapter-5-cover.png)
 
@@ -46,6 +46,8 @@ Cryptography on Android is built atop the **Java Cryptography Architecture (JCA)
 ## 1. The Java Cryptography Architecture (JCA) in Android
 
 The Java Cryptography Architecture (JCA) is structured around two key concepts: **Engine Classes** and **Cryptographic Service Providers (CSPs)**.
+
+![Android Cryptographic Architecture & PRNG Entropy Pipeline](/assets/images/posts/android-security/ch5-crypto-architecture.png)
 
 ### Engine Classes vs. Providers
 
@@ -141,10 +143,30 @@ Where:
 
 > **The Golden Rule of ECDSA**: The nonce $k$ must be cryptographically random and **never reused**.
 
-If an attacker observes two distinct signatures $(r, s_1)$ and $(r, s_2)$ that share the same $r$ value, it proves that the exact same nonce $k$ was reused! The attacker can trivially compute the private key $d_A$ algebraically:
+If an attacker observes two distinct signatures $(r, s_1)$ and $(r, s_2)$ that share the same $r$ value, it proves that the exact same nonce $k$ was reused! The attacker can compute the private key $d_A$ algebraically:
 
 $$k = rac{z_1 - z_2}{s_1 - s_2} \pmod n$$
 $$d_A = rac{s_1 \cdot k - z_1}{r} \pmod n$$
+
+### Practical Python Proof of Concept: Private Key Recovery
+
+```python
+# Demonstrating ECDSA private key recovery from duplicate nonce k
+# secp256k1 curve order n
+n = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
+
+# Observed public transactions sharing r:
+# (r, s1, z1) and (r, s2, z2)
+def recover_private_key(r, s1, z1, s2, z2):
+    # Calculate k = (z1 - z2) / (s1 - s2) mod n
+    numerator = (z1 - z2) % n
+    denominator = (s1 - s2) % n
+    k = (numerator * pow(denominator, -1, n)) % n
+    
+    # Calculate dA = (s1 * k - z1) / r mod n
+    dA = ((s1 * k - z1) * pow(r, -1, n)) % n
+    return dA
+```
 
 ### Why Did Android Reuse $k$?
 
@@ -233,6 +255,7 @@ In [Chapter 6: Network Security and PKI](/posts/android-security-internals-chapt
 3. [Android Security Team - Some Thoughts on Android's SecureRandom (Official CVE-2013-7372 Disclosure)](https://android-developers.googleblog.com/2013/08/some-thoughts-on-android-securerandom.html)
 4. [NIST SP 800-90A Rev. 1: Recommendation for Random Number Generation Using Deterministic Random Bit Generators](https://csrc.nist.gov/publications/detail/sp/800-90a/rev-1/final)
 5. [Conscrypt GitHub Repository (Google BoringSSL JNI Provider)](https://github.com/google/conscrypt)
+6. [OWASP Mobile Application Security Verification Standard (MASVS-CRYPTO)](https://mas.owasp.org/)
 
 ---
 
