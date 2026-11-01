@@ -1,7 +1,7 @@
 ---
 title: "Cyber Threat Intelligence (CTI) & Threat Actor Profiling Framework"
 date: 2025-01-01 12:07:00 +0300
-categories: [Research, Threat Intelligence]
+categories: [Cyber Security, Threat Intelligence]
 tags: [threat-intelligence, cti, mitre-attack, attribution, threat-actors, diamond-model]
 description: "An operational framework for Cyber Threat Intelligence (CTI), exploring threat actor profiling, adversary TTP correlation, the Diamond Model, and MITRE ATT&CK integration."
 ---

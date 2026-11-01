@@ -5,7 +5,7 @@ categories: [Scripts, Bash]
 tags: [reconnaissance, dns, pentesting, automation]
 description: "A Bash-based reconnaissance framework automating DNS enumeration, subdomain discovery, HTTP probing, WAF detection, and vulnerability scanning for penetration testers."
 image:
-  path: /assets/images/Reconnaissance Framework.jpg
+  path: /assets/images/reconnaissance-framework.jpg
   alt: Reconnaissance Framework
 ---
 

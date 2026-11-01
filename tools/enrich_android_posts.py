@@ -8,3 +8,4 @@ posts_dir = "_posts"
 # verify zero emojis, verify table formatting, and overwrite.
 
 print("Starting enrichment process...")
+

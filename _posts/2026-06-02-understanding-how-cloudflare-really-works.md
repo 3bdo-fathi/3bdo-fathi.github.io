@@ -1,10 +1,7 @@
 ---
 title: "The Deep Infrastructure Architecture of Cloudflare"
 date: 2026-06-02 12:00:00 +0300
-categories:
-  - Cyber Security
-  - Network Engineering
-  - Infrastructure
+categories: [Cyber Security, Network Security]
 tags:
   - cloudflare
   - networking

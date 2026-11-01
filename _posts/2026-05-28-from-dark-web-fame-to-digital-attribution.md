@@ -1,7 +1,7 @@
 ---
 title: "From Dark Web Fame to Digital Attribution: The Story of How OPSEC Failures Can Destroy Years of Anonymity"
 date: 2026-05-28 12:14:00 +0300
-categories: [Research, Security News]
+categories: [Cyber Security, Threat Intelligence]
 tags: [INT3X, OPSEC, Threat Intelligence, OSINT, Quellostanco, Cyber Attribution, BlueKeep, Egyptian Cyber Threat]
 description: "A real-world case study on threat actor attribution, OSINT methodologies, and how operational security (OPSEC) failures exposed the INT3X cybercrime group."
 image:

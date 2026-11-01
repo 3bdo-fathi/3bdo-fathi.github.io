@@ -1,7 +1,7 @@
 ---
 title: "Vulnerability Research & Root Cause Analysis Methodology"
 date: 2025-01-01 12:12:00 +0300
-categories: [Research, Vulnerabilities]
+categories: [Cyber Security, Vulnerability Research]
 tags: [vulnerability-research, cve, root-cause-analysis, memory-safety, patch-diffing]
 description: "A technical overview of vulnerability research methodologies, binary patch diffing, root cause analysis, CVE classification, and responsible disclosure."
 ---

@@ -1,7 +1,7 @@
 ---
 title: "SAST vs DAST vs IAST vs RASP: AppSec Testing Guide"
 date: 2026-08-31
-categories: [Cyber Security, Application Security, DevSecOps]
+categories: [Cyber Security, Application Security]
 tags: [sast, dast, iast, rasp, sca, secrets-scanning, iac, api-security, aspm, appsec, devsecops, shift-left, vulnerability-management]
 description: "Compare SAST, DAST, IAST, and RASP, then layer SCA, secrets scanning, IaC, API testing, and ASPM into a practical AppSec program."
 image:

@@ -1,6 +1,6 @@
 ---
 title: "Building a Python-Based System Information Gathering Tool"
-date: 2025-05-30 16:03:00 +0300
+date: 2025-10-30 16:03:00 +0300
 categories: [Cyber Security, Network Security]
 tags: [python, reconnaissance, pentesting, nmap]
 description: "A comprehensive guide to automating network reconnaissance, port scanning, system enumeration, and service discovery using Python and Nmap."

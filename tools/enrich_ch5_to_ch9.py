@@ -1080,3 +1080,4 @@ Have you configured Android Enterprise profiles or investigated ransomware abuse
 """
 
 update_post("2026-11-01-android-security-internals-chapter-9.md", ch9_content)
+
