@@ -22,3 +22,4 @@ if target in c and "post-dedication-box" not in c:
     print("Added dedication banner to _layouts/post.html successfully!")
 else:
     print("Target not found or already added")
+
