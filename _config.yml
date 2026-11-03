@@ -227,13 +227,6 @@ jekyll-archives:
   permalinks:
     category: /categories/:name/
 
-plugins:
-  - jekyll-paginate
-  - jekyll-sitemap
-  - jekyll-feed
-  - jekyll-seo-tag
-  - jekyll-archives
-
 # Newsletter subscription settings (optional)
 newsletter:
   enabled: true
