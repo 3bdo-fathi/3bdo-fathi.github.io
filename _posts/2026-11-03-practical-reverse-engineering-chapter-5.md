@@ -1,6 +1,6 @@
 ---
 title: "Practical Reverse Engineering: Chapter 5 - Software Obfuscation and Deobfuscation"
-date: 2026-11-04 17:00:00 +0300
+date: 2026-11-03 17:00:00 +0300
 categories: [Cyber Security, Reverse Engineering]
 tags: [reverse-engineering, obfuscation, deobfuscation, cfg-flattening, opaque-predicates, virtual-machines, symbolic-execution, quetz]
 description: "An exhaustive technical breakdown of Chapter 5 of 'Practical Reverse Engineering' by Bruce Dang et al., analyzing white-box attack contexts, MBA expressions, CFG flattening, VM-based protectors, symbolic execution with Z3/angr, and solving the Quetz keygenme."

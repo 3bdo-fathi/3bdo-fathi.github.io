@@ -1,6 +1,6 @@
 ---
 title: "Practical Reverse Engineering: Chapter 2 - ARM Architecture and Assembly"
-date: 2026-11-04 11:00:00 +0300
+date: 2026-11-03 11:00:00 +0300
 categories: [Cyber Security, Reverse Engineering]
 tags: [reverse-engineering, arm, thumb-2, aapcs, barrel-shifter, coprocessor, cache-coherency]
 description: "An exhaustive technical breakdown of Chapter 2 of 'Practical Reverse Engineering' by Bruce Dang et al., analyzing the ARM RISC architecture, 8 privilege modes, Thumb-2, barrel shifter, coprocessors, unk_function decompilation, and complete exercise solutions."
