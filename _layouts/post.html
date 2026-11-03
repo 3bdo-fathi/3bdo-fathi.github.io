@@ -12,6 +12,7 @@ script_includes:
 {% include lang.html %}
 
 {% include toc-status.html %}
+{% include reading-progress.html %}
 
 <article class="px-1" data-toc="{{ enable_toc }}">
   <header>
@@ -107,42 +108,90 @@ script_includes:
       {% include post-edit.html lang=lang %}
     </div>
 
-    <!-- Sadaqah Jariyah & Enduring Knowledge Box -->
-    <div class="post-dedication-box my-4 p-3 rounded" style="background: rgba(88, 166, 255, 0.05); border: 1px solid rgba(88, 166, 255, 0.2); font-size: 0.88rem; line-height: 1.6;">
-      <div class="d-flex align-items-center gap-2 mb-1" style="color: #58a6ff; font-weight: 600;">
-        <i class="fas fa-book-reader"></i>
-        <span>Sadaqah Jariyah & Knowledge Sharing | صدقة جارية وعلم يُنتفع به</span>
+    <!-- Stay Updated: Newsletter & RSS -->
+    <div class="post-newsletter-card my-4 p-3 rounded" style="background: rgba(22, 27, 34, 0.6); border: 1px solid rgba(88, 166, 255, 0.2);">
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+        <div class="d-flex align-items-center gap-2" style="color: #58a6ff; font-weight: 600; font-size: 0.95rem;">
+          <i class="fas fa-paper-plane"></i>
+          <span>Stay Updated</span>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <button id="copy-feed-btn" type="button" class="btn btn-outline-secondary btn-sm" style="font-size: 0.78rem; padding: 2px 8px;">
+            <i class="fas fa-copy me-1"></i> Copy RSS URL
+          </button>
+          <a href="/feed.xml" target="_blank" rel="noopener noreferrer" class="btn btn-outline-warning btn-sm" style="font-size: 0.78rem; padding: 2px 8px; text-decoration: none;">
+            <i class="fas fa-rss me-1"></i> RSS Feed
+          </a>
+        </div>
       </div>
-      <p class="mb-0 text-muted" style="font-size: 0.84rem;">
-        This technical content and everything shared across this blog is dedicated with sincere intention to serve as enduring, beneficial knowledge (علم يُنتفع به) and an ongoing charity (صدقة جارية). If you find value in this research, please remember me and my family in your sincere prayers.
+      <p class="text-muted mb-3" style="font-size: 0.84rem; line-height: 1.5;">
+        Subscribe to receive new security write-ups, vulnerability analyses, and research papers directly in your inbox.
       </p>
+      <form
+        action="https://buttondown.com/api/emails/embed-subscribe/{{ site.newsletter.buttondown_username | default: '3bdo-fathi' }}"
+        method="post"
+        target="popupwindow"
+        onsubmit="window.open('https://buttondown.com/{{ site.newsletter.buttondown_username | default: '3bdo-fathi' }}', 'popupwindow')"
+        class="d-flex gap-2 flex-wrap mb-3"
+      >
+        <input
+          type="email"
+          name="email"
+          placeholder="Enter your email address..."
+          required
+          class="form-control form-control-sm flex-grow-1"
+          style="max-width: 320px; background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(88, 166, 255, 0.3); color: #f0f6fc; font-size: 0.84rem;"
+        />
+        <button type="submit" class="btn btn-primary btn-sm px-3" style="font-size: 0.84rem; font-weight: 500;">
+          Subscribe
+        </button>
+      </form>
+      <div class="d-flex align-items-center gap-2 flex-wrap pt-2 border-top" style="border-color: rgba(88, 166, 255, 0.1) !important;">
+        <span class="text-muted" style="font-size: 0.78rem;">Or connect directly:</span>
+        <a href="https://www.linkedin.com/in/3bdo-fathi" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm" style="font-size: 0.76rem; padding: 1px 7px; text-decoration: none;">
+          <i class="fab fa-linkedin me-1"></i> LinkedIn
+        </a>
+        <a href="https://t.me/abdofathii" target="_blank" rel="noopener noreferrer" class="btn btn-outline-info btn-sm" style="font-size: 0.76rem; padding: 1px 7px; text-decoration: none;">
+          <i class="fab fa-telegram me-1"></i> Telegram
+        </a>
+        <a href="https://twitter.com/3bdofathii" target="_blank" rel="noopener noreferrer" class="btn btn-outline-light btn-sm" style="font-size: 0.76rem; padding: 1px 7px; text-decoration: none;">
+          <i class="fa-brands fa-x-twitter me-1"></i> X
+        </a>
+      </div>
     </div>
 
-    {% if page.tags.size > 0 %}
-      <div class="post-tags">
-        <i class="fa fa-tags fa-fw me-1"></i>
-        {% for tag in page.tags %}
-          <a
-            href="{{ site.baseurl }}/tags/{{ tag | slugify | url_encode }}/"
-            class="post-tag no-text-decoration"
-          >
-            {{- tag -}}
-          </a>
-        {% endfor %}
-      </div>
-    {% endif %}
+    <script>
+      (function () {
+        const copyBtn = document.getElementById('copy-feed-btn');
+        if (copyBtn) {
+          copyBtn.addEventListener('click', function () {
+            const feedUrl = window.location.origin + '{{ "/feed.xml" | relative_url }}';
+            navigator.clipboard.writeText(feedUrl).then(function () {
+              const origHtml = copyBtn.innerHTML;
+              copyBtn.innerHTML = '<i class="fas fa-check me-1 text-success"></i> Copied!';
+              setTimeout(function () {
+                copyBtn.innerHTML = origHtml;
+              }, 2000);
+            });
+          });
+        }
+      })();
+    </script>
 
-    <div class="post-tail-bottom d-flex justify-content-between align-items-center mt-5 pb-2">
-      <div class="license-wrapper">
-        {% if site.data.locales[lang].copyright.license.template %}
-          {% capture _replacement %}
-        <a href="{{ site.data.locales[lang].copyright.license.link }}">
-          {{ site.data.locales[lang].copyright.license.name }}
-        </a>
-        {% endcapture %}
+    <!-- Dedicated Knowledge & Ongoing Charity Tribute -->
+    <div class="post-dedication-bar my-4 py-3 px-3 rounded text-center" style="background: rgba(88, 166, 255, 0.04); border-left: 3px solid #58a6ff; font-size: 0.84rem; line-height: 1.7; color: #8b949e;">
+      <div class="mb-1" style="color: #c9d1d9;">هذا العمل صَدَقَةٌ جَارِيَةٌ وعِلْمٌ يُنتَفَعُ به — نسألكم الدعاء بظهر الغيب لي ولوالديّ.</div>
+      <div class="text-muted" style="font-size: 0.8rem;">Dedicated as an ongoing charity and enduring knowledge — please remember me and my family in your prayers.</div>
+    </div>
 
-          {{ site.data.locales[lang].copyright.license.template | replace: ':LICENSE_NAME', _replacement }}
-        {% endif %}
+    <!-- Comments Section -->
+    {% include comments.html %}
+
+    <div class="post-tail-bottom d-flex justify-content-between align-items-center flex-wrap gap-2 mt-5 pb-2">
+      <div class="license-wrapper text-muted small d-flex align-items-center gap-1">
+        <i class="fab fa-creative-commons"></i>
+        <span>Licensed under</span>
+        <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer" class="text-reset text-decoration-underline">CC BY 4.0</a>
       </div>
 
       {% include post-sharing.html lang=lang %}

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://3bdo-fathi.github.io/sitemap.xml
+
