@@ -124,4 +124,13 @@
   }
 
   const modeToggle = new ModeToggle();
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById(ModeToggle.ID);
+    if (btn) {
+      btn.addEventListener('click', function() {
+        modeToggle.flipMode();
+      });
+    }
+  });
 </script>

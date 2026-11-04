@@ -2,24 +2,22 @@
 
 <aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end">
   <header class="profile-wrapper">
-    <a href="{{ '/' | relative_url }}" id="avatar" class="rounded-circle">
+    <a href="{{ '/' | relative_url }}" id="avatar" class="d-block">
       {% if site.avatar != empty and site.avatar %}
         {% capture avatar_url %}
-          {% if site.avatar contains '://' %}
+          {%- if site.avatar contains '://' -%}
             {{ site.avatar }}
-          {% elsif site.img_cdn != empty and site.img_cdn %}
-            {{ site.avatar | prepend: site.img_cdn }}
-          {% else %}
+          {%- elsif site.cdn -%}
+            {{ site.cdn | append: site.avatar }}
+          {%- else -%}
             {{ site.avatar | relative_url }}
-          {% endif %}
+          {%- endif -%}
         {% endcapture %}
-        <img src="{{ avatar_url | strip }}" width="112" height="112" alt="avatar" onerror="this.style.display='none'">
+        <img src="{{ avatar_url | strip }}" alt="avatar" onerror="this.style.display='none'">
       {% endif %}
     </a>
 
-    <h1 class="site-title">
-      <a href="{{ '/' | relative_url }}">{{ site.title }}</a>
-    </h1>
+    <a class="site-title d-block" href="{{ '/' | relative_url }}">{{ site.title }}</a>
     <p class="site-subtitle fst-italic mb-0">{{ site.tagline }}</p>
   </header>
   <!-- .profile-wrapper -->
@@ -48,16 +46,82 @@
 
   <style>
     #sidebar .sidebar-bottom {
+      padding: 0.5rem 0.5rem !important;
+      margin-bottom: 1.25rem !important;
+    }
+    #sidebar .theme-switch-wrapper {
       display: flex !important;
-      flex-wrap: nowrap !important;
+      justify-content: center !important;
+      width: 100% !important;
+    }
+    #mode-toggle.theme-switch-btn {
+      width: 48px !important;
+      height: 24px !important;
+      border-radius: 20px !important;
+      padding: 2px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      cursor: pointer !important;
+      position: relative !important;
+      border: 1px solid var(--border-color, rgba(88, 166, 255, 0.25)) !important;
+      background: var(--sidebar-border-color, #21262d) !important;
+      outline: none !important;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+      transition: all 0.3s ease !important;
+      margin: 0 !important;
+    }
+    #mode-toggle.theme-switch-btn .switch-thumb {
+      width: 18px !important;
+      height: 18px !important;
+      border-radius: 50% !important;
+      display: flex !important;
       align-items: center !important;
       justify-content: center !important;
-      padding: 0.5rem 0.5rem !important;
-      gap: 0.35rem !important;
-      margin-bottom: 1.5rem !important;
+      font-size: 10px !important;
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.25s ease !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
     }
-    #sidebar .sidebar-bottom a,
-    #sidebar .sidebar-bottom #mode-toggle {
+    /* Dark Mode State */
+    [data-mode="dark"] #mode-toggle.theme-switch-btn {
+      background: #161b22 !important;
+      border-color: rgba(88, 166, 255, 0.4) !important;
+    }
+    [data-mode="dark"] #mode-toggle.theme-switch-btn .switch-thumb {
+      transform: translateX(24px) !important;
+      background: #58a6ff !important;
+      color: #0d1117 !important;
+    }
+    [data-mode="dark"] #mode-toggle.theme-switch-btn .mode-icon-light {
+      display: none !important;
+    }
+    [data-mode="dark"] #mode-toggle.theme-switch-btn .mode-icon-dark {
+      display: inline-block !important;
+    }
+    /* Light Mode State */
+    [data-mode="light"] #mode-toggle.theme-switch-btn {
+      background: #d8dee4 !important;
+      border-color: #afb8c1 !important;
+    }
+    [data-mode="light"] #mode-toggle.theme-switch-btn .switch-thumb {
+      transform: translateX(0px) !important;
+      background: #ffffff !important;
+      color: #f59e0b !important;
+    }
+    [data-mode="light"] #mode-toggle.theme-switch-btn .mode-icon-dark {
+      display: none !important;
+    }
+    [data-mode="light"] #mode-toggle.theme-switch-btn .mode-icon-light {
+      display: inline-block !important;
+    }
+    /* Social Icons Row */
+    #sidebar .sidebar-social {
+      display: flex !important;
+      flex-wrap: nowrap !important;
+      justify-content: center !important;
+      gap: 0.35rem !important;
+      width: 100% !important;
+    }
+    #sidebar .sidebar-social a {
       width: 1.9rem !important;
       height: 1.9rem !important;
       margin: 0 !important;
@@ -68,76 +132,66 @@
       border-radius: 50% !important;
       font-size: 0.9rem !important;
       color: var(--sidebar-btn-color, inherit) !important;
-      border: none !important;
-      background: transparent !important;
-      cursor: pointer !important;
       transition: all 0.2s ease-in-out !important;
     }
-    #sidebar .sidebar-bottom a:hover,
-    #sidebar .sidebar-bottom #mode-toggle:hover {
+    #sidebar .sidebar-social a:hover {
       transform: translateY(-2px) !important;
       color: #58a6ff !important;
       box-shadow: 0 0 8px rgba(88, 166, 255, 0.4) !important;
     }
-    #sidebar .sidebar-bottom a:not(:last-child) {
-      margin-right: 0 !important;
-    }
-    #sidebar .sidebar-bottom .icon-border {
-      margin: 0 0.15rem !important;
-      height: 14px !important;
-      width: 1px !important;
-      border-radius: 1px !important;
-      background-color: var(--sidebar-border-color, #30363d) !important;
-    }
   </style>
 
-  <div class="sidebar-bottom w-100">
-    <button type="button" class="btn btn-link nav-link" aria-label="Switch Mode" id="mode-toggle">
-      <i class="fas fa-adjust"></i>
-    </button>
+  <div class="sidebar-bottom w-100 d-flex flex-column align-items-center">
+    <!-- Modern Toggle Switch -->
+    <div class="theme-switch-wrapper mb-2">
+      <button type="button" class="theme-switch-btn" aria-label="Switch Mode" id="mode-toggle">
+        <span class="switch-thumb">
+          <i class="fas fa-moon mode-icon-dark"></i>
+          <i class="fas fa-sun mode-icon-light"></i>
+        </span>
+      </button>
+    </div>
 
-    {% if site.data.contact.size > 0 %}
-      <span class="icon-border"></span>
-    {% endif %}
+    <!-- Social links in single clean row -->
+    <div class="sidebar-social">
+      {% for entry in site.data.contact %}
+        {% capture url %}
+          {%- if entry.type == 'github' -%}
+            https://github.com/{{ site.github.username }}
+          {%- elsif entry.type == 'twitter' -%}
+            https://twitter.com/{{ site.twitter.username }}
+          {%- elsif entry.type == 'email' -%}
+            {% assign email = site.social.email | default: site.email %}
+            mailto:{{ email }}
+          {%- elsif entry.type == 'rss' -%}
+            {{ entry.url | default: '/feed.xml' | relative_url }}
+          {%- else -%}
+            {{ entry.url }}
+          {%- endif -%}
+        {% endcapture %}
 
-    {% for entry in site.data.contact %}
-      {% capture url %}
-        {%- if entry.type == 'github' -%}
-          https://github.com/{{ site.github.username }}
-        {%- elsif entry.type == 'twitter' -%}
-          https://twitter.com/{{ site.twitter.username }}
-        {%- elsif entry.type == 'email' -%}
-          {% assign email = site.social.email | default: site.email %}
-          mailto:{{ email }}
-        {%- elsif entry.type == 'rss' -%}
-          {{ entry.url | default: '/feed.xml' | relative_url }}
-        {%- else -%}
-          {{ entry.url }}
-        {%- endif -%}
-      {% endcapture %}
-
-      {% if url %}
-        <a
-          href="{{ url | strip }}"
-          aria-label="{{ entry.type }}"
-          {% assign link_types = '' %}
-          {% unless entry.noblank %}
-            target="_blank"
-            {% assign link_types = 'noopener noreferrer' %}
-          {% endunless %}
-          {% if entry.type == 'mastodon' %}
-            {% assign link_types = link_types | append: ' me' | strip %}
-          {% endif %}
-          {% unless link_types == empty %}
-            rel="{{ link_types }}"
-          {% endunless %}
-        >
-          <i class="{{ entry.icon }}"></i>
-        </a>
-      {% endif %}
-    {% endfor %}
+        {% if url %}
+          <a
+            href="{{ url | strip }}"
+            aria-label="{{ entry.type }}"
+            {% assign link_types = '' %}
+            {% unless entry.noblank %}
+              target="_blank"
+              {% assign link_types = 'noopener noreferrer' %}
+            {% endunless %}
+            {% if entry.type == 'mastodon' %}
+              {% assign link_types = link_types | append: ' me' | strip %}
+            {% endif %}
+            {% unless link_types == empty %}
+              rel="{{ link_types }}"
+            {% endunless %}
+          >
+            <i class="{{ entry.icon }}"></i>
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
   </div>
   <!-- .sidebar-bottom -->
 </aside>
 <!-- #sidebar -->
-
