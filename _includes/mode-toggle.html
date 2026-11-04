@@ -7,7 +7,6 @@
     if (savedMode) {
       document.documentElement.setAttribute('data-mode', savedMode);
     } else {
-      // Follow system preference initially if no explicit user preference
       var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
       document.documentElement.setAttribute('data-mode', prefersDark ? 'dark' : 'light');
     }
@@ -115,6 +114,12 @@
     }
 
     flipMode() {
+      const now = Date.now();
+      if (this._lastFlip && (now - this._lastFlip < 300)) {
+        return;
+      }
+      this._lastFlip = now;
+
       if (this.isDarkMode) {
         this.setLight(true);
       } else {
@@ -125,12 +130,52 @@
 
   const modeToggle = new ModeToggle();
 
+  /* Bind mode-toggle click and keyboard shortcuts */
   document.addEventListener('DOMContentLoaded', function() {
-    var btn = document.getElementById(ModeToggle.ID);
-    if (btn) {
-      btn.addEventListener('click', function() {
+    // Mode toggle button click handler
+    const btn = document.getElementById('mode-toggle');
+    if (btn && !btn.dataset.modeBound) {
+      btn.dataset.modeBound = 'true';
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
         modeToggle.flipMode();
       });
+    }
+
+    // Keyboard shortcut for search: Ctrl+K, Cmd+K, or slash ('/')
+    document.addEventListener('keydown', function(e) {
+      const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+      const isInput = activeTag === 'input' || activeTag === 'textarea' || (document.activeElement && document.activeElement.isContentEditable);
+
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        triggerSearch();
+      } else if (e.key === '/' && !isInput) {
+        e.preventDefault();
+        triggerSearch();
+      } else if (e.key === 'Escape') {
+        const searchInput = document.getElementById('search-input');
+        const searchCancel = document.getElementById('search-cancel');
+        if (searchInput && document.activeElement === searchInput) {
+          if (searchCancel) {
+            searchCancel.click();
+          } else {
+            searchInput.blur();
+          }
+        }
+      }
+    });
+
+    function triggerSearch() {
+      const searchTrigger = document.getElementById('search-trigger');
+      const searchInput = document.getElementById('search-input');
+      if (searchTrigger && window.getComputedStyle(searchTrigger).display !== 'none') {
+        searchTrigger.click();
+      }
+      if (searchInput) {
+        searchInput.focus();
+        searchInput.select();
+      }
     }
   });
 </script>

@@ -93,8 +93,42 @@ script_includes:
     {{ content }}
   </div>
 
+  <style>
+    .post-btn-minimal {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.28rem 0.65rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12));
+      color: var(--text-muted-color, #8b949e);
+      text-decoration: none;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .post-btn-minimal:hover {
+      color: #58a6ff;
+      border-color: rgba(88, 166, 255, 0.4);
+      background: rgba(88, 166, 255, 0.08);
+    }
+    [data-mode="light"] .post-btn-minimal {
+      background: rgba(0, 0, 0, 0.02);
+      border-color: rgba(0, 0, 0, 0.12);
+      color: #57606a;
+    }
+    [data-mode="light"] .post-btn-minimal:hover {
+      color: #0969da;
+      border-color: rgba(9, 105, 218, 0.4);
+      background: rgba(9, 105, 218, 0.06);
+    }
+  </style>
+
   <div class="post-tail-wrapper text-muted">
-    <div class="d-flex justify-content-between align-items-center gap-3 mb-3">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
       {% if page.categories.size > 0 %}
         <div class="post-meta">
           <i class="far fa-folder-open fa-fw me-1"></i>
@@ -105,22 +139,30 @@ script_includes:
         </div>
       {% endif %}
 
-      {% include post-edit.html lang=lang %}
+      <div class="d-flex align-items-center gap-2">
+        <button id="copy-article-link-btn" type="button" class="post-btn-minimal" title="Copy Article Link">
+          <i class="fas fa-link"></i>
+          <span>Copy Link</span>
+        </button>
+        {% include post-edit.html lang=lang %}
+      </div>
     </div>
 
     <!-- Stay Updated: Newsletter & RSS -->
-    <div class="post-newsletter-card my-4 p-3 rounded" style="background: rgba(22, 27, 34, 0.6); border: 1px solid rgba(88, 166, 255, 0.2);">
+    <div class="post-newsletter-card my-4 p-3 rounded" style="background: rgba(22, 27, 34, 0.6); border: 1px solid var(--border-color, rgba(88, 166, 255, 0.2));">
       <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
         <div class="d-flex align-items-center gap-2" style="color: #58a6ff; font-weight: 600; font-size: 0.95rem;">
           <i class="fas fa-paper-plane"></i>
           <span>Stay Updated</span>
         </div>
         <div class="d-flex align-items-center gap-2">
-          <button id="copy-feed-btn" type="button" class="btn btn-outline-secondary btn-sm" style="font-size: 0.78rem; padding: 2px 8px;">
-            <i class="fas fa-copy me-1"></i> Copy RSS URL
+          <button id="copy-feed-btn" type="button" class="post-btn-minimal">
+            <i class="fas fa-copy"></i>
+            <span>Copy RSS URL</span>
           </button>
-          <a href="/feed.xml" target="_blank" rel="noopener noreferrer" class="btn btn-outline-warning btn-sm" style="font-size: 0.78rem; padding: 2px 8px; text-decoration: none;">
-            <i class="fas fa-rss me-1"></i> RSS Feed
+          <a href="/feed.xml" target="_blank" rel="noopener noreferrer" class="post-btn-minimal">
+            <i class="fas fa-rss"></i>
+            <span>RSS Feed</span>
           </a>
         </div>
       </div>
@@ -140,22 +182,25 @@ script_includes:
           placeholder="Enter your email address..."
           required
           class="form-control form-control-sm flex-grow-1"
-          style="max-width: 320px; background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(88, 166, 255, 0.3); color: #f0f6fc; font-size: 0.84rem;"
+          style="max-width: 320px; font-size: 0.84rem;"
         />
         <button type="submit" class="btn btn-primary btn-sm px-3" style="font-size: 0.84rem; font-weight: 500;">
           Subscribe
         </button>
       </form>
-      <div class="d-flex align-items-center gap-2 flex-wrap pt-2 border-top" style="border-color: rgba(88, 166, 255, 0.1) !important;">
+      <div class="d-flex align-items-center gap-2 flex-wrap pt-2 border-top" style="border-color: var(--border-color, rgba(88, 166, 255, 0.1)) !important;">
         <span class="text-muted" style="font-size: 0.78rem;">Or connect directly:</span>
-        <a href="https://www.linkedin.com/in/3bdo-fathi" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm" style="font-size: 0.76rem; padding: 1px 7px; text-decoration: none;">
-          <i class="fab fa-linkedin me-1"></i> LinkedIn
+        <a href="https://www.linkedin.com/in/3bdo-fathi" target="_blank" rel="noopener noreferrer" class="post-btn-minimal">
+          <i class="fab fa-linkedin"></i>
+          <span>LinkedIn</span>
         </a>
-        <a href="https://t.me/abdofathii" target="_blank" rel="noopener noreferrer" class="btn btn-outline-info btn-sm" style="font-size: 0.76rem; padding: 1px 7px; text-decoration: none;">
-          <i class="fab fa-telegram me-1"></i> Telegram
+        <a href="https://t.me/abdofathii" target="_blank" rel="noopener noreferrer" class="post-btn-minimal">
+          <i class="fab fa-telegram"></i>
+          <span>Telegram</span>
         </a>
-        <a href="https://twitter.com/3bdofathii" target="_blank" rel="noopener noreferrer" class="btn btn-outline-light btn-sm" style="font-size: 0.76rem; padding: 1px 7px; text-decoration: none;">
-          <i class="fa-brands fa-x-twitter me-1"></i> X
+        <a href="https://twitter.com/3bdofathii" target="_blank" rel="noopener noreferrer" class="post-btn-minimal">
+          <i class="fa-brands fa-x-twitter"></i>
+          <span>X</span>
         </a>
       </div>
     </div>
@@ -168,9 +213,22 @@ script_includes:
             const feedUrl = window.location.origin + '{{ "/feed.xml" | relative_url }}';
             navigator.clipboard.writeText(feedUrl).then(function () {
               const origHtml = copyBtn.innerHTML;
-              copyBtn.innerHTML = '<i class="fas fa-check me-1 text-success"></i> Copied!';
+              copyBtn.innerHTML = '<i class="fas fa-check text-success"></i> <span>Copied!</span>';
               setTimeout(function () {
                 copyBtn.innerHTML = origHtml;
+              }, 2000);
+            });
+          });
+        }
+
+        const copyArticleBtn = document.getElementById('copy-article-link-btn');
+        if (copyArticleBtn) {
+          copyArticleBtn.addEventListener('click', function () {
+            navigator.clipboard.writeText(window.location.href).then(function () {
+              const origHtml = copyArticleBtn.innerHTML;
+              copyArticleBtn.innerHTML = '<i class="fas fa-check text-success"></i> <span>Copied!</span>';
+              setTimeout(function () {
+                copyArticleBtn.innerHTML = origHtml;
               }, 2000);
             });
           });

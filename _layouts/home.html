@@ -44,9 +44,70 @@ layout: default
 
 {% include post-stats-styles.html %}
 
+<style>
+  .category-filter-wrapper {
+    margin-bottom: 1.25rem;
+  }
+  .category-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .cat-filter-btn {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+    color: var(--text-muted-color, #8b949e);
+    padding: 0.32rem 0.8rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    border-radius: 20px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+  }
+  .cat-filter-btn:hover {
+    color: #58a6ff;
+    border-color: rgba(88, 166, 255, 0.4);
+    background: rgba(88, 166, 255, 0.08);
+  }
+  .cat-filter-btn.active {
+    background: #58a6ff !important;
+    color: #ffffff !important;
+    border-color: #58a6ff !important;
+  }
+  [data-mode="light"] .cat-filter-btn {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    color: #57606a;
+  }
+  [data-mode="light"] .cat-filter-btn:hover {
+    background: rgba(9, 105, 218, 0.08);
+    border-color: #0969da;
+    color: #0969da;
+  }
+  [data-mode="light"] .cat-filter-btn.active {
+    background: #0969da !important;
+    color: #ffffff !important;
+    border-color: #0969da !important;
+  }
+</style>
+
+<div class="category-filter-wrapper">
+  <div class="category-filter-bar" role="toolbar" aria-label="Category Filters">
+    <button type="button" class="cat-filter-btn active" data-filter="all">All</button>
+    <button type="button" class="cat-filter-btn" data-filter="reverse engineering">Reverse Engineering</button>
+    <button type="button" class="cat-filter-btn" data-filter="android security">Android Security</button>
+    <button type="button" class="cat-filter-btn" data-filter="active directory">Active Directory</button>
+    <button type="button" class="cat-filter-btn" data-filter="social engineering">Social Engineering</button>
+    <button type="button" class="cat-filter-btn" data-filter="application security">AppSec &amp; Web</button>
+    <button type="button" class="cat-filter-btn" data-filter="scripts">Scripts</button>
+  </div>
+</div>
+
 <div id="post-list" class="flex-grow-1 px-xl-1">
   {% for post in posts %}
-    <article class="card-wrapper card">
+    <article class="card-wrapper card" data-categories="{% if post.categories %}{{ post.categories | join: ' ' | downcase }}{% endif %}">
       <a href="{{ post.url | relative_url }}" class="post-preview row g-0 flex-md-row-reverse" data-post-path="{{ post.url }}">
         {% assign card_body_col = '12' %}
 
@@ -140,5 +201,52 @@ layout: default
 {% if paginator.total_pages > 1 %}
   {% include post-paginator.html %}
 {% endif %}
+
+<div id="category-filter-empty" class="text-center py-5 d-none text-muted">
+  <p class="mb-2">No posts matching this category on the current page.</p>
+  <a href="{{ '/categories/' | relative_url }}" class="cat-filter-btn d-inline-block">View All Categories</a>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const filterBtns = document.querySelectorAll('.cat-filter-btn[data-filter]');
+    const postCards = document.querySelectorAll('#post-list article.card-wrapper');
+    const emptyNotice = document.getElementById('category-filter-empty');
+    const paginatorEl = document.querySelector('.pagination-wrapper, nav.paginator');
+
+    if (!filterBtns.length || !postCards.length) return;
+
+    filterBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const filter = this.getAttribute('data-filter');
+        filterBtns.forEach(function (b) { b.classList.remove('active'); });
+        this.classList.add('active');
+
+        let visibleCount = 0;
+        postCards.forEach(function (card) {
+          const cats = (card.getAttribute('data-categories') || '').toLowerCase();
+          if (filter === 'all' || cats.indexOf(filter) !== -1) {
+            card.style.display = '';
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        if (emptyNotice) {
+          if (visibleCount === 0) {
+            emptyNotice.classList.remove('d-none');
+          } else {
+            emptyNotice.classList.add('d-none');
+          }
+        }
+
+        if (paginatorEl) {
+          paginatorEl.style.display = (filter === 'all') ? '' : 'none';
+        }
+      });
+    });
+  });
+</script>
 
 {% include post-analytics.html %}

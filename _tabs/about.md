@@ -5,59 +5,39 @@ title: About Me
 permalink: /about/
 ---
 
-## Abdulrahman M. Fathi
-**0x3bdo** &bull; Cyber Security Engineer &amp; Penetration Tester  
-*Cairo, Egypt*
+# Abdulrahman M. Fathi
 
-<div class="d-flex flex-wrap gap-2 my-3">
-  <a href="https://www.linkedin.com/in/3bdo-fathi" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm">
-    <i class="fab fa-linkedin me-1"></i> LinkedIn
-  </a>
-  <a href="https://github.com/3bdo-fathi" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary btn-sm">
-    <i class="fab fa-github me-1"></i> GitHub
-  </a>
-  <a href="mailto:abdulrahmanmohamedfathi@gmail.com" class="btn btn-outline-info btn-sm">
-    <i class="fas fa-envelope me-1"></i> Email
-  </a>
-  <a href="/contact-me/" class="btn btn-outline-dark btn-sm">
-    <i class="fas fa-paper-plane me-1"></i> Contact
-  </a>
-</div>
+**0x3bdo** | Cyber Security Engineer & Penetration Tester  
+Cairo, Egypt
+
+[LinkedIn](https://www.linkedin.com/in/3bdo-fathi) • [GitHub](https://github.com/3bdo-fathi) • [Email](mailto:abdulrahmanmohamedfathi@gmail.com) • [Contact](/contact-me/)
 
 ---
 
-### About Me
+### Bio
 
-I am an offensive security engineer and penetration tester based in Cairo, Egypt. My technical work focuses on uncovering vulnerabilities across complex application architectures, modern network environments, and compiled binaries, helping organizations strengthen their security posture by thinking like an adversary.
-
----
-
-### Technical Focus
-
-* **Mobile Security & Reverse Engineering**: Auditing Android and iOS applications, analyzing compiled DEX bytecode and native C/C++ shared libraries (`.so`), dynamic runtime instrumentation using Frida and objection, and bypassing root detection and SSL certificate pinning.
-* **Web Applications & APIs**: Assessing modern web applications and microservices (REST, GraphQL), with a focus on nuanced business logic flaws, Broken Object-Level Authorization (BOLA/IDOR), and SSRF targeting cloud metadata.
-* **Active Directory & Enterprise Red Teaming**: Assessing internal enterprise networks, graph-based attack path analysis using BloodHound, Kerberos attacks (Kerberoasting, AS-REP Roasting), and Active Directory Certificate Services (AD CS) misconfigurations.
-* **Binary Analysis & Automation**: Reverse engineering compiled x86, x64, and ARM binaries, Windows kernel internals and driver analysis, and crafting custom offensive automation tooling using Python and Bash.
+Offensive security engineer and penetration tester focused on uncovering vulnerabilities across web ecosystems, mobile applications, APIs, Active Directory environments, and compiled binaries. I specialize in chaining subtle architectural misconfigurations into high-impact assessments and providing actionable, engineering-driven remediation.
 
 ---
 
-### Featured Research Series
+### Focus Areas
 
-* [**Practical Reverse Engineering**](/categories/reverse-engineering/): 5-chapter comprehensive breakdown covering x86, x64, ARM assembly, Windows kernel architecture, WinDbg automation, and software obfuscation/deobfuscation.
-* [**Android Security Internals**](/categories/android-security/): 13-chapter deep-dive into the Android security model, Binder IPC, permissions architecture, cryptographic providers, and root internals.
-* [**Social Engineering: The Art of Human Hacking**](/categories/social-engineering/): 9-chapter analysis of human-centric attack surfaces, psychological elicitation, and defensive awareness.
-
----
-
-### Ongoing Charity & Knowledge Sharing | صدقة جارية وعلم يُنتفع به
-
-> **هذا العمل صَدَقَةٌ جَارِيَةٌ وعِلْمٌ يُنتَفَعُ به — نسألكم الدعاء بظهر الغيب لي ولوالديّ.**  
-> *Dedicated as an ongoing charity and enduring knowledge — please remember me and my family in your prayers.*
-
-All research papers, vulnerability analyses, and technical guides published on this blog are shared unconditionally as enduring beneficial knowledge.
+- **Mobile Security & Reverse Engineering**: Android/iOS auditing, bytecode analysis (Smali/DEX), dynamic instrumentation with Frida, and cryptographic inspection.
+- **Web & API Security**: Architecture reviews, business logic flaws, authorization issues (BOLA/IDOR), and modern API protocols (REST, GraphQL, gRPC).
+- **Active Directory & Enterprise Security**: Attack path analysis with BloodHound, Kerberos abuse, AD CS misconfigurations, and lateral movement defense.
+- **Binary Analysis & Automation**: x86/x64/ARM reverse engineering, kernel driver analysis, dynamic debugging with WinDbg, and custom offensive tooling in Python.
 
 ---
 
-### Get In Touch
+### Research & Book Series
 
-Feel free to connect on [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) or reach out via [email](mailto:abdulrahmanmohamedfathi@gmail.com).
+In-depth technical breakdowns and chapter-by-chapter reference analyses:
+
+- [**Practical Reverse Engineering**](/categories/reverse-engineering/) — x86, x64, ARM, Windows kernel internals, WinDbg automation, and software deobfuscation.
+- [**Android Security Internals**](/categories/android-security/) — Linux sandbox, Binder IPC, package manager, and Android cryptographic framework.
+- [**Social Engineering: The Art of Human Hacking**](/categories/social-engineering/) — Psychological attack vectors, elicitation methodologies, and human defense engineering.
+
+---
+
+> **هذا العمل صَدَقَةٌ جَارِيَةٌ وعِلْمٌ يُنتَفَعُ به — نسألكم الدعاء بظهر الغيب لي ولوالديّ**  
+> *Dedicated as ongoing charity and beneficial knowledge. Please remember me and my parents in your prayers.*

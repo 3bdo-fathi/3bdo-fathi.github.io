@@ -2,7 +2,7 @@
 
 <aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end">
   <header class="profile-wrapper">
-    <a href="{{ '/' | relative_url }}" id="avatar" class="d-block">
+    <a href="{{ '/' | relative_url }}" id="avatar" class="rounded-circle d-block">
       {% if site.avatar != empty and site.avatar %}
         {% capture avatar_url %}
           {%- if site.avatar contains '://' -%}
@@ -13,11 +13,13 @@
             {{ site.avatar | relative_url }}
           {%- endif -%}
         {% endcapture %}
-        <img src="{{ avatar_url | strip }}" alt="avatar" onerror="this.style.display='none'">
+        <img src="{{ avatar_url | strip }}" width="112" height="112" alt="avatar" onerror="this.style.display='none'">
       {% endif %}
     </a>
 
-    <a class="site-title d-block" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+    <h1 class="site-title">
+      <a href="{{ '/' | relative_url }}">{{ site.title }}</a>
+    </h1>
     <p class="site-subtitle fst-italic mb-0">{{ site.tagline }}</p>
   </header>
   <!-- .profile-wrapper -->
@@ -45,152 +47,152 @@
   </nav>
 
   <style>
+    #sidebar #avatar {
+      border: 2px solid var(--border-color, rgba(255, 255, 255, 0.12)) !important;
+      transition: transform 0.25s ease, border-color 0.25s ease !important;
+      overflow: hidden !important;
+    }
+    #sidebar #avatar:hover {
+      transform: scale(1.03) !important;
+      border-color: #58a6ff !important;
+    }
+
+    /* Minimalist Unified Bottom Dock */
     #sidebar .sidebar-bottom {
-      padding: 0.5rem 0.5rem !important;
+      padding: 0.5rem 0.6rem !important;
       margin-bottom: 1.25rem !important;
-    }
-    #sidebar .theme-switch-wrapper {
-      display: flex !important;
-      justify-content: center !important;
-      width: 100% !important;
-    }
-    #mode-toggle.theme-switch-btn {
-      width: 48px !important;
-      height: 24px !important;
-      border-radius: 20px !important;
-      padding: 2px !important;
-      display: inline-flex !important;
-      align-items: center !important;
-      cursor: pointer !important;
-      position: relative !important;
-      border: 1px solid var(--border-color, rgba(88, 166, 255, 0.25)) !important;
-      background: var(--sidebar-border-color, #21262d) !important;
-      outline: none !important;
-      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2) !important;
-      transition: all 0.3s ease !important;
-      margin: 0 !important;
-    }
-    #mode-toggle.theme-switch-btn .switch-thumb {
-      width: 18px !important;
-      height: 18px !important;
-      border-radius: 50% !important;
       display: flex !important;
       align-items: center !important;
-      justify-content: center !important;
-      font-size: 10px !important;
-      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.25s ease !important;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
-    }
-    /* Dark Mode State */
-    [data-mode="dark"] #mode-toggle.theme-switch-btn {
-      background: #161b22 !important;
-      border-color: rgba(88, 166, 255, 0.4) !important;
-    }
-    [data-mode="dark"] #mode-toggle.theme-switch-btn .switch-thumb {
-      transform: translateX(24px) !important;
-      background: #58a6ff !important;
-      color: #0d1117 !important;
-    }
-    [data-mode="dark"] #mode-toggle.theme-switch-btn .mode-icon-light {
-      display: none !important;
-    }
-    [data-mode="dark"] #mode-toggle.theme-switch-btn .mode-icon-dark {
-      display: inline-block !important;
-    }
-    /* Light Mode State */
-    [data-mode="light"] #mode-toggle.theme-switch-btn {
-      background: #d8dee4 !important;
-      border-color: #afb8c1 !important;
-    }
-    [data-mode="light"] #mode-toggle.theme-switch-btn .switch-thumb {
-      transform: translateX(0px) !important;
-      background: #ffffff !important;
-      color: #f59e0b !important;
-    }
-    [data-mode="light"] #mode-toggle.theme-switch-btn .mode-icon-dark {
-      display: none !important;
-    }
-    [data-mode="light"] #mode-toggle.theme-switch-btn .mode-icon-light {
-      display: inline-block !important;
-    }
-    /* Social Icons Row */
-    #sidebar .sidebar-social {
-      display: flex !important;
-      flex-wrap: nowrap !important;
       justify-content: center !important;
       gap: 0.35rem !important;
-      width: 100% !important;
     }
-    #sidebar .sidebar-social a {
-      width: 1.9rem !important;
-      height: 1.9rem !important;
+
+    #sidebar .dock-btn {
+      width: 2rem !important;
+      height: 2rem !important;
+      min-width: 2rem !important;
+      min-height: 2rem !important;
+      padding: 0 !important;
       margin: 0 !important;
-      flex-shrink: 0 !important;
       display: inline-flex !important;
       align-items: center !important;
       justify-content: center !important;
-      border-radius: 50% !important;
+      border-radius: 8px !important;
       font-size: 0.9rem !important;
-      color: var(--sidebar-btn-color, inherit) !important;
-      transition: all 0.2s ease-in-out !important;
+      color: var(--text-muted-color, #8b949e) !important;
+      background: rgba(255, 255, 255, 0.03) !important;
+      border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1)) !important;
+      cursor: pointer !important;
+      outline: none !important;
+      text-decoration: none !important;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
-    #sidebar .sidebar-social a:hover {
-      transform: translateY(-2px) !important;
+
+    #sidebar .dock-btn:hover {
       color: #58a6ff !important;
-      box-shadow: 0 0 8px rgba(88, 166, 255, 0.4) !important;
+      border-color: rgba(88, 166, 255, 0.4) !important;
+      background: rgba(88, 166, 255, 0.1) !important;
+      transform: translateY(-2px) !important;
+    }
+
+    #sidebar .dock-divider {
+      width: 1px !important;
+      height: 16px !important;
+      margin: 0 0.2rem !important;
+      background: var(--border-color, rgba(255, 255, 255, 0.15)) !important;
+    }
+
+    /* Minimal Mode Toggle Icon States */
+    #mode-toggle {
+      position: relative !important;
+    }
+
+    #mode-toggle i {
+      transition: transform 0.3s ease !important;
+    }
+
+    #mode-toggle:active i {
+      transform: rotate(180deg) scale(0.9) !important;
+    }
+
+    #mode-toggle .icon-sun {
+      display: inline-flex;
+      color: #e3b341;
+    }
+    #mode-toggle .icon-moon {
+      display: none;
+    }
+
+    [data-mode="dark"] #mode-toggle .icon-sun {
+      display: inline-flex !important;
+      color: #e3b341 !important;
+    }
+    [data-mode="dark"] #mode-toggle .icon-moon {
+      display: none !important;
+    }
+
+    [data-mode="light"] #mode-toggle .icon-sun {
+      display: none !important;
+    }
+    [data-mode="light"] #mode-toggle .icon-moon {
+      display: inline-flex !important;
+      color: #58a6ff !important;
+    }
+
+    [data-mode="light"] #sidebar .dock-btn {
+      background: rgba(0, 0, 0, 0.02) !important;
+      border: 1px solid rgba(0, 0, 0, 0.1) !important;
     }
   </style>
 
-  <div class="sidebar-bottom w-100 d-flex flex-column align-items-center">
-    <!-- Modern Toggle Switch -->
-    <div class="theme-switch-wrapper mb-2">
-      <button type="button" class="theme-switch-btn" aria-label="Switch Mode" id="mode-toggle">
-        <span class="switch-thumb">
-          <i class="fas fa-moon mode-icon-dark"></i>
-          <i class="fas fa-sun mode-icon-light"></i>
-        </span>
-      </button>
-    </div>
+  <div class="sidebar-bottom w-100">
+    <!-- Clean Minimalist Theme Mode Toggle -->
+    <button type="button" class="dock-btn" aria-label="Toggle Theme" id="mode-toggle" title="Toggle Theme">
+      <i class="fas fa-sun icon-sun"></i>
+      <i class="fas fa-moon icon-moon"></i>
+    </button>
 
-    <!-- Social links in single clean row -->
-    <div class="sidebar-social">
-      {% for entry in site.data.contact %}
-        {% capture url %}
-          {%- if entry.type == 'github' -%}
-            https://github.com/{{ site.github.username }}
-          {%- elsif entry.type == 'twitter' -%}
-            https://twitter.com/{{ site.twitter.username }}
-          {%- elsif entry.type == 'email' -%}
-            {% assign email = site.social.email | default: site.email %}
-            mailto:{{ email }}
-          {%- elsif entry.type == 'rss' -%}
-            {{ entry.url | default: '/feed.xml' | relative_url }}
-          {%- else -%}
-            {{ entry.url }}
-          {%- endif -%}
-        {% endcapture %}
+    <span class="dock-divider"></span>
 
-        {% if url %}
-          <a
-            href="{{ url | strip }}"
-            aria-label="{{ entry.type }}"
-            {% assign link_types = '' %}
-            {% unless entry.noblank %}
-              target="_blank"
-              {% assign link_types = 'noopener noreferrer' %}
-            {% endunless %}
-            {% if entry.type == 'mastodon' %}
-              {% assign link_types = link_types | append: ' me' | strip %}
-            {% endif %}
-            {% unless link_types == empty %}
-              rel="{{ link_types }}"
-            {% endunless %}
-          >
-            <i class="{{ entry.icon }}"></i>
-          </a>
-        {% endif %}
-      {% endfor %}
-    </div>
+    <!-- Social links in same clean dock -->
+    {% for entry in site.data.contact %}
+      {% capture url %}
+        {%- if entry.type == 'github' -%}
+          https://github.com/{{ site.github.username }}
+        {%- elsif entry.type == 'twitter' -%}
+          https://twitter.com/{{ site.twitter.username }}
+        {%- elsif entry.type == 'email' -%}
+          {% assign email = site.social.email | default: site.email %}
+          mailto:{{ email }}
+        {%- elsif entry.type == 'rss' -%}
+          {{ entry.url | default: '/feed.xml' | relative_url }}
+        {%- else -%}
+          {{ entry.url }}
+        {%- endif -%}
+      {% endcapture %}
+
+      {% if url %}
+        <a
+          href="{{ url | strip }}"
+          aria-label="{{ entry.type }}"
+          title="{{ entry.type | capitalize }}"
+          class="dock-btn"
+          {% assign link_types = '' %}
+          {% unless entry.noblank %}
+            target="_blank"
+            {% assign link_types = 'noopener noreferrer' %}
+          {% endunless %}
+          {% if entry.type == 'mastodon' %}
+            {% assign link_types = link_types | append: ' me' | strip %}
+          {% endif %}
+          {% unless link_types == empty %}
+            rel="{{ link_types }}"
+          {% endunless %}
+        >
+          <i class="{{ entry.icon }}"></i>
+        </a>
+      {% endif %}
+    {% endfor %}
   </div>
   <!-- .sidebar-bottom -->
 </aside>
