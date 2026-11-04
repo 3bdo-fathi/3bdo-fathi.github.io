@@ -5,103 +5,131 @@ title: About Me
 permalink: /about/
 ---
 
-<div class="mb-4">
-  <h1 class="mb-1" style="color: #f0f6fc; font-weight: 700; font-size: 2.2rem;">Abdulrahman M. Fathi</h1>
-  <p class="text-muted mb-2" style="font-size: 1.1rem;">
-    <strong style="color: #58a6ff;">0x3bdo</strong> | Cyber Security Engineer & Penetration Tester
-  </p>
-  <p class="text-secondary mb-3" style="font-size: 0.95rem;">
-    Cairo, Egypt &nbsp;|&nbsp; Web, Mobile, API & Infrastructure Security Assessments
-  </p>
-  <div class="d-flex flex-wrap gap-2">
-    <a href="https://www.linkedin.com/in/3bdo-fathi" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm">
-      <i class="fab fa-linkedin me-1"></i> LinkedIn
-    </a>
-    <a href="https://github.com/3bdo-fathi" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark btn-sm">
-      <i class="fab fa-github me-1"></i> GitHub
-    </a>
-    <a href="mailto:abdulrahmanmohamedfathi@gmail.com" class="btn btn-outline-info btn-sm">
-      <i class="fas fa-envelope me-1"></i> Email
-    </a>
-    <a href="/contact-me/" class="btn btn-outline-secondary btn-sm">
-      <i class="fas fa-paper-plane me-1"></i> Contact Page
-    </a>
+<div class="card mb-4 border-0 shadow-sm" style="background: var(--card-bg, rgba(22, 27, 34, 0.05)); border: 1px solid var(--border-color, rgba(88, 166, 255, 0.15)) !important; border-radius: 14px;">
+  <div class="card-body p-4">
+    <div class="d-flex flex-column flex-md-row align-items-center gap-4 text-center text-md-start">
+      <img src="/assets/images/avatar.jpg" alt="Abdulrahman M. Fathi" class="rounded-circle shadow" style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #58a6ff;">
+      <div class="flex-grow-1">
+        <h1 class="mb-1" style="font-weight: 700; font-size: 2.1rem; color: var(--heading-color);">Abdulrahman M. Fathi</h1>
+        <p class="mb-2" style="font-size: 1.05rem;">
+          <strong style="color: #58a6ff;">0x3bdo</strong> &bull; Cyber Security Engineer &amp; Penetration Tester
+        </p>
+        <p class="text-muted mb-3" style="font-size: 0.92rem;">
+          Cairo, Egypt &nbsp;|&nbsp; Web, Mobile, API, Active Directory &amp; Binary Security
+        </p>
+        <div class="d-flex flex-wrap justify-content-center justify-content-md-start gap-2">
+          <a href="https://www.linkedin.com/in/3bdo-fathi" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm">
+            <i class="fab fa-linkedin me-1"></i> LinkedIn
+          </a>
+          <a href="https://github.com/3bdo-fathi" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary btn-sm">
+            <i class="fab fa-github me-1"></i> GitHub
+          </a>
+          <a href="mailto:abdulrahmanmohamedfathi@gmail.com" class="btn btn-outline-info btn-sm">
+            <i class="fas fa-envelope me-1"></i> Email
+          </a>
+          <a href="/contact-me/" class="btn btn-outline-dark btn-sm">
+            <i class="fas fa-paper-plane me-1"></i> Contact
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 ---
 
-### الغاية والرسالة: صدقةٌ جارية وعِلمٌ يُنتَفَعُ به
-#### Core Purpose: Enduring Knowledge & Ongoing Charity
+### Professional Overview
 
-> عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ، أَنَّ رَسُولَ اللَّهِ ﷺ قَالَ:  
-> **«إِذَا مَاتَ الْإِنْسَانُ انْقَطَعَ عَنْهُ عَمَلُهُ إِلَّا مِنْ ثَلَاثَةٍ: إِلَّا مِنْ صَدَقَةٍ جَارِيَةٍ، أَوْ عِلْمٍ يُنْتَفَعُ بِهِ، أَوْ وَلَدٍ صَالِحٍ يَدْعُو لَهُ»**  
-> *(رواه مسلم)*
->
-> ---
->
-> Abu Hurairah (may Allah be pleased with him) reported that the Messenger of Allah (peace be upon him) said:  
-> **"When a human being dies, all their deeds come to an end except for three: an ongoing charity, beneficial knowledge, or a righteous child who prays for them."**  
-> *(Narrated by Muslim)*
+My journey in offensive security stems from a fundamental curiosity: *understanding how complex software and network systems function beneath high-level abstractions, and engineering practical methods to evaluate and harden their security boundaries.*
 
-كل ما يُنشر في هذه المدونة — من أبحاث تقنية، وتلخيصات للكتب التخصصية، ومخططات معمارية، وتحليلات أمنية، وأدوات برمجية — تم إعداده بنية خالصة وصادقة: **أن يكون عِلْمًا يُنتَفَعُ به وصَدَقَةً جاريةً عني وعن والديّ وأهلي**، ليبقى هذا المحتوى أثرًا طيبًا ومرجعًا نافعًا لكل باحث وطالب علم في هذا المجال حتى بعد أن ألقى الله وانقطاع عملي.
+Today, I operate as an offensive security engineer and penetration tester. My primary focus centers on uncovering subtle architecture and logic vulnerabilities across modern web ecosystems, mobile applications, distributed APIs, Active Directory infrastructures, and compiled binaries. 
 
-إن زكاة العلم نشره وبذله للناس، ومجال الأمن السيبراني يجب ألا يُحتكر أو يُحجب خلف أسوار مادية. ورجائي الوحيد من كل قارئ وباحث يستفيد من أي محتوى أو تحليل كُتب هنا أن يذكرني وأهلي بصالح الدعاء بظهر الغيب.
+I believe effective penetration testing goes far beyond running automated scanners or checking compliance checkboxes. Automated tools flag common signatures; real-world adversaries understand context, business logic, trust relationships, and system internals. My methodology focuses on chained attack paths—combining minor misconfigurations into high-impact assessments—paired with engineering-driven remediation guidance that addresses root architectural causes.
 
 ---
 
-Everything published across this blog—every technical breakdown, architectural diagram, exploit analysis, and security guide—is shared with a singular, sincere intention: **to serve as enduring beneficial knowledge and an ongoing charity (Sadaqah Jariyah)** that continues to assist students, engineers, and researchers long after my time in this world.
+### Core Technical Competencies
 
-Information security shouldn't be hidden behind paywalls or obscure corporate silos. Documenting and sharing knowledge unconditionally is my personal mission and lasting contribution. If you ever find value in this research, please remember me and my family in your sincere prayers.
+<div class="row g-3 my-2">
+  <div class="col-md-6">
+    <div class="p-3 rounded h-100" style="background: var(--card-bg, rgba(22, 27, 34, 0.03)); border: 1px solid var(--border-color, rgba(88, 166, 255, 0.15));">
+      <h5 class="mb-2" style="color: #58a6ff; font-weight: 600;">
+        <i class="fas fa-mobile-alt me-2"></i> Mobile Security &amp; Reverse Engineering
+      </h5>
+      <p class="text-muted small mb-0">
+        In-depth auditing of Android and iOS applications. Static bytecode analysis (Smali, DEX), native C/C++ library reverse engineering (`.so`), dynamic instrumentation with Frida, objection, and custom scripts. Bypassing root detection, certificate pinning, and auditing cryptographic workflows.
+      </p>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="p-3 rounded h-100" style="background: var(--card-bg, rgba(22, 27, 34, 0.03)); border: 1px solid var(--border-color, rgba(88, 166, 255, 0.15));">
+      <h5 class="mb-2" style="color: #58a6ff; font-weight: 600;">
+        <i class="fas fa-globe me-2"></i> Web Applications &amp; Modern APIs
+      </h5>
+      <p class="text-muted small mb-0">
+        Assessing complex web applications, microservices, and API architectures (REST, GraphQL, gRPC). Specialized in nuanced business logic flaws, Broken Object-Level Authorization (BOLA/IDOR), SSRF targeting cloud metadata, and OAuth 2.0 token flaws.
+      </p>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="p-3 rounded h-100" style="background: var(--card-bg, rgba(22, 27, 34, 0.03)); border: 1px solid var(--border-color, rgba(88, 166, 255, 0.15));">
+      <h5 class="mb-2" style="color: #58a6ff; font-weight: 600;">
+        <i class="fas fa-network-wired me-2"></i> Active Directory &amp; Enterprise Red Teaming
+      </h5>
+      <p class="text-muted small mb-0">
+        Internal enterprise penetration testing. Graph-based attack path analysis using BloodHound, Kerberos exploitation (Kerberoasting, AS-REP Roasting), Active Directory Certificate Services (AD CS) template misconfigurations, and lateral movement tradecraft.
+      </p>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="p-3 rounded h-100" style="background: var(--card-bg, rgba(22, 27, 34, 0.03)); border: 1px solid var(--border-color, rgba(88, 166, 255, 0.15));">
+      <h5 class="mb-2" style="color: #58a6ff; font-weight: 600;">
+        <i class="fas fa-terminal me-2"></i> Binary Analysis &amp; Automation
+      </h5>
+      <p class="text-muted small mb-0">
+        Reverse engineering compiled x86, x64, and ARM binaries. Dynamic debugging with WinDbg, DbgEng scripting, kernel driver analysis, deobfuscation, and crafting custom offensive automation tooling using Python and Bash.
+      </p>
+    </div>
+  </div>
+</div>
 
 ---
 
-### Hello, I'm Abdulrahman M. Fathi
+### Featured Research & Book Summary Series
 
-My journey in cybersecurity started with a fundamental question: *"How do complex digital systems actually work under the hood, and how can they be broken or resiliently defended?"*
+This blog hosts exhaustive, chapter-by-chapter technical deep-dives into industry-standard cybersecurity reference works:
 
-What began as an insatiable curiosity quickly transformed into a deep, lasting passion and a full-time commitment to offensive security. Today, I operate as an offensive security engineer and penetration tester, focusing on uncovering hidden attack vectors, understanding complex application workflows, and helping organizations fortify their defenses by actively thinking like an adversary.
-
----
-
-### Philosophy & The Offensive Mindset
-
-True security cannot be evaluated through automated point-and-click scanners or superficial compliance checklists. Automated tools identify known signatures and superficial misconfigurations; real human adversaries understand context, business logic, system architecture, and trust boundaries.
-
-My objective on every assessment is to adopt the perspective of a creative, persistent adversary—identifying subtle, overlooked anomalies, chaining seemingly minor logic flaws into full-impact compromises, and treating systems as interconnected living architectures rather than isolated endpoints.
-
-Every assessment concludes not merely with a list of vulnerabilities, but with practical, engineering-driven remediation roadmaps designed to help developers and infrastructure teams eliminate security weaknesses at their architectural root.
+1. [**Practical Reverse Engineering**](/categories/reverse-engineering/)
+   An exhaustive 5-chapter series dissecting x86/x64 and ARM assembly, calling conventions, Windows kernel internals (KPCR, SSDT, IRPs, rootkits), WinDbg automation, and software obfuscation/deobfuscation (CFG flattening, custom VMs, symbolic execution).
+2. [**Android Security Internals**](/categories/android-security/)
+   A comprehensive 13-chapter breakdown of Nikolay Elenkov's classic work, exploring the Linux kernel sandbox, Binder IPC, permissions architecture, package management, cryptographic providers, device encryption, and root mechanics.
+3. [**Social Engineering: The Art of Human Hacking**](/categories/social-engineering/)
+   A 9-chapter analysis of Christopher Hadnagy's foundation on psychological attack surfaces, elicitation methodologies, nonverbal communication, persuasion models, and defensive enterprise engineering.
 
 ---
 
-### What Drives My Technical Work
+### Ongoing Charity & Knowledge Sharing | صدقة جارية وعلم يُنتفع به
 
-My technical focus spans the full spectrum of offensive security, driven by hands-on experimentation, reverse engineering, and deep protocol analysis:
-
-* **Mobile Security & Binary Dissection**: A profound fascination with mobile operating system internals, primarily Android architecture and iOS ecosystems. I spend extensive time analyzing compiled DEX bytecode, reading Smali, auditing native shared libraries (`.so`), and understanding low-level IPC mechanics (such as Android Binder and Content Providers). Utilizing dynamic instrumentation frameworks like **Frida**, **Objection**, and **Medusa**, I examine application behavior at runtime, bypass SSL Pinning, defeat integrity and root detection mechanisms, and audit cryptographic implementations.
-* **Web Applications & Modern API Ecosystems**: In-depth security assessments of complex web applications, microservices architectures, and modern API endpoints (REST, GraphQL, OAuth 2.0). My focus lies in uncovering nuanced business logic flaws, Broken Object-Level Authorization (BOLA/IDOR), Server-Side Request Forgery (SSRF) targeting cloud metadata services, and subtle session management vulnerabilities.
-* **Enterprise Infrastructure & Active Directory Red Teaming**: Dissecting corporate enterprise environments through graph-based attack path analysis, identity exploitation (such as Kerberoasting, AS-REP Roasting, and Pass-the-Hash), and enumerating Active Directory Certificate Services (AD CS) template misconfigurations to understand how adversaries maneuver across complex networks.
-* **Offensive Tooling & Automation**: Crafting purpose-built automation pipelines and reconnaissance tools in **Python** and **Bash** to streamline discovery, automate repetitive assessment tasks, and map wide attack surfaces.
-
----
-
-### Beyond Technical Assessments: Education & Mentorship
-
-Beyond performing penetration tests and vulnerability research, one of the most rewarding dimensions of my work is **cybersecurity education and mentorship**.
-
-I actively dedicate time to designing and delivering cybersecurity training courses, creating realistic hands-on simulation labs, and mentoring aspiring practitioners and developers. Demystifying complex technical topics—whether it is mobile reverse engineering, memory hooking, or network exploitation—and helping others develop their technical intuition and break into offensive security is a continuous source of inspiration.
+<div class="p-4 my-3 rounded" style="background: var(--card-bg, rgba(22, 27, 34, 0.04)); border: 1px solid var(--border-color, rgba(88, 166, 255, 0.2)); border-radius: 12px;">
+  <p class="text-center fw-bold mb-2" style="font-size: 1.05rem; color: #58a6ff;">
+    هذا العمل صَدَقَةٌ جَارِيَةٌ وعِلْمٌ يُنتَفَعُ به — نسألكم الدعاء بظهر الغيب لي ولوالديّ
+  </p>
+  <p class="text-center text-muted small mb-3">
+    Dedicated as an ongoing charity and enduring knowledge &bull; Please remember me and my family in your prayers
+  </p>
+  <hr style="border-top: 1px dashed var(--border-color, rgba(88, 166, 255, 0.2)); margin: 12px 0;">
+  <p class="small text-muted mb-0" style="line-height: 1.6;">
+    Every research paper, architectural breakdown, exploit analysis, and technical guide published on this blog is shared with a sincere intention: to serve as enduring, beneficial knowledge. Cybersecurity knowledge should never be gatekept behind commercial walls. If you find value in these materials, a sincere prayer in absentia for me and my family is all that is requested.
+  </p>
+</div>
 
 ---
 
-### Why This Blog Exists
+### Education & Mentorship
 
-This blog is my personal technical workshop and living digital garden—a space where I document real-world penetration testing insights, chapter-by-chapter dissections of classic cybersecurity texts (such as *Android Security Internals* and *Social Engineering: The Art of Human Hacking*), vulnerability research, automation scripts, and practical lessons learned from the field.
+Beyond security assessments, I actively contribute to technical education. I design hands-on simulation environments, author technical tutorials, and mentor developers and aspiring penetration testers. Helping others develop an intuitive understanding of low-level systems and defensive tradecraft remains one of the most rewarding aspects of my work.
 
-This is not a commercial portfolio. It is an enduring, growing archive of knowledge, open unconditionally to anyone seeking to learn, build, and defend.
-
----
-
-**Thank you for visiting.**  
-Whether you are just taking your first steps into cybersecurity or are already deep in the field, I hope you find something here that inspires your journey and sharpens your craft.
-
-*Abdulrahman M. Fathi (0x3bdo)*
+If you would like to discuss security research, collaborate on a project, or connect, feel free to reach out via [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) or through the [Contact Page](/contact-me/).
