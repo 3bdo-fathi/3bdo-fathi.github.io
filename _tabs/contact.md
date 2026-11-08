@@ -168,7 +168,7 @@ image: /assets/images/site/preview.jpg
   const countContainer = document.getElementById('char-count-container');
   const MAX_LENGTH = 2000;
 
-  // Character counter + warning
+  /* Character counter + warning */
   function updateCharCount() {
     const length = messageInput.value.length;
     countContainer.textContent = `${length} / ${MAX_LENGTH}`;

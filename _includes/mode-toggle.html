@@ -228,7 +228,7 @@
   (function() {
     try {
       var savedMode = localStorage.getItem('mode') || sessionStorage.getItem('mode') || localStorage.getItem('theme');
-      var mode = savedMode ? savedMode : 'dark'; // Default to Pitch Black Dark Mode
+      var mode = savedMode ? savedMode : 'dark';
       document.documentElement.setAttribute('data-mode', mode);
       document.documentElement.setAttribute('data-bs-theme', mode);
     } catch (e) {}
@@ -253,7 +253,6 @@
           sessionStorage.setItem('mode', mode);
         } catch (e) {}
       }
-      // Broadcast to Chirpy theme listeners & custom components
       try {
         window.postMessage({ id: 'theme-updated', message: mode }, '*');
         window.dispatchEvent(new CustomEvent('theme-change', { detail: { theme: mode } }));
@@ -279,7 +278,6 @@
       });
     }
 
-    // Keyboard shortcut for search: Ctrl+K, Cmd+K, or slash ('/')
     if (!window._searchShortcutBound) {
       window._searchShortcutBound = true;
       document.addEventListener('keydown', function(e) {

@@ -322,7 +322,6 @@ layout: default
           }
         });
 
-        // Update active button
         filterBtns.forEach(function (btn) {
           const btnFilter = (btn.getAttribute('data-filter') || '').toLowerCase().trim();
           if (btnFilter === filter.toLowerCase().trim()) {
@@ -332,7 +331,6 @@ layout: default
           }
         });
 
-        // Toggle empty state
         if (emptyNotice) {
           if (matchCount === 0) {
             emptyNotice.classList.remove('d-none');
@@ -341,7 +339,6 @@ layout: default
           }
         }
 
-        // Update counter label
         if (counterText) {
           if (filter === 'all') {
             counterText.textContent = 'Showing all ' + matchCount + ' write-ups';
@@ -350,7 +347,6 @@ layout: default
           }
         }
 
-        // Smooth scroll to top of list if user is scrolled past
         if (shouldScroll && postList) {
           const rect = postList.getBoundingClientRect();
           if (rect.top < 60) {
@@ -362,14 +358,12 @@ layout: default
         }
       }
 
-      // Button click bindings
       filterBtns.forEach(function (btn) {
         btn.addEventListener('click', function (e) {
           e.preventDefault();
           const filter = this.getAttribute('data-filter') || 'all';
           applyFilter(filter, true);
 
-          // Update URL hash for easy sharing / bookmarking
           try {
             if (filter === 'all') {
               if (window.location.hash) {
@@ -383,7 +377,6 @@ layout: default
         });
       });
 
-      // Check initial URL hash / query param (e.g. #social-engineering or ?cat=social-engineering)
       let initialFilter = 'all';
       try {
         const hash = (window.location.hash || '').replace(/^#/, '').toLowerCase().trim();
