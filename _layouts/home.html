@@ -82,36 +82,42 @@ layout: default
     font-weight: 700;
   }
 
-  [data-mode="light"] .cat-filter-btn {
+  html[data-mode="light"] .cat-filter-btn,
+  html[data-bs-theme="light"] .cat-filter-btn {
     background: #f6f8fa;
     border: 1px solid #d0d7de;
     color: #57606a;
   }
 
-  [data-mode="light"] .cat-filter-btn .cat-count {
+  html[data-mode="light"] .cat-filter-btn .cat-count,
+  html[data-bs-theme="light"] .cat-filter-btn .cat-count {
     background: rgba(0, 0, 0, 0.06);
     color: #57606a;
   }
 
-  [data-mode="light"] .cat-filter-btn:hover {
+  html[data-mode="light"] .cat-filter-btn:hover,
+  html[data-bs-theme="light"] .cat-filter-btn:hover {
     background: #f3f4f6;
     border-color: #0969da;
     color: #0969da;
   }
 
-  [data-mode="light"] .cat-filter-btn:hover .cat-count {
+  html[data-mode="light"] .cat-filter-btn:hover .cat-count,
+  html[data-bs-theme="light"] .cat-filter-btn:hover .cat-count {
     color: #0969da;
     background: rgba(9, 105, 218, 0.1);
   }
 
-  [data-mode="light"] .cat-filter-btn.active {
+  html[data-mode="light"] .cat-filter-btn.active,
+  html[data-bs-theme="light"] .cat-filter-btn.active {
     background: #0969da !important;
     color: #ffffff !important;
     border-color: #0969da !important;
     box-shadow: 0 2px 8px rgba(9, 105, 218, 0.25);
   }
 
-  [data-mode="light"] .cat-filter-btn.active .cat-count {
+  html[data-mode="light"] .cat-filter-btn.active .cat-count,
+  html[data-bs-theme="light"] .cat-filter-btn.active .cat-count {
     background: rgba(255, 255, 255, 0.25) !important;
     color: #ffffff !important;
   }
@@ -130,11 +136,11 @@ layout: default
     }
   }
 
-  /* Smooth Fade-in on infinite scroll load */
+  /* Smooth Fade-in on filter */
   @keyframes postFadeIn {
     from {
       opacity: 0;
-      transform: translateY(12px);
+      transform: translateY(8px);
     }
     to {
       opacity: 1;
@@ -143,11 +149,15 @@ layout: default
   }
 
   .post-fade-in {
-    animation: postFadeIn 0.32s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: postFadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
 
-  #infinite-scroll-sentinel {
-    min-height: 60px;
+  #post-filter-status {
+    font-size: 0.78rem;
+    color: #8b949e;
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
   }
 </style>
 
@@ -266,118 +276,141 @@ layout: default
   {% endfor %}
 </div>
 
-<!-- Continuous Infinite Scroll Sentinel -->
-<div id="infinite-scroll-sentinel" class="py-4 text-center">
-  <div id="infinite-scroll-loading" class="text-muted small">
-    <i class="fas fa-circle-notch fa-spin me-2"></i> Loading more posts...
-  </div>
-  <div id="infinite-scroll-end" class="text-muted small d-none">
-    <span class="d-inline-block px-3 py-1 rounded" style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08);">
-      All posts loaded
-    </span>
-  </div>
-</div>
-
 <div id="category-filter-empty" class="text-center py-5 d-none text-muted">
   <p class="mb-2">No write-ups found matching this category.</p>
 </div>
 
+<div id="post-filter-status" class="text-muted">
+  <span id="post-filter-counter-text">Showing all {{ posts.size }} write-ups</span>
+</div>
+
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const BATCH_SIZE = 8;
-    const filterBtns = document.querySelectorAll('.cat-filter-btn[data-filter]');
-    const postCards = Array.from(document.querySelectorAll('#post-list article.card-wrapper'));
-    const sentinel = document.getElementById('infinite-scroll-sentinel');
-    const loadingIndicator = document.getElementById('infinite-scroll-loading');
-    const endIndicator = document.getElementById('infinite-scroll-end');
-    const emptyNotice = document.getElementById('category-filter-empty');
+  (function () {
+    function initCategoryFilters() {
+      const filterBtns = document.querySelectorAll('.cat-filter-btn[data-filter]');
+      const postCards = Array.from(document.querySelectorAll('#post-list article.card-wrapper'));
+      const emptyNotice = document.getElementById('category-filter-empty');
+      const counterText = document.getElementById('post-filter-counter-text');
+      const postList = document.getElementById('post-list');
 
-    let currentFilter = 'all';
-    let currentlyVisible = 0;
-    let filteredPosts = [];
+      if (!filterBtns.length || !postCards.length) return;
 
-    function applyFilter(filter) {
-      currentFilter = filter;
-      filteredPosts = postCards.filter(function (card) {
-        if (filter === 'all') return true;
-        const cats = (card.getAttribute('data-categories') || '').toLowerCase().split('||');
-        return cats.includes(filter);
-      });
+      function postMatches(card, filter) {
+        if (!filter || filter === 'all') return true;
+        const raw = card.getAttribute('data-categories') || '';
+        const cats = raw.toLowerCase().split('||').map(function (c) { return c.trim(); });
+        const target = filter.toLowerCase().trim();
+        const targetSlug = target.replace(/[\s_]+/g, '-');
 
-      // Hide all posts first
-      postCards.forEach(function (card) {
-        card.style.display = 'none';
-        card.classList.remove('post-fade-in');
-      });
-
-      currentlyVisible = 0;
-
-      if (filteredPosts.length === 0) {
-        if (emptyNotice) emptyNotice.classList.remove('d-none');
-        if (sentinel) sentinel.style.display = 'none';
-        return;
+        return cats.some(function (c) {
+          const cSlug = c.replace(/[\s_]+/g, '-');
+          return c === target || cSlug === targetSlug || c.indexOf(target) !== -1;
+        });
       }
 
-      if (emptyNotice) emptyNotice.classList.add('d-none');
-      if (sentinel) sentinel.style.display = '';
+      function applyFilter(filter, shouldScroll) {
+        let matchCount = 0;
 
-      loadNextBatch();
-    }
-
-    function loadNextBatch() {
-      const nextBatch = filteredPosts.slice(currentlyVisible, currentlyVisible + BATCH_SIZE);
-      nextBatch.forEach(function (card) {
-        card.style.display = '';
-        card.classList.add('post-fade-in');
-      });
-
-      currentlyVisible += nextBatch.length;
-
-      if (currentlyVisible >= filteredPosts.length) {
-        if (loadingIndicator) loadingIndicator.classList.add('d-none');
-        if (endIndicator) endIndicator.classList.remove('d-none');
-      } else {
-        if (loadingIndicator) loadingIndicator.classList.remove('d-none');
-        if (endIndicator) endIndicator.classList.add('d-none');
-      }
-    }
-
-    // Filter button clicks
-    filterBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        filterBtns.forEach(function (b) { b.classList.remove('active'); });
-        this.classList.add('active');
-        const filter = this.getAttribute('data-filter');
-        applyFilter(filter);
-      });
-    });
-
-    // IntersectionObserver for continuous scroll
-    if ('IntersectionObserver' in window && sentinel) {
-      const observer = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting && currentlyVisible < filteredPosts.length) {
-            loadNextBatch();
+        postCards.forEach(function (card) {
+          if (postMatches(card, filter)) {
+            card.style.display = '';
+            card.classList.add('post-fade-in');
+            matchCount++;
+          } else {
+            card.style.display = 'none';
+            card.classList.remove('post-fade-in');
           }
         });
-      }, { rootMargin: '300px' });
 
-      observer.observe(sentinel);
-    } else {
-      // Fallback scroll listener
-      window.addEventListener('scroll', function () {
-        if (sentinel && currentlyVisible < filteredPosts.length) {
-          const rect = sentinel.getBoundingClientRect();
-          if (rect.top <= window.innerHeight + 300) {
-            loadNextBatch();
+        // Update active button
+        filterBtns.forEach(function (btn) {
+          const btnFilter = (btn.getAttribute('data-filter') || '').toLowerCase().trim();
+          if (btnFilter === filter.toLowerCase().trim()) {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
+        });
+
+        // Toggle empty state
+        if (emptyNotice) {
+          if (matchCount === 0) {
+            emptyNotice.classList.remove('d-none');
+          } else {
+            emptyNotice.classList.add('d-none');
           }
         }
+
+        // Update counter label
+        if (counterText) {
+          if (filter === 'all') {
+            counterText.textContent = 'Showing all ' + matchCount + ' write-ups';
+          } else {
+            counterText.textContent = 'Showing ' + matchCount + ' write-up' + (matchCount === 1 ? '' : 's');
+          }
+        }
+
+        // Smooth scroll to top of list if user is scrolled past
+        if (shouldScroll && postList) {
+          const rect = postList.getBoundingClientRect();
+          if (rect.top < 60) {
+            window.scrollTo({
+              top: window.pageYOffset + rect.top - 80,
+              behavior: 'smooth'
+            });
+          }
+        }
+      }
+
+      // Button click bindings
+      filterBtns.forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          const filter = this.getAttribute('data-filter') || 'all';
+          applyFilter(filter, true);
+
+          // Update URL hash for easy sharing / bookmarking
+          try {
+            if (filter === 'all') {
+              if (window.location.hash) {
+                history.replaceState(null, '', window.location.pathname + window.location.search);
+              }
+            } else {
+              const slug = filter.replace(/\s+/g, '-');
+              history.replaceState(null, '', '#' + slug);
+            }
+          } catch (err) {}
+        });
       });
+
+      // Check initial URL hash / query param (e.g. #social-engineering or ?cat=social-engineering)
+      let initialFilter = 'all';
+      try {
+        const hash = (window.location.hash || '').replace(/^#/, '').toLowerCase().trim();
+        const params = new URLSearchParams(window.location.search);
+        const queryCat = (params.get('cat') || params.get('category') || '').toLowerCase().trim();
+        const candidate = queryCat || hash;
+
+        if (candidate) {
+          filterBtns.forEach(function (btn) {
+            const bf = (btn.getAttribute('data-filter') || '').toLowerCase().trim();
+            const bfSlug = bf.replace(/[\s_]+/g, '-');
+            if (candidate === bf || candidate === bfSlug) {
+              initialFilter = bf;
+            }
+          });
+        }
+      } catch (err) {}
+
+      applyFilter(initialFilter, false);
     }
 
-    // Initial population
-    applyFilter('all');
-  });
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCategoryFilters);
+    } else {
+      initCategoryFilters();
+    }
+  })();
 </script>
 
 {% include post-analytics.html %}

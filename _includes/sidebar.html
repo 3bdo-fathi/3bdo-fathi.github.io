@@ -105,10 +105,12 @@
     /* Minimal Mode Toggle Icon States */
     #mode-toggle {
       position: relative !important;
+      cursor: pointer !important;
     }
 
     #mode-toggle i {
       transition: transform 0.3s ease !important;
+      pointer-events: none;
     }
 
     #mode-toggle:active i {
@@ -123,18 +125,24 @@
       display: none;
     }
 
-    [data-mode="dark"] #mode-toggle .icon-sun {
+    html[data-mode="dark"] #mode-toggle .icon-sun,
+    html[data-bs-theme="dark"] #mode-toggle .icon-sun,
+    html:not([data-mode="light"]):not([data-bs-theme="light"]) #mode-toggle .icon-sun {
       display: inline-flex !important;
       color: #e3b341 !important;
     }
-    [data-mode="dark"] #mode-toggle .icon-moon {
+    html[data-mode="dark"] #mode-toggle .icon-moon,
+    html[data-bs-theme="dark"] #mode-toggle .icon-moon,
+    html:not([data-mode="light"]):not([data-bs-theme="light"]) #mode-toggle .icon-moon {
       display: none !important;
     }
 
-    [data-mode="light"] #mode-toggle .icon-sun {
+    html[data-mode="light"] #mode-toggle .icon-sun,
+    html[data-bs-theme="light"] #mode-toggle .icon-sun {
       display: none !important;
     }
-    [data-mode="light"] #mode-toggle .icon-moon {
+    html[data-mode="light"] #mode-toggle .icon-moon,
+    html[data-bs-theme="light"] #mode-toggle .icon-moon {
       display: inline-flex !important;
       color: #58a6ff !important;
     }
@@ -197,3 +205,5 @@
   <!-- .sidebar-bottom -->
 </aside>
 <!-- #sidebar -->
+
+{% include mode-toggle.html %}

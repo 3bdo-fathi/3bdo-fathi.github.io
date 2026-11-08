@@ -1,8 +1,9 @@
 <!-- Premium OLED Pitch Black & Clean Light Mode Theme System -->
 <style>
   /* Smooth theme transitions */
-  html[data-mode] {
-    transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+  html[data-mode],
+  html[data-bs-theme] {
+    transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
                 color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
                 border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -11,17 +12,31 @@
      DARK MODE (Pure OLED True Black #000000)
      ======================================================== */
   html[data-mode="dark"],
-  html:not([data-mode]) {
+  html[data-bs-theme="dark"],
+  html:not([data-mode="light"]):not([data-bs-theme="light"]) {
+    /* Bootstrap 5 Variables */
+    --bs-body-bg: #000000 !important;
+    --bs-body-color: #e6edf3 !important;
+    --bs-emphasis-color: #ffffff !important;
+    --bs-secondary-color: #8b949e !important;
+    --bs-secondary-bg: #0d0d0d !important;
+    --bs-tertiary-bg: #121212 !important;
+    --bs-border-color: rgba(255, 255, 255, 0.1) !important;
+    --bs-link-color: #58a6ff !important;
+    --bs-link-hover-color: #79c0ff !important;
+
     /* Surfaces: Pure Pitch Black */
     --main-bg: #000000 !important;
     --sidebar-bg: #000000 !important;
     --card-bg: #080808 !important;
     --card-header-bg: #0d0d0d !important;
     --card-hovor-bg: #121212 !important;
-    --topbar-bg: rgba(0, 0, 0, 0.9) !important;
+    --card-hover-bg: #121212 !important;
+    --topbar-bg: rgba(0, 0, 0, 0.88) !important;
     --button-bg: #0d0d0d !important;
     --search-tag-bg: #0d0d0d !important;
     --footer-bg: #000000 !important;
+    --mask-bg: rgba(0, 0, 0, 0.85) !important;
     
     /* Borders: Ultra-clean razor sharp borders */
     --main-border-color: rgba(255, 255, 255, 0.1) !important;
@@ -36,6 +51,7 @@
     --text-color: #e6edf3 !important;
     --heading-color: #ffffff !important;
     --text-muted-color: #8b949e !important;
+    --text-muted-highlight-color: #f0f6fc !important;
     --text-muted-hightlight-color: #f0f6fc !important;
     --label-color: #8b949e !important;
     --site-title-color: #ffffff !important;
@@ -64,19 +80,49 @@
     --blockquote-text-color: #8b949e !important;
   }
 
+  /* Pure Black body & structure overrides in Dark Mode */
+  html[data-mode="dark"] body,
+  html[data-bs-theme="dark"] body,
+  html:not([data-mode="light"]):not([data-bs-theme="light"]) body,
+  html[data-mode="dark"] #main-wrapper,
+  html[data-bs-theme="dark"] #main-wrapper,
+  html:not([data-mode="light"]):not([data-bs-theme="light"]) #main-wrapper,
+  html[data-mode="dark"] #sidebar,
+  html[data-bs-theme="dark"] #sidebar,
+  html:not([data-mode="light"]):not([data-bs-theme="light"]) #sidebar,
+  html[data-mode="dark"] footer,
+  html[data-bs-theme="dark"] footer,
+  html:not([data-mode="light"]):not([data-bs-theme="light"]) footer {
+    background-color: #000000 !important;
+  }
+
   /* ========================================================
      LIGHT MODE (Clean Editorial & Crisp Royal Blue)
      ======================================================== */
-  html[data-mode="light"] {
+  html[data-mode="light"],
+  html[data-bs-theme="light"] {
+    --bs-body-bg: #ffffff !important;
+    --bs-body-color: #24292f !important;
+    --bs-emphasis-color: #1f2328 !important;
+    --bs-secondary-color: #57606a !important;
+    --bs-secondary-bg: #f6f8fa !important;
+    --bs-tertiary-bg: #f8fafc !important;
+    --bs-border-color: #d0d7de !important;
+    --bs-link-color: #0969da !important;
+    --bs-link-hover-color: #0550ae !important;
+
     /* Surfaces */
     --main-bg: #ffffff !important;
     --sidebar-bg: #f6f8fa !important;
     --card-bg: #ffffff !important;
     --card-header-bg: #f6f8fa !important;
     --card-hovor-bg: #f8fafc !important;
+    --card-hover-bg: #f8fafc !important;
     --topbar-bg: rgba(255, 255, 255, 0.9) !important;
     --button-bg: #f6f8fa !important;
     --search-tag-bg: #eaeef2 !important;
+    --footer-bg: #f6f8fa !important;
+    --mask-bg: rgba(0, 0, 0, 0.3) !important;
     
     /* Borders */
     --main-border-color: #d0d7de !important;
@@ -85,12 +131,14 @@
     --search-border-color: #d0d7de !important;
     --input-focus-border-color: #0969da !important;
     --tag-border: #d0d7de !important;
+    --tag-hover: rgba(9, 105, 218, 0.08) !important;
     --language-border-color: #d0d7de !important;
     
     /* Typography */
     --text-color: #24292f !important;
     --heading-color: #1f2328 !important;
     --text-muted-color: #57606a !important;
+    --text-muted-highlight-color: #24292f !important;
     --text-muted-hightlight-color: #24292f !important;
     --label-color: #57606a !important;
     --site-title-color: #1f2328 !important;
@@ -101,7 +149,6 @@
     --link-color: #0969da !important;
     --link-underline-color: rgba(9, 105, 218, 0.4) !important;
     --toc-highlight: #0969da !important;
-    --tag-hover: rgba(9, 105, 218, 0.08) !important;
     --sidebar-active-color: #0969da !important;
     --sidebar-muted-color: #57606a !important;
     --sidebar-hover-bg: rgba(9, 105, 218, 0.06) !important;
@@ -119,19 +166,21 @@
     --blockquote-text-color: #57606a !important;
   }
 
-  /* Pure Black body & structure overrides in Dark Mode */
-  [data-mode="dark"] body,
-  html:not([data-mode]) body,
-  [data-mode="dark"] #main-wrapper,
-  html:not([data-mode]) #main-wrapper,
-  [data-mode="dark"] #sidebar,
-  html:not([data-mode]) #sidebar,
-  [data-mode="dark"] footer,
-  html:not([data-mode]) footer {
-    background-color: #000000 !important;
+  html[data-mode="light"] body,
+  html[data-bs-theme="light"] body,
+  html[data-mode="light"] #main-wrapper,
+  html[data-bs-theme="light"] #main-wrapper {
+    background-color: #ffffff !important;
   }
 
-  /* Card Lift & Polish */
+  html[data-mode="light"] #sidebar,
+  html[data-bs-theme="light"] #sidebar,
+  html[data-mode="light"] footer,
+  html[data-bs-theme="light"] footer {
+    background-color: #f6f8fa !important;
+  }
+
+  /* Card Lift & High Contrast in Dark Mode */
   .card-wrapper.card {
     border-radius: 10px !important;
     transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1),
@@ -139,21 +188,24 @@
                 border-color 0.22s ease !important;
   }
 
-  [data-mode="dark"] .card-wrapper.card,
-  html:not([data-mode]) .card-wrapper.card {
+  html[data-mode="dark"] .card-wrapper.card,
+  html[data-bs-theme="dark"] .card-wrapper.card,
+  html:not([data-mode="light"]):not([data-bs-theme="light"]) .card-wrapper.card {
     background-color: #080808 !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
   }
 
-  [data-mode="dark"] .card-wrapper.card:hover,
-  html:not([data-mode]) .card-wrapper.card:hover {
+  html[data-mode="dark"] .card-wrapper.card:hover,
+  html[data-bs-theme="dark"] .card-wrapper.card:hover,
+  html:not([data-mode="light"]):not([data-bs-theme="light"]) .card-wrapper.card:hover {
     transform: translateY(-3px) !important;
     background-color: #0d0d0d !important;
     border-color: rgba(88, 166, 255, 0.4) !important;
     box-shadow: 0 8px 28px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(88, 166, 255, 0.3) !important;
   }
 
-  [data-mode="light"] .card-wrapper.card:hover {
+  html[data-mode="light"] .card-wrapper.card:hover,
+  html[data-bs-theme="light"] .card-wrapper.card:hover {
     transform: translateY(-3px) !important;
     border-color: #0969da !important;
     box-shadow: 0 8px 20px rgba(140, 149, 159, 0.25), 0 0 0 1px #0969da !important;
@@ -172,174 +224,91 @@
 </style>
 
 <script type="text/javascript">
-  /* Immediate mode application before DOM render to prevent theme flicker */
+  /* Instant mode application before DOM render to prevent theme flicker */
   (function() {
-    var savedMode = localStorage.getItem('mode') || sessionStorage.getItem('mode');
-    if (savedMode) {
-      document.documentElement.setAttribute('data-mode', savedMode);
-    } else {
-      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      document.documentElement.setAttribute('data-mode', prefersDark ? 'dark' : 'light');
-    }
+    try {
+      var savedMode = localStorage.getItem('mode') || sessionStorage.getItem('mode') || localStorage.getItem('theme');
+      var mode = savedMode ? savedMode : 'dark'; // Default to Pitch Black Dark Mode
+      document.documentElement.setAttribute('data-mode', mode);
+      document.documentElement.setAttribute('data-bs-theme', mode);
+    } catch (e) {}
   })();
 
-  class ModeToggle {
-    static get MODE_KEY() {
-      return 'mode';
-    }
-    static get MODE_ATTR() {
-      return 'data-mode';
-    }
-    static get DARK_MODE() {
-      return 'dark';
-    }
-    static get LIGHT_MODE() {
-      return 'light';
-    }
-    static get ID() {
-      return 'mode-toggle';
-    }
+  window.ModeManager = {
+    get current() {
+      var attr = document.documentElement.getAttribute('data-mode') || document.documentElement.getAttribute('data-bs-theme');
+      if (attr === 'light' || attr === 'dark') return attr;
+      var saved = localStorage.getItem('mode') || localStorage.getItem('theme');
+      return saved ? saved : 'dark';
+    },
 
-    constructor() {
-      let self = this;
-
-      this.sysDarkPrefers.addEventListener('change', () => {
-        if (!self.hasUserChosen) {
-          self.applySystemMode();
-        }
-      });
-
-      if (this.hasUserChosen) {
-        if (this.mode === ModeToggle.DARK_MODE) {
-          this.setDark(false);
-        } else {
-          this.setLight(false);
-        }
-      } else {
-        this.applySystemMode();
-      }
-    }
-
-    get sysDarkPrefers() {
-      return window.matchMedia('(prefers-color-scheme: dark)');
-    }
-
-    get isPreferDark() {
-      return this.sysDarkPrefers.matches;
-    }
-
-    get hasUserChosen() {
-      return localStorage.getItem(ModeToggle.MODE_KEY) !== null || sessionStorage.getItem(ModeToggle.MODE_KEY) !== null;
-    }
-
-    get mode() {
-      return localStorage.getItem(ModeToggle.MODE_KEY) || sessionStorage.getItem(ModeToggle.MODE_KEY);
-    }
-
-    get isDarkMode() {
-      var attr = document.documentElement.getAttribute(ModeToggle.MODE_ATTR);
-      if (attr) {
-        return attr === ModeToggle.DARK_MODE;
-      }
-      return this.mode === ModeToggle.DARK_MODE || (!this.hasUserChosen && this.isPreferDark);
-    }
-
-    get modeStatus() {
-      return this.isDarkMode ? ModeToggle.DARK_MODE : ModeToggle.LIGHT_MODE;
-    }
-
-    applySystemMode() {
-      if (this.isPreferDark) {
-        this.setDark(false);
-      } else {
-        this.setLight(false);
-      }
-    }
-
-    setDark(persist = true) {
-      document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE);
+    setMode: function(mode, persist) {
+      if (typeof persist === 'undefined') persist = true;
+      document.documentElement.setAttribute('data-mode', mode);
+      document.documentElement.setAttribute('data-bs-theme', mode);
       if (persist) {
-        localStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE);
-        sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE);
+        try {
+          localStorage.setItem('mode', mode);
+          localStorage.setItem('theme', mode);
+          sessionStorage.setItem('mode', mode);
+        } catch (e) {}
       }
-      this.notify();
+      // Broadcast to Chirpy theme listeners & custom components
+      try {
+        window.postMessage({ id: 'theme-updated', message: mode }, '*');
+        window.dispatchEvent(new CustomEvent('theme-change', { detail: { theme: mode } }));
+      } catch (e) {}
+    },
+
+    toggle: function() {
+      var next = (this.current === 'dark') ? 'light' : 'dark';
+      this.setMode(next, true);
     }
-
-    setLight(persist = true) {
-      document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE);
-      if (persist) {
-        localStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE);
-        sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE);
-      }
-      this.notify();
-    }
-
-    notify() {
-      window.postMessage(
-        {
-          direction: ModeToggle.ID,
-          message: this.modeStatus
-        },
-        '*'
-      );
-    }
-
-    flipMode() {
-      const now = Date.now();
-      if (this._lastFlip && (now - this._lastFlip < 300)) {
-        return;
-      }
-      this._lastFlip = now;
-
-      if (this.isDarkMode) {
-        this.setLight(true);
-      } else {
-        this.setDark(true);
-      }
-    }
-  }
-
-  const modeToggle = new ModeToggle();
+  };
 
   /* Bind mode-toggle click and keyboard shortcuts */
-  document.addEventListener('DOMContentLoaded', function() {
-    // Mode toggle button click handler
-    const btn = document.getElementById('mode-toggle');
+  function bindModeToggle() {
+    var btn = document.getElementById('mode-toggle');
     if (btn && !btn.dataset.modeBound) {
       btn.dataset.modeBound = 'true';
+      btn.style.cursor = 'pointer';
       btn.addEventListener('click', function(e) {
         e.preventDefault();
-        modeToggle.flipMode();
+        e.stopPropagation();
+        window.ModeManager.toggle();
       });
     }
 
     // Keyboard shortcut for search: Ctrl+K, Cmd+K, or slash ('/')
-    document.addEventListener('keydown', function(e) {
-      const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
-      const isInput = activeTag === 'input' || activeTag === 'textarea' || (document.activeElement && document.activeElement.isContentEditable);
+    if (!window._searchShortcutBound) {
+      window._searchShortcutBound = true;
+      document.addEventListener('keydown', function(e) {
+        var activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+        var isInput = activeTag === 'input' || activeTag === 'textarea' || (document.activeElement && document.activeElement.isContentEditable);
 
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        triggerSearch();
-      } else if (e.key === '/' && !isInput) {
-        e.preventDefault();
-        triggerSearch();
-      } else if (e.key === 'Escape') {
-        const searchInput = document.getElementById('search-input');
-        const searchCancel = document.getElementById('search-cancel');
-        if (searchInput && document.activeElement === searchInput) {
-          if (searchCancel) {
-            searchCancel.click();
-          } else {
-            searchInput.blur();
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          triggerSearch();
+        } else if (e.key === '/' && !isInput) {
+          e.preventDefault();
+          triggerSearch();
+        } else if (e.key === 'Escape') {
+          var searchInput = document.getElementById('search-input');
+          var searchCancel = document.getElementById('search-cancel');
+          if (searchInput && document.activeElement === searchInput) {
+            if (searchCancel) {
+              searchCancel.click();
+            } else {
+              searchInput.blur();
+            }
           }
         }
-      }
-    });
+      });
+    }
 
     function triggerSearch() {
-      const searchTrigger = document.getElementById('search-trigger');
-      const searchInput = document.getElementById('search-input');
+      var searchTrigger = document.getElementById('search-trigger');
+      var searchInput = document.getElementById('search-input');
       if (searchTrigger && window.getComputedStyle(searchTrigger).display !== 'none') {
         searchTrigger.click();
       }
@@ -348,5 +317,11 @@
         searchInput.select();
       }
     }
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bindModeToggle);
+  } else {
+    bindModeToggle();
+  }
 </script>
