@@ -7,21 +7,17 @@ description: "An exhaustive technical breakdown of Chapter 3 of 'Practical Rever
 image:
   path: /assets/images/posts/reverse-engineering/chapter-3-cover.png
   alt: "Practical Reverse Engineering Chapter 3 Cover"
+series: "Practical Reverse Engineering"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome to the third chapter of our deep-dive series covering **"Practical Reverse Engineering"** by **Bruce Dang, Alexandre Gazet, Elias Bachaalany, and Sébastien Josse** (Wiley, 2014).
 
 In the Windows operating system, the boundary between user mode (Ring 3) and kernel mode (Ring 0) represents the ultimate security frontier. While user-mode applications run inside virtualized, unprivileged sandboxes with private address spaces, kernel-mode code executes with total processor authority. A single flaw in a third-party kernel driver (`.sys`) can compromise the entire operating system, bypass endpoint detection and response (EDR) sensors, or induce an immediate Blue Screen of Death (BSOD).
 
 In this chapter, we dissect the internal mechanics of the **Windows Kernel**: processor control regions (`KPCR`/`KPRCB`), system call dispatching via `KiSystemCall64` and the SSDT, Interrupt Request Levels (`IRQL`), pool memory allocators, I/O Request Packet (`IRP`) flow, device driver architectures, IOCTL buffering mechanisms, the in-depth reverse engineering of **Sample A (x86 Rootkit)** and **Sample B (x64 Rootkit)**, and solutions to all chapter exercises.
-
-![Practical Reverse Engineering Chapter 3](/assets/images/posts/reverse-engineering/chapter-3-cover.png)
 
 ---
 
@@ -466,3 +462,6 @@ In this chapter, we unpacked the Windows kernel architecture: processor control 
 
 In [**Chapter 4: Windows Debugging & Automation**](/posts/practical-reverse-engineering-chapter-4/), we transition into dynamic analysis: mastering WinDbg, conditional breakpoints, pseudo-registers, DbgEng scripting, automated unpacking of protectors like UPX, and writing custom debugger extensions.
 
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

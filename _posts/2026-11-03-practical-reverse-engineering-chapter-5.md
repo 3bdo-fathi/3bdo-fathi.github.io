@@ -7,14 +7,12 @@ description: "An exhaustive technical breakdown of Chapter 5 of 'Practical Rever
 image:
   path: /assets/images/posts/reverse-engineering/chapter-5-cover.png
   alt: "Practical Reverse Engineering Chapter 5 Cover"
+series: "Practical Reverse Engineering"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome to the fifth and culminating chapter of our technical deep-dive series covering **"Practical Reverse Engineering"** by **Bruce Dang, Alexandre Gazet, Elias Bachaalany, and Sébastien Josse** (Wiley, 2014).
 
 In the software security arena, binary protection represents an unending arms race. Malware authors deploy obfuscation to evade antimalware signatures and frustrate incident responders; commercial software vendors employ obfuscation (such as VMProtect, Themida, and Denuvo) to safeguard intellectual property and thwart piracy; and cryptographic engineers design white-box implementations to prevent key extraction in untrusted execution environments.
@@ -22,8 +20,6 @@ In the software security arena, binary protection represents an unending arms ra
 However, obfuscation does not mean mathematically unbreachable security. In the **White-Box Attack Context (WBAC)**, the reverse engineer possesses total visibility over the hardware, operating system, memory space, and registers. Given sufficient program analysis primitives—compiler optimization theories, dynamic binary translation, intermediate representations, and symbolic execution—any obfuscated software transformation can be modeled, simplified, and inverted.
 
 In this chapter, we dissect: the formal theory of program obfuscation, data transformations (Mixed Boolean-Arithmetic, constant unfolding), control flow protections (opaque predicates, `PUSH-RET` indirection, CFG flattening), custom **Virtual Machine (VM) based protectors**, deobfuscation engines (Miasm, Metasm, symbolic execution with SMT solvers), and the complete walk-through solving the professional-grade **Quetz Keygenme**, followed by comprehensive solutions to the chapter exercises.
-
-![Practical Reverse Engineering Chapter 5](/assets/images/posts/reverse-engineering/chapter-5-cover.png)
 
 ---
 
@@ -405,3 +401,6 @@ Across this five-part series on **"Practical Reverse Engineering"**, we traverse
 
 Binary analysis is not merely about reading disassembled instructions; it is about reconstructing the logic, intent, and constraints of compiled software. With these foundations, you possess the tools and methodology to tackle any executable across architectures, operating systems, and protection schemes.
 
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

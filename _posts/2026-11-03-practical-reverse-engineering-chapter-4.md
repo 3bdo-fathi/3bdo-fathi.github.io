@@ -7,14 +7,12 @@ description: "An exhaustive technical breakdown of Chapter 4 of 'Practical Rever
 image:
   path: /assets/images/posts/reverse-engineering/chapter-4-cover.png
   alt: "Practical Reverse Engineering Chapter 4 Cover"
+series: "Practical Reverse Engineering"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome to the fourth chapter of our comprehensive series covering **"Practical Reverse Engineering"** by **Bruce Dang, Alexandre Gazet, Elias Bachaalany, and Sébastien Josse** (Wiley, 2014).
 
 Static disassembly in IDA Pro or Ghidra provides the structural blueprint of an executable. However, when software employs packed code, encrypted payloads, runtime API resolving, dynamic polymorphism, or complex kernel callbacks, static analysis alone becomes painfully slow. To unpack binaries efficiently, observe live memory transformations, and capture ephemeral keys, the analyst must harness dynamic debugging and automation.
@@ -22,8 +20,6 @@ Static disassembly in IDA Pro or Ghidra provides the structural blueprint of an 
 In the Windows realm, Microsoft's **Debugging Tools for Windows (WinDbg, CDB, KD, and the DbgEng engine)** constitute the industry benchmark. Beyond its interactive interface, DbgEng provides a Turing-complete command scripting language and an extensible COM-based C++ SDK.
 
 In this chapter, we dissect: WinDbg architecture, MASM vs. C++ expression evaluators, event filters, memory inspection commands, hardware breakpoints, pseudo-registers, writing complex loop-based DbgEng scripts, an automated **UPX unpacker script**, a live **File I/O monitor**, the **DbgEng C++ Extension SDK**, and complete solutions to the chapter exercises.
-
-![Practical Reverse Engineering Chapter 4](/assets/images/posts/reverse-engineering/chapter-4-cover.png)
 
 ---
 
@@ -418,3 +414,6 @@ In this chapter, we explored Windows debugging mechanics: expression evaluation 
 
 In [**Chapter 5: Software Obfuscation & Deobfuscation**](/posts/practical-reverse-engineering-chapter-5/), we tackle the ultimate challenge of binary analysis: understanding code obfuscation techniques (opaque predicates, CFG flattening, custom virtual machines, white-box cryptography) and breaking them using automated program analysis, symbolic execution, and solving the famous Quetz keygenme challenge.
 
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

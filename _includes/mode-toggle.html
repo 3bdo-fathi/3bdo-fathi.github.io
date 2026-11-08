@@ -1,4 +1,175 @@
-<!-- Switch the mode between dark and light. -->
+<!-- Premium OLED Pitch Black & Clean Light Mode Theme System -->
+<style>
+  /* Smooth theme transitions */
+  html[data-mode] {
+    transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* ========================================================
+     DARK MODE (Pure OLED True Black #000000)
+     ======================================================== */
+  html[data-mode="dark"],
+  html:not([data-mode]) {
+    /* Surfaces: Pure Pitch Black */
+    --main-bg: #000000 !important;
+    --sidebar-bg: #000000 !important;
+    --card-bg: #080808 !important;
+    --card-header-bg: #0d0d0d !important;
+    --card-hovor-bg: #121212 !important;
+    --topbar-bg: rgba(0, 0, 0, 0.9) !important;
+    --button-bg: #0d0d0d !important;
+    --search-tag-bg: #0d0d0d !important;
+    --footer-bg: #000000 !important;
+    
+    /* Borders: Ultra-clean razor sharp borders */
+    --main-border-color: rgba(255, 255, 255, 0.1) !important;
+    --sidebar-border-color: rgba(255, 255, 255, 0.08) !important;
+    --btn-border-color: rgba(255, 255, 255, 0.14) !important;
+    --search-border-color: rgba(255, 255, 255, 0.16) !important;
+    --input-focus-border-color: #58a6ff !important;
+    --tag-border: rgba(255, 255, 255, 0.12) !important;
+    --language-border-color: rgba(255, 255, 255, 0.1) !important;
+    
+    /* Typography: Crisp High Contrast */
+    --text-color: #e6edf3 !important;
+    --heading-color: #ffffff !important;
+    --text-muted-color: #8b949e !important;
+    --text-muted-hightlight-color: #f0f6fc !important;
+    --label-color: #8b949e !important;
+    --site-title-color: #ffffff !important;
+    --site-subtitle-color: #8b949e !important;
+    --post-list-text-color: #8b949e !important;
+    
+    /* Accents & Links */
+    --link-color: #58a6ff !important;
+    --link-underline-color: rgba(88, 166, 255, 0.4) !important;
+    --toc-highlight: #58a6ff !important;
+    --tag-hover: rgba(88, 166, 255, 0.15) !important;
+    --sidebar-active-color: #58a6ff !important;
+    --sidebar-muted-color: #8b949e !important;
+    --sidebar-hover-bg: rgba(255, 255, 255, 0.04) !important;
+
+    /* Shadows & Glows */
+    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+    --btn-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6) !important;
+
+    /* Code & Callouts */
+    --highlight-bg-color: #070707 !important;
+    --highlighter-rouge-color: #f0f6fc !important;
+    --inline-code-bg: rgba(255, 255, 255, 0.08) !important;
+    --code-color: #79c0ff !important;
+    --blockquote-border-color: #58a6ff !important;
+    --blockquote-text-color: #8b949e !important;
+  }
+
+  /* ========================================================
+     LIGHT MODE (Clean Editorial & Crisp Royal Blue)
+     ======================================================== */
+  html[data-mode="light"] {
+    /* Surfaces */
+    --main-bg: #ffffff !important;
+    --sidebar-bg: #f6f8fa !important;
+    --card-bg: #ffffff !important;
+    --card-header-bg: #f6f8fa !important;
+    --card-hovor-bg: #f8fafc !important;
+    --topbar-bg: rgba(255, 255, 255, 0.9) !important;
+    --button-bg: #f6f8fa !important;
+    --search-tag-bg: #eaeef2 !important;
+    
+    /* Borders */
+    --main-border-color: #d0d7de !important;
+    --sidebar-border-color: #d8dee4 !important;
+    --btn-border-color: #d0d7de !important;
+    --search-border-color: #d0d7de !important;
+    --input-focus-border-color: #0969da !important;
+    --tag-border: #d0d7de !important;
+    --language-border-color: #d0d7de !important;
+    
+    /* Typography */
+    --text-color: #24292f !important;
+    --heading-color: #1f2328 !important;
+    --text-muted-color: #57606a !important;
+    --text-muted-hightlight-color: #24292f !important;
+    --label-color: #57606a !important;
+    --site-title-color: #1f2328 !important;
+    --site-subtitle-color: #57606a !important;
+    --post-list-text-color: #57606a !important;
+    
+    /* Accents & Links */
+    --link-color: #0969da !important;
+    --link-underline-color: rgba(9, 105, 218, 0.4) !important;
+    --toc-highlight: #0969da !important;
+    --tag-hover: rgba(9, 105, 218, 0.08) !important;
+    --sidebar-active-color: #0969da !important;
+    --sidebar-muted-color: #57606a !important;
+    --sidebar-hover-bg: rgba(9, 105, 218, 0.06) !important;
+
+    /* Shadows */
+    --card-shadow: 0 2px 8px rgba(140, 149, 159, 0.15), 0 0 0 1px #d0d7de !important;
+    --btn-box-shadow: 0 1px 3px rgba(31, 35, 40, 0.08) !important;
+
+    /* Code & Callouts */
+    --highlight-bg-color: #f6f8fa !important;
+    --highlighter-rouge-color: #24292f !important;
+    --inline-code-bg: rgba(175, 184, 193, 0.2) !important;
+    --code-color: #0969da !important;
+    --blockquote-border-color: #0969da !important;
+    --blockquote-text-color: #57606a !important;
+  }
+
+  /* Pure Black body & structure overrides in Dark Mode */
+  [data-mode="dark"] body,
+  html:not([data-mode]) body,
+  [data-mode="dark"] #main-wrapper,
+  html:not([data-mode]) #main-wrapper,
+  [data-mode="dark"] #sidebar,
+  html:not([data-mode]) #sidebar,
+  [data-mode="dark"] footer,
+  html:not([data-mode]) footer {
+    background-color: #000000 !important;
+  }
+
+  /* Card Lift & Polish */
+  .card-wrapper.card {
+    border-radius: 10px !important;
+    transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.22s ease !important;
+  }
+
+  [data-mode="dark"] .card-wrapper.card,
+  html:not([data-mode]) .card-wrapper.card {
+    background-color: #080808 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  }
+
+  [data-mode="dark"] .card-wrapper.card:hover,
+  html:not([data-mode]) .card-wrapper.card:hover {
+    transform: translateY(-3px) !important;
+    background-color: #0d0d0d !important;
+    border-color: rgba(88, 166, 255, 0.4) !important;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(88, 166, 255, 0.3) !important;
+  }
+
+  [data-mode="light"] .card-wrapper.card:hover {
+    transform: translateY(-3px) !important;
+    border-color: #0969da !important;
+    box-shadow: 0 8px 20px rgba(140, 149, 159, 0.25), 0 0 0 1px #0969da !important;
+  }
+
+  /* Glassmorphic Topbar */
+  #topbar-wrapper {
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+  }
+
+  /* Post preview image rounded corners */
+  .post-preview img {
+    border-radius: 8px !important;
+  }
+</style>
 
 <script type="text/javascript">
   /* Immediate mode application before DOM render to prevent theme flicker */

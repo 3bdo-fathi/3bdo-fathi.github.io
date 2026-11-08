@@ -7,14 +7,12 @@ description: "A comprehensive summary of Chapter 5 of Christopher Hadnagy's 'Soc
 image:
   path: /assets/images/posts/social-engineering/chapter-5-cover.png
   alt: Social Engineering The Art of Human Hacking - Chapter 5 Summary
+series: "Social Engineering: The Art of Human Hacking"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome back to our book summary series covering Christopher Hadnagy's masterpiece, **"Social Engineering: The Art of Human Hacking"** (Wiley Publishing).
 
 In [Chapter 4: Pretexting](/posts/social-engineering-art-of-human-hacking-chapter-4/), we explored the principles of constructing believable characters and navigating operational legal boundaries.
@@ -30,8 +28,6 @@ As psychologist Carl Gustav Jung famously observed:
 
 Let's dissect the science of hacking the human cognitive operating system.
 
-![Chapter 5: Mind Tricks & Psychology Cover](/assets/images/posts/social-engineering/chapter-5-cover.png)
-
 ---
 
 ### Series Navigation
@@ -39,7 +35,6 @@ Let's dissect the science of hacking the human cognitive operating system.
 | **Previous Chapter** | **Current Chapter** | **Next Chapter** |
 | :---: | :---: | :---: |
 | [Chapter 4: Pretexting](/posts/social-engineering-art-of-human-hacking-chapter-4/) | **Chapter 5: Mind Tricks & Psychology** | [Chapter 6: Influence & Persuasion](/posts/social-engineering-art-of-human-hacking-chapter-6/) |
-
 
 ---
 
@@ -220,7 +215,6 @@ Without rapport, social engineering fails. Hadnagy identifies three essential st
 | :---: | :---: | :---: |
 | [Chapter 4: Pretexting](/posts/social-engineering-art-of-human-hacking-chapter-4/) | **Chapter 5: Mind Tricks & Psychology** | [Chapter 6: Influence & Persuasion](/posts/social-engineering-art-of-human-hacking-chapter-6/) |
 
-
 ---
 
 ## Next in the Series: Chapter 6 Preview
@@ -249,4 +243,6 @@ Have you ever spotted a microexpression of contempt or fear during an audit or i
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) | [GitHub](https://github.com/3bdo-fathi) | [Contact Page](/contact-me/)
 
-- Abdulrahman Mohamed
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

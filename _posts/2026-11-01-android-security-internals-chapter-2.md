@@ -7,14 +7,12 @@ description: "An in-depth technical analysis of Chapter 2 of Nikolay Elenkov's '
 image:
   path: /assets/images/posts/android-security/chapter-2-cover.png
   alt: "Android Security Internals Chapter 2 Cover"
+series: "Android Security Internals"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**, enriched with real-world vulnerability research and offensive testing methodologies from the **OWASP Mobile Application Security Testing Guide (MASTG)**.
 
 In [Chapter 1](/posts/android-security-internals-chapter-1/), we dissected Android's kernel sandbox, UID allocation, and Binder IPC mechanics. In this installment, we explore **Chapter 2: Permissions**, the primary mechanism Android employs to restrict access to sensitive device APIs, hardware sensors, network interfaces, and private user datasets.
@@ -22,8 +20,6 @@ In [Chapter 1](/posts/android-security-internals-chapter-1/), we dissected Andro
 While users typically perceive permissions as interactive prompt dialogs, under the hood Android's permission model is a multi-tier enforcement architecture spanning **compiled XML manifests**, **Linux kernel Supplementary Group IDs (GIDs)**, **framework-level Binder hook checks**, and **transient Content Provider URI delegation tokens**.
 
 Let's dive into the technical internals of Android's permission framework.
-
-![Android Security Internals Chapter 2](/assets/images/posts/android-security/chapter-2-cover.png)
 
 ---
 
@@ -324,4 +320,6 @@ Have you audited Android apps for confused deputy or URI grant vulnerabilities? 
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) | [GitHub](https://github.com/3bdo-fathi) | [Contact Page](/contact-me/)
 
-- Abdulrahman Mohamed
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

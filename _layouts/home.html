@@ -6,58 +6,33 @@ layout: default
 
 {% assign all_pinned = site.posts | where: 'pin', 'true' %}
 {% assign all_normal = site.posts | where_exp: 'item', 'item.pin != true and item.hidden != true' %}
-
-{% assign posts = '' | split: '' %}
-
-{% assign visible_start = paginator.page | minus: 1 | times: paginator.per_page %}
-{% assign visible_end = visible_start | plus: paginator.per_page %}
-
-{% if all_pinned.size > visible_start %}
-  {% if all_pinned.size > visible_end %}
-    {% assign pinned_size = paginator.per_page %}
-  {% else %}
-    {% assign pinned_size = all_pinned.size | minus: visible_start %}
-  {% endif %}
-
-  {% for i in (visible_start..all_pinned.size) limit: pinned_size %}
-    {% assign posts = posts | push: all_pinned[i] %}
-  {% endfor %}
-{% else %}
-  {% assign pinned_size = 0 %}
-{% endif %}
-
-{% assign normal_size = paginator.posts | size | minus: pinned_size %}
-
-{% if normal_size > 0 %}
-  {% if pinned_size > 0 %}
-    {% assign normal_start = 0 %}
-  {% else %}
-    {% assign normal_start = visible_start | minus: all_pinned.size %}
-  {% endif %}
-
-  {% assign normal_end = normal_start | plus: normal_size | minus: 1 %}
-
-  {% for i in (normal_start..normal_end) %}
-    {% assign posts = posts | push: all_normal[i] %}
-  {% endfor %}
-{% endif %}
+{% assign posts = all_pinned | concat: all_normal %}
 
 {% include post-stats-styles.html %}
 
 <style>
+  /* Dynamic Responsive Category Bar */
   .category-filter-wrapper {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
+    position: relative;
   }
+
   .category-filter-bar {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
+    gap: 0.5rem 0.6rem;
+    align-items: center;
+    padding: 0.25rem 0;
   }
+
   .cat-filter-btn {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
-    color: var(--text-muted-color, #8b949e);
-    padding: 0.32rem 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: #0d0d0d;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #8b949e;
+    padding: 0.35rem 0.85rem;
     font-size: 0.82rem;
     font-weight: 500;
     border-radius: 20px;
@@ -65,49 +40,142 @@ layout: default
     outline: none;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     user-select: none;
+    white-space: nowrap;
+    line-height: 1.2;
   }
+
+  .cat-filter-btn .cat-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.08rem 0.45rem;
+    font-size: 0.72rem;
+    font-family: monospace;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #8b949e;
+    transition: all 0.2s ease;
+  }
+
   .cat-filter-btn:hover {
     color: #58a6ff;
     border-color: rgba(88, 166, 255, 0.4);
-    background: rgba(88, 166, 255, 0.08);
+    background: #161b22;
   }
+
+  .cat-filter-btn:hover .cat-count {
+    color: #58a6ff;
+    background: rgba(88, 166, 255, 0.15);
+  }
+
   .cat-filter-btn.active {
     background: #58a6ff !important;
-    color: #ffffff !important;
+    color: #000000 !important;
     border-color: #58a6ff !important;
+    font-weight: 600;
+    box-shadow: 0 0 14px rgba(88, 166, 255, 0.35);
   }
+
+  .cat-filter-btn.active .cat-count {
+    background: rgba(0, 0, 0, 0.2) !important;
+    color: #000000 !important;
+    font-weight: 700;
+  }
+
   [data-mode="light"] .cat-filter-btn {
-    background: rgba(0, 0, 0, 0.03);
-    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: #f6f8fa;
+    border: 1px solid #d0d7de;
     color: #57606a;
   }
+
+  [data-mode="light"] .cat-filter-btn .cat-count {
+    background: rgba(0, 0, 0, 0.06);
+    color: #57606a;
+  }
+
   [data-mode="light"] .cat-filter-btn:hover {
-    background: rgba(9, 105, 218, 0.08);
+    background: #f3f4f6;
     border-color: #0969da;
     color: #0969da;
   }
+
+  [data-mode="light"] .cat-filter-btn:hover .cat-count {
+    color: #0969da;
+    background: rgba(9, 105, 218, 0.1);
+  }
+
   [data-mode="light"] .cat-filter-btn.active {
     background: #0969da !important;
     color: #ffffff !important;
     border-color: #0969da !important;
+    box-shadow: 0 2px 8px rgba(9, 105, 218, 0.25);
+  }
+
+  [data-mode="light"] .cat-filter-btn.active .cat-count {
+    background: rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+  }
+
+  @media (max-width: 576px) {
+    .category-filter-bar {
+      gap: 0.4rem 0.45rem;
+    }
+    .cat-filter-btn {
+      padding: 0.28rem 0.65rem;
+      font-size: 0.75rem;
+    }
+    .cat-filter-btn .cat-count {
+      padding: 0.05rem 0.35rem;
+      font-size: 0.68rem;
+    }
+  }
+
+  /* Smooth Fade-in on infinite scroll load */
+  @keyframes postFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .post-fade-in {
+    animation: postFadeIn 0.32s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  #infinite-scroll-sentinel {
+    min-height: 60px;
   }
 </style>
 
+<!-- Dynamic Category Filter Bar -->
 <div class="category-filter-wrapper">
   <div class="category-filter-bar" role="toolbar" aria-label="Category Filters">
-    <button type="button" class="cat-filter-btn active" data-filter="all">All</button>
-    <button type="button" class="cat-filter-btn" data-filter="reverse engineering">Reverse Engineering</button>
-    <button type="button" class="cat-filter-btn" data-filter="android security">Android Security</button>
-    <button type="button" class="cat-filter-btn" data-filter="active directory">Active Directory</button>
-    <button type="button" class="cat-filter-btn" data-filter="social engineering">Social Engineering</button>
-    <button type="button" class="cat-filter-btn" data-filter="application security">AppSec &amp; Web</button>
-    <button type="button" class="cat-filter-btn" data-filter="scripts">Scripts</button>
+    <button type="button" class="cat-filter-btn active" data-filter="all">
+      <span>All</span>
+      <span class="cat-count">{{ posts.size }}</span>
+    </button>
+    {% assign sorted_categories = site.categories | sort %}
+    {% for category in sorted_categories %}
+      {% assign cat_name = category[0] %}
+      {% if cat_name == 'Cyber Security' %}{% continue %}{% endif %}
+      {% assign cat_posts_count = category[1].size %}
+      {% if cat_posts_count > 0 %}
+        <button type="button" class="cat-filter-btn" data-filter="{{ cat_name | downcase }}">
+          <span>{{ cat_name }}</span>
+          <span class="cat-count">{{ cat_posts_count }}</span>
+        </button>
+      {% endif %}
+    {% endfor %}
   </div>
 </div>
 
 <div id="post-list" class="flex-grow-1 px-xl-1">
   {% for post in posts %}
-    <article class="card-wrapper card" data-categories="{% if post.categories %}{{ post.categories | join: ' ' | downcase }}{% endif %}">
+    <article class="card-wrapper card" data-categories="{% if post.categories %}{{ post.categories | join: '||' | downcase }}{% endif %}">
       <a href="{{ post.url | relative_url }}" class="post-preview row g-0 flex-md-row-reverse" data-post-path="{{ post.url }}">
         {% assign card_body_col = '12' %}
 
@@ -174,9 +242,9 @@ layout: default
                   </span>
                 {% endif %}
 
-                <span class="post-meta-mini">
+                <span class="post-meta-mini" title="Estimated reading time">
                   <i class="fas fa-clock" aria-hidden="true"></i>
-                  {% include calc-read-time.html content=post.content %} min
+                  {% include calc-read-time.html content=post.content %} min read
                 </span>
                 <span class="post-meta-mini">
                   <i class="fas fa-eye" aria-hidden="true"></i>
@@ -198,54 +266,117 @@ layout: default
   {% endfor %}
 </div>
 
-{% if paginator.total_pages > 1 %}
-  {% include post-paginator.html %}
-{% endif %}
+<!-- Continuous Infinite Scroll Sentinel -->
+<div id="infinite-scroll-sentinel" class="py-4 text-center">
+  <div id="infinite-scroll-loading" class="text-muted small">
+    <i class="fas fa-circle-notch fa-spin me-2"></i> Loading more posts...
+  </div>
+  <div id="infinite-scroll-end" class="text-muted small d-none">
+    <span class="d-inline-block px-3 py-1 rounded" style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08);">
+      All posts loaded
+    </span>
+  </div>
+</div>
 
 <div id="category-filter-empty" class="text-center py-5 d-none text-muted">
-  <p class="mb-2">No posts matching this category on the current page.</p>
-  <a href="{{ '/categories/' | relative_url }}" class="cat-filter-btn d-inline-block">View All Categories</a>
+  <p class="mb-2">No write-ups found matching this category.</p>
 </div>
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
+    const BATCH_SIZE = 8;
     const filterBtns = document.querySelectorAll('.cat-filter-btn[data-filter]');
-    const postCards = document.querySelectorAll('#post-list article.card-wrapper');
+    const postCards = Array.from(document.querySelectorAll('#post-list article.card-wrapper'));
+    const sentinel = document.getElementById('infinite-scroll-sentinel');
+    const loadingIndicator = document.getElementById('infinite-scroll-loading');
+    const endIndicator = document.getElementById('infinite-scroll-end');
     const emptyNotice = document.getElementById('category-filter-empty');
-    const paginatorEl = document.querySelector('.pagination-wrapper, nav.paginator');
 
-    if (!filterBtns.length || !postCards.length) return;
+    let currentFilter = 'all';
+    let currentlyVisible = 0;
+    let filteredPosts = [];
 
+    function applyFilter(filter) {
+      currentFilter = filter;
+      filteredPosts = postCards.filter(function (card) {
+        if (filter === 'all') return true;
+        const cats = (card.getAttribute('data-categories') || '').toLowerCase().split('||');
+        return cats.includes(filter);
+      });
+
+      // Hide all posts first
+      postCards.forEach(function (card) {
+        card.style.display = 'none';
+        card.classList.remove('post-fade-in');
+      });
+
+      currentlyVisible = 0;
+
+      if (filteredPosts.length === 0) {
+        if (emptyNotice) emptyNotice.classList.remove('d-none');
+        if (sentinel) sentinel.style.display = 'none';
+        return;
+      }
+
+      if (emptyNotice) emptyNotice.classList.add('d-none');
+      if (sentinel) sentinel.style.display = '';
+
+      loadNextBatch();
+    }
+
+    function loadNextBatch() {
+      const nextBatch = filteredPosts.slice(currentlyVisible, currentlyVisible + BATCH_SIZE);
+      nextBatch.forEach(function (card) {
+        card.style.display = '';
+        card.classList.add('post-fade-in');
+      });
+
+      currentlyVisible += nextBatch.length;
+
+      if (currentlyVisible >= filteredPosts.length) {
+        if (loadingIndicator) loadingIndicator.classList.add('d-none');
+        if (endIndicator) endIndicator.classList.remove('d-none');
+      } else {
+        if (loadingIndicator) loadingIndicator.classList.remove('d-none');
+        if (endIndicator) endIndicator.classList.add('d-none');
+      }
+    }
+
+    // Filter button clicks
     filterBtns.forEach(function (btn) {
       btn.addEventListener('click', function () {
-        const filter = this.getAttribute('data-filter');
         filterBtns.forEach(function (b) { b.classList.remove('active'); });
         this.classList.add('active');
-
-        let visibleCount = 0;
-        postCards.forEach(function (card) {
-          const cats = (card.getAttribute('data-categories') || '').toLowerCase();
-          if (filter === 'all' || cats.indexOf(filter) !== -1) {
-            card.style.display = '';
-            visibleCount++;
-          } else {
-            card.style.display = 'none';
-          }
-        });
-
-        if (emptyNotice) {
-          if (visibleCount === 0) {
-            emptyNotice.classList.remove('d-none');
-          } else {
-            emptyNotice.classList.add('d-none');
-          }
-        }
-
-        if (paginatorEl) {
-          paginatorEl.style.display = (filter === 'all') ? '' : 'none';
-        }
+        const filter = this.getAttribute('data-filter');
+        applyFilter(filter);
       });
     });
+
+    // IntersectionObserver for continuous scroll
+    if ('IntersectionObserver' in window && sentinel) {
+      const observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting && currentlyVisible < filteredPosts.length) {
+            loadNextBatch();
+          }
+        });
+      }, { rootMargin: '300px' });
+
+      observer.observe(sentinel);
+    } else {
+      // Fallback scroll listener
+      window.addEventListener('scroll', function () {
+        if (sentinel && currentlyVisible < filteredPosts.length) {
+          const rect = sentinel.getBoundingClientRect();
+          if (rect.top <= window.innerHeight + 300) {
+            loadNextBatch();
+          }
+        }
+      });
+    }
+
+    // Initial population
+    applyFilter('all');
   });
 </script>
 

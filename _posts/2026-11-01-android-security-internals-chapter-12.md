@@ -7,14 +7,12 @@ description: "An in-depth analysis of Chapter 12 of Nikolay Elenkov's 'Android S
 image:
   path: /assets/images/posts/android-security/chapter-12-cover.png
   alt: "Android Security Internals Chapter 12 Cover"
+series: "Android Security Internals"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**, enriched with kernel security research, Project Treble architecture, and mandatory access control exploitation tradecraft.
 
 In [Chapter 11](/posts/android-security-internals-chapter-11/), we investigated NFC architecture, Host-based Card Emulation, and smart card protocols. In this installment, we explore **Chapter 12: SELinux in Android**, dissecting the single most impactful security enhancement introduced to the platform: **Security-Enhanced Linux (SEAndroid)**.
@@ -22,8 +20,6 @@ In [Chapter 11](/posts/android-security-internals-chapter-11/), we investigated 
 Before Android 4.3, Android's security model relied entirely on Discretionary Access Control (DAC) through Linux UIDs. This created an all-or-nothing vulnerability: **if an attacker compromised a daemon running as `root` (UID 0), the game was over.** The attacker had unfettered access to all files, devices, memory regions, and kernel system calls.
 
 SELinux dismantled this paradigm by introducing **Mandatory Access Control (MAC)**, enforcing strict containment rules that confine processes even if they run as root.
-
-![Android Security Internals Chapter 12](/assets/images/posts/android-security/chapter-12-cover.png)
 
 ---
 
@@ -162,4 +158,6 @@ Have you developed custom SEAndroid policies or audited Android device firmware 
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) | [GitHub](https://github.com/3bdo-fathi) | [Contact Page](/contact-me/)
 
-- Abdulrahman Mohamed
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

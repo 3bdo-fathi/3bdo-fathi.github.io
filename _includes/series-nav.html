@@ -1,0 +1,288 @@
+<!-- Series Navigation & Syllabus Component -->
+{% if page.series %}
+  {% assign series_posts = site.posts | where: "series", page.series | reverse %}
+  {% assign total_count = series_posts.size %}
+  
+  {% if total_count > 1 %}
+    {% assign current_idx = 0 %}
+    {% for p in series_posts %}
+      {% if p.url == page.url %}
+        {% assign current_idx = forloop.index %}
+        {% assign prev_post = nil %}
+        {% assign next_post = nil %}
+        
+        {% assign prev_idx = forloop.index0 | minus: 1 %}
+        {% assign next_idx = forloop.index0 | plus: 1 %}
+        
+        {% if prev_idx >= 0 %}
+          {% assign prev_post = series_posts[prev_idx] %}
+        {% endif %}
+        {% if next_idx < total_count %}
+          {% assign next_post = series_posts[next_idx] %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+
+    <style>
+      .series-banner-card {
+        margin: 1.75rem 0;
+        padding: 1.15rem 1.25rem;
+        background: #080808;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-left: 4px solid #58a6ff;
+        border-radius: 8px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+      }
+
+      [data-mode="light"] .series-banner-card {
+        background: rgba(246, 248, 250, 0.9);
+        border-color: rgba(9, 105, 218, 0.2);
+        border-left-color: #0969da;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .series-title-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .series-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #58a6ff;
+      }
+
+      [data-mode="light"] .series-badge {
+        color: #0969da;
+      }
+
+      .series-progress-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.2rem 0.55rem;
+        border-radius: 20px;
+        background: rgba(88, 166, 255, 0.12);
+        border: 1px solid rgba(88, 166, 255, 0.3);
+        color: #58a6ff;
+      }
+
+      [data-mode="light"] .series-progress-pill {
+        background: rgba(9, 105, 218, 0.08);
+        border-color: rgba(9, 105, 218, 0.25);
+        color: #0969da;
+      }
+
+      .series-name {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: #c9d1d9;
+        margin-bottom: 0.35rem;
+      }
+
+      [data-mode="light"] .series-name {
+        color: #24292f;
+      }
+
+      .series-details {
+        margin-top: 0.75rem;
+        font-size: 0.85rem;
+      }
+
+      .series-details summary {
+        cursor: pointer;
+        user-select: none;
+        color: #8b949e;
+        font-weight: 500;
+        transition: color 0.2s ease;
+        outline: none;
+      }
+
+      .series-details summary:hover {
+        color: #58a6ff;
+      }
+
+      [data-mode="light"] .series-details summary {
+        color: #57606a;
+      }
+
+      [data-mode="light"] .series-details summary:hover {
+        color: #0969da;
+      }
+
+      .series-list {
+        list-style: none;
+        padding: 0;
+        margin: 0.75rem 0 0 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      [data-mode="light"] .series-list {
+        border-top-color: rgba(0, 0, 0, 0.08);
+      }
+
+      .series-list-item {
+        display: flex;
+        align-items: baseline;
+        gap: 0.65rem;
+        padding: 0.45rem 0.2rem;
+        border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+        font-size: 0.84rem;
+        line-height: 1.4;
+      }
+
+      [data-mode="light"] .series-list-item {
+        border-bottom-color: rgba(0, 0, 0, 0.05);
+      }
+
+      .series-list-item a {
+        color: #8b949e;
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      .series-list-item a:hover {
+        color: #58a6ff;
+        text-decoration: underline;
+      }
+
+      [data-mode="light"] .series-list-item a {
+        color: #57606a;
+      }
+
+      [data-mode="light"] .series-list-item a:hover {
+        color: #0969da;
+      }
+
+      .series-list-item.active {
+        font-weight: 600;
+      }
+
+      .series-list-item.active a {
+        color: #58a6ff;
+      }
+
+      [data-mode="light"] .series-list-item.active a {
+        color: #0969da;
+      }
+
+      .series-part-num {
+        font-family: monospace;
+        font-size: 0.75rem;
+        color: #6e7681;
+        min-width: 20px;
+      }
+
+      .series-nav-controls {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.85rem;
+        margin: 1.5rem 0;
+      }
+
+      @media (max-width: 576px) {
+        .series-nav-controls {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .series-nav-btn {
+        display: flex;
+        flex-direction: column;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        background: #080808;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        text-decoration: none !important;
+        transition: all 0.2s ease;
+      }
+
+      .series-nav-btn:hover {
+        border-color: rgba(88, 166, 255, 0.45);
+        background: rgba(88, 166, 255, 0.08);
+        transform: translateY(-2px);
+      }
+
+      [data-mode="light"] .series-nav-btn {
+        background: rgba(246, 248, 250, 0.7);
+        border-color: rgba(9, 105, 218, 0.16);
+      }
+
+      [data-mode="light"] .series-nav-btn:hover {
+        border-color: rgba(9, 105, 218, 0.45);
+        background: rgba(9, 105, 218, 0.06);
+      }
+
+      .series-nav-btn .direction {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #58a6ff;
+        margin-bottom: 0.25rem;
+      }
+
+      [data-mode="light"] .series-nav-btn .direction {
+        color: #0969da;
+      }
+
+      .series-nav-btn .target-title {
+        font-size: 0.85rem;
+        color: #c9d1d9;
+        line-height: 1.35;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      [data-mode="light"] .series-nav-btn .target-title {
+        color: #24292f;
+      }
+    </style>
+
+    <div class="series-banner-card">
+      <div class="series-title-row">
+        <span class="series-badge">
+          <i class="fas fa-layer-group"></i> Research Series
+        </span>
+        <span class="series-progress-pill">
+          Part {{ current_idx }} of {{ total_count }}
+        </span>
+      </div>
+      <div class="series-name">{{ page.series }}</div>
+      <div class="text-muted" style="font-size: 0.82rem;">
+        This article is part of an ongoing in-depth series. Follow along or explore other chapters in the syllabus below.
+      </div>
+      <details class="series-details">
+        <summary>
+          <i class="fas fa-list-ul me-1"></i> View Full Series Syllabus ({{ total_count }} parts)
+        </summary>
+        <ul class="series-list">
+          {% for p in series_posts %}
+            <li class="series-list-item {% if p.url == page.url %}active{% endif %}">
+              <span class="series-part-num">#{{ forloop.index }}</span>
+              {% if p.url == page.url %}
+                <span>{{ p.title }} <span class="badge bg-primary ms-1" style="font-size: 0.65rem;">Current</span></span>
+              {% else %}
+                <a href="{{ p.url | relative_url }}">{{ p.title }}</a>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </details>
+    </div>
+  {% endif %}
+{% endif %}
+

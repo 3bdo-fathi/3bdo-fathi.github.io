@@ -4,7 +4,7 @@ icon: fas fa-envelope
 order: 5
 title: Contact Me
 permalink: /contact-me/
-image: /assets/images/preview.jpg
+image: /assets/images/site/preview.jpg
 ---
 
 <style>

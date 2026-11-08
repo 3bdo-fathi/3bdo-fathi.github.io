@@ -7,14 +7,12 @@ description: "A comprehensive summary of Chapter 7 of Christopher Hadnagy's 'Soc
 image:
   path: /assets/images/posts/social-engineering/chapter-7-cover.png
   alt: Social Engineering The Art of Human Hacking - Chapter 7 Summary
+series: "Social Engineering: The Art of Human Hacking"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome back to our book summary series covering Christopher Hadnagy's **"Social Engineering: The Art of Human Hacking"** (Wiley Publishing).
 
 In [Chapter 6: Influence & Persuasion](/posts/social-engineering-art-of-human-hacking-chapter-6/), we explored reality framing, psychological compliance weapons, and manipulation models.
@@ -30,8 +28,6 @@ However, Hadnagy immediately attaches a crucial caveat: **tools do not make the 
 
 In this chapter, we dissect the complete physical and digital arsenal: from **lockpicks and shove knives** to **Maltego, SET, Asterisk caller ID spoofing, and password profilers.**
 
-![Chapter 7: Tools of the Social Engineer Cover](/assets/images/posts/social-engineering/chapter-7-cover.png)
-
 ---
 
 ### Series Navigation
@@ -39,7 +35,6 @@ In this chapter, we dissect the complete physical and digital arsenal: from **lo
 | **Previous Chapter** | **Current Chapter** | **Next Chapter** |
 | :---: | :---: | :---: |
 | [Chapter 6: Influence & Persuasion](/posts/social-engineering-art-of-human-hacking-chapter-6/) | **Chapter 7: The Tools of the Social Engineer** | [Chapter 8: Real-World Case Studies](/posts/social-engineering-art-of-human-hacking-chapter-8/) |
-
 
 ---
 
@@ -206,7 +201,6 @@ Developed by Robin Wood (`digininja`), CeWL spiders an organization's website, e
 | :---: | :---: | :---: |
 | [Chapter 6: Influence & Persuasion](/posts/social-engineering-art-of-human-hacking-chapter-6/) | **Chapter 7: The Tools of the Social Engineer** | [Chapter 8: Real-World Case Studies](/posts/social-engineering-art-of-human-hacking-chapter-8/) |
 
-
 ---
 
 ## Next in the Series: Chapter 8 Preview
@@ -235,4 +229,6 @@ What is your preferred toolkit for OSINT and physical security assessments? Have
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) | [GitHub](https://github.com/3bdo-fathi) | [Contact Page](/contact-me/)
 
-- Abdulrahman Mohamed
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

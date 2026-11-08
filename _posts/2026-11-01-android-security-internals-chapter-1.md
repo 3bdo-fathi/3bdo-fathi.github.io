@@ -7,21 +7,17 @@ description: "An exhaustive technical breakdown of Chapter 1 of Nikolay Elenkov'
 image:
   path: /assets/images/posts/android-security/chapter-1-cover.png
   alt: "Android Security Internals Chapter 1 Cover"
+series: "Android Security Internals"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome to the inaugural post of our deep-dive book summary series covering **"Android Security Internals: An In-Depth Guide to Android's Security Architecture"** by **Nikolay Elenkov** (No Starch Press), enriched with cutting-edge vulnerability research from **Google Project Zero**, **Android Hacker's Handbook**, and the **OWASP Mobile Application Security Verification Standard (MASVS)**.
 
 Android is the most widely deployed operating system on the planet, running on billions of smartphones, tablets, IoT devices, automotive infotainment systems, and enterprise wearables. While traditional operating systems rely heavily on discretionary user accounts and network-perimeter firewalls, Android was engineered from the ground up on a radical security paradigm: **treating every single installed application as an untrusted, mutually hostile tenant on a multi-user Linux system.**
 
 In this chapter, we dissect the foundational pillars of the Android security model: the modified Linux kernel, userspace privilege separation, Dalvik/ART runtime isolation, the low-level mechanics of the Binder Inter-Process Communication (IPC) subsystem, and the kernel memory vulnerabilities that threaten this boundary.
-
-![Android Security Internals Chapter 1](/assets/images/posts/android-security/chapter-1-cover.png)
 
 ---
 
@@ -363,4 +359,6 @@ Have questions or insights regarding Android's kernel sandbox or Binder IPC mech
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) | [GitHub](https://github.com/3bdo-fathi) | [Contact Page](/contact-me/)
 
-- Abdulrahman Mohamed
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

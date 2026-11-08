@@ -7,14 +7,12 @@ description: "A comprehensive summary of Chapter 6 of Christopher Hadnagy's 'Soc
 image:
   path: /assets/images/posts/social-engineering/chapter-6-cover.png
   alt: Social Engineering The Art of Human Hacking - Chapter 6 Summary
+series: "Social Engineering: The Art of Human Hacking"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome back to our book summary series covering Christopher Hadnagy's **"Social Engineering: The Art of Human Hacking"** (Wiley Publishing).
 
 In [Chapter 5: Mind Tricks & Psychology](/posts/social-engineering-art-of-human-hacking-chapter-5/), we analyzed microexpressions, NLP vocal modulation, and the Human Buffer Overflow.
@@ -34,8 +32,6 @@ Hadnagy frames this chapter with Benjamin Franklin's immortal advice:
 
 Let's dissect the psychological mechanisms of influence, cognitive reality framing, and manipulation tactics.
 
-![Chapter 6: Influence & Persuasion Cover](/assets/images/posts/social-engineering/chapter-6-cover.png)
-
 ---
 
 ### Series Navigation
@@ -43,7 +39,6 @@ Let's dissect the psychological mechanisms of influence, cognitive reality frami
 | **Previous Chapter** | **Current Chapter** | **Next Chapter** |
 | :---: | :---: | :---: |
 | [Chapter 5: Mind Tricks & Psychology](/posts/social-engineering-art-of-human-hacking-chapter-5/) | **Chapter 6: Influence & Persuasion** | [Chapter 7: The Tools of the Social Engineer](/posts/social-engineering-art-of-human-hacking-chapter-7/) |
-
 
 ---
 
@@ -191,7 +186,6 @@ Hadnagy explains that while influence aims for mutual benefit, manipulation seek
 | :---: | :---: | :---: |
 | [Chapter 5: Mind Tricks & Psychology](/posts/social-engineering-art-of-human-hacking-chapter-5/) | **Chapter 6: Influence & Persuasion** | [Chapter 7: The Tools of the Social Engineer](/posts/social-engineering-art-of-human-hacking-chapter-7/) |
 
-
 ---
 
 ## Next in the Series: Chapter 7 Preview
@@ -221,4 +215,6 @@ Which weapon of influence do you encounter most often in security assessments or
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) | [GitHub](https://github.com/3bdo-fathi) | [Contact Page](/contact-me/)
 
-- Abdulrahman Mohamed
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

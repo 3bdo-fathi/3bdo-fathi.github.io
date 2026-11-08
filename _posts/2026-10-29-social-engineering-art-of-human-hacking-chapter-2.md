@@ -7,14 +7,12 @@ description: "A comprehensive summary of Chapter 2 of Christopher Hadnagy's 'Soc
 image:
   path: /assets/images/posts/social-engineering/chapter-2-cover.png
   alt: Social Engineering The Art of Human Hacking - Chapter 2 Summary
+series: "Social Engineering: The Art of Human Hacking"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome back to the second installment of our book summary series covering Christopher Hadnagy's classic text, **"Social Engineering: The Art of Human Hacking"** (Wiley Publishing).
 
 In [Chapter 1: A Look into the World of Social Engineering](/posts/social-engineering-art-of-human-hacking-chapter-1/), we explored the foundational definition of social engineering, the attacker's Return on Investment (ROI), and the overarching framework that governs human-centric engagements.
@@ -25,8 +23,6 @@ Today, we delve into **Chapter 2: Information Gathering**, where Hadnagy states 
 
 Without thorough, disciplined reconnaissance, even the most charismatic pretext or technical payload will collapse under the slightest scrutiny. In this chapter, Hadnagy outlines where data hides, how to harvest it, and how to construct rigorous **Communication Models** to ensure your delivery achieves compliance.
 
-![Chapter 2: Information Gathering Cover](/assets/images/posts/social-engineering/chapter-2-cover.png)
-
 ---
 
 ### Series Navigation
@@ -34,7 +30,6 @@ Without thorough, disciplined reconnaissance, even the most charismatic pretext 
 | **Previous Chapter** | **Current Chapter** | **Next Chapter** |
 | :---: | :---: | :---: |
 | [Chapter 1: The World of Social Engineering](/posts/social-engineering-art-of-human-hacking-chapter-1/) | **Chapter 2: Information Gathering** | [Chapter 3: Elicitation](/posts/social-engineering-art-of-human-hacking-chapter-3/) |
-
 
 ---
 
@@ -236,7 +231,6 @@ Hadnagy recommends **reversing the communication model** during audit planning:
 | :---: | :---: | :---: |
 | [Chapter 1: The World of Social Engineering](/posts/social-engineering-art-of-human-hacking-chapter-1/) | **Chapter 2: Information Gathering** | [Chapter 3: Elicitation](/posts/social-engineering-art-of-human-hacking-chapter-3/) |
 
-
 ---
 
 ## Next in the Series: Chapter 3 Preview
@@ -267,4 +261,6 @@ How do you approach OSINT and target profiling during penetration testing? Have 
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) | [GitHub](https://github.com/3bdo-fathi) | [Contact Page](/contact-me/)
 
-- Abdulrahman Mohamed
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

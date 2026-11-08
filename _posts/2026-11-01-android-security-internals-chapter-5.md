@@ -7,21 +7,17 @@ description: "An exhaustive analysis of Chapter 5 of Nikolay Elenkov's 'Android 
 image:
   path: /assets/images/posts/android-security/chapter-5-cover.png
   alt: "Android Security Internals Chapter 5 Cover"
+series: "Android Security Internals"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**, expanded with mathematical cryptanalysis and real-world mobile vulnerability research from **Google Project Zero** and the **OWASP Mobile Application Security Verification Standard (MASVS)**.
 
 In [Chapter 4](/posts/android-security-internals-chapter-4/), we explored multi-user architecture and storage virtualization. In this installment, we explore **Chapter 5: Cryptographic Providers**, investigating the engine that powers encryption, digital signatures, message integrity, and pseudorandom number generation across the Android platform.
 
 Cryptography on Android is built atop the **Java Cryptography Architecture (JCA)**. However, Android deviates significantly from standard desktop Oracle Java. In this deep dive, we examine how Android transitioned from Apache Harmony and Bouncy Castle to high-performance native OpenSSL/BoringSSL C engines, analyze how the system collects entropy, mathematically deconstruct the infamous 2013 Android PRNG flaw that resulted in the mass theft of Bitcoin wallets worldwide, and audit common mobile cryptographic anti-patterns.
-
-![Android Security Internals Chapter 5](/assets/images/posts/android-security/chapter-5-cover.png)
 
 ---
 
@@ -265,4 +261,6 @@ Have you audited mobile cryptographic implementations for nonce reuse or ECB mod
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) | [GitHub](https://github.com/3bdo-fathi) | [Contact Page](/contact-me/)
 
-- Abdulrahman Mohamed
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

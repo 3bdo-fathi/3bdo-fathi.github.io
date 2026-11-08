@@ -90,7 +90,9 @@ script_includes:
   {% endif %}
 
   <div class="content">
+    {% include series-nav.html %}
     {{ content }}
+    {% include series-nav-bottom.html %}
   </div>
 
   <style>
@@ -149,7 +151,7 @@ script_includes:
     </div>
 
     <!-- Stay Updated: Newsletter & RSS -->
-    <div class="post-newsletter-card my-4 p-3 rounded" style="background: rgba(22, 27, 34, 0.6); border: 1px solid var(--border-color, rgba(88, 166, 255, 0.2));">
+    <div class="post-newsletter-card my-4 p-3 rounded" style="background: var(--card-bg, #080808); border: 1px solid var(--main-border-color, rgba(255, 255, 255, 0.1));">
       <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
         <div class="d-flex align-items-center gap-2" style="color: #58a6ff; font-weight: 600; font-size: 0.95rem;">
           <i class="fas fa-paper-plane"></i>
@@ -237,9 +239,14 @@ script_includes:
     </script>
 
     <!-- Dedicated Knowledge & Ongoing Charity Tribute -->
-    <div class="post-dedication-bar my-4 py-3 px-3 rounded text-center" style="background: rgba(88, 166, 255, 0.04); border-left: 3px solid #58a6ff; font-size: 0.84rem; line-height: 1.7; color: #8b949e;">
-      <div class="mb-1" style="color: #c9d1d9;">هذا العمل صَدَقَةٌ جَارِيَةٌ وعِلْمٌ يُنتَفَعُ به — نسألكم الدعاء بظهر الغيب لي ولوالديّ.</div>
-      <div class="text-muted" style="font-size: 0.8rem;">Dedicated as an ongoing charity and enduring knowledge — please remember me and my family in your prayers.</div>
+    <div class="post-dedication-bar my-4 py-3 px-3 rounded text-center" style="background: rgba(88, 166, 255, 0.05); border-left: 3px solid #58a6ff; font-size: 0.88rem; line-height: 1.8; color: #8b949e;">
+      <div class="mb-2" style="color: #f0f6fc; font-weight: 500;">
+        اللهم اجعل هذا العمل علمًا نافعًا وصدقةً جارية، واكتب لي به الأجر والقبول، وانفع به كل من قرأه أو تعلّمه.<br>
+        اللهم احفظ لي والديّ وأهلي، وبارك في أعمارهم وصحتهم، وأدم عليهم نعمة الصحة والعافية، ولا تريني فيهم بأسًا يبكيني.
+      </div>
+      <div class="text-muted" style="font-size: 0.82rem; font-style: italic;">
+        Dedicated as ongoing charity and beneficial knowledge. May Allah bless my parents and family, protect them, and grant them lasting health and happiness.
+      </div>
     </div>
 
     <!-- Comments Section -->

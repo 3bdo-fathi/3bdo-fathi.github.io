@@ -5,13 +5,13 @@ categories: [Scripts, Python]
 tags: [keylogger, security-audit, python, ethical-hacking]
 description: "A step-by-step guide to building a Python keylogger for authorized security audits, covering log rotation, rotating file handlers, and professional logging practices."
 image:
-  path: /assets/images/keylogger-banner.webp
-  alt: Keylogger Security Banner
+  path: /assets/images/posts/automation/keylogger-audit-cover.png
+  alt: "Creating a Keylogger for Authorized Security Audits Cover Banner"
+toc: true
+schema:
+  type: Article
+  author: Abdulrahman M. Fathi
 ---
-Hello everyone,
-
-I hope you're doing well and having a great day.
-
 In today's article, we'll explore a project that demonstrates how user input can be monitored and logged in controlled environments for educational purposes and authorized security assessments.
 
 Understanding how keylogging mechanisms work is valuable for security professionals because it helps explain a common technique frequently encountered during malware analysis, incident response investigations, security awareness programs, and defensive security research. By understanding how these tools operate, defenders can better identify, detect, and mitigate similar threats in real-world environments.
@@ -19,8 +19,6 @@ Understanding how keylogging mechanisms work is valuable for security profession
 The purpose of this project is not to promote unauthorized monitoring, but rather to examine the technical concepts behind keyboard event handling, logging mechanisms, and application design within a controlled and authorized context.
 
 In this article, we'll build the project step by step, review the source code, and discuss the security considerations associated with this type of software.
-
-Let's get started.
 
 **LEGAL DISCLAIMER:** This article is for educational purposes only. The code and techniques discussed here should only be used on systems you own or have explicit written permission to test. Unauthorized use is illegal and unethical.
 
@@ -58,7 +56,7 @@ Keylogger-Project/
 └── README.md
 ```
 
-![Project Structure](/assets/images/posts/project-structure.png)
+![Project Structure](/assets/images/posts/automation/project-structure.png)
 
 ## Building the Keylogger
 
@@ -318,7 +316,7 @@ if __name__ == "__main__":
         keylogger.stop_monitoring()
 ```
 
-![Running](/assets/images/posts/keylogger-running.png)
+![Running](/assets/images/posts/automation/keylogger-running.png)
 
 ## Testing Your Keylogger
 
@@ -334,12 +332,9 @@ python keylogger.py
 5. Check the log file in the `logs` folder
 6. Press `Ctrl+C` to stop
 
-![Logs](/assets/images/posts/log-file-output.png)
+![Logs](/assets/images/posts/automation/log-file-output.png)
 
 The log file records each keystroke along with the exact timestamp, allowing analysis of user input behavior and key events such as special keys (`SHIFT`, `WIN`, `ENTER`, `ESC`).
-
-
-
 
 ## Important Legal Notes
 
@@ -352,7 +347,6 @@ The log file records each keystroke along with the exact timestamp, allowing ana
   - Permanent criminal record
 
 **Always get written permission first.**
-
 
 ## Next Steps
 
@@ -378,8 +372,6 @@ I hope you found it useful and gained a better understanding of how keyboard eve
 
 Until the next article, stay curious and keep learning.
 
-— Abdulrahman Mohamed
-
 ---
 
 ## References & Further Reading
@@ -398,4 +390,6 @@ Have a question, suggestion, or topic you'd like to discuss? Feel free to reach 
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) · [GitHub](https://github.com/3bdo-fathi) · [Contact Page](/contact-me/)
 
-*— Abdulrahman M. Fathi*
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

@@ -1,0 +1,47 @@
+<!-- Bottom Series Next/Previous Controls -->
+{% if page.series %}
+  {% assign series_posts = site.posts | where: "series", page.series | reverse %}
+  {% assign total_count = series_posts.size %}
+  
+  {% if total_count > 1 %}
+    {% assign prev_post = nil %}
+    {% assign next_post = nil %}
+    
+    {% for p in series_posts %}
+      {% if p.url == page.url %}
+        {% assign prev_idx = forloop.index0 | minus: 1 %}
+        {% assign next_idx = forloop.index0 | plus: 1 %}
+        
+        {% if prev_idx >= 0 %}
+          {% assign prev_post = series_posts[prev_idx] %}
+        {% endif %}
+        {% if next_idx < total_count %}
+          {% assign next_post = series_posts[next_idx] %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+
+    {% if prev_post or next_post %}
+      <div class="series-nav-controls">
+        {% if prev_post %}
+          <a href="{{ prev_post.url | relative_url }}" class="series-nav-btn text-start">
+            <span class="direction"><i class="fas fa-chevron-left me-1"></i> Previous in Series</span>
+            <span class="target-title">{{ prev_post.title }}</span>
+          </a>
+        {% else %}
+          <div></div>
+        {% endif %}
+
+        {% if next_post %}
+          <a href="{{ next_post.url | relative_url }}" class="series-nav-btn text-end">
+            <span class="direction">Next in Series <i class="fas fa-chevron-right ms-1"></i></span>
+            <span class="target-title">{{ next_post.title }}</span>
+          </a>
+        {% else %}
+          <div></div>
+        {% endif %}
+      </div>
+    {% endif %}
+  {% endif %}
+{% endif %}
+

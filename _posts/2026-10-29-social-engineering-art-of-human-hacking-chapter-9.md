@@ -7,14 +7,12 @@ description: "A comprehensive summary of Chapter 9 of Christopher Hadnagy's 'Soc
 image:
   path: /assets/images/posts/social-engineering/chapter-9-cover.png
   alt: Social Engineering The Art of Human Hacking - Chapter 9 Summary
+series: "Social Engineering: The Art of Human Hacking"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome to the ninth and concluding installment of our book summary series covering Christopher Hadnagy's foundational work, **"Social Engineering: The Art of Human Hacking"** (Wiley Publishing).
 
 Over the past eight chapters, we have analyzed the dark and fascinating mechanics of human deception:
@@ -36,8 +34,6 @@ Hadnagy closes the book with Anton Chekhov's poignant insight:
 
 Let's examine the six strategic pillars of social engineering defense.
 
-![Chapter 9: Prevention & Mitigation Cover](/assets/images/posts/social-engineering/chapter-9-cover.png)
-
 ---
 
 ### Series Navigation
@@ -45,7 +41,6 @@ Let's examine the six strategic pillars of social engineering defense.
 | **Previous Chapter** | **Current Chapter** | **Next Chapter** |
 | :---: | :---: | :---: |
 | [Chapter 8: Real-World Case Studies](/posts/social-engineering-art-of-human-hacking-chapter-8/) | **Chapter 9: Prevention & Mitigation** | *Series Concluded (See Master Index Below)* |
-
 
 ---
 
@@ -244,4 +239,6 @@ Thank you for reading this series! How does your organization train employees ag
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) | [GitHub](https://github.com/3bdo-fathi) | [Contact Page](/contact-me/)
 
-- Abdulrahman Mohamed
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

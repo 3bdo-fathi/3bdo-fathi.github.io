@@ -9,14 +9,13 @@ tags:
   - infrastructure
 description: "A deep technical breakdown of Cloudflare's infrastructure: BGP Anycast routing, XDP/eBPF packet processing, Pingora proxy framework, Keyless SSL, and origin hardening strategies."
 image:
-  path: /assets/images/posts/cloudflare.png
-  alt: Cloudflare Architecture Overview
+  path: /assets/images/posts/appsec/cloudflare-architecture-cover.png
+  alt: "The Deep Infrastructure Architecture of Cloudflare Cover Banner"
+toc: true
+schema:
+  type: Article
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
-I hope you're doing well and having a great day.
-
 In this article, we'll explore a topic that I found both interesting and worth sharing. My goal is to break it down in a practical and easy-to-follow way while highlighting the concepts that matter most from both a security and engineering perspective.
 
 When network engineers and security architects look at Cloudflare, they don't simply see a CDN or a web application firewall. They see one of the most sophisticated distributed systems operating on the Internet today.
@@ -24,8 +23,6 @@ When network engineers and security architects look at Cloudflare, they don't si
 Marketing materials often describe Cloudflare as a reverse proxy running on an Anycast network. While technically correct, that description barely scratches the surface. Behind the scenes lies a highly engineered platform built on commodity x86 servers, custom networking stacks, kernel-level optimizations, and globally distributed infrastructure capable of processing millions of requests every second.
 
 In this article, we'll move beyond the marketing terms and take a closer look at the low-level request lifecycle, traffic routing, packet processing, and architectural decisions that allow Cloudflare to operate at Internet scale.
-
-Let's get started.
 
 ---
 
@@ -158,8 +155,6 @@ I hope you found it useful and learned something new.
 
 Until the next article, stay curious and keep learning.
 
-— Abdulrahman Mohamed
-
 ---
 
 ## References & Further Reading
@@ -178,4 +173,6 @@ Have a question, suggestion, or topic you'd like to discuss? Feel free to reach 
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) · [GitHub](https://github.com/3bdo-fathi) · [Contact Page](/contact-me/)
 
-*— Abdulrahman M. Fathi*
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

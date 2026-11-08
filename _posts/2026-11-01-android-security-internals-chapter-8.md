@@ -7,21 +7,17 @@ description: "A technical breakdown of Chapter 8 of Nikolay Elenkov's 'Android S
 image:
   path: /assets/images/posts/android-security/chapter-8-cover.png
   alt: "Android Security Internals Chapter 8 Cover"
+series: "Android Security Internals"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**, enriched with identity security research, OAuth 2.0 mobile security profiles, and auditing tradecraft from the **OWASP Mobile Application Security Verification Standard (MASVS-AUTH)**.
 
 In [Chapter 7](/posts/android-security-internals-chapter-7/), we explored credential storage, master key derivation, and ARM TrustZone integration. In this installment, we explore **Chapter 8: Online Account Management**, analyzing how Android centralizes identity, manages authentication tokens, and provides seamless Single Sign-On (SSO) across applications.
 
 Rather than forcing every application to implement its own login screens, store raw user passwords, and handle OAuth token refresh loops independently, Android introduced the **`AccountManager`** framework. In this chapter, we dissect how `AccountManagerService` coordinates authenticators, manages SQLite token storage, and enforces security boundaries to prevent unauthorized token harvesting.
-
-![Android Security Internals Chapter 8](/assets/images/posts/android-security/chapter-8-cover.png)
 
 ---
 
@@ -141,4 +137,6 @@ Have you audited mobile Single Sign-On (SSO) integrations or OAuth token flows o
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) | [GitHub](https://github.com/3bdo-fathi) | [Contact Page](/contact-me/)
 
-- Abdulrahman Mohamed
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

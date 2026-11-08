@@ -5,20 +5,18 @@ categories: [Cyber Security, Threat Intelligence]
 tags: [INT3X, OPSEC, Threat Intelligence, OSINT, Quellostanco, Cyber Attribution, BlueKeep, Egyptian Cyber Threat]
 description: "A real-world case study on threat actor attribution, OSINT methodologies, and how operational security (OPSEC) failures exposed the INT3X cybercrime group."
 image:
-  path: /assets/images/posts/int3x-opsec-cover.jpg  
-  alt: int3x-opsec-cover
+  path: /assets/images/posts/threat-intel/opsec-attribution-cover.png
+  alt: "From Dark Web Fame to Digital Attribution Cover Banner"
+toc: true
+schema:
+  type: Article
+  author: Abdulrahman M. Fathi
 ---
-Hello everyone,
-
-I hope you're doing well and having a great day.
-
 In today's article, we'll take a closer look at a real-world attribution case that attracted significant attention within the Egyptian cybersecurity community. Beyond the headlines, this case provides valuable lessons about Operational Security (OPSEC), Open-Source Intelligence (OSINT), and the reality of digital attribution.
 
 My goal is not to focus on individuals, but rather to examine the investigative methodology, the mistakes that enabled attribution, and the lessons security professionals can learn from the process.
 
 Whether you're interested in Threat Intelligence, OSINT, Digital Forensics, or Cyber Threat Attribution, this case demonstrates how small pieces of publicly available information can eventually form a much larger picture.
-
-Let's get started.
 
 Over the past several months, the Egyptian cybersecurity community has been closely following a series of attacks, breach claims, defacements, and data leak announcements targeting universities, educational platforms, government entities, and private organizations. During that period, one alias repeatedly appeared across underground forums, dark web marketplaces, breach announcements, and cybercrime communities: **Quellostanco**, a member of the **INT3X** group that became one of the most talked-about threat actor groups targeting Egyptian organizations throughout 2026. With every new breach claim, the group's reputation continued to grow, and many people began viewing them as highly sophisticated attackers who understood anonymity, operational security, and underground operations.
 
@@ -29,7 +27,6 @@ What happened next demonstrated something that cybersecurity professionals have 
 ## The Misconception About Attribution
 
 One of the biggest misconceptions in cybersecurity is the belief that attribution begins with malware analysis, server exploitation, infrastructure compromises, or advanced digital forensics. In reality, many investigations begin with something much simpler. A username. An email address. A profile photo. A forum post. A writing style. A Git commit. A small artifact that seems completely meaningless on its own but becomes extremely valuable when combined with hundreds of other artifacts collected over time. Attribution is rarely about finding one massive mistake. It is usually about finding dozens of small mistakes and understanding how they connect together.
-
 
 The investigation surrounding Quellostanco serves as an excellent example of this process. Researchers initially began by tracking the alias across different platforms and communities. The goal was straightforward: identify where the username appeared, determine whether variations of the name existed elsewhere, and understand whether the same individual was reusing digital identities across multiple services. Like many internet users, the actor appeared to have developed habits. Those habits eventually became one of the most valuable sources of intelligence throughout the entire investigation.
 
@@ -80,7 +77,7 @@ Reviewing Git repositories and commit history is an important step during attrib
 
 In one repository, a commit dated **11 November 2023** exposed a personal email address within the Git metadata. In another repository, the developer's **real name** appeared directly within the project files.
 
-![Git Commit Metadata Exposure](/assets/images/posts/git-commit-exposure.png)   
+![Git Commit Metadata Exposure](/assets/images/posts/threat-intel/git-commit-exposure.png)   
 
 ### Step 4: Confirming Identity with Leaked Email and Phone Number
 
@@ -182,8 +179,6 @@ I hope you found it useful and gained valuable insight into how modern attributi
 
 Until the next article, stay curious and keep learning.
 
-— Abdulrahman Mohamed
-
 ---
 
 ## References & Further Reading
@@ -202,4 +197,6 @@ Have a question, suggestion, or topic you'd like to discuss? Feel free to reach 
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) · [GitHub](https://github.com/3bdo-fathi) · [Contact Page](/contact-me/)
 
-*— Abdulrahman M. Fathi*
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

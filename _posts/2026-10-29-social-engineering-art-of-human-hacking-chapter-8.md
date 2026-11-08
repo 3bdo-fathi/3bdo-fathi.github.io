@@ -7,14 +7,12 @@ description: "A comprehensive summary of Chapter 8 of Christopher Hadnagy's 'Soc
 image:
   path: /assets/images/posts/social-engineering/chapter-8-cover.png
   alt: Social Engineering The Art of Human Hacking - Chapter 8 Summary
+series: "Social Engineering: The Art of Human Hacking"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome back to our book summary series covering Christopher Hadnagy's **"Social Engineering: The Art of Human Hacking"** (Wiley Publishing).
 
 In [Chapter 7: The Tools of the Social Engineer](/posts/social-engineering-art-of-human-hacking-chapter-7/), we reviewed the physical and digital toolkit: lockpicks, hidden cameras, Maltego, SET, and password profilers.
@@ -30,8 +28,6 @@ Hadnagy opens Chapter 8 with a guiding thought from Mati Aharoni:
 
 Let's dissect these six operations through the lens of the Social Engineering Framework.
 
-![Chapter 8: Real-World Case Studies Cover](/assets/images/posts/social-engineering/chapter-8-cover.png)
-
 ---
 
 ### Series Navigation
@@ -39,7 +35,6 @@ Let's dissect these six operations through the lens of the Social Engineering Fr
 | **Previous Chapter** | **Current Chapter** | **Next Chapter** |
 | :---: | :---: | :---: |
 | [Chapter 7: The Tools of the Social Engineer](/posts/social-engineering-art-of-human-hacking-chapter-7/) | **Chapter 8: Real-World Case Studies** | [Chapter 9: Prevention & Mitigation](/posts/social-engineering-art-of-human-hacking-chapter-9/) |
-
 
 ---
 
@@ -196,7 +191,6 @@ The intruder believed he had made a friend; the client received a comprehensive 
 | :---: | :---: | :---: |
 | [Chapter 7: The Tools of the Social Engineer](/posts/social-engineering-art-of-human-hacking-chapter-7/) | **Chapter 8: Real-World Case Studies** | [Chapter 9: Prevention & Mitigation](/posts/social-engineering-art-of-human-hacking-chapter-9/) |
 
-
 ---
 
 ## Next in the Series: Chapter 9 (Final Chapter) Preview
@@ -226,4 +220,6 @@ Which of these six case studies surprised you the most? Have you ever had to per
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) | [GitHub](https://github.com/3bdo-fathi) | [Contact Page](/contact-me/)
 
-- Abdulrahman Mohamed
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

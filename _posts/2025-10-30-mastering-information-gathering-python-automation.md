@@ -5,13 +5,13 @@ categories: [Cyber Security, Network Security]
 tags: [python, reconnaissance, pentesting, nmap]
 description: "A comprehensive guide to automating network reconnaissance, port scanning, system enumeration, and service discovery using Python and Nmap."
 image:
-  path: /assets/images/python-script.jpg
-  alt: Python Script Recon
+  path: /assets/images/posts/automation/python-sysinfo-cover.png
+  alt: "Building a Python-Based System Information Gathering Tool Cover Banner"
+toc: true
+schema:
+  type: Article
+  author: Abdulrahman M. Fathi
 ---
-Hello everyone,
-
-I hope you're doing well and having a great day.
-
 In today's article, I'd like to share a Python project I developed to simplify and automate one of the most important phases of any security assessment: reconnaissance.
 
 Whether you're performing a penetration test, conducting a security audit, or simply trying to understand the structure of a network, information gathering is often the foundation upon which everything else is built. The more accurately and efficiently information is collected, the easier it becomes to identify potential attack surfaces, exposed services, and security weaknesses.
@@ -19,9 +19,6 @@ Whether you're performing a penetration test, conducting a security audit, or si
 The primary goal of this project was to automate several common reconnaissance tasks while keeping the workflow simple, organized, and easy to use. By combining system information gathering, network scanning, port enumeration, and operating system detection into a single tool, the process becomes significantly more efficient and less repetitive.
 
 In this article, we'll explore how the tool works, review the source code, and discuss how each component contributes to the overall reconnaissance process.
-
-Let's get started.
-
 
 In today's interconnected world, cybersecurity has become a fundamental priority for individuals and organizations alike. One of the key steps in securing any environment is network reconnaissance — the process of systematically collecting information about systems and networks. For cybersecurity professionals, gaining a comprehensive understanding of the infrastructure is not just useful but essential.
 
@@ -177,7 +174,7 @@ Here is an example of the output that you would see when running the network rec
 
 ### Sample Output:
 
-![Nmap Scan Output](/assets/images/nmap-scan.png)
+![Nmap Scan Output](/assets/images/posts/automation/nmap-scan.png)
 *Figure: Terminal execution and scan results*
 
 The above screenshot shows the results of a network scan on the specified range (`192.168.5.135`). The tool uses `nmap` to identify active hosts on the network.
@@ -237,7 +234,6 @@ The well-organized report ensures that the data can be easily referenced and ana
 
 ---
 
-
 ## Conclusion
 
 Reconnaissance is often considered the foundation of both penetration testing and security assessments. The quality of information gathered during this phase directly influences the effectiveness of every stage that follows.
@@ -251,8 +247,6 @@ Thank you for taking the time to read this article.
 I hope you found it useful and gained some ideas that may help you build or improve your own security automation projects.
 
 Until the next article, stay curious and keep learning.
-
-— Abdulrahman Mohamed
 
 ---
 
@@ -272,4 +266,6 @@ Have a question, suggestion, or topic you'd like to discuss? Feel free to reach 
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) · [GitHub](https://github.com/3bdo-fathi) · [Contact Page](/contact-me/)
 
-*— Abdulrahman M. Fathi*
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

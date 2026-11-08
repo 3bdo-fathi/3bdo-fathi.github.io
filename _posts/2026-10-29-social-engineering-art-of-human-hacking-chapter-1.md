@@ -7,14 +7,12 @@ description: "An in-depth summary and technical breakdown of Chapter 1 of Christ
 image:
   path: /assets/images/posts/social-engineering/chapter-1-cover.png
   alt: Social Engineering The Art of Human Hacking - Chapter 1 Summary
+series: "Social Engineering: The Art of Human Hacking"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 I hope you're doing well and having a productive week.
 
 Today marks the beginning of an in-depth, chapter-by-chapter book summary series on one of the most foundational texts ever written on offensive security and human vulnerability: **"Social Engineering: The Art of Human Hacking"** by **Christopher Hadnagy** (Wiley Publishing).
@@ -24,8 +22,6 @@ As cybersecurity professionals, we spend thousands of hours configuring firewall
 In this series, we will dissect Hadnagy's framework systematically. We will analyze the psychological principles, the covert reconnaissance techniques, the communication models, the physical tools, and the defensive countermeasures required to protect modern organizations.
 
 Let's dive into **Chapter 1: A Look into the World of Social Engineering**.
-
-![Social Engineering: The Art of Human Hacking Chapter 1](/assets/images/posts/social-engineering/chapter-1-cover.png)
 
 ---
 
@@ -272,7 +268,6 @@ The framework models the lifecycle of a human-centric penetration test:
 | :---: | :---: | :---: |
 | *First Chapter in Series* | **Chapter 1: The World of Social Engineering** | [Chapter 2: Information Gathering](/posts/social-engineering-art-of-human-hacking-chapter-2/) |
 
-
 ---
 
 ## Next in the Series: Chapter 2 Preview
@@ -304,4 +299,6 @@ Have you encountered social engineering attempts in your assessments or organiza
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) | [GitHub](https://github.com/3bdo-fathi) | [Contact Page](/contact-me/)
 
-- Abdulrahman Mohamed
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

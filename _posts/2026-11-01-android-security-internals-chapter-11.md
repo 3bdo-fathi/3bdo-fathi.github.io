@@ -7,14 +7,12 @@ description: "A technical dissection of Chapter 11 of Nikolay Elenkov's 'Android
 image:
   path: /assets/images/posts/android-security/chapter-11-cover.png
   alt: "Android Security Internals Chapter 11 Cover"
+series: "Android Security Internals"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**, enriched with EMV contactless payment specifications and wireless security research.
 
 In [Chapter 10](/posts/android-security-internals-chapter-10/), we examined physical device security, full disk encryption, and verified boot integrity. In this installment, we explore **Chapter 11: NFC and Secure Elements**, dissecting the short-range wireless radio stack that powers contactless mobile payments, transit ticketing, access control badges, and cryptographic identity tokens.
@@ -22,8 +20,6 @@ In [Chapter 10](/posts/android-security-internals-chapter-10/), we examined phys
 For years, contactless mobile transactions were trapped behind a formidable architectural barrier: **telecom carrier control of the physical SIM card.**
 
 In this deep dive, we trace the evolution from hardware-bound Secure Elements (UICC and eSE) to Android 4.4's industry-disrupting innovation: **Host-based Card Emulation (HCE)**. We will analyze the ISO 7816-4 smart card protocol, trace how `NfcService` dispatches APDUs, and evaluate contactless attack surfaces like relay attacks and rogue AID registrations.
-
-![Android Security Internals Chapter 11](/assets/images/posts/android-security/chapter-11-cover.png)
 
 ---
 
@@ -196,4 +192,6 @@ Have you audited mobile payment architectures or analyzed NFC smart card protoco
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) | [GitHub](https://github.com/3bdo-fathi) | [Contact Page](/contact-me/)
 
-- Abdulrahman Mohamed
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

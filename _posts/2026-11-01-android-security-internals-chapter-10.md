@@ -7,21 +7,17 @@ description: "An exhaustive technical breakdown of Chapter 10 of Nikolay Elenkov
 image:
   path: /assets/images/posts/android-security/chapter-10-cover.png
   alt: "Android Security Internals Chapter 10 Cover"
+series: "Android Security Internals"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**, enriched with storage encryption analysis, File-Based Encryption (FBE), Direct Boot architecture, and Android Verified Boot (AVB 2.0).
 
 Operating system access controls (such as Linux UIDs and SELinux policies) only protect data while the Android kernel is running. If an adversary steals a physical smartphone, connects high-speed hardware programmers to the eMMC flash chip, or boots a custom recovery kernel, all software-level protections vanish.
 
 To counter physical and hardware attacks, Android implements two formidable defenses: **Storage Encryption** (Full Disk Encryption via `dm-crypt` and File-Based Encryption via `fscrypt`), and **Verified Boot** via `dm-verity`.
-
-![Android Security Internals Chapter 10](/assets/images/posts/android-security/chapter-10-cover.png)
 
 ---
 
@@ -181,4 +177,6 @@ Have you audited mobile verified boot chains or analyzed storage encryption mech
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) | [GitHub](https://github.com/3bdo-fathi) | [Contact Page](/contact-me/)
 
-- Abdulrahman Mohamed
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

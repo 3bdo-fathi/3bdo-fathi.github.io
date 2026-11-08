@@ -7,21 +7,17 @@ description: "An exhaustive technical breakdown of Chapter 2 of 'Practical Rever
 image:
   path: /assets/images/posts/reverse-engineering/chapter-2-cover.png
   alt: "Practical Reverse Engineering Chapter 2 Cover"
+series: "Practical Reverse Engineering"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome to the second installment of our deep-dive series covering **"Practical Reverse Engineering"** by **Bruce Dang, Alexandre Gazet, Elias Bachaalany, and Sébastien Josse** (Wiley, 2014).
 
 While x86 and x64 dominate traditional desktop and server workloads, **ARM (Advanced RISC Machine)** powers the modern mobile, embedded, and IoT universe—from Android and iOS smartphones to smart automotive ECUs, network routers, and Apple Silicon. For a reverse engineer, transitioning from x86 to ARM requires a mental paradigm shift: moving away from complex variable-length CISC instructions with direct memory arithmetic, toward a lean, orthogonal **Reduced Instruction Set Computer (RISC) load-store architecture**.
 
 In this post, we dissect the ARM architecture: privilege modes, banked registers, the ARM vs. Thumb-2 execution states, the zero-cycle hardware barrel shifter, coprocessor interactions (`CP15`), AAPCS calling conventions, memory synchronization primitives, cache coherency in self-modifying code, the complete decompilation of the Chapter 2 **`unk_function`** walk-through, and comprehensive solutions to all chapter exercises.
-
-![Practical Reverse Engineering Chapter 2](/assets/images/posts/reverse-engineering/chapter-2-cover.png)
 
 ---
 
@@ -523,3 +519,6 @@ In this chapter, we explored the RISC mechanics of ARM: execution states, barrel
 
 In [**Chapter 3: The Windows Kernel & Rootkits**](/posts/practical-reverse-engineering-chapter-3/), we dive into the internal architecture of the Windows NT kernel: `KPCR`, `EPROCESS`, system call dispatching, IRQL levels, pool allocations, IRP handling, and analyzing real-world x86 and x64 rootkits.
 
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

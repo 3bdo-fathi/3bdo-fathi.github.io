@@ -7,21 +7,17 @@ description: "A comprehensive technical conclusion analyzing Chapter 13 of Nikol
 image:
   path: /assets/images/posts/android-security/chapter-13-cover.png
   alt: "Android Security Internals Chapter 13 Cover"
+series: "Android Security Internals"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome to the grand finale of our comprehensive book summary series covering **"Android Security Internals: An In-Depth Guide to Android's Security Architecture"** by **Nikolay Elenkov** (No Starch Press), expanded with cutting-edge root architectures, Magisk internals, KernelSU, and Google Play Integrity attestation bypass research.
 
 Over the preceding twelve chapters, we have analyzed Android from its deepest Linux kernel roots to its high-level application sandboxes. In this final installment, we explore **Chapter 13: System Updates and Root Access**, examining how the operating system patches itself over the air (OTA) and dissecting the engineering behind **root access**—the ultimate privilege escalation where an administrator or researcher reclaims total sovereignty over their physical hardware.
 
 We will trace the boot sequence into the standalone **Recovery OS**, unpack the format and cryptographic verification of OTA update packages, review historical privilege escalation exploits, examine the four distinct eras of **`su` binary architecture**, and analyze the cat-and-mouse game between hardware attestation and modern root-hiding frameworks.
-
-![Android Security Internals Chapter 13](/assets/images/posts/android-security/chapter-13-cover.png)
 
 ---
 
@@ -224,4 +220,6 @@ Thank you for following along with this exhaustive 13-part series on Android Sec
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) | [GitHub](https://github.com/3bdo-fathi) | [Contact Page](/contact-me/)
 
-- Abdulrahman Mohamed
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

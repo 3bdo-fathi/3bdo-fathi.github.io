@@ -7,14 +7,12 @@ description: "A comprehensive summary of Chapter 3 of Christopher Hadnagy's 'Soc
 image:
   path: /assets/images/posts/social-engineering/chapter-3-cover.png
   alt: Social Engineering The Art of Human Hacking - Chapter 3 Summary
+series: "Social Engineering: The Art of Human Hacking"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome back to our book summary series covering Christopher Hadnagy's **"Social Engineering: The Art of Human Hacking"** (Wiley Publishing).
 
 In [Chapter 2: Information Gathering](/posts/social-engineering-art-of-human-hacking-chapter-2/), we examined the foundations of reconnaissance, OSINT data sources, and communication modeling.
@@ -28,8 +26,6 @@ Hadnagy opens Chapter 3 with Sun Tzu's famous maxim:
 
 When done masterfully, elicitation leaves zero trace. The target never realizes an interrogation occurred, never suspects foul play, and often walks away feeling valued, respected, and happy with the interaction.
 
-![Chapter 3: Elicitation Cover](/assets/images/posts/social-engineering/chapter-3-cover.png)
-
 ---
 
 ### Series Navigation
@@ -37,7 +33,6 @@ When done masterfully, elicitation leaves zero trace. The target never realizes 
 | **Previous Chapter** | **Current Chapter** | **Next Chapter** |
 | :---: | :---: | :---: |
 | [Chapter 2: Information Gathering](/posts/social-engineering-art-of-human-hacking-chapter-2/) | **Chapter 3: Elicitation** | [Chapter 4: Pretexting](/posts/social-engineering-art-of-human-hacking-chapter-4/) |
-
 
 ---
 
@@ -196,7 +191,6 @@ Questions structured on the assumption that the target already possesses the dat
 | :---: | :---: | :---: |
 | [Chapter 2: Information Gathering](/posts/social-engineering-art-of-human-hacking-chapter-2/) | **Chapter 3: Elicitation** | [Chapter 4: Pretexting](/posts/social-engineering-art-of-human-hacking-chapter-4/) |
 
-
 ---
 
 ## Next in the Series: Chapter 4 Preview
@@ -226,4 +220,6 @@ Have you ever caught someone using elicitation techniques in your daily life? Ho
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) | [GitHub](https://github.com/3bdo-fathi) | [Contact Page](/contact-me/)
 
-- Abdulrahman Mohamed
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

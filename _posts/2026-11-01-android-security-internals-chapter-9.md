@@ -7,14 +7,12 @@ description: "An in-depth review of Chapter 9 of Nikolay Elenkov's 'Android Secu
 image:
   path: /assets/images/posts/android-security/chapter-9-cover.png
   alt: "Android Security Internals Chapter 9 Cover"
+series: "Android Security Internals"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**, enriched with enterprise mobile architecture and threat intelligence analysis on mobile banking trojans and ransomware.
 
 In [Chapter 8](/posts/android-security-internals-chapter-8/), we explored online account management and authentication token delegation. In this installment, we explore **Chapter 9: Enterprise Security**, examining the architecture designed to allow corporate IT administrators and Mobile Device Management (MDM) solutions to enforce security baselines on corporate and Bring Your Own Device (BYOD) hardware.
@@ -22,8 +20,6 @@ In [Chapter 8](/posts/android-security-internals-chapter-8/), we explored online
 Enterprise mobile security demands strict controls: enforcing complex PINs, preventing screen captures, disabling hardware cameras, isolating corporate email from personal social media apps, and executing cryptographic remote wipes if a device is lost.
 
 In this deep dive, we dissect the **Device Administration API**, examine how `DevicePolicyManagerService` enforces hardware policies, explore the containerization models of **Samsung KNOX** and **Managed Profiles**, and analyze how Android ransomware abused these enterprise APIs to hold user devices hostage.
-
-![Android Security Internals Chapter 9](/assets/images/posts/android-security/chapter-9-cover.png)
 
 ---
 
@@ -185,4 +181,6 @@ Have you configured Android Enterprise profiles or investigated ransomware abuse
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) | [GitHub](https://github.com/3bdo-fathi) | [Contact Page](/contact-me/)
 
-- Abdulrahman Mohamed
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

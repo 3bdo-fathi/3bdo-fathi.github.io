@@ -7,14 +7,12 @@ description: "A rigorous technical analysis of Chapter 7 of Nikolay Elenkov's 'A
 image:
   path: /assets/images/posts/android-security/chapter-7-cover.png
   alt: "Android Security Internals Chapter 7 Cover"
+series: "Android Security Internals"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**, expanded with hardware security research from **Google Project Zero** and the **OWASP Mobile Application Security Verification Standard (MASVS)**.
 
 In [Chapter 6](/posts/android-security-internals-chapter-6/), we dissected network security, the system CA store, and TLS certificate validation. In this installment, we explore **Chapter 7: Credential Storage**, examining the architecture responsible for protecting cryptographic keys, digital certificates, and user secrets when the device is at rest.
@@ -22,8 +20,6 @@ In [Chapter 6](/posts/android-security-internals-chapter-6/), we dissected netwo
 Storing private cryptographic keys on a mobile device presents a classic security paradox: **If malicious code or a local root exploit compromises the Android operating system, how can private keys remain secure?**
 
 Android resolves this through a multi-layered credential subsystem anchored by the native `/system/bin/keystore` daemon, user-derived master keys, hardware isolation powered by the Keymaster Hardware Abstraction Layer (HAL) running inside ARM TrustZone, and dedicated tamper-resistant **StrongBox** security chips.
-
-![Android Security Internals Chapter 7](/assets/images/posts/android-security/chapter-7-cover.png)
 
 ---
 
@@ -183,4 +179,6 @@ Have you analyzed Android hardware key attestation or audited KeyStore implement
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) | [GitHub](https://github.com/3bdo-fathi) | [Contact Page](/contact-me/)
 
-- Abdulrahman Mohamed
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

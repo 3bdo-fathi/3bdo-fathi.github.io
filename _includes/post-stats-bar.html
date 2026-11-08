@@ -5,7 +5,7 @@
 
 {% assign words = include.content | strip_html | number_of_words: 'auto' %}
 {% assign wpm = 180 %}
-{% assign read_mins = words | divided_by: wpm %}
+{% assign read_mins = words | plus: 179 | divided_by: wpm %}
 {% unless read_mins > 0 %}
   {% assign read_mins = 1 %}
 {% endunless %}

@@ -5,22 +5,18 @@ categories: [Scripts, Bash]
 tags: [reconnaissance, dns, pentesting, automation]
 description: "A Bash-based reconnaissance framework automating DNS enumeration, subdomain discovery, HTTP probing, WAF detection, and vulnerability scanning for penetration testers."
 image:
-  path: /assets/images/reconnaissance-framework.jpg
-  alt: Reconnaissance Framework
+  path: /assets/images/posts/automation/recon-dns-framework-cover.png
+  alt: "Building an Advanced Reconnaissance & DNS Enumeration Framework Cover Banner"
+toc: true
+schema:
+  type: Article
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
-I hope you're doing well and having a great day.
-
 In today's article, I'd like to share a project I've been working on to improve efficiency during reconnaissance and attack surface analysis. As many security professionals know, reconnaissance is often one of the most time-consuming phases of any penetration test, requiring multiple tools, extensive data collection, and significant effort to keep results organized.
 
 The goal of this project was not simply to automate individual tools, but to build a structured framework capable of handling the entire reconnaissance workflow while maintaining clean and organized outputs. By combining DNS enumeration, subdomain discovery, HTTP probing, technology fingerprinting, and vulnerability discovery into a single workflow, the framework helps reduce repetitive tasks and allows analysts to focus more on analysis rather than data collection.
 
 In this article, I'll walk through the framework's architecture, explain the reasoning behind each component, and demonstrate how different reconnaissance stages can be automated effectively using Bash and several widely used security tools.
-
-Let's get started.
-
 
 Recently, I started building an advanced reconnaissance and DNS enumeration automation framework to improve workflow efficiency during external penetration testing and attack surface analysis.
 
@@ -422,8 +418,6 @@ I hope you found it useful and gained some ideas that may help improve your own 
 
 Until the next article, stay curious and keep learning.
 
-— Abdulrahman Mohamed
-
 ---
 
 ## References & Further Reading
@@ -442,4 +436,6 @@ Have a question, suggestion, or topic you'd like to discuss? Feel free to reach 
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) · [GitHub](https://github.com/3bdo-fathi) · [Contact Page](/contact-me/)
 
-*— Abdulrahman M. Fathi*
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

@@ -7,14 +7,12 @@ description: "A technical dissection of Chapter 4 of Nikolay Elenkov's 'Android 
 image:
   path: /assets/images/posts/android-security/chapter-4-cover.png
   alt: "Android Security Internals Chapter 4 Cover"
+series: "Android Security Internals"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**, expanded with multi-tenant architecture analysis and enterprise container research.
 
 In [Chapter 3](/posts/android-security-internals-chapter-3/), we examined APK anatomy, DEX bytecode structure, the evolution of APK signature schemes (v1 through v4), and historic vulnerabilities like FakeID and Janus. In this installment, we explore **Chapter 4: User Management**, analyzing how Android implemented genuine multi-user support on top of an operating system that had already hijacked the Linux multi-user model for application sandboxing.
@@ -22,8 +20,6 @@ In [Chapter 3](/posts/android-security-internals-chapter-3/), we examined APK an
 When Google introduced multi-user functionality in Android 4.2 (initially for tablets, and later in Android 5.0 for phones), they faced an architectural challenge: **If Linux UIDs were already assigned to individual apps (UIDs 10000+), how could multiple human users coexist on the same filesystem without breaking process sandboxing?**
 
 The solution was an elegant mathematical range allocation formula combined with kernel-level storage virtualization and Linux mount namespaces.
-
-![Android Security Internals Chapter 4](/assets/images/posts/android-security/chapter-4-cover.png)
 
 ---
 
@@ -217,4 +213,6 @@ Have you analyzed enterprise MDM containers or multi-user isolation on Android? 
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) | [GitHub](https://github.com/3bdo-fathi) | [Contact Page](/contact-me/)
 
-- Abdulrahman Mohamed
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

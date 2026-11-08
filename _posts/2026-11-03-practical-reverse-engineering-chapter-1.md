@@ -7,21 +7,17 @@ description: "An exhaustive technical breakdown of Chapter 1 of 'Practical Rever
 image:
   path: /assets/images/posts/reverse-engineering/chapter-1-cover.png
   alt: "Practical Reverse Engineering Chapter 1 Cover"
+series: "Practical Reverse Engineering"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome to the inaugural post of our technical deep-dive series covering **"Practical Reverse Engineering: x86, x64, ARM, Windows Kernel, Reversing Tools, and Obfuscation"** by **Bruce Dang, Alexandre Gazet, Elias Bachaalany, and Sébastien Josse** (Wiley, 2014). This series dissects binary analysis from foundational silicon architecture to sophisticated kernel rootkits and program deobfuscation.
 
 Reverse engineering compiled binaries requires an exact mental model of hardware execution. Compilers do not produce human-readable logic; they emit discrete machine instructions constrained by processor architecture, register availability, memory segmentation, and operating system calling conventions. To reverse engineer effectively, an analyst must translate high-level abstractions (loops, objects, stack frames, pointer arithmetic) into their underlying machine representations and vice versa.
 
 In this first post, we dissect the foundational pillars of the **x86 and x64 processor architectures**: CPU execution rings, register sets, flags, arithmetic strength reduction, stack layouts across 32-bit and 64-bit calling conventions, physical memory translation via PAE/4-level paging, the complete reverse engineering of **Sample J (DllMain)**, and exhaustive solutions to the chapter exercises.
-
-![Practical Reverse Engineering Chapter 1](/assets/images/posts/reverse-engineering/chapter-1-cover.png)
 
 ---
 
@@ -576,3 +572,6 @@ In this chapter, we unpacked the foundational machine constraints of x86 and x64
 
 In [**Chapter 2: ARM Architecture & Assembly**](/posts/practical-reverse-engineering-chapter-2/), we transition from CISC variable-length instructions to RISC load-store mechanics, 32-bit ARM vs. Thumb-2 states, the hardware barrel shifter, conditional instruction execution, coprocessors, and decompiling complex Thumb-2 embedded device routines.
 
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

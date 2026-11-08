@@ -7,21 +7,17 @@ description: "A deep technical exploration of Chapter 6 of Nikolay Elenkov's 'An
 image:
   path: /assets/images/posts/android-security/chapter-6-cover.png
   alt: "Android Security Internals Chapter 6 Cover"
+series: "Android Security Internals"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
 Welcome back to our book summary series covering **"Android Security Internals"** by **Nikolay Elenkov**, expanded with network interception tradecraft and dynamic instrumentation methods from the **OWASP Mobile Application Security Testing Guide (MASTG)**.
 
 In [Chapter 5](/posts/android-security-internals-chapter-5/), we examined cryptographic providers and PRNG entropy architecture. In this installment, we explore **Chapter 6: Network Security and PKI**, dissecting how Android protects data-in-transit across untrusted wireless networks, validates Public Key Infrastructure (PKI) certificate chains, manages root Certificate Authorities (CAs), and enforces transport layer security.
 
 As mobile security engineers and penetration testers, intercepting network traffic via Man-In-The-Middle (MITM) proxies is one of our most fundamental workflows. In this chapter, we explore the deep internal mechanics of Android's TLS stack, understand the difference between system and user CA stores, analyze flawed custom `TrustManager` implementations, deconstruct certificate pinning defenses, and deploy advanced Frida scripts to bypass pinning across Java, OkHttp, and Flutter native BoringSSL runtimes.
-
-![Android Security Internals Chapter 6](/assets/images/posts/android-security/chapter-6-cover.png)
 
 ---
 
@@ -258,4 +254,6 @@ Have you analyzed mobile TLS implementations or bypassed certificate pinning in 
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) | [GitHub](https://github.com/3bdo-fathi) | [Contact Page](/contact-me/)
 
-- Abdulrahman Mohamed
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*

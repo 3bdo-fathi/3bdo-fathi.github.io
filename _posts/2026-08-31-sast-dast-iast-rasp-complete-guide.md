@@ -5,25 +5,18 @@ categories: [Cyber Security, Application Security]
 tags: [sast, dast, iast, rasp, sca, secrets-scanning, iac, api-security, aspm, appsec, devsecops, shift-left, vulnerability-management]
 description: "Compare SAST, DAST, IAST, and RASP, then layer SCA, secrets scanning, IaC, API testing, and ASPM into a practical AppSec program."
 image:
-  path: /assets/images/posts/appsec/appsec-sdlc-overview.png
-  alt: Application security testing across the SDLC - SAST DAST IAST RASP comparison
+  path: /assets/images/posts/appsec/appsec-sast-dast-rasp-cover.png
+  alt: "SAST vs DAST vs IAST vs RASP Cover Banner"
 toc: true
 schema:
   type: Article
-  author: Abdulrahman Mohamed
+  author: Abdulrahman M. Fathi
 ---
-
-Hello everyone,
-
-I hope you're doing well and having a great day.
-
 If you've spent any time in application security or DevSecOps, you've almost certainly seen these four acronyms thrown around together: **SAST**, **DAST**, **IAST**, and **RASP**. Vendors pitch them as competing solutions. Teams argue about which one to buy first. And in practice, most organizations end up confused about what each one actually does — and more importantly, **when** it should run.
 
 The short answer is that they are not interchangeable. They operate at different stages of the software development lifecycle (SDLC), use different visibility models, and serve different goals. SAST, DAST, and IAST are primarily **testing and detection** tools. RASP is a **runtime protection** control. Mature AppSec programs use them together, not instead of each other — and they surround them with composition analysis, secrets controls, infrastructure scanning, API testing, and a way to measure whether risk is actually going down.
 
 In this article, we'll break down each approach with clear definitions, real-world use cases, trade-offs, and authoritative references from OWASP, NIST, and industry research — then place the four acronyms inside the broader engineering system that real programs actually run.
-
-Let's get started.
 
 ![Application security testing across the SDLC](/assets/images/posts/appsec/appsec-sdlc-overview.png)
 
@@ -474,8 +467,6 @@ I hope this guide helps you navigate the AppSec tooling landscape with clarity.
 
 Until the next article, stay curious and keep learning.
 
-— Abdulrahman Mohamed
-
 ---
 
 ## Next Steps
@@ -517,4 +508,6 @@ Have a question, suggestion, or topic you'd like to discuss? Feel free to reach 
 
 * [LinkedIn](https://www.linkedin.com/in/3bdo-fathi) · [GitHub](https://github.com/3bdo-fathi) · [Contact Page](/contact-me/)
 
-*— Abdulrahman M. Fathi*
+---
+
+*Author: Abdulrahman M. Fathi (0x3bdo) • Cyber Security Engineer & Penetration Tester*
