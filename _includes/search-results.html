@@ -1,13 +1,72 @@
-<!-- The Search results -->
+<!-- The Search Results Overlay / Container -->
 
 <div id="search-result-wrapper" class="d-flex justify-content-center d-none">
-  <div class="col-11 content">
+  <div class="col-12 col-lg-11 col-xl-10 content">
+    <div id="search-results-bar" class="d-flex align-items-center justify-content-between flex-wrap gap-2 py-3 mb-3 border-bottom" style="border-color: rgba(255, 255, 255, 0.08) !important;">
+      <div class="d-flex align-items-center gap-2">
+        <i class="fas fa-search text-primary"></i>
+        <h2 class="h5 mb-0 fw-bold" id="search-results-title">Search Results</h2>
+        <span class="badge bg-primary-subtle text-primary border border-primary-subtle" id="search-results-counter">0 matches</span>
+      </div>
+      <button type="button" class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1" id="search-exit-btn">
+        <i class="fas fa-times"></i>
+        <span>Close Search</span>
+      </button>
+    </div>
+
     <div id="search-hints">
       <div class="text-muted small py-2">
-        <span><i class="fas fa-search me-1"></i> Type keywords, tags, or categories to search...</span>
+        <span><i class="fas fa-info-circle me-1"></i> Type keywords, tool names (Frida, Burp, Ghidra), CVE numbers, or categories to search...</span>
       </div>
     </div>
-    <div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div>
+
+    <div id="search-results" class="d-flex flex-wrap text-muted mt-2"></div>
   </div>
 </div>
 
+<style>
+  html[data-mode="light"] #search-results-bar,
+  html[data-bs-theme="light"] #search-results-bar {
+    border-bottom-color: #d0d7de !important;
+  }
+  #search-results article {
+    width: 100%;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+  }
+  html[data-mode="light"] #search-results article,
+  html[data-bs-theme="light"] #search-results article {
+    border-bottom-color: rgba(0, 0, 0, 0.08);
+  }
+  #search-results article h2 {
+    font-size: 1.15rem;
+    margin-bottom: 0.4rem;
+  }
+  #search-results article h2 a {
+    color: var(--heading-color, #f0f6fc);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  #search-results article h2 a:hover {
+    color: #58a6ff;
+  }
+  html[data-mode="light"] #search-results article h2 a,
+  html[data-bs-theme="light"] #search-results article h2 a {
+    color: #1f2328 !important;
+  }
+  html[data-mode="light"] #search-results article h2 a:hover,
+  html[data-bs-theme="light"] #search-results article h2 a:hover {
+    color: #0969da !important;
+  }
+  #search-results article p {
+    font-size: 0.88rem;
+    color: #8b949e;
+    line-height: 1.5;
+    margin-top: 0.5rem;
+  }
+  html[data-mode="light"] #search-results article p,
+  html[data-bs-theme="light"] #search-results article p {
+    color: #57606a !important;
+  }
+</style>

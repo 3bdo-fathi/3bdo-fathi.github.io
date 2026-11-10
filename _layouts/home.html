@@ -286,8 +286,11 @@ layout: default
   {% endfor %}
 </div>
 
-<div id="category-filter-empty" class="text-center py-5 d-none text-muted">
-  <p class="mb-2">No write-ups found matching this category.</p>
+<div id="category-filter-empty" class="text-center py-5 d-none text-muted" style="display: none !important;">
+  <p class="mb-2 fs-6">No write-ups found matching this category.</p>
+  <button type="button" class="btn btn-sm btn-outline-primary mt-2" id="reset-filter-btn">
+    <i class="fas fa-layer-group me-1"></i> View all {{ posts.size }} write-ups
+  </button>
 </div>
 
 <div id="post-filter-status" class="text-muted">
@@ -341,20 +344,41 @@ layout: default
           }
         });
 
-        if (emptyNotice) {
-          if (matchCount === 0) {
+        const filterStatus = document.getElementById('post-filter-status');
+
+        if (matchCount === 0 && filter !== 'all') {
+          if (emptyNotice) {
             emptyNotice.classList.remove('d-none');
-          } else {
+            emptyNotice.style.setProperty('display', 'block', 'important');
+          }
+          if (filterStatus) {
+            filterStatus.style.setProperty('display', 'none', 'important');
+          }
+        } else {
+          if (emptyNotice) {
             emptyNotice.classList.add('d-none');
+            emptyNotice.style.setProperty('display', 'none', 'important');
+          }
+          if (filterStatus) {
+            filterStatus.style.setProperty('display', 'block', 'important');
+          }
+          if (counterText) {
+            if (filter === 'all') {
+              counterText.textContent = 'Showing all ' + matchCount + ' write-ups';
+            } else {
+              counterText.textContent = 'Showing ' + matchCount + ' write-up' + (matchCount === 1 ? '' : 's');
+            }
           }
         }
 
-        if (counterText) {
-          if (filter === 'all') {
-            counterText.textContent = 'Showing all ' + matchCount + ' write-ups';
-          } else {
-            counterText.textContent = 'Showing ' + matchCount + ' write-up' + (matchCount === 1 ? '' : 's');
-          }
+        const resetBtn = document.getElementById('reset-filter-btn');
+        if (resetBtn && !resetBtn.dataset.bound) {
+          resetBtn.dataset.bound = 'true';
+          resetBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const allBtn = document.querySelector('.cat-filter-btn[data-filter="all"]');
+            if (allBtn) allBtn.click();
+          });
         }
 
         if (shouldScroll && postList) {

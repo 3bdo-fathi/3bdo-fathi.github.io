@@ -2,7 +2,7 @@
 title: "Practical Reverse Engineering: Chapter 4 - Windows Debugging and Automation"
 date: 2026-11-03 15:00:00 +0300
 categories: [Cyber Security, Reverse Engineering]
-tags: [reverse-engineering, windbg, dbgeng, scripting, automation, unpacking, upx, breakpoints]
+tags: [ reverse-engineering, windbg, dbgeng, scripting, automation, unpacking, upx, breakpoints, debugging, x64dbg, ida-pro, anti-debugging ]
 description: "An exhaustive technical breakdown of Chapter 4 of 'Practical Reverse Engineering' by Bruce Dang et al., analyzing WinDbg internals, MASM vs C++ expression evaluators, DbgEng scripting, automated UPX unpackers, and custom debugger extensions."
 image:
   path: /assets/images/posts/reverse-engineering/chapter-4-cover.png

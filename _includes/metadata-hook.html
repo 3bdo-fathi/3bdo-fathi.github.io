@@ -1,0 +1,36 @@
+<!-- Google Structured Data (JSON-LD) for TechArticle & BlogPosting -->
+{% if page.layout == 'post' %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": {{ page.title | jsonify }},
+  "description": {{ page.description | default: page.excerpt | strip_html | strip_newlines | jsonify }},
+  "inLanguage": "en-US",
+  "proficiencyLevel": "Expert",
+  "keywords": {{ page.tags | join: ', ' | jsonify }},
+  "articleSection": {{ page.categories | join: ' > ' | jsonify }},
+  "datePublished": "{{ page.date | date_to_xmlschema }}",
+  "dateModified": "{{ page.last_modified_at | default: page.date | date_to_xmlschema }}",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ page.url | absolute_url }}"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "{{ site.social.name | default: 'Abdulrahman Mohamed' }}",
+    "jobTitle": "Cyber Security Engineer & Penetration Tester",
+    "url": "https://www.linkedin.com/in/3bdo-fathi"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "{{ site.title | default: '0x3bdo' }}",
+    "url": "{{ site.url }}"
+  }{% if page.image %},
+  "image": {
+    "@type": "ImageObject",
+    "url": "{{ page.image.path | default: page.image | absolute_url }}"
+  }{% endif %}
+}
+</script>
+{% endif %}

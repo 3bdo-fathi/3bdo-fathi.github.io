@@ -2,7 +2,7 @@
 title: "Practical Reverse Engineering: Chapter 1 - x86 and x64 Architecture"
 date: 2026-11-03 09:00:00 +0300
 categories: [Cyber Security, Reverse Engineering]
-tags: [reverse-engineering, x86, x64, assembly, calling-conventions, paging, anti-vm, sample-j]
+tags: [ reverse-engineering, x86, x64, assembly, calling-conventions, paging, anti-vm, sample-j, ida-pro, ghidra ]
 description: "An exhaustive technical breakdown of Chapter 1 of 'Practical Reverse Engineering' by Bruce Dang et al., analyzing x86/x64 registers, execution modes, stack frames, calling conventions, PAE paging, Sample J DllMain disassembly, and complete exercise solutions."
 image:
   path: /assets/images/posts/reverse-engineering/chapter-1-cover.png

@@ -1,0 +1,170 @@
+<!--
+  Jekyll Simple Search loader & Interactive Search Controller
+  See: <https://github.com/christian-fei/Simple-Jekyll-Search>
+-->
+
+{% capture result_elem %}
+  <article class="px-1 px-sm-2 px-lg-3">
+    <header>
+      <h2><a href="{url}">{title}</a></h2>
+      <div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-2 small gap-3">
+        {categories}
+        {tags}
+      </div>
+    </header>
+    <p>{content}</p>
+  </article>
+{% endcapture %}
+
+{% capture not_found %}<p class="mt-4 text-center text-muted"><i class="fas fa-search me-2"></i>{{ site.data.locales[include.lang].search.no_results | default: "No matching write-ups found." }}</p>{% endcapture %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var searchInput = document.getElementById('search-input');
+    var resultsContainer = document.getElementById('search-results');
+    var resultWrapper = document.getElementById('search-result-wrapper');
+    var searchHints = document.getElementById('search-hints');
+    var searchClearBtn = document.getElementById('search-clear-btn');
+    var searchExitBtn = document.getElementById('search-exit-btn');
+    var searchContainer = document.getElementById('search');
+    var resultsCounter = document.getElementById('search-results-counter');
+    var mainRows = document.querySelectorAll('#main-wrapper > .container > .row');
+
+    if (!searchInput || !resultsContainer) return;
+
+    /* Initialize SimpleJekyllSearch */
+    if (typeof SimpleJekyllSearch === 'function') {
+      try {
+        SimpleJekyllSearch({
+          searchInput: searchInput,
+          resultsContainer: resultsContainer,
+          json: '{{ "/assets/js/data/search.json" | relative_url }}',
+          searchResultTemplate: '{{ result_elem | strip_newlines }}',
+          noResultsText: '{{ not_found | strip_newlines }}',
+          templateMiddleware: function (prop, value) {
+            if (prop === 'categories') {
+              if (!value) return '';
+              return '<span class="d-inline-flex align-items-center"><i class="far fa-folder fa-fw me-1"></i>' + value + '</span>';
+            }
+            if (prop === 'tags') {
+              if (!value) return '';
+              return '<span class="d-inline-flex align-items-center"><i class="fa fa-tag fa-fw me-1"></i>' + value + '</span>';
+            }
+            return value;
+          }
+        });
+      } catch (err) {
+        /* SimpleJekyllSearch init error safely handled */
+      }
+    }
+
+    function updateCounter() {
+      if (!resultsCounter) return;
+      var articles = resultsContainer.querySelectorAll('article');
+      var count = articles.length;
+      if (count === 0 && searchInput.value.trim().length > 0) {
+        resultsCounter.textContent = '0 matches';
+        resultsCounter.className = 'badge bg-danger-subtle text-danger border border-danger-subtle';
+      } else {
+        resultsCounter.textContent = count + (count === 1 ? ' match' : ' matches');
+        resultsCounter.className = 'badge bg-primary-subtle text-primary border border-primary-subtle';
+      }
+    }
+
+    function openSearchResults() {
+      if (resultWrapper && resultWrapper.classList.contains('d-none')) {
+        resultWrapper.classList.remove('d-none');
+        mainRows.forEach(function (row) {
+          row.classList.add('d-none');
+        });
+      }
+    }
+
+    function closeSearchResults() {
+      if (resultWrapper && !resultWrapper.classList.contains('d-none')) {
+        resultWrapper.classList.add('d-none');
+        mainRows.forEach(function (row) {
+          row.classList.remove('d-none');
+        });
+        resultsContainer.innerHTML = '';
+        searchInput.value = '';
+        if (searchContainer) searchContainer.classList.remove('has-input');
+        if (searchHints) searchHints.classList.remove('d-none');
+      }
+    }
+
+    /* Track search input typing */
+    searchInput.addEventListener('input', function () {
+      var val = searchInput.value.trim();
+      if (searchContainer) {
+        if (val.length > 0) {
+          searchContainer.classList.add('has-input');
+        } else {
+          searchContainer.classList.remove('has-input');
+        }
+      }
+
+      if (val.length > 0) {
+        openSearchResults();
+        if (searchHints) searchHints.classList.add('d-none');
+        setTimeout(updateCounter, 120);
+      } else {
+        closeSearchResults();
+      }
+    });
+
+    /* Clear button click */
+    if (searchClearBtn) {
+      searchClearBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        closeSearchResults();
+        searchInput.focus();
+      });
+    }
+
+    /* Exit button click */
+    if (searchExitBtn) {
+      searchExitBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        closeSearchResults();
+      });
+    }
+
+    /* Observe search result changes to auto-update counter */
+    var observer = new MutationObserver(function () {
+      if (searchInput.value.trim().length > 0) {
+        updateCounter();
+      }
+    });
+    observer.observe(resultsContainer, { childList: true, subtree: true });
+
+    /* Global shortcut bindings: Esc, Ctrl+K, / */
+    document.addEventListener('keydown', function (e) {
+      var tag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+      var isInput = tag === 'input' || tag === 'textarea' || (document.activeElement && document.activeElement.isContentEditable);
+
+      if (e.key === 'Escape') {
+        closeSearchResults();
+        var cancelBtn = document.getElementById('search-cancel');
+        if (cancelBtn) cancelBtn.click();
+        searchInput.blur();
+      } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        var trigger = document.getElementById('search-trigger');
+        if (trigger && window.getComputedStyle(trigger).display !== 'none') {
+          trigger.click();
+        }
+        searchInput.focus();
+        searchInput.select();
+      } else if (e.key === '/' && !isInput) {
+        e.preventDefault();
+        var trigger2 = document.getElementById('search-trigger');
+        if (trigger2 && window.getComputedStyle(trigger2).display !== 'none') {
+          trigger2.click();
+        }
+        searchInput.focus();
+        searchInput.select();
+      }
+    });
+  });
+</script>

@@ -2,7 +2,7 @@
 title: "Practical Reverse Engineering: Chapter 3 - The Windows Kernel and Rootkit Analysis"
 date: 2026-11-03 13:00:00 +0300
 categories: [Cyber Security, Reverse Engineering]
-tags: [reverse-engineering, windows-kernel, rootkits, kpcr, ssdt-hooking, irql, irp, ioctl, dkom]
+tags: [ reverse-engineering, windows-kernel, rootkits, kpcr, ssdt-hooking, irql, irp, ioctl, dkom, windbg, kernel-drivers, ida-pro ]
 description: "An exhaustive technical breakdown of Chapter 3 of 'Practical Reverse Engineering' by Bruce Dang et al., analyzing Windows kernel architecture, KPCR, system call dispatching, IRQL rules, IRP handling, IOCTL methods, x86/x64 rootkit walk-throughs, and complete exercise solutions."
 image:
   path: /assets/images/posts/reverse-engineering/chapter-3-cover.png

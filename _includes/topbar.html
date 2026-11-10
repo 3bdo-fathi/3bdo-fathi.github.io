@@ -1,0 +1,140 @@
+<!-- The Top Bar with Universal Theme Toggle & Enhanced Search -->
+
+<header id="topbar-wrapper" class="flex-shrink-0" aria-label="Top Bar">
+  <div
+    id="topbar"
+    class="d-flex align-items-center justify-content-between px-lg-3 h-100"
+  >
+    <nav id="breadcrumb" aria-label="Breadcrumb">
+      {% assign paths = page.url | split: '/' %}
+
+      {% if paths.size == 0 or page.layout == 'home' %}
+        <!-- index page -->
+        <span>{{ site.data.locales[include.lang].tabs.home | capitalize }}</span>
+
+      {% else %}
+        {% for item in paths %}
+          {% if forloop.first %}
+            <span>
+              <a href="{{ '/' | relative_url }}">
+                {{- site.data.locales[include.lang].tabs.home | capitalize -}}
+              </a>
+            </span>
+
+          {% elsif forloop.last %}
+            {% if page.collection == 'tabs' %}
+              <span>{{ site.data.locales[include.lang].tabs[item] | default: page.title }}</span>
+            {% else %}
+              <span>{{ page.title }}</span>
+            {% endif %}
+
+          {% elsif page.layout == 'category' or page.layout == 'tag' %}
+            <span>
+              <a href="{{ item | append: '/' | relative_url }}">
+                {{- site.data.locales[include.lang].tabs[item] | default: page.title -}}
+              </a>
+            </span>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </nav>
+    <!-- endof #breadcrumb -->
+
+    <button type="button" id="sidebar-trigger" class="btn btn-link" aria-label="Sidebar">
+      <i class="fas fa-bars fa-fw"></i>
+    </button>
+
+    <div id="topbar-title">
+      {% if page.layout == 'home' %}
+        {{- site.data.locales[include.lang].title | default: site.title -}}
+      {% elsif page.collection == 'tabs' or page.layout == 'page' %}
+        {%- capture tab_key -%}{{ page.url | split: '/' }}{%- endcapture -%}
+        {{- site.data.locales[include.lang].tabs[tab_key] | default: page.title -}}
+      {% else %}
+        {{- site.data.locales[include.lang].layout[page.layout] | default: page.layout | capitalize -}}
+      {% endif %}
+    </div>
+
+    <div class="topbar-actions d-flex align-items-center gap-2">
+      <!-- Universal Dark/Light Mode Toggle (Accessible on Mobile, Tablet & Desktop) -->
+      <button
+        type="button"
+        id="mode-toggle-topbar"
+        class="btn btn-link topbar-mode-btn"
+        aria-label="Toggle Theme"
+        title="Switch Dark/Light Theme"
+      >
+        <i class="fas fa-sun"></i>
+      </button>
+
+      <!-- Mobile Search Trigger Button -->
+      <button type="button" id="search-trigger" class="btn btn-link" aria-label="Search">
+        <i class="fas fa-search fa-fw"></i>
+      </button>
+    </div>
+
+    <!-- Topbar Search Bar with Quick Clear Button -->
+    <search id="search" class="align-items-center ms-3 ms-lg-0 position-relative">
+      <i class="fas fa-search fa-fw search-icon-left"></i>
+      <input
+        class="form-control"
+        id="search-input"
+        type="search"
+        aria-label="search"
+        autocomplete="off"
+        placeholder="{{ site.data.locales[include.lang].search.hint | capitalize }}... (Ctrl+K)"
+      >
+      <button
+        type="button"
+        id="search-clear-btn"
+        class="btn btn-link p-0 position-absolute end-0 me-2 text-muted d-none"
+        aria-label="Clear Search"
+        title="Clear search (Esc)"
+        style="top: 50%; transform: translateY(-50%); font-size: 0.85rem; z-index: 5;"
+      >
+        <i class="fas fa-times-circle"></i>
+      </button>
+    </search>
+
+    <button type="button" class="btn btn-link text-decoration-none" id="search-cancel">
+      {{- site.data.locales[include.lang].search.cancel -}}
+    </button>
+  </div>
+</header>
+
+<style>
+  .topbar-mode-btn {
+    color: var(--text-muted-color, #8b949e);
+    padding: 0.35rem 0.5rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    border: none;
+    background: transparent;
+  }
+  .topbar-mode-btn:hover {
+    color: #58a6ff;
+    background: rgba(88, 166, 255, 0.1);
+  }
+  html[data-mode="light"] .topbar-mode-btn,
+  html[data-bs-theme="light"] .topbar-mode-btn {
+    color: #57606a !important;
+  }
+  html[data-mode="light"] .topbar-mode-btn:hover,
+  html[data-bs-theme="light"] .topbar-mode-btn:hover {
+    color: #0969da !important;
+    background: rgba(9, 105, 218, 0.08) !important;
+  }
+
+  #search.has-input #search-clear-btn {
+    display: inline-block !important;
+  }
+
+  /* Responsive styling for topbar actions */
+  @media (min-width: 1200px) {
+    #search-trigger {
+      display: none !important;
+    }
+  }
+</style>

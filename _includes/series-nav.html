@@ -277,10 +277,40 @@
         </span>
       </div>
       <div class="series-name">{{ page.series }}</div>
-      <div class="text-muted" style="font-size: 0.82rem;">
+      <div class="text-muted mb-3" style="font-size: 0.82rem;">
         This article is part of an ongoing in-depth series. Follow along or explore other chapters in the syllabus below.
       </div>
-      <details class="series-details">
+
+      <!-- Quick Part Navigation (Top) -->
+      {% if prev_post or next_post %}
+        <div class="series-nav-controls my-2">
+          {% if prev_post %}
+            <a href="{{ prev_post.url | relative_url }}" class="series-nav-btn text-start">
+              <span class="direction"><i class="fas fa-chevron-left me-1"></i> Previous Part</span>
+              <span class="target-title">{{ prev_post.title }}</span>
+            </a>
+          {% else %}
+            <div class="series-nav-btn text-start opacity-50 pe-none">
+              <span class="direction text-muted"><i class="fas fa-flag me-1"></i> First Part</span>
+              <span class="target-title text-muted">You are at the start of this series</span>
+            </div>
+          {% endif %}
+
+          {% if next_post %}
+            <a href="{{ next_post.url | relative_url }}" class="series-nav-btn text-end">
+              <span class="direction">Next Part <i class="fas fa-chevron-right ms-1"></i></span>
+              <span class="target-title">{{ next_post.title }}</span>
+            </a>
+          {% else %}
+            <div class="series-nav-btn text-end opacity-50 pe-none">
+              <span class="direction text-muted">Series Finale <i class="fas fa-check-circle ms-1"></i></span>
+              <span class="target-title text-muted">Latest published part in this series</span>
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      <details class="series-details pt-2 border-top" style="border-color: rgba(255, 255, 255, 0.08) !important;">
         <summary>
           <i class="fas fa-list-ul me-1"></i> View Full Series Syllabus ({{ total_count }} parts)
         </summary>
@@ -289,7 +319,7 @@
             <li class="series-list-item {% if p.url == page.url %}active{% endif %}">
               <span class="series-part-num">#{{ forloop.index }}</span>
               {% if p.url == page.url %}
-                <span>{{ p.title }} <span class="badge bg-primary ms-1" style="font-size: 0.65rem;">Current</span></span>
+                <span class="fw-semibold text-primary">{{ p.title }} <span class="badge bg-primary ms-1" style="font-size: 0.65rem;">Current Chapter</span></span>
               {% else %}
                 <a href="{{ p.url | relative_url }}">{{ p.title }}</a>
               {% endif %}
