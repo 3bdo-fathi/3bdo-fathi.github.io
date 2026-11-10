@@ -126,14 +126,12 @@
     }
 
     html[data-mode="dark"] #mode-toggle .icon-sun,
-    html[data-bs-theme="dark"] #mode-toggle .icon-sun,
-    html:not([data-mode="light"]):not([data-bs-theme="light"]) #mode-toggle .icon-sun {
+    html[data-bs-theme="dark"] #mode-toggle .icon-sun {
       display: inline-flex !important;
       color: #e3b341 !important;
     }
     html[data-mode="dark"] #mode-toggle .icon-moon,
-    html[data-bs-theme="dark"] #mode-toggle .icon-moon,
-    html:not([data-mode="light"]):not([data-bs-theme="light"]) #mode-toggle .icon-moon {
+    html[data-bs-theme="dark"] #mode-toggle .icon-moon {
       display: none !important;
     }
 
@@ -144,12 +142,32 @@
     html[data-mode="light"] #mode-toggle .icon-moon,
     html[data-bs-theme="light"] #mode-toggle .icon-moon {
       display: inline-flex !important;
-      color: #58a6ff !important;
+      color: #0969da !important;
     }
 
-    [data-mode="light"] #sidebar .dock-btn {
-      background: rgba(0, 0, 0, 0.02) !important;
-      border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    html[data-mode="light"] #sidebar .dock-btn,
+    html[data-bs-theme="light"] #sidebar .dock-btn {
+      background: #ffffff !important;
+      border: 1px solid #d0d7de !important;
+      color: #57606a !important;
+    }
+
+    html[data-mode="light"] #sidebar .dock-btn:hover,
+    html[data-bs-theme="light"] #sidebar .dock-btn:hover {
+      background: #f3f4f6 !important;
+      border-color: #0969da !important;
+      color: #0969da !important;
+    }
+
+    #sidebar .site-title a {
+      color: var(--site-title-color, var(--heading-color, #ffffff)) !important;
+      text-decoration: none !important;
+      font-weight: 800 !important;
+      transition: color 0.2s ease !important;
+    }
+
+    #sidebar .site-title a:hover {
+      color: var(--link-color, #58a6ff) !important;
     }
   </style>
 

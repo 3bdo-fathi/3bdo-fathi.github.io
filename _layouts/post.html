@@ -117,15 +117,17 @@ script_includes:
       border-color: rgba(88, 166, 255, 0.4);
       background: rgba(88, 166, 255, 0.08);
     }
-    [data-mode="light"] .post-btn-minimal {
-      background: rgba(0, 0, 0, 0.02);
-      border-color: rgba(0, 0, 0, 0.12);
-      color: #57606a;
+    html[data-mode="light"] .post-btn-minimal,
+    html[data-bs-theme="light"] .post-btn-minimal {
+      background: #f6f8fa !important;
+      border-color: #d0d7de !important;
+      color: #57606a !important;
     }
-    [data-mode="light"] .post-btn-minimal:hover {
-      color: #0969da;
-      border-color: rgba(9, 105, 218, 0.4);
-      background: rgba(9, 105, 218, 0.06);
+    html[data-mode="light"] .post-btn-minimal:hover,
+    html[data-bs-theme="light"] .post-btn-minimal:hover {
+      color: #0969da !important;
+      border-color: #0969da !important;
+      background: #ffffff !important;
     }
   </style>
 
