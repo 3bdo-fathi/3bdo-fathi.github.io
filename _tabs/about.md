@@ -39,7 +39,12 @@ In-depth technical breakdowns and chapter-by-chapter reference analyses:
 
 ---
 
-> **اللهم اجعل هذا العمل علمًا نافعًا وصدقةً جارية، واكتب لي به الأجر والقبول، وانفع به كل من قرأه أو تعلّمه.**  
-> **اللهم احفظ لي والديّ وأهلي، وبارك في أعمارهم وصحتهم، وأدم عليهم نعمة الصحة والعافية، ولا تريني فيهم بأسًا يبكيني.**  
->  
-> *Dedicated as ongoing charity and beneficial knowledge. May Allah bless my parents and family, protect them, and grant them lasting health and happiness.*
+<div class="post-dedication-bar my-4">
+  <div class="post-dedication-primary">
+    اللهم اجعل هذا العمل علمًا نافعًا وصدقةً جارية، واكتب لي به الأجر والقبول، وانفع به كل من قرأه أو تعلّمه.<br>
+    اللهم احفظ لي والديّ وأهلي، وبارك في أعمارهم وصحتهم، وأدم عليهم نعمة الصحة والعافية، ولا تريني فيهم بأسًا يبكيني.
+  </div>
+  <div class="post-dedication-secondary">
+    Dedicated as ongoing charity and beneficial knowledge. May Allah bless my parents and family, protect them, and grant them lasting health and happiness.
+  </div>
+</div>

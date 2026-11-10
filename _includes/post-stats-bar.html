@@ -15,7 +15,8 @@
 <div class="post-stats-bar" id="post-stats-bar" data-page-path="{{ page.url | default: '/' }}">
   <div class="post-stat post-stat-read" title="{{ words }} {{ stats.words }}">
     <i class="fas fa-book-open" aria-hidden="true"></i>
-    <span class="stat-value"><em>{{ read_mins }}</em> {{ site.data.locales[include.lang].post.read_time.unit }}</span>
+    <span class="stat-value"><em>{{ read_mins }}</em> min</span>
+    <span class="stat-label">read</span>
   </div>
 
   <div class="post-stat post-stat-views is-loading" id="stat-views" title="{{ stats.views }}">

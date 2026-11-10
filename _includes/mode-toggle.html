@@ -320,9 +320,75 @@
   .post-preview img {
     border-radius: 8px !important;
   }
+
+  /* Universal Dedication Tribute Bar (Posts & About Tab) */
+  .post-dedication-bar {
+    border-radius: 10px !important;
+    padding: 1.25rem 1.5rem !important;
+    font-size: 0.95rem !important;
+    line-height: 2 !important;
+    text-align: center !important;
+    margin: 2rem 0 !important;
+    transition: background 0.2s ease, border-color 0.2s ease !important;
+  }
+
+  /* Dark mode dedication */
+  html:not([data-mode="light"]):not([data-bs-theme="light"]) .post-dedication-bar,
+  html[data-mode="dark"] .post-dedication-bar,
+  html[data-bs-theme="dark"] .post-dedication-bar {
+    background: rgba(88, 166, 255, 0.06) !important;
+    border: 1px solid rgba(88, 166, 255, 0.18) !important;
+    border-left: 4px solid #58a6ff !important;
+  }
+  html:not([data-mode="light"]):not([data-bs-theme="light"]) .post-dedication-primary,
+  html[data-mode="dark"] .post-dedication-primary,
+  html[data-bs-theme="dark"] .post-dedication-primary {
+    color: #f0f6fc !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    margin-bottom: 0.6rem !important;
+  }
+  html:not([data-mode="light"]):not([data-bs-theme="light"]) .post-dedication-secondary,
+  html[data-mode="dark"] .post-dedication-secondary,
+  html[data-bs-theme="dark"] .post-dedication-secondary {
+    color: #8b949e !important;
+    font-size: 0.85rem !important;
+    font-style: italic !important;
+  }
+
+  /* Light mode dedication - Deep Charcoal, 100% Crisp Contrast */
+  html[data-mode="light"] .post-dedication-bar,
+  html[data-bs-theme="light"] .post-dedication-bar {
+    background: #f0f7ff !important;
+    border: 1px solid #c8e1ff !important;
+    border-left: 4px solid #0969da !important;
+    box-shadow: 0 2px 8px rgba(9, 105, 218, 0.05) !important;
+  }
+  html[data-mode="light"] .post-dedication-primary,
+  html[data-bs-theme="light"] .post-dedication-primary {
+    color: #0f1419 !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    margin-bottom: 0.6rem !important;
+  }
+  html[data-mode="light"] .post-dedication-secondary,
+  html[data-bs-theme="light"] .post-dedication-secondary {
+    color: #424a53 !important;
+    font-size: 0.85rem !important;
+    font-style: italic !important;
+  }
 </style>
 
 <script type="text/javascript">
+  /* Unregister any stale legacy service worker to ensure instant fresh updates */
+  if ('serviceWorker' in navigator) {
+    try {
+      navigator.serviceWorker.getRegistrations().then(function(regs) {
+        regs.forEach(function(r) { r.unregister(); });
+      });
+    } catch (e) {}
+  }
+
   /* Instant mode application before DOM render to prevent theme flicker */
   (function() {
     try {

@@ -37,3 +37,4 @@ jobs:
             git commit -m "Auto-update Threat Advisory Radar with latest CISA KEV zero-days"
             git push origin main
           fi
+

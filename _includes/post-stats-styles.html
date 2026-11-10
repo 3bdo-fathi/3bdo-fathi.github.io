@@ -3,7 +3,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.5rem 0.6rem;
+    gap: 0.5rem 0.65rem;
     margin: 1.15rem 0 1.6rem;
     padding-bottom: 0.95rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -11,30 +11,30 @@
 
   html[data-mode="light"] .post-stats-bar,
   html[data-bs-theme="light"] .post-stats-bar {
-    border-bottom-color: rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid #e1e4e8 !important;
   }
 
   .post-stat {
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    padding: 0.32rem 0.75rem;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.35rem 0.8rem;
+    border: 1px solid #30363d;
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.03);
+    background: #161b22;
     font-size: 0.78rem;
     color: #c9d1d9;
     line-height: 1.25;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     user-select: none;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   }
 
   .post-stat:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(88, 166, 255, 0.3);
+    background: #1c2128;
+    border-color: rgba(88, 166, 255, 0.5);
     transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
   }
 
   .post-stat i {
@@ -61,7 +61,7 @@
   }
 
   .post-stat .stat-value {
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     font-weight: 700;
     font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
     color: #f0f6fc;
@@ -78,42 +78,42 @@
   /* Light mode */
   html[data-mode="light"] .post-stat,
   html[data-bs-theme="light"] .post-stat {
-    background: #f6f8fa;
-    border-color: #d0d7de;
-    color: #24292f;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    background: #f6f8fa !important;
+    border: 1px solid #d0d7de !important;
+    color: #24292f !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
   }
 
   html[data-mode="light"] .post-stat:hover,
   html[data-bs-theme="light"] .post-stat:hover {
-    background: #f3f4f6;
-    border-color: #0969da;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    background: #ffffff !important;
+    border-color: #0969da !important;
+    box-shadow: 0 3px 8px rgba(9, 105, 218, 0.12) !important;
   }
 
   html[data-mode="light"] .post-stat .stat-label,
   html[data-bs-theme="light"] .post-stat .stat-label {
-    color: #57606a;
+    color: #57606a !important;
   }
 
   html[data-mode="light"] .post-stat .stat-value,
   html[data-bs-theme="light"] .post-stat .stat-value {
-    color: #24292f;
+    color: #1f2328 !important;
   }
 
   html[data-mode="light"] .post-stat-read i,
   html[data-bs-theme="light"] .post-stat-read i {
-    color: #0969da;
+    color: #0969da !important;
   }
 
   html[data-mode="light"] .post-stat-views i,
   html[data-bs-theme="light"] .post-stat-views i {
-    color: #1a7f37;
+    color: #1a7f37 !important;
   }
 
   html[data-mode="light"] .post-stat-visits i,
   html[data-bs-theme="light"] .post-stat-visits i {
-    color: #8250df;
+    color: #8250df !important;
   }
 
   /* Mini stats on cards / archives */
