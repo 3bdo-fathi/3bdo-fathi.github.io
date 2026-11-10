@@ -1,0 +1,39 @@
+name: "Auto-Update Threat Advisory Radar"
+
+on:
+  schedule:
+    # Runs daily at 04:00 UTC
+    - cron: '0 4 * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions UI
+
+permissions:
+  contents: write
+
+jobs:
+  update-radar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Fetch Latest CISA KEV Exploited Zero-Days
+        run: |
+          python3 tools/update_threat_radar.py
+
+      - name: Commit and Push if Changed
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Actions [Radar Bot]"
+          git add _data/threat_advisories.json
+          if git diff --staged --quiet; then
+            echo "No new CVE advisories. Everything up to date."
+          else
+            git commit -m "Auto-update Threat Advisory Radar with latest CISA KEV zero-days"
+            git push origin main
+          fi
