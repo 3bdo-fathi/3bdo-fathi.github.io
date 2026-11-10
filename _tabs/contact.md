@@ -1,7 +1,7 @@
 ---
 layout: page
 icon: fas fa-envelope
-order: 5
+order: 6
 title: Contact Me
 permalink: /contact-me/
 image: /assets/images/site/preview.jpg
