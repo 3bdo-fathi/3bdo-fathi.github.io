@@ -129,6 +129,53 @@ script_includes:
       border-color: #0969da !important;
       background: #ffffff !important;
     }
+    /* Dedication bar */
+    .post-dedication-bar {
+      background: rgba(88, 166, 255, 0.05);
+      border: 1px solid rgba(88, 166, 255, 0.15);
+      border-left: 4px solid #58a6ff !important;
+      border-radius: 8px;
+      padding: 1.15rem 1.25rem;
+      font-size: 0.9rem;
+      line-height: 1.9;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+    .post-dedication-primary {
+      color: #f0f6fc;
+      font-weight: 600;
+      font-size: 0.96rem;
+      margin-bottom: 0.45rem;
+    }
+    .post-dedication-secondary {
+      color: #8b949e;
+      font-size: 0.82rem;
+      font-style: italic;
+    }
+
+    html[data-mode="light"] .post-dedication-bar,
+    html[data-bs-theme="light"] .post-dedication-bar {
+      background: #f0f7ff !important;
+      border: 1px solid #c8e1ff !important;
+      border-left: 4px solid #0969da !important;
+    }
+    html[data-mode="light"] .post-dedication-primary,
+    html[data-bs-theme="light"] .post-dedication-primary {
+      color: #1f2328 !important;
+      font-weight: 700 !important;
+    }
+    html[data-mode="light"] .post-dedication-secondary,
+    html[data-bs-theme="light"] .post-dedication-secondary {
+      color: #57606a !important;
+    }
+
+    /* Newsletter card in light mode */
+    html[data-mode="light"] .post-newsletter-card,
+    html[data-bs-theme="light"] .post-newsletter-card {
+      background: #ffffff !important;
+      border: 1px solid #d0d7de !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+    }
   </style>
 
   <div class="post-tail-wrapper text-muted">
@@ -241,12 +288,12 @@ script_includes:
     </script>
 
     <!-- Dedicated Knowledge & Ongoing Charity Tribute -->
-    <div class="post-dedication-bar my-4 py-3 px-3 rounded text-center" style="background: rgba(88, 166, 255, 0.05); border-left: 3px solid #58a6ff; font-size: 0.88rem; line-height: 1.8; color: #8b949e;">
-      <div class="mb-2" style="color: #f0f6fc; font-weight: 500;">
+    <div class="post-dedication-bar my-4">
+      <div class="post-dedication-primary">
         اللهم اجعل هذا العمل علمًا نافعًا وصدقةً جارية، واكتب لي به الأجر والقبول، وانفع به كل من قرأه أو تعلّمه.<br>
         اللهم احفظ لي والديّ وأهلي، وبارك في أعمارهم وصحتهم، وأدم عليهم نعمة الصحة والعافية، ولا تريني فيهم بأسًا يبكيني.
       </div>
-      <div class="text-muted" style="font-size: 0.82rem; font-style: italic;">
+      <div class="post-dedication-secondary">
         Dedicated as ongoing charity and beneficial knowledge. May Allah bless my parents and family, protect them, and grant them lasting health and happiness.
       </div>
     </div>
