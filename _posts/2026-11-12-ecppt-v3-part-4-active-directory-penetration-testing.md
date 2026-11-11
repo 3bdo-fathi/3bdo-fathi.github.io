@@ -233,15 +233,54 @@ mimikatz # kerberos::golden /user:Administrator /domain:inlanefreight.local /sid
 
 ---
 
-## References & Further Reading
+---
 
-1. **Microsoft MS-KILE: Kerberos Protocol Extensions Specification**: [https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-kile/](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-kile/)
-2. **BloodHound Documentation**: [https://bloodhound.readthedocs.io/](https://bloodhound.readthedocs.io/)
-3. **Rubeus: An Active Directory & Kerberos Toolset** by HarmJ0y: [https://github.com/GhostPack/Rubeus](https://github.com/GhostPack/Rubeus)
-4. **Benjamin Delpy's Mimikatz Repository**: [https://github.com/gentilkiwi/mimikatz](https://github.com/gentilkiwi/mimikatz)
-5. **MITRE ATT&CK Matrix for Enterprise**:
-   * Technique T1558: Steal or Forge Kerberos Tickets (Kerberoasting, AS-REP Roasting, Golden/Silver Tickets)
-   * Technique T1003.006: OS Credential Dumping: DCSync
+## Visual Architecture: Kerberos Authentication Flow & Attack Graph
+
+The following technical diagram contrasts the 5-step Kerberos protocol exchange with the exact interception points for Kerberoasting and AS-REP Roasting, alongside BloodHound shortest attack paths:
+
+![Active Directory Attack Vectors: Kerberos Exploitation & Persistence](/assets/images/posts/ecppt/part-4-diagram.png)
+
+### Key Architectural Observations from the Diagram:
+1. **The Kerberoasting Vulnerability**: Notice step 4 of the exchange. When a user requests access to an SPN, the KDC issues a TGS ticket encrypted with the **target service account's NTLM password hash**. Because the client must deliver this ticket to the service, the client receives the encrypted blob, allowing offline brute-force attacks against weak service passwords.
+2. **Golden vs. Silver Tickets**: A Golden Ticket requires the `krbtgt` account hash and forges a TGT (Ticket Granting Ticket), making it effective across the entire forest. A Silver Ticket requires only the specific service account's hash, forging a TGS ticket directly. Because the service validates the ticket using its own secret key, **a Silver Ticket never communicates with the Domain Controller**, making it invisible in DC security event logs!
+
+---
+
+## Attack Chain Interconnection: Escalating from Domain User to Forest Enterprise Admin
+
+Active Directory penetration testing represents the strategic center of an internal enterprise compromise:
+
+```mermaid
+flowchart LR
+    Part3["Part 3: Network Recon / LLMNR Poisoning"] -->|Yields Domain Credentials| Part4["Part 4: BloodHound Enumeration & Kerberoasting"]
+    Part4 -->|Extracts Service Account Hash| Part4Crack["Hashcat Mode 13100 Cracking (Domain Admin Pass)"]
+    Part4Crack -->|Enables Remote DCSync| Part4DCSync["DCSync: krbtgt Hash Harvested"]
+    Part4DCSync -->|Forges Golden Ticket| Part7["Part 7: Persistent C2 Beaconing as Domain Admin"]
+```
+
+* **Connection to Part 5 (Privilege Escalation)**: Once BloodHound identifies a workstation on which your domain user has local administrator rights, you execute local privilege escalation (Part 5) to dump the LSASS memory of logged-in Domain Admins.
+* **Connection to Part 6 (Pivoting)**: Using harvested NTLM hashes or Kerberos tickets, you establish SOCKS tunnels via Ligolo-ng or SSH (Part 6) to remotely compromise Domain Controllers located in isolated server subnets.
+
+---
+
+## Categorized References & Authoritative Sources
+
+### 1. Microsoft Protocol Standards & Whitepapers
+* **Microsoft MS-KILE**: Kerberos Protocol Extensions Specification. [https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-kile/](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-kile/).
+* **Microsoft MS-DRSR**: Directory Replication Service Remote Protocol (DCSync Primitives).
+* **Sean Metcalf's ADSecurity.org**: The premier technical blog on Active Directory security and Kerberos attacks. [https://adsecurity.org/](https://adsecurity.org/).
+
+### 2. Industry-Standard Offensive AD Tooling
+* **BloodHound by SpecterOps**: Six Degrees of Domain Admin graph analysis. [https://github.com/SpecterOps/BloodHound](https://github.com/SpecterOps/BloodHound).
+* **Rubeus by HarmJ0y (Will Schroeder)**: C# toolset for raw Kerberos interaction. [https://github.com/GhostPack/Rubeus](https://github.com/GhostPack/Rubeus).
+* **Mimikatz by Benjamin Delpy**: Extraction of plaintext passwords, hashes, and ticket forging. [https://github.com/gentilkiwi/mimikatz](https://github.com/gentilkiwi/mimikatz).
+
+### 3. MITRE ATT&CK Enterprise Techniques
+* **T1558.003**: Steal or Forge Kerberos Tickets: Kerberoasting. [https://attack.mitre.org/techniques/T1558/003/](https://attack.mitre.org/techniques/T1558/003/).
+* **T1558.004**: Steal or Forge Kerberos Tickets: AS-REP Roasting. [https://attack.mitre.org/techniques/T1558/004/](https://attack.mitre.org/techniques/T1558/004/).
+* **T1558.001**: Steal or Forge Kerberos Tickets: Golden Ticket. [https://attack.mitre.org/techniques/T1558/001/](https://attack.mitre.org/techniques/T1558/001/).
+* **T1003.006**: OS Credential Dumping: DCSync. [https://attack.mitre.org/techniques/T1003/006/](https://attack.mitre.org/techniques/T1003/006/).
 
 ---
 

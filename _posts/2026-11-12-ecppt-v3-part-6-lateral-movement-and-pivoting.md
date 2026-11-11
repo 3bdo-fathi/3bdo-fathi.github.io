@@ -235,15 +235,51 @@ xfreerdp /v:172.16.1.50 /u:Administrator /pth:7fc07bbe74664a7726da442b439aa4b5 /
 
 ---
 
-## References & Further Reading
+---
 
-1. **Ligolo-ng Repository & Documentation**: [https://github.com/nico-cha/ligolo-ng](https://github.com/nico-cha/ligolo-ng)
-2. **Chisel: Fast TCP/UDP Tunnel over HTTP** by Jaime Pillora: [https://github.com/jpillora/chisel](https://github.com/jpillora/chisel)
-3. **Evil-WinRM: The Ultimate WinRM Shell**: [https://github.com/Hackplayers/evil-winrm](https://github.com/Hackplayers/evil-winrm)
-4. **RFC 4251: The Secure Shell (SSH) Protocol Architecture**.
-5. **MITRE ATT&CK Matrix**:
-   * Technique T1090: Proxy (Multi-hop Proxies, External/Internal Proxies)
-   * Technique T1021: Remote Services (SMB, WinRM, RDP)
+## Visual Architecture: Multi-Tier Pivoting & Tunneling Mechanics
+
+The following technical diagram contrasts the legacy SSH port forwarding techniques with modern Layer-3 TUN interface routing via Ligolo-ng across segmented DMZs:
+
+![Multi-Tier Enterprise Pivoting: SSH Tunneling vs Ligolo-ng Routing](/assets/images/posts/ecppt/part-6-diagram.png)
+
+### Key Architectural Observations from the Diagram:
+1. **Layer-3 vs. Layer-7 Proxies**: Traditional SOCKS5 proxies operate at Layer-7 (Application layer). Security tools must explicitly support SOCKS proxies, and tools that rely on raw packet crafting (like Nmap SYN scan `-sS`, masscan, or ICMP ping) fail completely.
+2. **The Ligolo-ng TUN Advantage**: By instantiating a virtual Layer-3 network device (`dev ligolo`) on Kali Linux, the operating system kernel handles the IP packet encapsulation. You add routes via `ip route add 172.16.1.0/24 dev ligolo`, allowing all native security tools to operate without `proxychains`!
+
+---
+
+## Attack Chain Interconnection: Traversing Deeply Segmented Enterprise Networks
+
+Pivoting is the logistical backbone of every advanced penetration test:
+
+```mermaid
+flowchart LR
+    Part5["Part 5: Local PrivEsc (SYSTEM on DMZ Server)"] -->|Enables TUN Interface Setup| Part6["Part 6: Configure Ligolo-ng Layer-3 Pivot"]
+    Part6 -->|Direct Access to Internal Subnet| Part4["Part 4: Attack Internal Active Directory Domain Controller"]
+    Part6 -->|Direct Access to Database Enclave| Part2["Part 2: Exploit Internal Legacy Services via BOF"]
+```
+
+* **Connection to Part 4 (Active Directory)**: Corporate Domain Controllers are rarely placed in internet-facing DMZs. Establishing a Ligolo-ng or Chisel tunnel in Part 6 allows you to run BloodHound, PowerView, and Kerberoasting against internal DCs from your Kali machine.
+* **Connection to Part 7 (Command & Control)**: When internal victim machines lack direct egress internet connectivity, you configure C2 internal redirectors or SMB named pipe listeners to pivot C2 beacons out through your established tunnels.
+
+---
+
+## Categorized References & Authoritative Sources
+
+### 1. Tunneling & Routing Repositories
+* **Ligolo-ng Repository & User Documentation**: [https://github.com/nico-cha/ligolo-ng](https://github.com/nico-cha/ligolo-ng).
+* **Chisel by Jaime Pillora**: Fast TCP/UDP tunnel over HTTP with SSH encryption. [https://github.com/jpillora/chisel](https://github.com/jpillora/chisel).
+* **Proxychains-ng (New Generation)**: Dynamic SOCKS proxy router. [https://github.com/rofl0r/proxychains-ng](https://github.com/rofl0r/proxychains-ng).
+
+### 2. Lateral Movement Tooling
+* **Evil-WinRM by Hackplayers**: The ultimate WinRM shell for offensive operations. [https://github.com/Hackplayers/evil-winrm](https://github.com/Hackplayers/evil-winrm).
+* **Impacket WMIExec & PsExec**: High-fidelity lateral movement scripts. [https://github.com/fortra/impacket](https://github.com/fortra/impacket).
+* **SANS Institute: Pivoting and Port Forwarding Cheat Sheet**: [https://www.sans.org/posters/pivoting-and-port-forwarding/](https://www.sans.org/posters/pivoting-and-port-forwarding/).
+
+### 3. MITRE ATT&CK Enterprise Techniques
+* **T1090**: Proxy (Multi-hop Proxies, External/Internal Proxies). [https://attack.mitre.org/techniques/T1090/](https://attack.mitre.org/techniques/T1090/).
+* **T1021**: Remote Services (SMB, WinRM, RDP). [https://attack.mitre.org/techniques/T1021/](https://attack.mitre.org/techniques/T1021/).
 
 ---
 

@@ -235,15 +235,52 @@ When operating against intrusion detection systems (Snort, Suricata) and restric
 
 ---
 
-## References & Further Reading
+---
 
-1. **Nmap Network Scanning: The Official Nmap Project Guide** by Gordon "Fyodor" Lyon.
-2. **RFC 793: Transmission Control Protocol Specification**: [https://tools.ietf.org/html/rfc793](https://tools.ietf.org/html/rfc793)
-3. **Responder Project Repository**: [https://github.com/SpiderLabs/Responder](https://github.com/SpiderLabs/Responder)
-4. **SecureAuth Impacket Repository**: [https://github.com/fortra/impacket](https://github.com/fortra/impacket)
-5. **MITRE ATT&CK Matrix**:
-   * Technique T1046: Network Service Discovery
-   * Technique T1557.001: LLMNR/NBT-NS Poisoning and SMB Relay
+## Visual Architecture: Network Reconnaissance & Attack Vectors
+
+The following diagram breaks down packet-level scanning mechanics alongside the operational execution flow of LLMNR/NBT-NS poisoning and real-time SMB relaying:
+
+![Network Penetration Testing: Discovery, Enumeration & MITM Attacks](/assets/images/posts/ecppt/part-3-diagram.png)
+
+### Key Architectural Observations from the Diagram:
+1. **Half-Open Advantage**: The SYN stealth scan never sends the final `ACK` packet. Because the TCP 3-way handshake is never completed, standard application socket APIs (such as `accept()`) never trigger, bypassing application-level connection logging.
+2. **Relay Prerequisite**: Notice that SMB Relaying requires **SMB Message Signing to be Disabled** on the target server. If signing is enforced, the target server verifies cryptographic signatures computed with the session key, causing the relayed authentication to fail.
+
+---
+
+## Attack Chain Interconnection: Propagating from Reconnaissance to Network Domination
+
+Network reconnaissance is the strategic engine that drives every subsequent phase of an engagement:
+
+```mermaid
+flowchart LR
+    Part3["Part 3: Network Recon & LLMNR Poisoning"] -->|Discovers Domain Controller & SPNs| Part4["Part 4: Active Directory Kerberos Exploitation"]
+    Part3 -->|Captures NetNTLMv2 Admin Hash| Part6["Part 6: Lateral Movement (Pass-the-Hash via WMIExec)"]
+    Part3 -->|Identifies Web Port 80/443| Part8["Part 8: Web Application Exploitation (SQLi / LFI)"]
+```
+
+* **Direct Feed into Part 4 (Active Directory)**: Network port scanning identifies the primary Domain Controllers (ports 88 Kerberos, 389 LDAP, 445 SMB) and enumerates service accounts configured with Service Principal Names (SPNs).
+* **Direct Feed into Part 6 (Pivoting & Lateral Movement)**: Discovering dual-homed hosts and extracting valid NetNTLMv2 hashes enables immediate lateral movement across internal subnets using Pass-the-Hash.
+
+---
+
+## Categorized References & Authoritative Sources
+
+### 1. Networking Standards & Official RFCs
+* **RFC 793**: Transmission Control Protocol (TCP) Specification. [https://www.rfc-editor.org/rfc/rfc793](https://www.rfc-editor.org/rfc/rfc793).
+* **RFC 1001 / 1002**: Protocol Standard for a NetBIOS Service on a TCP/UDP Transport.
+* **RFC 4795**: Link-Local Multicast Name Resolution (LLMNR). [https://www.rfc-editor.org/rfc/rfc4795](https://www.rfc-editor.org/rfc/rfc4795).
+
+### 2. Offensive Tooling Repositories
+* **Nmap Network Scanning**: Official Reference by Gordon "Fyodor" Lyon. [https://nmap.org/book/](https://nmap.org/book/).
+* **SpiderLabs Responder**: LLMNR/NBT-NS/MDNS poisoner and credential harvester. [https://github.com/SpiderLabs/Responder](https://github.com/SpiderLabs/Responder).
+* **SecureAuth Impacket Suite**: Python classes for working with network protocols. [https://github.com/fortra/impacket](https://github.com/fortra/impacket).
+
+### 3. MITRE ATT&CK Enterprise Techniques
+* **T1046**: Network Service Discovery. [https://attack.mitre.org/techniques/T1046/](https://attack.mitre.org/techniques/T1046/).
+* **T1557.001**: LLMNR/NBT-NS Poisoning and SMB Relay. [https://attack.mitre.org/techniques/T1557/001/](https://attack.mitre.org/techniques/T1557/001/).
+* **T1187**: Forced Authentication. [https://attack.mitre.org/techniques/T1187/](https://attack.mitre.org/techniques/T1187/).
 
 ---
 

@@ -288,15 +288,52 @@ su hacker
 
 ---
 
-## References & Further Reading
+---
 
-1. **GTFOBins Unix Binaries Privilege Escalation Reference**: [https://gtfobins.github.io/](https://gtfobins.github.io/)
-2. **LOLBAS Project (Living Off The Land Binaries and Scripts for Windows)**: [https://lolbas-project.github.io/](https://lolbas-project.github.io/)
-3. **PayloadsAllTheThings - Privilege Escalation**: [https://github.com/swisskyrepo/PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings)
-4. **HackTricks - Windows & Linux Local Privilege Escalation**: by Carlos Polop.
-5. **MITRE ATT&CK Matrix**:
-   * Technique T1548: Abuse Elevation Control Mechanism (Bypass UAC, SUID/SGID)
-   * Technique T1134: Access Token Manipulation
+## Visual Architecture: Privilege Escalation Primitives & Decision Engine
+
+The following diagram maps out the primary attack vectors across both operating systems alongside the Potato token impersonation architecture:
+
+![Windows & Linux Privilege Escalation: Primitives & Decision Engine](/assets/images/posts/ecppt/part-5-diagram.png)
+
+### Key Architectural Observations from the Diagram:
+1. **The Token Impersonation Pivot**: Service accounts (`LOCAL SERVICE`, `NETWORK SERVICE`, `IIS APPPOOL`) routinely possess `SeImpersonatePrivilege`. The "Potato" family exploits this by running a rogue local RPC listener, forcing a `SYSTEM` process (like DCOM or Print Spooler) to authenticate against it, and invoking `ImpersonateNamedPipeClient()` to grab the elevated token.
+2. **Linux Capability Granularity**: Linux capabilities bypass the binary all-or-nothing nature of SUID. When an administrator grants `cap_setuid+ep` to a scripting engine such as Python or Perl, it grants that process the absolute power to invoke `setuid(0)`, yielding immediate root access.
+
+---
+
+## Attack Chain Interconnection: Elevating to SYSTEM / Root to Enable Multi-Tier Pivoting
+
+Privilege escalation is the mandatory bridge between an initial foothold and lateral expansion:
+
+```mermaid
+flowchart LR
+    Part8["Part 8: Web Exploitation (webshell as www-data)"] -->|Initial Access| Part5["Part 5: Local Privilege Escalation (Root / SYSTEM)"]
+    Part5 -->|Enables Memory Dumping| Part4["Part 4: Extract LSASS Domain Admin Hashes"]
+    Part5 -->|Enables Interface Promiscuity| Part6["Part 6: Configure Ligolo-ng TUN Pivot Routes"]
+```
+
+* **Connection to Part 4 (Active Directory)**: Standard users cannot access the memory space of `lsass.exe`. Escalating to `NT AUTHORITY\SYSTEM` in Part 5 is required before invoking `Invoke-Mimikatz` or executing DCSync attacks.
+* **Connection to Part 6 (Pivoting)**: Creating virtual network TUN interfaces via `Ligolo-ng` or binding privileged raw sockets for packet forwarding requires root or administrative privileges on the pivot host.
+
+---
+
+## Categorized References & Authoritative Sources
+
+### 1. Curated Privilege Escalation Repositories
+* **GTFOBins**: Curated list of Unix binaries used to bypass local security restrictions. [https://gtfobins.github.io/](https://gtfobins.github.io/).
+* **LOLBAS Project**: Living Off The Land Binaries, Scripts, and Libraries for Windows. [https://lolbas-project.github.io/](https://lolbas-project.github.io/).
+* **PayloadsAllTheThings**: Comprehensive privilege escalation cheatsheets. [https://github.com/swisskyrepo/PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings).
+
+### 2. Exploit Source Code & Research
+* **PrintSpoofer by itm4n**: Named pipe impersonation exploit targeting `SeImpersonatePrivilege`. [https://github.com/itm4n/PrintSpoofer](https://github.com/itm4n/PrintSpoofer).
+* **GodPotato by BeichenDream**: Universal token impersonation targeting Windows Server 2012 through 2022. [https://github.com/BeichenDream/GodPotato](https://github.com/BeichenDream/GodPotato).
+* **PEASS-ng (WinPEAS & LinPEAS)**: Automated local privilege escalation scanners by Carlos Polop. [https://github.com/peass-ng/PEASS-ng](https://github.com/peass-ng/PEASS-ng).
+
+### 3. MITRE ATT&CK Enterprise Techniques
+* **T1548**: Abuse Elevation Control Mechanism (Bypass UAC, SUID/SGID). [https://attack.mitre.org/techniques/T1548/](https://attack.mitre.org/techniques/T1548/).
+* **T1134**: Access Token Manipulation. [https://attack.mitre.org/techniques/T1134/](https://attack.mitre.org/techniques/T1134/).
+* **T1574**: Hijack Execution Flow (DLL Search Order, PATH Hijacking). [https://attack.mitre.org/techniques/T1574/](https://attack.mitre.org/techniques/T1574/).
 
 ---
 

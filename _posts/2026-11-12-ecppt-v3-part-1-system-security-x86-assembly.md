@@ -291,13 +291,56 @@ gef➤ x/10i $eip
 
 ---
 
-## References & Further Reading
+---
 
-1. **Intel 64 and IA-32 Architectures Software Developer’s Manual**: Volumes 1, 2, and 3 (Intel Corporation).
-2. **Phrack Magazine Issue 49**: *Smashing The Stack For Fun And Profit* by Aleph One (1996).
-3. **GEF (GDB Enhanced Features) Official Documentation**: [https://hugsy.github.io/gef/](https://hugsy.github.io/gef/)
-4. **NASM (Netwide Assembler) Manual**: [https://www.nasm.us/doc/](https://www.nasm.us/doc/)
-5. **Practical Malware Analysis**: *The Hands-On Guide to Dissecting Malicious Software* by Michael Sikorski & Andrew Honig.
+## Visual Architecture: Process Memory & Stack Frame Layout
+
+The following technical diagram illustrates the complete memory mapping of a 32-bit process alongside the exact layer-by-layer anatomy of a function stack frame:
+
+![IA-32 Architecture: 32-bit Process Memory Layout & Stack Frame Anatomy](/assets/images/posts/ecppt/part-1-diagram.png)
+
+### Key Architectural Observations from the Diagram:
+1. **Memory Separation**: The 4 GB address space is bifurcated between User Space (`0x00000000` to `0xBFFFFFFF` on Linux, or `0x7FFFFFFF` on standard Windows) and Kernel Space (`0xC0000000` to `0xFFFFFFFF`). User code cannot dereference Kernel page tables without generating an immediate `Access Violation (0xC0000005)` fault.
+2. **Opposing Memory Growth**: The stack expands downward toward lower numerical memory addresses as items are pushed, while the dynamic heap expands upward toward higher memory addresses. This architectural decision preserves maximum contiguous unallocated space for runtime execution.
+3. **The Exploit Bridge**: Notice how local variables at `[ebp - X]` sit directly adjacent to the `Saved EBP` and `Saved EIP` slots at `[ebp + 4]`. Because memory copy routines write from lower addresses toward higher addresses, any unbounded string copy into the local buffer inherently overwrites the return pointer.
+
+---
+
+## Attack Chain Interconnection: Bridging Assembly to the Penetration Testing Lifecycle
+
+Low-level assembly language and memory architecture are not isolated theoretical concepts; they form the operational foundation of the entire offensive assessment lifecycle:
+
+```mermaid
+flowchart LR
+    Part1["Part 1: x86 Architecture & Stack Frames"] -->|Direct Foundation| Part2["Part 2: Custom Buffer Overflows & SEH Exploits"]
+    Part1 -->|Memory Primitives| Part10["Part 10: In-Memory AMSI Patching via Reflection"]
+    Part2 -->|Yields Initial Shell| Part5["Part 5: Local Privilege Escalation (SYSTEM / Root)"]
+    Part5 -->|Enables Routing & Injections| Part6["Part 6: Multi-Tier Network Pivoting"]
+```
+
+* **Direct Feed into Part 2 (Exploit Development)**: Understanding that `EIP` points to the next executable instruction and that the stack pointer `ESP` can be referenced via `JMP ESP` instructions allows us to calculate exact byte offsets and construct weaponized stack buffer overflows.
+* **Direct Feed into Part 10 (AMSI Evasion)**: In-memory memory patching techniques (such as replacing `AmsiScanBuffer` with `mov eax, 0x80070057; ret`) require understanding x86/x64 calling conventions and instruction byte opcodes.
+
+---
+
+## Categorized References & Authoritative Sources
+
+### 1. Official Architecture & Compiler Specifications
+* **Intel 64 and IA-32 Architectures Software Developer’s Manual**: Volumes 1, 2A-2D, and 3A-3D. [Intel Corporation Documentation](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html).
+* **System V Application Binary Interface**: *Intel386 Architecture Processor Supplement (Fourth Edition)*.
+* **Microsoft Learn: x86 Calling Conventions**: [https://learn.microsoft.com/en-us/cpp/cpp/argument-passing-and-naming-conventions](https://learn.microsoft.com/en-us/cpp/cpp/argument-passing-and-naming-conventions).
+
+### 2. Seminal Security Research & Whitepapers
+* **Phrack Magazine Issue 49**: *Smashing The Stack For Fun And Profit* by Aleph One (1996). [http://phrack.org/issues/49/14.html](http://phrack.org/issues/49/14.html).
+* **OpenSecurityTraining2**: *Architecture 1001: x86-64 Assembly* by Xeno Kovah. [https://ost2.fyi/](https://ost2.fyi/).
+
+### 3. MITRE ATT&CK Enterprise Techniques
+* **T1203**: Exploitation for Client Execution. [https://attack.mitre.org/techniques/T1203/](https://attack.mitre.org/techniques/T1203/).
+* **T1055**: Process Injection. [https://attack.mitre.org/techniques/T1055/](https://attack.mitre.org/techniques/T1055/).
+
+### 4. Interactive Practice Labs & Tooling
+* **GEF (GDB Enhanced Features)**: Modern debugging environment for exploit developers. [https://github.com/hugsy/gef](https://github.com/hugsy/gef).
+* **OverTheWire Wargames: Narnia & Protostar**: Classic hands-on binary exploitation practice. [https://overthewire.org/wargames/narnia/](https://overthewire.org/wargames/narnia/).
 
 ---
 

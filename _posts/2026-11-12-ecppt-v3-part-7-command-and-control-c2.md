@@ -201,16 +201,52 @@ To ensure robust offensive hygiene, operators must understand the telemetry sign
 
 ---
 
-## References & Further Reading
+---
 
-1. **The C2 Matrix Project** by Jorge Orchilles: [https://www.thec2matrix.com/](https://www.thec2matrix.com/)
-2. **BC-Security PowerShell-Empire & Starkiller Documentation**: [https://bc-security.gitbook.io/empire-wiki/](https://bc-security.gitbook.io/empire-wiki/)
-3. **BishopFox Sliver C2 Framework**: [https://github.com/BishopFox/sliver](https://github.com/BishopFox/sliver)
-4. **Red Team Infrastructure Wiki**: *Automated C2 Redirection with Apache and Nginx*.
-5. **MITRE ATT&CK Matrix**:
-   * Technique T1071: Application Layer Protocol (Web, DNS)
-   * Technique T1090.004: Domain Fronting
-   * Technique T1027: Obfuscated/Encrypted Payloads
+## Visual Architecture: Resilient Multi-Tier C2 Infrastructure
+
+The following diagram maps out the tiered defense evasion architecture utilized in modern red team operations, combining CDN edge workers, Apache `mod_rewrite` redirectors, and team servers:
+
+![Resilient C2 Architecture: Tiered Redirectors, Domain Fronting & OpSec](/assets/images/posts/ecppt/part-7-diagram.png)
+
+### Key Architectural Observations from the Diagram:
+1. **Sacrificial Edge Layer**: Frontline redirectors bear all the risk. If a threat hunter discovers a beacon IP address and blacklists it, only the disposable redirector is burned. The core team server remains completely hidden on a private WireGuard VPN subnet.
+2. **The Malleable Profile**: C2 communications are customized to blend with benign background traffic. HTTP headers, cookies, URIs, and POST parameters are disguised to emulate legitimate enterprise web applications (such as Microsoft Office 365 or Google Analytics telemetry).
+
+---
+
+## Attack Chain Interconnection: Orchestrating Stealthy Campaign Persistence
+
+Command and Control (C2) provides the command infrastructure that powers post-exploitation:
+
+```mermaid
+flowchart LR
+    Part7["Part 7: Multi-Tier C2 Infrastructure (Empire/Starkiller)"] -->|Generates Obfuscated Stagers| Part9["Part 9: Weaponized Phishing & HTML Smuggling Payloads"]
+    Part9 -->|Executes in Victim Memory| Part10["Part 10: In-Memory AMSI Bypass & PowerSploit"]
+    Part10 -->|Maintains Persistent Beacon| Part7Checkin["Steady C2 Agent Session Established!"]
+```
+
+* **Connection to Part 9 (Client-Side Attacks)**: The listeners configured in Part 7 generate the stager payloads embedded into VBA Office macros and HTML Smuggling downloads in Part 9.
+* **Connection to Part 10 (PowerShell for Pentesters)**: The Empire agent executes in-memory PowerShell commands. Combining Empire with in-memory AMSI patching in Part 10 guarantees that Windows Defender will not kill the agent process upon check-in.
+
+---
+
+## Categorized References & Authoritative Sources
+
+### 1. C2 Evaluation & Modern Frameworks
+* **The C2 Matrix Project** by Jorge Orchilles: Comprehensive taxonomy of C2 frameworks. [https://www.thec2matrix.com/](https://www.thec2matrix.com/).
+* **BC-Security PowerShell-Empire & Starkiller Documentation**: [https://bc-security.gitbook.io/empire-wiki/](https://bc-security.gitbook.io/empire-wiki/).
+* **BishopFox Sliver C2 Framework**: Cross-platform open-source C2. [https://github.com/BishopFox/sliver](https://github.com/BishopFox/sliver).
+
+### 2. Red Team Infrastructure & OpSec Research
+* **Red Team Infrastructure Wiki**: *Automated C2 Redirection with Apache and Nginx* by Steve Borosh & Jeff Dimmock. [https://github.com/bluscreenofjeff/Red-Team-Infrastructure-Wiki](https://github.com/bluscreenofjeff/Red-Team-Infrastructure-Wiki).
+* **Salesforce Engineering: Open-Sourcing JA3 & JA3S**: TLS client and server fingerprinting for threat detection.
+* **Malleable C2 Profiles Reference Guide**: Customizing beacon telemetry syntax.
+
+### 3. MITRE ATT&CK Enterprise Techniques
+* **T1071**: Application Layer Protocol (Web Protocols, DNS). [https://attack.mitre.org/techniques/T1071/](https://attack.mitre.org/techniques/T1071/).
+* **T1090.004**: Proxy: Domain Fronting. [https://attack.mitre.org/techniques/T1090/004/](https://attack.mitre.org/techniques/T1090/004/).
+* **T1027**: Obfuscated/Encrypted Payloads. [https://attack.mitre.org/techniques/T1027/](https://attack.mitre.org/techniques/T1027/).
 
 ---
 

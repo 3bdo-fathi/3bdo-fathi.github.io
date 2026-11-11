@@ -250,16 +250,53 @@ However, when files are encapsulated inside an **ISO** or **VHD** container, Win
 
 ---
 
-## References & Further Reading
+---
 
-1. **GoPhish Official Framework Documentation**: [https://getgophish.com/documentation/](https://getgophish.com/documentation/)
-2. **MacroPack by Sevagas**: [https://github.com/sevagas/macro_pack](https://github.com/sevagas/macro_pack)
-3. **Outflank - HTML Smuggling Techniques & Evasion Research**.
-4. **Robert Cialdini's "Influence: The Psychology of Persuasion"**.
-5. **MITRE ATT&CK Matrix**:
-   * Technique T1566: Phishing (Spearphishing Attachment, Spearphishing Link)
-   * Technique T1204.002: User Execution: Malicious File
-   * Technique T1027.006: HTML Smuggling
+## Visual Architecture: Client-Side Weaponization & Delivery Pipeline
+
+The following technical diagram details the 4-phase client-side attack lifecycle, from psychological pretexting and email deliverability alignment to HTML Smuggling and container-based MOTW evasion:
+
+![Client-Side Attack Architecture: Weaponization, Delivery & MOTW Evasion](/assets/images/posts/ecppt/part-9-diagram.png)
+
+### Key Architectural Observations from the Diagram:
+1. **The HTML Smuggling Delivery Mechanism**: By generating a dynamic file inside a JavaScript `Blob` and triggering a synthetic `a.click()` event, the file is assembled directly in browser memory. Perimeter web filtering appliances inspect the HTTP transmission and see only benign HTML and JavaScript, completely failing to detect the compiled executable or ISO container crossing the perimeter.
+2. **The MOTW Container Bypass**: Standard files downloaded via web browsers inherit the NTFS `Zone.Identifier=3` alternate data stream. Encapsulating payloads inside an `.iso` container ensures that when a victim double-clicks to mount the ISO, Windows Explorer assigns it a virtual drive letter, stripping the zone flag from files inside!
+
+---
+
+## Attack Chain Interconnection: Bypassing Perimeter Defenses to Deliver C2 Implants
+
+Client-side attacks represent the ultimate initial access vector when server-side perimeters are impenetrable:
+
+```mermaid
+flowchart LR
+    Part9["Part 9: Phishing / HTML Smuggling Weaponization"] -->|Victim Executes Container Payload| Part7["Part 7: First C2 Beacon Checks into Team Server"]
+    Part7 -->|Injects In-Memory Commands| Part10["Part 10: In-Memory AMSI Bypass & PowerSploit"]
+    Part10 -->|Dumps Domain Credentials| Part4["Part 4: Lateral Domain Dominance (Active Directory)"]
+```
+
+* **Connection to Part 7 (C2 Infrastructure)**: The payload delivered by your HTML Smuggling or VBA macro is configured to establish a reverse HTTPS beacon back to the multi-tier C2 redirectors built in Part 7.
+* **Connection to Part 10 (PowerShell for Pentesters)**: Windows endpoints are equipped with Windows Defender and AMSI. Delivering a PowerShell stager via client-side phishing requires executing the in-memory AMSI memory patch from Part 10 to prevent Defender from killing the process upon arrival.
+
+---
+
+## Categorized References & Authoritative Sources
+
+### 1. Phishing & Weaponization Tooling
+* **GoPhish Official Framework Documentation**: [https://getgophish.com/documentation/](https://getgophish.com/documentation/).
+* **MacroPack by Sevagas**: Automated Office document weaponization and macro obfuscation. [https://github.com/sevagas/macro_pack](https://github.com/sevagas/macro_pack).
+* **Outflank Research: HTML Smuggling**: Deep-dive analysis of browser blob assembly. [https://outflank.nl/blog/2020/08/18/html-smuggling/](https://outflank.nl/blog/2020/08/18/html-smuggling/).
+
+### 2. Email Deliverability RFC Specifications
+* **RFC 7208**: Sender Policy Framework (SPF) for Authorizing Email Senders.
+* **RFC 6376**: DomainKeys Identified Mail (DKIM) Signatures.
+* **RFC 7489**: Domain-based Message Authentication, Reporting, and Conformance (DMARC).
+
+### 3. MITRE ATT&CK Enterprise Techniques
+* **T1566.001**: Phishing: Spearphishing Attachment. [https://attack.mitre.org/techniques/T1566/001/](https://attack.mitre.org/techniques/T1566/001/).
+* **T1566.002**: Phishing: Spearphishing Link. [https://attack.mitre.org/techniques/T1566/002/](https://attack.mitre.org/techniques/T1566/002/).
+* **T1204.002**: User Execution: Malicious File. [https://attack.mitre.org/techniques/T1204/002/](https://attack.mitre.org/techniques/T1204/002/).
+* **T1027.006**: HTML Smuggling. [https://attack.mitre.org/techniques/T1027/006/](https://attack.mitre.org/techniques/T1027/006/).
 
 ---
 

@@ -202,15 +202,51 @@ When applications pass user input to system shells (e.g., executing `system("pin
 
 ---
 
-## References & Further Reading
+---
 
-1. **OWASP Web Security Testing Guide (WSTG v4.2)**: [https://owasp.org/www-project-web-security-testing-guide/](https://owasp.org/www-project-web-security-testing-guide/)
-2. **PortSwigger Web Security Academy**: [https://portswigger.net/web-security](https://portswigger.net/web-security)
-3. **PayloadsAllTheThings - Web Exploitation Repository**: [https://github.com/swisskyrepo/PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings)
-4. **SecLists Fuzzing & Discovery Wordlists** by Daniel Miessler: [https://github.com/danielmiessler/SecLists](https://github.com/danielmiessler/SecLists)
-5. **MITRE ATT&CK Matrix**:
-   * Technique T1190: Exploit Public-Facing Application
-   * Technique T1059.006: Command and Scripting Interpreter: Python/PHP
+## Visual Architecture: OWASP WSTG Exploitation Matrix
+
+The following technical diagram details the exploitation workflows for Union-Based SQL Injection, Local File Inclusion to RCE via Log Poisoning, and multi-layer file upload filter evasion:
+
+![Web Application Penetration Testing: OWASP WSTG Exploitation Matrix](/assets/images/posts/ecppt/part-8-diagram.png)
+
+### Key Architectural Observations from the Diagram:
+1. **The Log Poisoning Mechanism**: Web servers log incoming request metadata into filesystem flat files (e.g. `access.log`). If an application contains an LFI vulnerability and has read permissions over the log file, injecting executable code into the `User-Agent` HTTP header causes the PHP interpreter to parse the log contents as code when included.
+2. **Image Polyglot Defense Bypass**: Simple extension changes (`.php.jpg`) are often blocked by validation routines that check the initial byte sequence ("Magic Bytes"). By injecting a webshell into a legitimate JPEG's comment block via `exiftool`, the file satisfies both extension checks and binary magic byte inspections.
+
+---
+
+## Attack Chain Interconnection: Transforming Web Access into Internal Network Compromise
+
+Web application security testing is the primary vector for establishing the initial foothold:
+
+```mermaid
+flowchart LR
+    Part8["Part 8: Web Pentesting (LFI Log Poisoning / SQLi)"] -->|Yields Web Shell as www-data| Part5["Part 5: Linux Privilege Escalation (to root)"]
+    Part5 -->|Discovers Internal Network Interfaces| Part6["Part 6: Multi-Tier Pivoting into Internal LAN"]
+    Part6 -->|Scans Internal Windows Subnet| Part3["Part 3: Network Attacks & Active Directory"]
+```
+
+* **Connection to Part 5 (Privilege Escalation)**: Gaining a webshell gives you code execution under the `www-data` or `apache` user account. You immediately transition to Part 5's Linux Privilege Escalation Playbook (SUID binaries, sudo rules) to gain root.
+* **Connection to Part 6 (Pivoting)**: Production web servers reside in the corporate DMZ. Once you gain root on the web server, you configure a Ligolo-ng TUN interface in Part 6 to pivot straight into the company's internal network.
+
+---
+
+## Categorized References & Authoritative Sources
+
+### 1. Industry Standards & Testing Methodologies
+* **OWASP Web Security Testing Guide (WSTG v4.2)**: The comprehensive guide for testing web applications. [https://owasp.org/www-project-web-security-testing-guide/](https://owasp.org/www-project-web-security-testing-guide/).
+* **OWASP Application Security Verification Standard (ASVS)**: Architectural security framework. [https://owasp.org/www-project-application-security-verification-standard/](https://owasp.org/www-project-application-security-verification-standard/).
+* **OWASP Top 10:2021**: The official list of critical web security risks. [https://owasp.org/Top10/](https://owasp.org/Top10/).
+
+### 2. Hands-on Training & Exploitation Dictionaries
+* **PortSwigger Web Security Academy**: Free, interactive web security labs and learning materials. [https://portswigger.net/web-security](https://portswigger.net/web-security).
+* **PayloadsAllTheThings - Web Exploitation Repository**: Curated cheat sheets for SQLi, LFI, SSRF, and file uploads. [https://github.com/swisskyrepo/PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings).
+* **SecLists Fuzzing Dictionaries by Daniel Miessler**: Comprehensive wordlists for directory discovery. [https://github.com/danielmiessler/SecLists](https://github.com/danielmiessler/SecLists).
+
+### 3. MITRE ATT&CK Enterprise Techniques
+* **T1190**: Exploit Public-Facing Application. [https://attack.mitre.org/techniques/T1190/](https://attack.mitre.org/techniques/T1190/).
+* **T1059.006**: Command and Scripting Interpreter: Python/PHP. [https://attack.mitre.org/techniques/T1059/006/](https://attack.mitre.org/techniques/T1059/006/).
 
 ---
 
