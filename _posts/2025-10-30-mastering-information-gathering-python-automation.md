@@ -2,7 +2,7 @@
 title: "Building a Python-Based System Information Gathering Tool"
 date: 2025-10-30 16:03:00 +0300
 categories: [Cyber Security, Network Security]
-tags: [ python, reconnaissance, pentesting, nmap, shodan, whois, osint ]
+tags: [python, reconnaissance, pentesting, nmap, shodan, whois, osint, information-gathering, network-scanning, cyber-security]
 description: "A comprehensive guide to automating network reconnaissance, port scanning, system enumeration, and service discovery using Python and Nmap."
 image:
   path: /assets/images/posts/automation/python-sysinfo-cover.png

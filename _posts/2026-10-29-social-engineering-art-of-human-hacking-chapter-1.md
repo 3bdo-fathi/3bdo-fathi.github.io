@@ -2,7 +2,7 @@
 title: "Book Summary: Social Engineering - The Art of Human Hacking (Chapter 1)"
 date: 2026-10-29 09:00:00 +0300
 categories: [Cyber Security, Social Engineering]
-tags: [social-engineering, human-hacking, osint, security-awareness, book-summary, christopher-hadnagy, pentesting]
+tags: [social-engineering, human-hacking, osint, security-awareness, book-summary, christopher-hadnagy, pentesting, cyber-security]
 description: "An in-depth summary and technical breakdown of Chapter 1 of Christopher Hadnagy's classic 'Social Engineering: The Art of Human Hacking', analyzing the anatomy of human deception, attacker ROI, real-world case studies, and the core Social Engineering Framework."
 image:
   path: /assets/images/posts/social-engineering/chapter-1-cover.png

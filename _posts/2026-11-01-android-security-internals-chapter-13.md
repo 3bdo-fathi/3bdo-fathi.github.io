@@ -2,7 +2,7 @@
 title: "Android Security Internals: Chapter 13 - System Updates and Root Access"
 date: 2026-11-01 21:00:00 +0300
 categories: [Cyber Security, Android Security]
-tags: [android, mobile security, internals, root, ota, recovery, exploits, supersu, magisk, kernelsu, play-integrity]
+tags: [android, mobile-security, internals, root, ota, recovery, exploits, supersu, magisk, kernelsu, play-integrity, android-security, cyber-security]
 description: "A comprehensive technical conclusion analyzing Chapter 13 of Nikolay Elenkov's 'Android Security Internals', covering Recovery OS mechanics, OTA update verification, privilege escalation exploits, su daemons, Magisk systemless root, and KernelSU."
 image:
   path: /assets/images/posts/android-security/chapter-13-cover.png

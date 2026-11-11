@@ -2,7 +2,7 @@
 title: "Android Security Internals: Chapter 6 - Network Security and PKI"
 date: 2026-11-01 14:00:00 +0300
 categories: [Cyber Security, Android Security]
-tags: [android, mobile security, internals, network-security, pki, tls, ssl, certificate-pinning, mitm, frida, mastg]
+tags: [android, mobile-security, internals, network-security, pki, tls, ssl, certificate-pinning, mitm, frida, mastg, android-security, cyber-security]
 description: "A deep technical exploration of Chapter 6 of Nikolay Elenkov's 'Android Security Internals', dissecting Android's TLS/SSL stack, TrustManager validation, system CA stores, certificate pinning, and MITM interception vectors with Frida bypass scripts."
 image:
   path: /assets/images/posts/android-security/chapter-6-cover.png

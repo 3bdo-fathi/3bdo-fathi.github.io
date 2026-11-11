@@ -14,7 +14,7 @@
             {{ site.avatar | relative_url }}
           {%- endif -%}
         {% endcapture %}
-        <img src="{{ avatar_url | strip }}" width="100" height="100" alt="avatar" onerror="this.style.display='none'">
+        <img src="{{ avatar_url | strip }}" width="124" height="124" alt="avatar" onerror="this.style.display='none'">
       {% endif %}
     </a>
 
@@ -110,14 +110,24 @@
     }
 
     #sidebar #avatar {
-      width: 96px !important;
-      height: 96px !important;
-      margin: 0 auto 0.75rem !important;
+      width: 124px !important;
+      height: 124px !important;
+      margin: 0 auto 0.85rem !important;
       display: block !important;
+      border-radius: 50% !important;
       border: 2px solid rgba(255, 255, 255, 0.15) !important;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45) !important;
       transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease !important;
       overflow: hidden !important;
+    }
+
+    #sidebar #avatar img {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      border-radius: 50% !important;
+      display: block !important;
+      transition: transform 300ms ease !important;
     }
 
     #sidebar #avatar:hover {
@@ -150,19 +160,28 @@
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
-      flex-wrap: wrap !important;
+      flex-wrap: nowrap !important;
+      white-space: nowrap !important;
       gap: 0.3rem !important;
-      font-size: 0.8rem !important;
+      font-size: 0.72rem !important;
       font-weight: 500 !important;
       color: #8b949e !important;
       line-height: 1.35 !important;
-      letter-spacing: -0.01em !important;
-      padding: 0 0.5rem !important;
+      letter-spacing: -0.015em !important;
+      padding: 0 0.25rem !important;
+      width: 100% !important;
+    }
+
+    .site-role-primary,
+    .site-role-secondary {
+      white-space: nowrap !important;
+      display: inline-block !important;
     }
 
     .site-role-divider {
       opacity: 0.45 !important;
-      font-size: 0.7rem !important;
+      font-size: 0.65rem !important;
+      user-select: none !important;
     }
 
     /* 2. Spacing: Reduced Gap between Profile Header and Menu (24-32px) */
@@ -385,6 +404,18 @@
     /* ==========================================================================
        Light Theme Adaptations (Clean Crisp Editorial Consistency)
        ========================================================================== */
+    html[data-mode="light"] #sidebar #avatar,
+    html[data-bs-theme="light"] #sidebar #avatar {
+      border: 3px solid #ffffff !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.06) !important;
+    }
+
+    html[data-mode="light"] #sidebar #avatar:hover,
+    html[data-bs-theme="light"] #sidebar #avatar:hover {
+      border-color: #0969da !important;
+      box-shadow: 0 6px 20px rgba(9, 105, 218, 0.18) !important;
+    }
+
     html[data-mode="light"] #sidebar .site-title a,
     html[data-bs-theme="light"] #sidebar .site-title a {
       color: #1f2328 !important;

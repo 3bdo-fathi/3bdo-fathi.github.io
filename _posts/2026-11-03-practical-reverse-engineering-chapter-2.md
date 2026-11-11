@@ -2,7 +2,7 @@
 title: "Practical Reverse Engineering: Chapter 2 - ARM Architecture and Assembly"
 date: 2026-11-03 11:00:00 +0300
 categories: [Cyber Security, Reverse Engineering]
-tags: [ reverse-engineering, arm, thumb-2, aapcs, barrel-shifter, coprocessor, cache-coherency, arm64, ida-pro, ghidra, assembly ]
+tags: [reverse-engineering, arm, thumb-2, aapcs, barrel-shifter, coprocessor, cache-coherency, arm64, ida-pro, ghidra, assembly, cyber-security, binary-analysis]
 description: "An exhaustive technical breakdown of Chapter 2 of 'Practical Reverse Engineering' by Bruce Dang et al., analyzing the ARM RISC architecture, 8 privilege modes, Thumb-2, barrel shifter, coprocessors, unk_function decompilation, and complete exercise solutions."
 image:
   path: /assets/images/posts/reverse-engineering/chapter-2-cover.png
@@ -518,6 +518,40 @@ if (r0 <= 100) {
 In this chapter, we explored the RISC mechanics of ARM: execution states, barrel-shifted arithmetic, coprocessor controls, structure recovery from disassembled Thumb-2 listings, and cache coherency.
 
 In [**Chapter 3: The Windows Kernel & Rootkits**](/posts/practical-reverse-engineering-chapter-3/), we dive into the internal architecture of the Windows NT kernel: `KPCR`, `EPROCESS`, system call dispatching, IRQL levels, pool allocations, IRP handling, and analyzing real-world x86 and x64 rootkits.
+
+---
+
+## Practical ARM Reverse Engineering Cheat-Sheet & Command Reference
+
+| Action / Verification | GDB-Multiarch / Radare2 Command | Disassembly / Binary Clue | Operational Purpose |
+| :--- | :--- | :--- | :--- |
+| **Inspect Thumb State** | `info reg $cpsr` | Bit 5 (T-bit) = 1 | Verifies CPU is decoding 16/32-bit Thumb-2 instructions |
+| **Check Return Address** | `print/x $lr` | `BL` / `BLX` overwrites LR | Tracks call graphs and detects stack canary corruption |
+| **Disassemble ARM Binary** | `arm-linux-gnueabihf-objdump -d target` | Variable vs. 4-byte aligned | Dumps symbol tables and interleaved ARM/Thumb routines |
+| **Emulate in QEMU** | `qemu-arm -g 1234 -L /usr/arm-linux-gnueabi/ target` | `gdb-multiarch -ex "target remote :1234"` | Allows dynamic stepping through ARM binaries on x86_64 host |
+
+---
+
+## Categorized References & Authoritative Reading
+
+### 1. Primary Academic & Industry Reference Works
+* Dang, Bruce, Alexandre Gazet, Elias Bachaalany, and Sébastien Josse. *Practical Reverse Engineering: x86, x64, ARM, Windows Kernel, Reversing Tools, and Obfuscation*. Wiley, 2014. Chapter 2: "ARM", pp. 63–114.
+* Seal, David. *ARM Architecture Reference Manual (ARMv7-A and ARMv7-R edition)*. ARM Limited / Addison-Wesley.
+* Sloss, Andrew, Dominic Symes, and Chris Wright. *ARM System Developer's Guide: Designing and Optimizing System Software*. Morgan Kaufmann.
+
+### 2. Official Platform & Architecture Specifications
+* **ARM Developer Suite**: *Procedure Call Standard for the ARM Architecture (AAPCS)*. [ARM Architecture Specifications](https://developer.arm.com/documentation/ihi0042/latest/).
+* **Linux Kernel Documentation**: *ARM Memory Management & Cache Coherency Architecture*. [https://www.kernel.org/doc/html/latest/arm/](https://www.kernel.org/doc/html/latest/arm/).
+
+### 3. MITRE ATT&CK Mobile & Enterprise Mapping
+* **T1418**: Software Discovery (Probing architecture features and ARM NEON coprocessor presence).
+* **T1562.001**: Impair Defenses: Disable or Modify Tools (Patching conditional execution flags in memory).
+* **T1055.002**: Process Injection: Portable Executable / ELF Injection.
+
+### 4. Hands-on Practice Labs & Verification Tooling
+* **Azeria Labs**: *ARM Assembly Basics & Exploit Development Tutorial Series*. [https://azeria-labs.com/](https://azeria-labs.com/).
+* **QEMU System and User-Mode Emulator**: Cross-architecture binary testing and debugging. [https://www.qemu.org/](https://www.qemu.org/).
+* **Cutter (powered by Rizin)**: GUI reverse engineering platform with excellent ARM/AArch64 decompilation. [https://cutter.re/](https://cutter.re/).
 
 ---
 

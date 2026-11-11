@@ -1,0 +1,60 @@
+# ==============================================================================
+# Contributors & Guest Authors Directory
+# Add any researcher or guest author who publishes or collaborates on this blog.
+# ==============================================================================
+
+- id: "ahmed-hassan"
+  name: "Ahmed Hassan"
+  handle: "@0x_ahmed"
+  role: "Senior Penetration Tester & Red Teamer"
+  badge: "Featured Contributor"
+  badge_color: "#38bdf8"
+  avatar: "/assets/images/site/avatar.jpg"
+  featured: true
+  message: "كل الشكر والتقدير للصديق العزيز أحمد على مساهمته القيمة في إثراء مقالات الـ Active Directory Attacks والـ Privilege Escalation، ونقل خبرته العملية الميدانية في اختبار الاختراق المتقدم بكل إخلاص وتفانٍ."
+  message_en: "Deep gratitude to Ahmed for his exceptional technical contributions to our Active Directory Kerberos exploitation series and real-world red teaming playbooks."
+  contributions:
+    - title: "Active Directory Kerberos Attacks & Pivoting Deep-Dive"
+      url: "/posts/ecppt-v3-part-4-active-directory-penetration-testing/"
+      date: "Nov 2026"
+  social:
+    linkedin: "https://www.linkedin.com/"
+    github: "https://github.com/"
+    twitter: "https://x.com/"
+
+- id: "mahmoud-salem"
+  name: "Mahmoud Salem"
+  handle: "@msalem_sec"
+  role: "Mobile Security Researcher & Malware Analyst"
+  badge: "Guest Author"
+  badge_color: "#10b981"
+  avatar: ""
+  featured: true
+  message: "خالص امتناني وتقديري لمحمود على شروحاته الدقيقة في هندسة تطبيقات الأندرويد العكسية وتخطي حمايات الـ SSL Pinning المتقدمة باستخدام Frida و Objection، وجهوده المستمرة في دعم الباحثين الجدد."
+  message_en: "Heartfelt appreciation to Mahmoud for authoring hands-on mobile dynamic instrumentation guides and sharing cutting-edge Frida hooking techniques."
+  contributions:
+    - title: "Mobile Security Playbook: Advanced TLS Pinning Bypass"
+      url: "/posts/mobile-pentesting-playbook-tls-pinning-bypass/"
+      date: "Nov 2026"
+  social:
+    linkedin: "https://www.linkedin.com/"
+    github: "https://github.com/"
+
+- id: "karim-adel"
+  name: "Karim Adel"
+  handle: "@k_adel_re"
+  role: "Binary Exploitation & Reverse Engineer"
+  badge: "Technical Reviewer"
+  badge_color: "#a855f7"
+  avatar: ""
+  featured: false
+  message: "شكر خاص لكريم على مراجعته التقنية الدقيقة لسلسلة الـ Practical Reverse Engineering وتدقيق شروحات الـ Assembly والـ Calling Conventions، مما رفع جودة المحتوى وموثوقيته العلمية."
+  message_en: "Special thanks to Karim for rigorously auditing the low-level assembly and Windows kernel disassembly teardowns across our reverse engineering series."
+  contributions:
+    - title: "Practical Reverse Engineering: Architecture & Stack Frames"
+      url: "/posts/practical-reverse-engineering-chapter-1/"
+      date: "Nov 2026"
+  social:
+    linkedin: "https://www.linkedin.com/"
+    github: "https://github.com/"
+

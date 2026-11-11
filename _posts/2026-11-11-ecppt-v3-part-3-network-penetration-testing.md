@@ -1,8 +1,8 @@
 ---
 title: "eCPPT Deep-Dive: Part 3 - Network Penetration Testing: Discovery, Enumeration & Network Attacks"
-date: 2026-11-12 10:00:00 +0300
+date: 2026-11-11 10:00:00 +0300
 categories: [Cyber Security, Penetration Testing]
-tags: [ecppt, network-pentesting, nmap, reconnaissance, responder, llmnr, smb-relay, enumeration]
+tags: [ecppt, network-pentesting, nmap, reconnaissance, responder, llmnr, smb-relay, enumeration, penetration-testing, cyber-security, red-team]
 description: "An exhaustive technical breakdown of Part 3 of the eCPPT curriculum: multi-layer host discovery, Nmap TCP SYN vs Connect scan internals, deep protocol enumeration (SNMP, DNS, SMB), LLMNR/NBT-NS poisoning with Responder, and SMB Relay attacks with ntlmrelayx."
 image:
   path: /assets/images/posts/ecppt/part-3-cover.png

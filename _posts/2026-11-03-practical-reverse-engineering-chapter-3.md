@@ -2,7 +2,7 @@
 title: "Practical Reverse Engineering: Chapter 3 - The Windows Kernel and Rootkit Analysis"
 date: 2026-11-03 13:00:00 +0300
 categories: [Cyber Security, Reverse Engineering]
-tags: [ reverse-engineering, windows-kernel, rootkits, kpcr, ssdt-hooking, irql, irp, ioctl, dkom, windbg, kernel-drivers, ida-pro ]
+tags: [reverse-engineering, windows-kernel, rootkits, kpcr, ssdt-hooking, irql, irp, ioctl, dkom, windbg, kernel-drivers, ida-pro, cyber-security, binary-analysis]
 description: "An exhaustive technical breakdown of Chapter 3 of 'Practical Reverse Engineering' by Bruce Dang et al., analyzing Windows kernel architecture, KPCR, system call dispatching, IRQL rules, IRP handling, IOCTL methods, x86/x64 rootkit walk-throughs, and complete exercise solutions."
 image:
   path: /assets/images/posts/reverse-engineering/chapter-3-cover.png
@@ -461,6 +461,41 @@ NTSTATUS InsecureDispatchDeviceControl(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 In this chapter, we unpacked the Windows kernel architecture: processor control regions, system call dispatching, IRQL constraints, IRP handling, and rootkit techniques across x86 and x64.
 
 In [**Chapter 4: Windows Debugging & Automation**](/posts/practical-reverse-engineering-chapter-4/), we transition into dynamic analysis: mastering WinDbg, conditional breakpoints, pseudo-registers, DbgEng scripting, automated unpacking of protectors like UPX, and writing custom debugger extensions.
+
+---
+
+## Practical Windows Kernel Analysis Cheat-Sheet (WinDbg KD)
+
+| Inspection Target | WinDbg Kernel Command | Target Kernel Structure | Security Purpose |
+| :--- | :--- | :--- | :--- |
+| **Inspect Active Processes** | `!process 0 0` | `nt!_EPROCESS` | Enumerates all running processes, PIDs, and token pointers |
+| **Audit Unlinked Threads** | `!process 0 4 <Process>` | `nt!_ETHREAD` | Exposes DKOM-hidden malware processes via active threads |
+| **Check Driver Dispatchers** | `!drvobj <DriverName> 2` | `nt!_DRIVER_OBJECT` | Audits `MajorFunction` table for rogue hook pointers |
+| **Examine Kernel Call Stack** | `k` / `kv` / `kb` | Kernel Stack Frame | Diagnoses kernel BSOD crashes, bugchecks, and corrupted pointers |
+| **Inspect I/O Request Packet**| `!irp <IRP_Address>` | `nt!_IRP` | Decodes pending IOCTL buffers and calling thread contexts |
+
+---
+
+## Categorized References & Authoritative Reading
+
+### 1. Primary Academic & Industry Reference Works
+* Dang, Bruce, Alexandre Gazet, Elias Bachaalany, and Sébastien Josse. *Practical Reverse Engineering: x86, x64, ARM, Windows Kernel, Reversing Tools, and Obfuscation*. Wiley, 2014. Chapter 3: "The Windows Kernel", pp. 115–168.
+* Russinovich, Mark, David Solomon, and Alex Ionescu. *Windows Internals, Part 1 & 2: System Architecture, Processes, Threads, Memory Management, and Security*. Microsoft Press (7th Edition).
+* Yosifovich, Pavel, Alex Ionescu, Mark Russinovich, and David Solomon. *Windows Kernel Programming*. Independently published.
+
+### 2. Official Platform & Architecture Specifications
+* **Microsoft Learn: Windows Driver Kit (WDK) Architecture**: [https://learn.microsoft.com/en-us/windows-hardware/drivers/](https://learn.microsoft.com/en-us/windows-hardware/drivers/).
+* **Microsoft Learn: Kernel-Mode Driver Framework (KMDF) Dispatch Mechanics**: [https://learn.microsoft.com/en-us/windows-hardware/drivers/wdf/](https://learn.microsoft.com/en-us/windows-hardware/drivers/wdf/).
+
+### 3. MITRE ATT&CK Enterprise Matrix Mapping
+* **T1068**: Exploitation for Privilege Escalation (Abusing arbitrary kernel write primitives). [https://attack.mitre.org/techniques/T1068/](https://attack.mitre.org/techniques/T1068/).
+* **T1014**: Rootkit (DKOM unlinking of `ActiveProcessLinks` and SSDT/IRP hooking). [https://attack.mitre.org/techniques/T1014/](https://attack.mitre.org/techniques/T1014/).
+* **T1562.001**: Impair Defenses: Disable Windows Defender or EDR via Kernel Token Tampering.
+
+### 4. Hands-on Practice Labs & Verification Tooling
+* **HEVD (Hacksys Extreme Vulnerable Driver)**: The premier industry standard vulnerable kernel driver for learning kernel exploitation. [https://github.com/hacksysteam/HackSysExtremeVulnerableDriver](https://github.com/hacksysteam/HackSysExtremeVulnerableDriver).
+* **WinDbg Preview (Windows Debugger Engine)**: Official kernel-mode and user-mode dynamic analysis suite.
+* **Process Hacker / System Informer**: Open-source kernel driver and process inspector. [https://systeminformer.sourceforge.io/](https://systeminformer.sourceforge.io/).
 
 ---
 

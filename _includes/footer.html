@@ -25,4 +25,18 @@
 
 {% include salawat-popup.html %}
 
+<script>
+  (function () {
+    function purgeComments() {
+      document.querySelectorAll('#giscus-wrapper, #giscus_thread, .giscus, .giscus-frame, [class*="giscus"]').forEach(function (el) {
+        el.remove();
+      });
+    }
+    purgeComments();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', purgeComments);
+    }
+  })();
+</script>
+
 

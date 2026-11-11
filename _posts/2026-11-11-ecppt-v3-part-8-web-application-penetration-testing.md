@@ -1,8 +1,8 @@
 ---
 title: "eCPPT Deep-Dive: Part 8 - Web Application Pentesting: OWASP WSTG & Critical Flaws"
-date: 2026-11-12 15:00:00 +0300
+date: 2026-11-11 15:00:00 +0300
 categories: [Cyber Security, Penetration Testing]
-tags: [ecppt, web-pentesting, owasp, sql-injection, xss, lfi, file-upload, web-security]
+tags: [ecppt, web-pentesting, owasp, sql-injection, xss, lfi, file-upload, web-security, penetration-testing, cyber-security, red-team]
 description: "An exhaustive technical breakdown of Part 8 of the eCPPT curriculum: the OWASP Web Security Testing Guide (WSTG) methodology, In-Band and Blind SQL Injection, weaponizing Local File Inclusion (LFI to RCE via Log Poisoning), and advanced file upload filter evasion."
 image:
   path: /assets/images/posts/ecppt/part-8-cover.png

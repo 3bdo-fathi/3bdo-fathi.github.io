@@ -2,7 +2,7 @@
 title: "Android Security Internals: Chapter 2 - Permissions Architecture"
 date: 2026-11-01 10:00:00 +0300
 categories: [Cyber Security, Android Security]
-tags: [android, mobile security, internals, permissions, packagemanager, binder, access-control, strandhogg, mastg]
+tags: [android, mobile-security, internals, permissions, packagemanager, binder, access-control, strandhogg, mastg, android-security, cyber-security]
 description: "An in-depth technical analysis of Chapter 2 of Nikolay Elenkov's 'Android Security Internals', detailing manifest definitions, protection levels, kernel GID mapping, runtime Binder checks, StrandHogg task hijacking, and content provider URI permissions."
 image:
   path: /assets/images/posts/android-security/chapter-2-cover.png

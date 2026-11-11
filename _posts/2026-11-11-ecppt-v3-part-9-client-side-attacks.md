@@ -1,8 +1,8 @@
 ---
 title: "eCPPT Deep-Dive: Part 9 - Client-Side Attacks: Weaponization & Phishing Delivery"
-date: 2026-11-12 16:00:00 +0300
+date: 2026-11-11 16:00:00 +0300
 categories: [Cyber Security, Penetration Testing]
-tags: [ecppt, client-side-attacks, social-engineering, gophish, vba-macros, html-smuggling, motw]
+tags: [ecppt, client-side-attacks, social-engineering, gophish, vba-macros, html-smuggling, motw, penetration-testing, cyber-security, red-team]
 description: "An exhaustive technical breakdown of Part 9 of the eCPPT curriculum: social engineering psychology, GoPhish campaign infrastructure, Microsoft Office VBA macro weaponization, HTML Application (HTA) payloads, HTML Smuggling, and Mark-of-the-Web (MOTW) container evasion."
 image:
   path: /assets/images/posts/ecppt/part-9-cover.png

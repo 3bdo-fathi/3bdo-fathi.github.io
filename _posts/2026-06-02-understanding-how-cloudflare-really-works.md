@@ -2,11 +2,7 @@
 title: "The Deep Infrastructure Architecture of Cloudflare"
 date: 2026-06-02 12:00:00 +0300
 categories: [Cyber Security, Network Security]
-tags:
-  - cloudflare
-  - networking
-  - ddos
-  - infrastructure
+tags: [cloudflare, networking, ddos, infrastructure, ddos-protection, waf, cdn, reverse-proxy, web-security, anycast-routing, cyber-security]
 description: "A deep technical breakdown of Cloudflare's infrastructure: BGP Anycast routing, XDP/eBPF packet processing, Pingora proxy framework, Keyless SSL, and origin hardening strategies."
 image:
   path: /assets/images/posts/appsec/cloudflare-architecture-cover.png

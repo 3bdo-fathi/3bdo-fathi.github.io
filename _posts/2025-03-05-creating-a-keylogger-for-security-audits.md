@@ -2,7 +2,7 @@
 title: "Creating a Keylogger for Authorized Security Audits"
 date: 2025-03-05 12:02:00 +0300
 categories: [Scripts, Python]
-tags: [keylogger, security-audit, python, ethical-hacking]
+tags: [keylogger, security-audit, python, ethical-hacking, malware-analysis, windows-api, cyber-security, red-team]
 description: "A step-by-step guide to building a Python keylogger for authorized security audits, covering log rotation, rotating file handlers, and professional logging practices."
 image:
   path: /assets/images/posts/automation/keylogger-audit-cover.png

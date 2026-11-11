@@ -2,7 +2,7 @@
 title: "Android Security Internals: Chapter 5 - Cryptographic Providers"
 date: 2026-11-01 13:00:00 +0300
 categories: [Cyber Security, Android Security]
-tags: [android, mobile security, internals, cryptography, jca, openssl, prng, bouncy-castle, ecdsa, mastg]
+tags: [android, mobile-security, internals, cryptography, jca, openssl, prng, bouncy-castle, ecdsa, mastg, android-security, cyber-security]
 description: "An exhaustive analysis of Chapter 5 of Nikolay Elenkov's 'Android Security Internals', investigating the Java Cryptography Architecture (JCA), AndroidOpenSSL, Bouncy Castle, SecureRandom entropy flaws, and CVE-2013-7372."
 image:
   path: /assets/images/posts/android-security/chapter-5-cover.png

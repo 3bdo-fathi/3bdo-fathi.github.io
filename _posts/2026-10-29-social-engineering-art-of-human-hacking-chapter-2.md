@@ -2,7 +2,7 @@
 title: "Book Summary: Social Engineering - The Art of Human Hacking (Chapter 2: Information Gathering)"
 date: 2026-10-29 10:00:00 +0300
 categories: [Cyber Security, Social Engineering]
-tags: [social-engineering, information-gathering, osint, shodan, google-dorking, communication-models, book-summary, christopher-hadnagy]
+tags: [social-engineering, information-gathering, osint, shodan, google-dorking, communication-models, book-summary, christopher-hadnagy, cyber-security, security-awareness]
 description: "A comprehensive summary of Chapter 2 of Christopher Hadnagy's 'Social Engineering: The Art of Human Hacking', exploring OSINT sources, Shannon-Weaver and SMCR communication models, and the art of target profiling."
 image:
   path: /assets/images/posts/social-engineering/chapter-2-cover.png

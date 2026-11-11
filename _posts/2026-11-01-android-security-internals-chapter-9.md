@@ -2,7 +2,7 @@
 title: "Android Security Internals: Chapter 9 - Enterprise Security"
 date: 2026-11-01 17:00:00 +0300
 categories: [Cyber Security, Android Security]
-tags: [android, mobile security, internals, enterprise, mdm, devicepolicy, knox, managed-profiles, ransomware]
+tags: [android, mobile-security, internals, enterprise, mdm, devicepolicy, knox, managed-profiles, ransomware, android-security, cyber-security]
 description: "An in-depth review of Chapter 9 of Nikolay Elenkov's 'Android Security Internals', evaluating Device Administration APIs, DevicePolicyManagerService, enterprise containerization, Samsung KNOX, and MDM policy enforcement."
 image:
   path: /assets/images/posts/android-security/chapter-9-cover.png

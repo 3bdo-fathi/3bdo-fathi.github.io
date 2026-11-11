@@ -2,7 +2,7 @@
 title: "Book Summary: Social Engineering - The Art of Human Hacking (Chapter 9: Prevention & Mitigation)"
 date: 2026-10-29 17:00:00 +0300
 categories: [Cyber Security, Social Engineering]
-tags: [social-engineering, security-awareness, mitigation, incident-response, human-firewall, red-team, book-summary, christopher-hadnagy]
+tags: [social-engineering, security-awareness, mitigation, incident-response, human-firewall, red-team, book-summary, christopher-hadnagy, cyber-security]
 description: "A comprehensive summary of Chapter 9 of Christopher Hadnagy's 'Social Engineering: The Art of Human Hacking', detailing the 6 pillars of organizational defense, non-punitive awareness culture, employee verification scripts, and auditing guidelines."
 image:
   path: /assets/images/posts/social-engineering/chapter-9-cover.png

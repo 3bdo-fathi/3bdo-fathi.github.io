@@ -1,8 +1,8 @@
 ---
 title: "eCPPT Deep-Dive: Part 5 - Windows & Linux Privilege Escalation Playbook"
-date: 2026-11-12 12:00:00 +0300
+date: 2026-11-11 12:00:00 +0300
 categories: [Cyber Security, Penetration Testing]
-tags: [ecppt, privilege-escalation, windows-privesc, linux-privesc, uac-bypass, token-impersonation, suid, gtfobins]
+tags: [ecppt, privilege-escalation, windows-privesc, linux-privesc, uac-bypass, token-impersonation, suid, gtfobins, penetration-testing, cyber-security, red-team]
 description: "An exhaustive technical breakdown of Part 5 of the eCPPT curriculum: the definitive field playbook for local privilege escalation on Windows and Linux, token impersonation (Potato attacks), insecure service abuse, silent UAC bypasses, SUID exploitation, and sudo environment hijacking."
 image:
   path: /assets/images/posts/ecppt/part-5-cover.png

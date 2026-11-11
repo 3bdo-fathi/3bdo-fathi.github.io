@@ -2,7 +2,7 @@
 title: "Book Summary: Social Engineering - The Art of Human Hacking (Chapter 4: Pretexting)"
 date: 2026-10-29 12:00:00 +0300
 categories: [Cyber Security, Social Engineering]
-tags: [social-engineering, pretexting, stanley-rifkin, cognitive-dissonance, legal-boundaries, book-summary, christopher-hadnagy]
+tags: [social-engineering, pretexting, stanley-rifkin, cognitive-dissonance, legal-boundaries, book-summary, christopher-hadnagy, cyber-security, security-awareness]
 description: "A comprehensive summary of Chapter 4 of Christopher Hadnagy's 'Social Engineering: The Art of Human Hacking', covering the 7 principles of pretexting, cognitive dissonance alignment, Stanley Rifkin's $10.2M heist, and the HP legal scandal."
 image:
   path: /assets/images/posts/social-engineering/chapter-4-cover.png

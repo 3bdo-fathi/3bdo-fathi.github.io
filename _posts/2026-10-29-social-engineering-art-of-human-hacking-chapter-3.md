@@ -2,7 +2,7 @@
 title: "Book Summary: Social Engineering - The Art of Human Hacking (Chapter 3: Elicitation)"
 date: 2026-10-29 11:00:00 +0300
 categories: [Cyber Security, Social Engineering]
-tags: [social-engineering, elicitation, psychology, nsa-rules, questioning-techniques, preloading, book-summary, christopher-hadnagy]
+tags: [social-engineering, elicitation, psychology, nsa-rules, questioning-techniques, preloading, book-summary, christopher-hadnagy, cyber-security, security-awareness]
 description: "A comprehensive summary of Chapter 3 of Christopher Hadnagy's 'Social Engineering: The Art of Human Hacking', analyzing NSA elicitation guidelines, conversational preloading, questioning taxonomy, and psychological exploitation."
 image:
   path: /assets/images/posts/social-engineering/chapter-3-cover.png

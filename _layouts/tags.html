@@ -7,6 +7,269 @@ layout: page
 <div class="taxonomy-intro">{{ content }}</div>
 {% endif %}
 
+<style>
+  .tags-toolbar {
+    margin-bottom: 1.75rem;
+  }
+
+  .tag-search-box {
+    position: relative;
+    width: 100%;
+  }
+
+  .tag-search-box .search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #64748b;
+    font-size: 0.85rem;
+    pointer-events: none;
+  }
+
+  .tag-search-input {
+    width: 100%;
+    height: 42px;
+    padding: 0 2.5rem 0 2.6rem;
+    border-radius: 21px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: #090d14;
+    color: #f1f5f9;
+    font-size: 0.88rem;
+    font-weight: 500;
+    outline: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  }
+
+  .tag-search-input:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15), 0 2px 8px rgba(0, 0, 0, 0.35);
+  }
+
+  .tag-search-clear {
+    position: absolute;
+    right: 0.85rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.85rem;
+    display: none;
+    transition: color 0.15s ease;
+  }
+
+  .tag-search-clear:hover {
+    color: #f1f5f9;
+  }
+
+  html[data-mode="light"] .tag-search-input,
+  html[data-bs-theme="light"] .tag-search-input {
+    background: #ffffff !important;
+    border-color: #d0d7de !important;
+    color: #24292f !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+  }
+
+  html[data-mode="light"] .tag-search-input:focus,
+  html[data-bs-theme="light"] .tag-search-input:focus {
+    border-color: #0969da !important;
+    box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.15) !important;
+  }
+
+  .tags-control-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.85rem;
+    padding: 0 0.35rem;
+  }
+
+  .tags-count-info {
+    font-size: 0.8rem;
+    color: #8b949e;
+    font-weight: 500;
+  }
+
+  .tags-sort-buttons {
+    display: inline-flex;
+    gap: 0.35rem;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.2rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  html[data-mode="light"] .tags-sort-buttons,
+  html[data-bs-theme="light"] .tags-sort-buttons {
+    background: #f6f8fa !important;
+    border-color: #d0d7de !important;
+  }
+
+  .tag-sort-btn {
+    border: none;
+    background: transparent;
+    color: #8b949e;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.65rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .tag-sort-btn:hover {
+    color: #f1f5f9;
+  }
+
+  .tag-sort-btn.active {
+    background: #0969da;
+    color: #ffffff !important;
+    box-shadow: 0 1px 4px rgba(9, 105, 218, 0.35);
+  }
+
+  html[data-mode="light"] .tag-sort-btn {
+    color: #57606a !important;
+  }
+
+  html[data-mode="light"] .tag-sort-btn.active {
+    background: #0969da !important;
+    color: #ffffff !important;
+  }
+
+  /* Tag Item Badges */
+  .taxonomy-tags {
+    gap: 0.55rem;
+  }
+
+  .tag-pill-item {
+    transition: transform 0.15s ease, opacity 0.2s ease;
+  }
+
+  .tag-pill-item.is-hidden {
+    display: none !important;
+  }
+
+  .tag-pill-item a.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.38rem 0.8rem;
+    border-radius: 20px;
+    background: #090d14;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #cbd5e1;
+    font-size: 0.8rem;
+    font-weight: 500;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    text-decoration: none;
+    transition: all 0.18s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+
+  .tag-pill-item a.tag .tag-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 0.35rem;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.08);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #94a3b8;
+  }
+
+  .tag-pill-item a.tag:hover {
+    background: #0969da;
+    border-color: #0969da;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(9, 105, 218, 0.35);
+  }
+
+  .tag-pill-item a.tag:hover .tag-count {
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+  }
+
+  html[data-mode="light"] .tag-pill-item a.tag,
+  html[data-bs-theme="light"] .tag-pill-item a.tag {
+    background: #ffffff !important;
+    border-color: #d0d7de !important;
+    color: #24292f !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+  }
+
+  html[data-mode="light"] .tag-pill-item a.tag .tag-count,
+  html[data-bs-theme="light"] .tag-pill-item a.tag .tag-count {
+    background: #f1f5f9 !important;
+    color: #64748b !important;
+  }
+
+  html[data-mode="light"] .tag-pill-item a.tag:hover,
+  html[data-bs-theme="light"] .tag-pill-item a.tag:hover {
+    background: #0969da !important;
+    border-color: #0969da !important;
+    color: #ffffff !important;
+  }
+
+  html[data-mode="light"] .tag-pill-item a.tag:hover .tag-count,
+  html[data-bs-theme="light"] .tag-pill-item a.tag:hover .tag-count {
+    background: rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+  }
+
+  #no-tags-found {
+    padding: 2.5rem 1rem;
+    text-align: center;
+    color: #8b949e;
+    font-size: 0.9rem;
+    display: none;
+    width: 100%;
+  }
+</style>
+
+<div class="tags-toolbar">
+  <div class="tag-search-box">
+    <i class="fas fa-search search-icon"></i>
+    <input
+      type="text"
+      id="tag-search-input"
+      class="tag-search-input"
+      placeholder="Search 290+ tags (e.g. active-directory, reverse-engineering, frida, buffer-overflow)..."
+      aria-label="Filter tags"
+      autocomplete="off"
+    >
+    <button type="button" id="tag-search-clear" class="tag-search-clear" aria-label="Clear search">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <div class="tags-control-bar">
+    <div class="tags-count-info">
+      Showing <strong id="tag-visible-count">0</strong> of <span id="tag-total-count">0</span> cybersecurity tags
+    </div>
+    <div class="tags-sort-buttons" role="group" aria-label="Sort tags">
+      <button type="button" class="tag-sort-btn active" id="btn-sort-count" title="Sort by number of articles">
+        <i class="fas fa-fire"></i> Top Tags
+      </button>
+      <button type="button" class="tag-sort-btn" id="btn-sort-alpha" title="Sort alphabetically">
+        <i class="fas fa-sort-alpha-down"></i> A-Z
+      </button>
+    </div>
+  </div>
+</div>
+
 <div id="tags" class="taxonomy-tags d-flex flex-wrap mx-xl-2">
   {% assign tags = '' | split: '' %}
   {% for t in site.tags %}
@@ -19,12 +282,101 @@ layout: page
   {% assign sorted_tags = tags | sort_natural %}
 
   {% for t in sorted_tags %}
-    <div>
+    <div class="tag-pill-item" data-tag="{{ t | downcase }}" data-count="{{ site.tags[t].size }}">
       <a class="tag" href="{{ t | slugify | url_encode | prepend: '/tags/' | append: '/' | relative_url }}">
-        {{ t -}}
-        <span class="text-muted">{{ site.tags[t].size }}</span>
+        <span>#{{- t -}}</span>
+        <span class="tag-count">{{ site.tags[t].size }}</span>
       </a>
     </div>
   {% endfor %}
+
+  <div id="no-tags-found">
+    <i class="fas fa-filter me-2 text-muted"></i>No cybersecurity tags matching your search query.
+  </div>
 </div>
 
+<script>
+  (function () {
+    const input = document.getElementById('tag-search-input');
+    const clearBtn = document.getElementById('tag-search-clear');
+    const container = document.getElementById('tags');
+    const visibleCountEl = document.getElementById('tag-visible-count');
+    const totalCountEl = document.getElementById('tag-total-count');
+    const noTagsEl = document.getElementById('no-tags-found');
+    const btnSortCount = document.getElementById('btn-sort-count');
+    const btnSortAlpha = document.getElementById('btn-sort-alpha');
+
+    if (!container) return;
+
+    const items = Array.from(container.querySelectorAll('.tag-pill-item'));
+    const total = items.length;
+    if (totalCountEl) totalCountEl.textContent = total;
+    if (visibleCountEl) visibleCountEl.textContent = total;
+
+    // Default sort: Top Tags (descending count, then name)
+    function sortItems(mode) {
+      items.sort((a, b) => {
+        if (mode === 'count') {
+          const countA = parseInt(a.getAttribute('data-count') || '0', 10);
+          const countB = parseInt(b.getAttribute('data-count') || '0', 10);
+          if (countB !== countA) return countB - countA;
+          return (a.getAttribute('data-tag') || '').localeCompare(b.getAttribute('data-tag') || '');
+        } else {
+          return (a.getAttribute('data-tag') || '').localeCompare(b.getAttribute('data-tag') || '');
+        }
+      });
+      items.forEach(el => container.appendChild(el));
+      if (noTagsEl) container.appendChild(noTagsEl);
+    }
+
+    // Initialize with Top Tags order
+    sortItems('count');
+
+    if (btnSortCount && btnSortAlpha) {
+      btnSortCount.addEventListener('click', function () {
+        btnSortCount.classList.add('active');
+        btnSortAlpha.classList.remove('active');
+        sortItems('count');
+      });
+
+      btnSortAlpha.addEventListener('click', function () {
+        btnSortAlpha.classList.add('active');
+        btnSortCount.classList.remove('active');
+        sortItems('alpha');
+      });
+    }
+
+    function filterTags() {
+      const q = (input.value || '').trim().toLowerCase();
+      if (clearBtn) {
+        clearBtn.style.display = q ? 'block' : 'none';
+      }
+
+      let visible = 0;
+      items.forEach(el => {
+        const tag = el.getAttribute('data-tag') || '';
+        if (!q || tag.includes(q)) {
+          el.classList.remove('is-hidden');
+          visible++;
+        } else {
+          el.classList.add('is-hidden');
+        }
+      });
+
+      if (visibleCountEl) visibleCountEl.textContent = visible;
+      if (noTagsEl) noTagsEl.style.display = visible === 0 ? 'block' : 'none';
+    }
+
+    if (input) {
+      input.addEventListener('input', filterTags);
+    }
+
+    if (clearBtn) {
+      clearBtn.addEventListener('click', function () {
+        input.value = '';
+        filterTags();
+        input.focus();
+      });
+    }
+  })();
+</script>

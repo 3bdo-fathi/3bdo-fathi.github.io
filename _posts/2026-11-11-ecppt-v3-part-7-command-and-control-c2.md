@@ -1,8 +1,8 @@
 ---
 title: "eCPPT Deep-Dive: Part 7 - Command and Control (C2): Architecture, Frameworks & Infrastructure"
-date: 2026-11-12 14:00:00 +0300
+date: 2026-11-11 14:00:00 +0300
 categories: [Cyber Security, Penetration Testing]
-tags: [ecppt, c2, command-and-control, powershell-empire, starkiller, domain-fronting, red-team]
+tags: [ecppt, c2, command-and-control, powershell-empire, starkiller, domain-fronting, red-team, penetration-testing, cyber-security]
 description: "An exhaustive technical breakdown of Part 7 of the eCPPT curriculum: Command and Control (C2) framework taxonomy, resilient multi-tier redirector infrastructure, Domain Fronting, beacon jitter, and red team operations with PowerShell-Empire and Starkiller."
 image:
   path: /assets/images/posts/ecppt/part-7-cover.png

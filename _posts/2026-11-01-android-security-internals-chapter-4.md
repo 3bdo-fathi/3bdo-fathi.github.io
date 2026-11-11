@@ -2,7 +2,7 @@
 title: "Android Security Internals: Chapter 4 - User Management"
 date: 2026-11-01 12:00:00 +0300
 categories: [Cyber Security, Android Security]
-tags: [android, mobile security, internals, multi-user, usermanager, storage, namespaces, access-control, enterprise]
+tags: [android, mobile-security, internals, multi-user, usermanager, storage, namespaces, access-control, enterprise, android-security, cyber-security]
 description: "A technical dissection of Chapter 4 of Nikolay Elenkov's 'Android Security Internals', covering Android multi-user architecture, UID mathematical mapping formulas, per-user storage virtualization, and UserManagerService internals."
 image:
   path: /assets/images/posts/android-security/chapter-4-cover.png

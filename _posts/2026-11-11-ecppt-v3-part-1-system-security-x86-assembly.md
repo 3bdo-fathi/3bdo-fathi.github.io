@@ -1,8 +1,8 @@
 ---
 title: "eCPPT Deep-Dive: Part 1 - System Security & x86 Assembly Fundamentals"
-date: 2026-11-12 08:00:00 +0300
+date: 2026-11-11 08:00:00 +0300
 categories: [Cyber Security, Penetration Testing]
-tags: [ecppt, system-security, x86, assembly, memory-management, stack-frame, calling-conventions, reverse-engineering]
+tags: [ecppt, system-security, x86, assembly, memory-management, stack-frame, calling-conventions, reverse-engineering, penetration-testing, cyber-security, red-team]
 description: "An exhaustive technical breakdown of Part 1 of the eCPPT curriculum: x86 processor architecture, IA-32 register sets, process virtual memory layout, stack frame mechanics (EBP/ESP), and calling conventions (__cdecl, __stdcall, __fastcall)."
 image:
   path: /assets/images/posts/ecppt/part-1-cover.png

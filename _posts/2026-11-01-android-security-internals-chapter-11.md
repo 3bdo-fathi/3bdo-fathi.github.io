@@ -2,7 +2,7 @@
 title: "Android Security Internals: Chapter 11 - NFC and Secure Elements"
 date: 2026-11-01 19:00:00 +0300
 categories: [Cyber Security, Android Security]
-tags: [android, mobile security, internals, nfc, hce, secure-element, contactless, smart-cards, apdu, emv]
+tags: [android, mobile-security, internals, nfc, hce, secure-element, contactless, smart-cards, apdu, emv, android-security, cyber-security]
 description: "A technical dissection of Chapter 11 of Nikolay Elenkov's 'Android Security Internals', examining the NFC architecture stack, Host-based Card Emulation (HCE), ISO 7816-4 APDU routing, and hardware Secure Elements (UICC/eSE)."
 image:
   path: /assets/images/posts/android-security/chapter-11-cover.png

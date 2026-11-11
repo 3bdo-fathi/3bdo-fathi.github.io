@@ -20,10 +20,43 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
-  .content img,
-  article img {
+  /* Content images & technical diagrams */
+  .content img:not(.avatar):not(.contributor-avatar):not(#avatar img),
+  article .content img:not(.avatar):not(.contributor-avatar):not(#avatar img),
+  .post-content img:not(.avatar):not(.contributor-avatar):not(#avatar img) {
     max-width: 100%;
     height: auto;
+    border-radius: 8px !important;
+    display: block;
+    margin: 1.5rem auto;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  /* Image Presentation in Dark Mode */
+  html:not([data-mode="light"]):not([data-bs-theme="light"]) .content img:not(.avatar):not(.contributor-avatar):not(#avatar img),
+  html:not([data-mode="light"]):not([data-bs-theme="light"]) article .content img:not(.avatar):not(.contributor-avatar):not(#avatar img),
+  html[data-mode="dark"] .content img:not(.avatar):not(.contributor-avatar):not(#avatar img),
+  html[data-mode="dark"] article .content img:not(.avatar):not(.contributor-avatar):not(#avatar img),
+  html[data-bs-theme="dark"] .content img:not(.avatar):not(.contributor-avatar):not(#avatar img),
+  html[data-bs-theme="dark"] article .content img:not(.avatar):not(.contributor-avatar):not(#avatar img) {
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6) !important;
+    background: #0a0d13 !important;
+  }
+
+  /* Image Presentation in Light Mode (Crisp Editorial Framing & Soft Shadow) */
+  html[data-mode="light"] .content img:not(.avatar):not(.contributor-avatar):not(#avatar img),
+  html[data-bs-theme="light"] .content img:not(.avatar):not(.contributor-avatar):not(#avatar img),
+  html[data-mode="light"] article .content img:not(.avatar):not(.contributor-avatar):not(#avatar img),
+  html[data-bs-theme="light"] article .content img:not(.avatar):not(.contributor-avatar):not(#avatar img) {
+    border: 1px solid #d0d7de !important;
+    box-shadow: 0 4px 16px rgba(140, 149, 159, 0.18), 0 1px 3px rgba(31, 35, 40, 0.08) !important;
+    background: #ffffff !important;
+  }
+
+  .content img:not(.avatar):not(.contributor-avatar):not(#avatar img):hover,
+  article .content img:not(.avatar):not(.contributor-avatar):not(#avatar img):hover {
+    transform: scale(1.008);
   }
 
   /* Smooth theme transitions */
@@ -317,8 +350,48 @@
     -webkit-backdrop-filter: blur(14px) !important;
   }
 
-  .post-preview img {
+  /* ── Card thumbnail images (home page) — fill container cleanly ── */
+  .post-preview img,
+  .preview-img img,
+  img.preview-img {
     border-radius: 8px !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+  }
+
+  /* ── Post cover / featured image (full-width inside a post page) ── */
+  .post-cover-wrapper {
+    display: block !important;
+    width: 100% !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+  }
+
+  /* Override Chirpy's aspect-ratio lock on .preview-img when it's a post cover */
+  figure.post-cover-wrapper .preview-img,
+  .post-cover-wrapper .preview-img {
+    aspect-ratio: unset !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .post-cover-wrapper img,
+  figure.post-cover-wrapper img {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;         /* respect natural aspect ratio */
+    max-height: none !important;
+    object-fit: unset !important;    /* full image, no cropping */
+    border-radius: 10px !important;
+  }
+
+  html[data-mode="light"] .preview-img,
+  html[data-bs-theme="light"] .preview-img {
+    background: #0d1117 !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
   }
 
   /* Universal Dedication Tribute Bar (Posts & About Tab) */

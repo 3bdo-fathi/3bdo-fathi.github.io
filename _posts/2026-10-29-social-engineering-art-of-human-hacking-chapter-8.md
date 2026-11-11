@@ -2,7 +2,7 @@
 title: "Book Summary: Social Engineering - The Art of Human Hacking (Chapter 8: Real-World Case Studies)"
 date: 2026-10-29 16:00:00 +0300
 categories: [Cyber Security, Social Engineering]
-tags: [social-engineering, case-studies, kevin-mitnick, pentesting, red-team, meterpreter, book-summary, christopher-hadnagy]
+tags: [social-engineering, case-studies, kevin-mitnick, pentesting, red-team, meterpreter, book-summary, christopher-hadnagy, cyber-security, security-awareness]
 description: "A comprehensive summary of Chapter 8 of Christopher Hadnagy's 'Social Engineering: The Art of Human Hacking', analyzing 6 landmark real-world exploits: Kevin Mitnick's DMV & SSA hacks, the Overconfident CEO, the Theme Park ticket scam, and social engineering a live hacker over Notepad."
 image:
   path: /assets/images/posts/social-engineering/chapter-8-cover.png

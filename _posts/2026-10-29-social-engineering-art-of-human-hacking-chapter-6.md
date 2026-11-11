@@ -2,7 +2,7 @@
 title: "Book Summary: Social Engineering - The Art of Human Hacking (Chapter 6: Influence & Persuasion)"
 date: 2026-10-29 14:00:00 +0300
 categories: [Cyber Security, Social Engineering]
-tags: [social-engineering, influence, persuasion, cialdini, framing, manipulation, psychology, book-summary, christopher-hadnagy]
+tags: [social-engineering, influence, persuasion, cialdini, framing, manipulation, psychology, book-summary, christopher-hadnagy, cyber-security, security-awareness]
 description: "A comprehensive summary of Chapter 6 of Christopher Hadnagy's 'Social Engineering: The Art of Human Hacking', analyzing Cialdini's weapons of influence, reality framing theory, retail planograms, and ethical manipulation tactics."
 image:
   path: /assets/images/posts/social-engineering/chapter-6-cover.png

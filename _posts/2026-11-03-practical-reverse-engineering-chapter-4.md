@@ -2,7 +2,7 @@
 title: "Practical Reverse Engineering: Chapter 4 - Windows Debugging and Automation"
 date: 2026-11-03 15:00:00 +0300
 categories: [Cyber Security, Reverse Engineering]
-tags: [ reverse-engineering, windbg, dbgeng, scripting, automation, unpacking, upx, breakpoints, debugging, x64dbg, ida-pro, anti-debugging ]
+tags: [reverse-engineering, windbg, dbgeng, scripting, automation, unpacking, upx, breakpoints, debugging, x64dbg, ida-pro, anti-debugging, cyber-security, binary-analysis]
 description: "An exhaustive technical breakdown of Chapter 4 of 'Practical Reverse Engineering' by Bruce Dang et al., analyzing WinDbg internals, MASM vs C++ expression evaluators, DbgEng scripting, automated UPX unpackers, and custom debugger extensions."
 image:
   path: /assets/images/posts/reverse-engineering/chapter-4-cover.png
@@ -413,6 +413,40 @@ bp 0x00402000 "
 In this chapter, we explored Windows debugging mechanics: expression evaluation nuances, memory introspection, hardware breakpoints, procedural DbgEng scripting, automated unpacking of protectors, and native C++ debugger extension development.
 
 In [**Chapter 5: Software Obfuscation & Deobfuscation**](/posts/practical-reverse-engineering-chapter-5/), we tackle the ultimate challenge of binary analysis: understanding code obfuscation techniques (opaque predicates, CFG flattening, custom virtual machines, white-box cryptography) and breaking them using automated program analysis, symbolic execution, and solving the famous Quetz keygenme challenge.
+
+---
+
+## Practical WinDbg Automation & Unpacking Cheat-Sheet
+
+| Workflow Goal | WinDbg Command / Script Snippet | Operational Behavior |
+| :--- | :--- | :--- |
+| **Hardware Read/Write Breakpoint** | `ba r4 0x00405000` | Triggers CPU debug register `DR0-DR3` when memory is dereferenced |
+| **Conditional Break on String** | `bp kernel32!CreateFileW "as /mu ${/v:path} poi(esp+4); .if ($spat(\"${path}\", \"*secret*\")) {} .else {gc}"` | Halts execution only when a specific file path or key is targeted |
+| **Automate Unpacking Loop** | `bp <OEP_Stub> "r $t0=poi(esp); bp /1 @$t0 \".writemem dump.bin 0x400000 L?0x50000; gc\"; gc"` | Captures decrypted image from memory immediately after decompression |
+| **Display Formatted Memory ASCII** | `da /c 64 poi(esp+4)` | Dumps null-terminated ASCII string at stack parameter location |
+
+---
+
+## Categorized References & Authoritative Reading
+
+### 1. Primary Academic & Industry Reference Works
+* Dang, Bruce, Alexandre Gazet, Elias Bachaalany, and Sébastien Josse. *Practical Reverse Engineering: x86, x64, ARM, Windows Kernel, Reversing Tools, and Obfuscation*. Wiley, 2014. Chapter 4: "Debugging and Automation", pp. 169–214.
+* Heward, Tarik. *Advanced Windows Debugging*. Addison-Wesley Professional.
+* Bachaalany, Elias. *The IDA Pro Book: The Unofficial Guide to the World's Most Popular Disassembler* (Contributed Materials & Plugins).
+
+### 2. Official Microsoft Debugger Engine Specifications
+* **Microsoft Learn: WinDbg Commands & Conditional Breakpoints Syntax**: [https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/commands](https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/commands).
+* **Microsoft Learn: DbgEng C++ API Extension Programming**: [https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/writing-dbgeng-extensions](https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/writing-dbgeng-extensions).
+
+### 3. MITRE ATT&CK Enterprise Matrix Mapping
+* **T1140**: Deobfuscate/Decode Files or Information (Automated unpacking and memory dumping). [https://attack.mitre.org/techniques/T1140/](https://attack.mitre.org/techniques/T1140/).
+* **T1057**: Process Discovery (Probing debugger detection flags `BeingDebugged`, `CheckRemoteDebuggerPresent`).
+* **T1497**: Virtualization/Sandbox Evasion (Time-based delta detection via `RDTSC`).
+
+### 4. Hands-on Practice Labs & Verification Tooling
+* **PyKd**: Python extension for WinDbg automating deep memory scraping and memory scanning. [https://githomelab.ru/pykd/pykd](https://githomelab.ru/pykd/pykd).
+* **Scylla / ScyllaHide**: Premier anti-anti-debugging and PE import reconstructor plugin. [https://github.com/x64dbg/ScyllaHide](https://github.com/x64dbg/ScyllaHide).
+* **UPX Packer & Unpacker**: Standard test target for unpacking validation. [https://upx.github.io/](https://upx.github.io/).
 
 ---
 

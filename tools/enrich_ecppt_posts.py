@@ -3,7 +3,7 @@ import os
 
 posts_data = [
     {
-        "filename": "_posts/2026-11-12-ecppt-v3-part-1-system-security-x86-assembly.md",
+        "filename": "_posts/2026-11-11-ecppt-v3-part-1-system-security-x86-assembly.md",
         "diagram_img": "assets/images/posts/ecppt/part-1-diagram.png",
         "diagram_caption": "IA-32 Architecture: 32-bit Process Memory Layout & Stack Frame Anatomy",
         "diagram_section": """## Visual Architecture: Process Memory & Stack Frame Layout
@@ -50,7 +50,7 @@ flowchart LR
 * **OverTheWire Wargames: Narnia & Protostar**: Classic hands-on binary exploitation practice. [https://overthewire.org/wargames/narnia/](https://overthewire.org/wargames/narnia/)."""
     },
     {
-        "filename": "_posts/2026-11-12-ecppt-v3-part-2-exploit-development-buffer-overflows.md",
+        "filename": "_posts/2026-11-11-ecppt-v3-part-2-exploit-development-buffer-overflows.md",
         "diagram_img": "assets/images/posts/ecppt/part-2-diagram.png",
         "diagram_caption": "Binary Exploitation: Stack Buffer Overflows & SEH Overwrite Flow",
         "diagram_section": """## Visual Architecture: The Buffer Overflow & SEH Exploitation Lifecycle
@@ -92,7 +92,7 @@ flowchart LR
 * **T1059**: Command and Scripting Interpreter. [https://attack.mitre.org/techniques/T1059/](https://attack.mitre.org/techniques/T1059/)."""
     },
     {
-        "filename": "_posts/2026-11-12-ecppt-v3-part-3-network-penetration-testing.md",
+        "filename": "_posts/2026-11-11-ecppt-v3-part-3-network-penetration-testing.md",
         "diagram_img": "assets/images/posts/ecppt/part-3-diagram.png",
         "diagram_caption": "Network Penetration Testing: Discovery, Enumeration & MITM Attacks",
         "diagram_section": """## Visual Architecture: Network Reconnaissance & Attack Vectors
@@ -135,7 +135,7 @@ flowchart LR
 * **T1187**: Forced Authentication. [https://attack.mitre.org/techniques/T1187/](https://attack.mitre.org/techniques/T1187/)."""
     },
     {
-        "filename": "_posts/2026-11-12-ecppt-v3-part-4-active-directory-penetration-testing.md",
+        "filename": "_posts/2026-11-11-ecppt-v3-part-4-active-directory-penetration-testing.md",
         "diagram_img": "assets/images/posts/ecppt/part-4-diagram.png",
         "diagram_caption": "Active Directory Attack Vectors: Kerberos Exploitation & Persistence",
         "diagram_section": """## Visual Architecture: Kerberos Authentication Flow & Attack Graph
@@ -180,7 +180,7 @@ flowchart LR
 * **T1003.006**: OS Credential Dumping: DCSync. [https://attack.mitre.org/techniques/T1003/006/](https://attack.mitre.org/techniques/T1003/006/)."""
     },
     {
-        "filename": "_posts/2026-11-12-ecppt-v3-part-5-privilege-escalation-playbook.md",
+        "filename": "_posts/2026-11-11-ecppt-v3-part-5-privilege-escalation-playbook.md",
         "diagram_img": "assets/images/posts/ecppt/part-5-diagram.png",
         "diagram_caption": "Windows & Linux Privilege Escalation: Primitives & Decision Engine",
         "diagram_section": """## Visual Architecture: Privilege Escalation Primitives & Decision Engine
@@ -223,7 +223,7 @@ flowchart LR
 * **T1574**: Hijack Execution Flow (DLL Search Order, PATH Hijacking). [https://attack.mitre.org/techniques/T1574/](https://attack.mitre.org/techniques/T1574/)."""
     },
     {
-        "filename": "_posts/2026-11-12-ecppt-v3-part-6-lateral-movement-and-pivoting.md",
+        "filename": "_posts/2026-11-11-ecppt-v3-part-6-lateral-movement-and-pivoting.md",
         "diagram_img": "assets/images/posts/ecppt/part-6-diagram.png",
         "diagram_caption": "Multi-Tier Enterprise Pivoting: SSH Tunneling vs Ligolo-ng Routing",
         "diagram_section": """## Visual Architecture: Multi-Tier Pivoting & Tunneling Mechanics
@@ -265,7 +265,7 @@ flowchart LR
 * **T1021**: Remote Services (SMB, WinRM, RDP). [https://attack.mitre.org/techniques/T1021/](https://attack.mitre.org/techniques/T1021/)."""
     },
     {
-        "filename": "_posts/2026-11-12-ecppt-v3-part-7-command-and-control-c2.md",
+        "filename": "_posts/2026-11-11-ecppt-v3-part-7-command-and-control-c2.md",
         "diagram_img": "assets/images/posts/ecppt/part-7-diagram.png",
         "diagram_caption": "Resilient C2 Architecture: Tiered Redirectors, Domain Fronting & OpSec",
         "diagram_section": """## Visual Architecture: Resilient Multi-Tier C2 Infrastructure
@@ -308,7 +308,7 @@ flowchart LR
 * **T1027**: Obfuscated/Encrypted Payloads. [https://attack.mitre.org/techniques/T1027/](https://attack.mitre.org/techniques/T1027/)."""
     },
     {
-        "filename": "_posts/2026-11-12-ecppt-v3-part-8-web-application-penetration-testing.md",
+        "filename": "_posts/2026-11-11-ecppt-v3-part-8-web-application-penetration-testing.md",
         "diagram_img": "assets/images/posts/ecppt/part-8-diagram.png",
         "diagram_caption": "Web Application Penetration Testing: OWASP WSTG Exploitation Matrix",
         "diagram_section": """## Visual Architecture: OWASP WSTG Exploitation Matrix
@@ -350,7 +350,7 @@ flowchart LR
 * **T1059.006**: Command and Scripting Interpreter: Python/PHP. [https://attack.mitre.org/techniques/T1059/006/](https://attack.mitre.org/techniques/T1059/006/)."""
     },
     {
-        "filename": "_posts/2026-11-12-ecppt-v3-part-9-client-side-attacks.md",
+        "filename": "_posts/2026-11-11-ecppt-v3-part-9-client-side-attacks.md",
         "diagram_img": "assets/images/posts/ecppt/part-9-diagram.png",
         "diagram_caption": "Client-Side Attack Architecture: Weaponization, Delivery & MOTW Evasion",
         "diagram_section": """## Visual Architecture: Client-Side Weaponization & Delivery Pipeline
@@ -394,7 +394,7 @@ flowchart LR
 * **T1027.006**: HTML Smuggling. [https://attack.mitre.org/techniques/T1027/006/](https://attack.mitre.org/techniques/T1027/006/)."""
     },
     {
-        "filename": "_posts/2026-11-12-ecppt-v3-part-10-powershell-for-pentesters.md",
+        "filename": "_posts/2026-11-11-ecppt-v3-part-10-powershell-for-pentesters.md",
         "diagram_img": "assets/images/posts/ecppt/part-10-diagram.png",
         "diagram_caption": "Offensive PowerShell & AMSI Evasion Architecture",
         "diagram_section": """## Visual Architecture: Offensive PowerShell & AMSI Memory Hooking

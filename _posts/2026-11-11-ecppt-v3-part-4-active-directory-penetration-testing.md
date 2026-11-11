@@ -1,8 +1,8 @@
 ---
 title: "eCPPT Deep-Dive: Part 4 - Active Directory Pentesting: Kerberos, Domain Attacks & Persistence"
-date: 2026-11-12 11:00:00 +0300
+date: 2026-11-11 11:00:00 +0300
 categories: [Cyber Security, Penetration Testing]
-tags: [ecppt, active-directory, kerberos, kerberoasting, as-rep-roasting, bloodhound, pass-the-hash, golden-ticket]
+tags: [ecppt, active-directory, kerberos, kerberoasting, as-rep-roasting, bloodhound, pass-the-hash, golden-ticket, penetration-testing, cyber-security, red-team]
 description: "An exhaustive technical breakdown of Part 4 of the eCPPT curriculum: Active Directory architecture, Kerberos protocol mechanics, BloodHound graph analysis, Kerberoasting, AS-REP Roasting, Pass-the-Hash, and Golden/Silver ticket persistence."
 image:
   path: /assets/images/posts/ecppt/part-4-cover.png

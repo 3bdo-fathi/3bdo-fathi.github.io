@@ -2,7 +2,7 @@
 title: "Android Security Internals: Chapter 7 - Credential Storage"
 date: 2026-11-01 15:00:00 +0300
 categories: [Cyber Security, Android Security]
-tags: [android, mobile security, internals, keystore, cryptography, trustzone, tee, keymaster, strongbox, mastg]
+tags: [android, mobile-security, internals, keystore, cryptography, trustzone, tee, keymaster, strongbox, mastg, android-security, cyber-security]
 description: "A rigorous technical analysis of Chapter 7 of Nikolay Elenkov's 'Android Security Internals', examining the keystore native daemon, master key derivation, hardware-backed keys, Keymaster HAL, StrongBox, and ARM TrustZone integration."
 image:
   path: /assets/images/posts/android-security/chapter-7-cover.png

@@ -2,7 +2,7 @@
 title: "Practical Reverse Engineering: Chapter 1 - x86 and x64 Architecture"
 date: 2026-11-03 09:00:00 +0300
 categories: [Cyber Security, Reverse Engineering]
-tags: [ reverse-engineering, x86, x64, assembly, calling-conventions, paging, anti-vm, sample-j, ida-pro, ghidra ]
+tags: [reverse-engineering, x86, x64, assembly, calling-conventions, paging, anti-vm, sample-j, ida-pro, ghidra, cyber-security, binary-analysis]
 description: "An exhaustive technical breakdown of Chapter 1 of 'Practical Reverse Engineering' by Bruce Dang et al., analyzing x86/x64 registers, execution modes, stack frames, calling conventions, PAE paging, Sample J DllMain disassembly, and complete exercise solutions."
 image:
   path: /assets/images/posts/reverse-engineering/chapter-1-cover.png
@@ -571,6 +571,42 @@ Equivalent C: `return __popcnt(val);`
 In this chapter, we unpacked the foundational machine constraints of x86 and x64: execution privileges, register sets, calling conventions, paging mechanics, and real-world injection logic. 
 
 In [**Chapter 2: ARM Architecture & Assembly**](/posts/practical-reverse-engineering-chapter-2/), we transition from CISC variable-length instructions to RISC load-store mechanics, 32-bit ARM vs. Thumb-2 states, the hardware barrel shifter, conditional instruction execution, coprocessors, and decompiling complex Thumb-2 embedded device routines.
+
+---
+
+## Practical Reverse Engineering Cheat-Sheet & Command Reference
+
+| Action / Verification | GDB / GEF Command | x64dbg / IDA Equivalent | Operational Purpose |
+| :--- | :--- | :--- | :--- |
+| **Inspect Stack Frame** | `telescope $rsp 20` | `d esp` or Stack View | Inspect return addresses, saved frame pointer, and canary |
+| **Find ROP Gadgets** | `ROPgadget --binary target` | `rp++ -f target.exe -r 5` | Locate `jmp esp`, `pop rdi; ret` for payload control |
+| **Paging & Permissions** | `vmmap` / `checksec` | Memory Map Window | Audit `NX/DEP`, `ASLR`, `PIE`, and `RWX` allocated segments |
+| **Trace Function Call** | `trace function_name` | `bp func; log {eax}` | Intercept calling convention parameter passing (`RCX`, `RDX`, `R8`, `R9`) |
+
+---
+
+## Categorized References & Authoritative Reading
+
+### 1. Primary Academic & Industry Reference Works
+* Dang, Bruce, Alexandre Gazet, Elias Bachaalany, and Sébastien Josse. *Practical Reverse Engineering: x86, x64, ARM, Windows Kernel, Reversing Tools, and Obfuscation*. Wiley, 2014. Chapter 1: "x86 and x64", pp. 1–62.
+* Fog, Agner. *Calling Conventions for Different C++ Compilers and Operating Systems*. Technical University of Denmark Research Report. [Agner Fog Software Optimization Resources](https://www.agner.org/optimize/).
+* Russinovich, Mark, David Solomon, and Alex Ionescu. *Windows Internals, Part 1: Architecture, Processes, Threads, Memory Management, and More*. Microsoft Press.
+
+### 2. Official Architecture Specifications
+* **Intel 64 and IA-32 Architectures Software Developer’s Manual**: Volumes 1, 2A-2D, and 3A-3D. [Intel Corporation Documentation](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html).
+* **Microsoft Learn: x64 Calling Convention & Register Allocation**: [https://learn.microsoft.com/en-us/cpp/build/x64-calling-convention](https://learn.microsoft.com/en-us/cpp/build/x64-calling-convention).
+* **AMD64 Architecture Programmer's Manual**: Volume 2: System Programming (Page Translation and Segmentation).
+
+### 3. MITRE ATT&CK Enterprise Matrix Mapping
+* **T1055**: Process Injection (Dynamic allocation via `VirtualAllocEx` and thread creation). [https://attack.mitre.org/techniques/T1055/](https://attack.mitre.org/techniques/T1055/).
+* **T1203**: Exploitation for Client Execution (Memory safety corruption via stack offsets). [https://attack.mitre.org/techniques/T1203/](https://attack.mitre.org/techniques/T1203/).
+* **T1027**: Obfuscated Files or Information (Bit manipulation and runtime string decryption). [https://attack.mitre.org/techniques/T1027/](https://attack.mitre.org/techniques/T1027/).
+
+### 4. Hands-on Practice Labs & Verification Tooling
+* **Ghidra Software Reverse Engineering Framework**: National Security Agency (NSA) Research Tool. [https://github.com/NationalSecurityAgency/ghidra](https://github.com/NationalSecurityAgency/ghidra).
+* **GEF (GDB Enhanced Features)**: Exploit development and architecture debugging environment. [https://github.com/hugsy/gef](https://github.com/hugsy/gef).
+* **x64dbg / x32dbg**: Open-source x64/x32 debugger for Windows binaries. [https://x64dbg.com/](https://x64dbg.com/).
+* **Crackmes.one Binary Challenges**: Dedicated community platform for reverse engineering puzzles. [https://crackmes.one/](https://crackmes.one/).
 
 ---
 

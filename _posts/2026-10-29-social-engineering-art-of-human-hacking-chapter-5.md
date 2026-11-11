@@ -2,7 +2,7 @@
 title: "Book Summary: Social Engineering - The Art of Human Hacking (Chapter 5: Mind Tricks & Psychology)"
 date: 2026-10-29 13:00:00 +0300
 categories: [Cyber Security, Social Engineering]
-tags: [social-engineering, microexpressions, paul-ekman, nlp, interrogation, human-buffer-overflow, rapport, book-summary, christopher-hadnagy]
+tags: [social-engineering, microexpressions, paul-ekman, nlp, interrogation, human-buffer-overflow, rapport, book-summary, christopher-hadnagy, cyber-security, security-awareness]
 description: "A comprehensive summary of Chapter 5 of Christopher Hadnagy's 'Social Engineering: The Art of Human Hacking', analyzing Paul Ekman's 7 microexpressions, DoD interrogation tactics, NLP embedded commands, and the Human Buffer Overflow equation."
 image:
   path: /assets/images/posts/social-engineering/chapter-5-cover.png

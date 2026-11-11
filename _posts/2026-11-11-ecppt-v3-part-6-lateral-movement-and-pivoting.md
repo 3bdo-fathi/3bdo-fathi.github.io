@@ -1,8 +1,8 @@
 ---
 title: "eCPPT Deep-Dive: Part 6 - Lateral Movement, Pivoting & Network Port Forwarding"
-date: 2026-11-12 13:00:00 +0300
+date: 2026-11-11 13:00:00 +0300
 categories: [Cyber Security, Penetration Testing]
-tags: [ecppt, pivoting, lateral-movement, port-forwarding, ssh-tunneling, chisel, ligolo-ng, proxychains]
+tags: [ecppt, pivoting, lateral-movement, port-forwarding, ssh-tunneling, chisel, ligolo-ng, proxychains, penetration-testing, cyber-security, red-team]
 description: "An exhaustive technical breakdown of Part 6 of the eCPPT curriculum: multi-tier enterprise network pivoting, SSH local/remote/dynamic tunneling, high-speed Layer-3 routing with Ligolo-ng, Chisel HTTP/WebSockets proxies, and Windows lateral movement via Evil-WinRM, WMIExec, and PsExec."
 image:
   path: /assets/images/posts/ecppt/part-6-cover.png

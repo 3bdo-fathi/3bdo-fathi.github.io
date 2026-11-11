@@ -2,7 +2,7 @@
 title: "Android Security Internals: Chapter 8 - Online Account Management"
 date: 2026-11-01 16:00:00 +0300
 categories: [Cyber Security, Android Security]
-tags: [android, mobile security, internals, accountmanager, oauth, authentication, sso, access-control, mastg]
+tags: [android, mobile-security, internals, accountmanager, oauth, authentication, sso, access-control, mastg, android-security, cyber-security]
 description: "A technical breakdown of Chapter 8 of Nikolay Elenkov's 'Android Security Internals', focusing on AccountManagerService, AbstractAccountAuthenticator, token delegation protocols, OAuth security boundaries, and PKCE."
 image:
   path: /assets/images/posts/android-security/chapter-8-cover.png

@@ -2,7 +2,7 @@
 title: "Android Security Internals: Chapter 10 - Device Security"
 date: 2026-11-01 18:00:00 +0300
 categories: [Cyber Security, Android Security]
-tags: [android, mobile security, internals, full-disk-encryption, fde, fbe, dm-crypt, dm-verity, verified-boot, direct-boot]
+tags: [android, mobile-security, internals, full-disk-encryption, fde, fbe, dm-crypt, dm-verity, verified-boot, direct-boot, android-security, cyber-security]
 description: "An exhaustive technical breakdown of Chapter 10 of Nikolay Elenkov's 'Android Security Internals', covering Full Disk Encryption (dm-crypt), File-Based Encryption (FBE), Direct Boot, crypto_footer layout, Keymaster key derivation, and Verified Boot (dm-verity) hash trees."
 image:
   path: /assets/images/posts/android-security/chapter-10-cover.png

@@ -2,7 +2,7 @@
 title: "Android Security Internals: Chapter 1 - Android's Security Model"
 date: 2026-11-01 09:00:00 +0300
 categories: [Cyber Security, Android Security]
-tags: [android, mobile security, internals, linux kernel, binder, sandboxing, dalvik, architecture, project-zero]
+tags: [android, mobile-security, internals, linux-kernel, binder, sandboxing, dalvik, architecture, project-zero, android-security, cyber-security]
 description: "An exhaustive technical breakdown of Chapter 1 of Nikolay Elenkov's 'Android Security Internals', analyzing multi-level sandboxing, Linux kernel isolation, Dalvik/ART virtual machine boundaries, and Binder IPC internals with Project Zero exploit analyses."
 image:
   path: /assets/images/posts/android-security/chapter-1-cover.png

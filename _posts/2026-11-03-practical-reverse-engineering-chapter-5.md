@@ -2,7 +2,7 @@
 title: "Practical Reverse Engineering: Chapter 5 - Software Obfuscation and Deobfuscation"
 date: 2026-11-03 17:00:00 +0300
 categories: [Cyber Security, Reverse Engineering]
-tags: [ reverse-engineering, obfuscation, deobfuscation, cfg-flattening, opaque-predicates, virtual-machines, symbolic-execution, quetz, angr, z3 ]
+tags: [reverse-engineering, obfuscation, deobfuscation, cfg-flattening, opaque-predicates, virtual-machines, symbolic-execution, quetz, angr, z3, cyber-security, binary-analysis]
 description: "An exhaustive technical breakdown of Chapter 5 of 'Practical Reverse Engineering' by Bruce Dang et al., analyzing white-box attack contexts, MBA expressions, CFG flattening, VM-based protectors, symbolic execution with Z3/angr, and solving the Quetz keygenme."
 image:
   path: /assets/images/posts/reverse-engineering/chapter-5-cover.png
@@ -400,6 +400,41 @@ Across this five-part series on **"Practical Reverse Engineering"**, we traverse
 5. [**Chapter 5: Software Obfuscation & Deobfuscation**](/posts/practical-reverse-engineering-chapter-5/): MBA expressions, opaque predicates, CFG flattening, VM-based protectors, symbolic execution with Z3, and cracking the Quetz keygenme.
 
 Binary analysis is not merely about reading disassembled instructions; it is about reconstructing the logic, intent, and constraints of compiled software. With these foundations, you possess the tools and methodology to tackle any executable across architectures, operating systems, and protection schemes.
+
+---
+
+## Practical Binary Deobfuscation Cheat-Sheet & Tool Arsenal
+
+| Obfuscation Primitive | Analysis / Neutralization Technique | Recommended Automation Tool |
+| :--- | :--- | :--- |
+| **Control Flow Flattening (CFF)** | Symbolic execution of basic blocks to resolve switch states; patch dispatcher with direct jumps | `angr` (Python) + `Triton` SMT framework |
+| **Opaque Predicates** | Taint analysis & dead-code elimination; identify invariant arithmetic conditions (e.g., $x^2 \ge 0$) | `MiASM` or Ghidra P-Code optimization |
+| **Mixed Boolean-Arithmetic (MBA)**| SMT Equivalence checking via Z3 solver or AST rewriting simplification rules | `Arybo` / `D810` Ghidra plugin |
+| **Custom Virtual Machine (VM)** | Instruction trace extraction; locate bytecode fetch-decode-execute loop & handler table | `Triton` dynamic symbolic execution / `Qiling` |
+
+---
+
+## Categorized References & Authoritative Reading
+
+### 1. Primary Academic & Industry Reference Works
+* Dang, Bruce, Alexandre Gazet, Elias Bachaalany, and Sébastien Josse. *Practical Reverse Engineering: x86, x64, ARM, Windows Kernel, Reversing Tools, and Obfuscation*. Wiley, 2014. Chapter 5: "Obfuscation", pp. 215–280.
+* Collberg, Christian, Clark Thomborson, and Douglas Low. *A Taxonomy of Obfuscating Transformations*. Technical Report, Department of Computer Science, University of Auckland.
+* Eyrolles, Marion. *Obfuscation with Mixed Boolean-Arithmetic Expressions: Reconstruction, Analysis and Simplification*. PhD Thesis, Université de Versailles Saint-Quentin-en-Yvelines.
+
+### 2. Seminal Research Papers & Tool Frameworks
+* **angr: A Next-Generation Binary Analysis Platform**: Shoshitaishvili, Yan, et al. IEEE Symposium on Security and Privacy (S&P), 2016. [https://angr.io/](https://angr.io/).
+* **Z3 Theorem Prover**: de Moura, Leonardo, and Nikolaj Bjørner. *Z3: An Efficient SMT Solver*. Microsoft Research. [https://github.com/Z3Prover/z3](https://github.com/Z3Prover/z3).
+* **Triton: Dynamic Binary Analysis Framework**: Saumon, Jonathan, et al. [https://triton-library.github.io/](https://triton-library.github.io/).
+
+### 3. MITRE ATT&CK Enterprise Matrix Mapping
+* **T1027.002**: Software Packing (UPX, Themida, VMProtect). [https://attack.mitre.org/techniques/T1027/002/](https://attack.mitre.org/techniques/T1027/002/).
+* **T1027**: Obfuscated Files or Information (Control flow flattening and dead code insertion).
+* **T1140**: Deobfuscate/Decode Files or Information (Runtime emulation and unpacking).
+
+### 4. Hands-on Practice Labs & Verification Tooling
+* **D810 Ghidra Deobfuscation Plugin**: Advanced rule-based simplifier for de-flattening and MBA reduction. [https://github.com/e-Origin/D810](https://github.com/e-Origin/D810).
+* **Qiling Framework**: Advanced cross-platform, cross-architecture binary emulation framework. [https://qiling.io/](https://qiling.io/).
+* **Quetz Keygenme (OpenSecurityTraining & Practical RE)**: Famous VM and MBA obfuscation training challenge.
 
 ---
 

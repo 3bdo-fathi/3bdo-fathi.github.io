@@ -11,7 +11,7 @@ layout: default
 
     <h1 class="dynamic-title">{{ title }}</h1>
 
-    {% if page.hide_stats != true and page.collection == 'tabs' %}
+    {% if page.show_stats == true %}
       {% include post-stats-styles.html %}
       {% include post-stats-bar.html lang=lang content=content %}
     {% endif %}

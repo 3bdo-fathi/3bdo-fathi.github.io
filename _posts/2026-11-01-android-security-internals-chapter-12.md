@@ -2,7 +2,7 @@
 title: "Android Security Internals: Chapter 12 - SELinux in Android"
 date: 2026-11-01 20:00:00 +0300
 categories: [Cyber Security, Android Security]
-tags: [android, mobile security, internals, selinux, seandroid, mac, access-control, kernel, avc, treble]
+tags: [android, mobile-security, internals, selinux, seandroid, mac, access-control, kernel, avc, treble, android-security, cyber-security]
 description: "An in-depth analysis of Chapter 12 of Nikolay Elenkov's 'Android Security Internals', dissecting SEAndroid Mandatory Access Control (MAC), kernel policy enforcement, domain transitions, Project Treble split policies, and mac_permissions.xml mapping."
 image:
   path: /assets/images/posts/android-security/chapter-12-cover.png

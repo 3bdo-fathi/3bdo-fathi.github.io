@@ -2,7 +2,7 @@
 title: "Book Summary: Social Engineering - The Art of Human Hacking (Chapter 7: The Tools of the Social Engineer)"
 date: 2026-10-29 15:00:00 +0300
 categories: [Cyber Security, Social Engineering]
-tags: [social-engineering, physical-security, lockpicking, maltego, set, cupp, cewl, book-summary, christopher-hadnagy]
+tags: [social-engineering, physical-security, lockpicking, maltego, set, cupp, cewl, book-summary, christopher-hadnagy, cyber-security, security-awareness]
 description: "A comprehensive summary of Chapter 7 of Christopher Hadnagy's 'Social Engineering: The Art of Human Hacking', analyzing physical bypass tools, covert surveillance, Maltego, the Social Engineer Toolkit (SET), and password profiling automation."
 image:
   path: /assets/images/posts/social-engineering/chapter-7-cover.png
