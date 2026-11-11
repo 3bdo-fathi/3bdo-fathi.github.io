@@ -1,0 +1,354 @@
+<!-- Salawat First-Visit Modal / تحية الصلاة على النبي ﷺ -->
+<style>
+  #salawat-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(5, 10, 15, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    opacity: 0;
+    transition: opacity 0.35s ease-in-out;
+  }
+
+  #salawat-modal-card {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(16, 185, 129, 0.25);
+    padding: 2.25rem 2rem 1.85rem;
+    text-align: center;
+    transform: scale(0.92) translateY(12px);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+    overflow: hidden;
+  }
+
+  /* Dark mode overrides */
+  [data-mode="dark"] #salawat-modal-card,
+  html[data-mode="dark"] #salawat-modal-card,
+  body[data-mode="dark"] #salawat-modal-card {
+    background: #0d1117;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 30px -5px rgba(16, 185, 129, 0.2);
+    color: #e6edf3;
+  }
+
+  /* Decorative Islamic Geometric subtle background */
+  .salawat-glow {
+    position: absolute;
+    top: -90px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 260px;
+    height: 260px;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.22) 0%, rgba(16, 185, 129, 0) 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .salawat-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .salawat-icon-wrapper {
+    width: 68px;
+    height: 68px;
+    margin: 0 auto 1.25rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.08) 100%);
+    border: 1.5px solid rgba(16, 185, 129, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #10b981;
+    font-size: 2rem;
+    box-shadow: 0 8px 20px -4px rgba(16, 185, 129, 0.25);
+    animation: salawatPulse 3s infinite ease-in-out;
+  }
+
+  @keyframes salawatPulse {
+    0%, 100% {
+      transform: scale(1);
+      box-shadow: 0 8px 20px -4px rgba(16, 185, 129, 0.25);
+    }
+    50% {
+      transform: scale(1.05);
+      box-shadow: 0 12px 28px -2px rgba(16, 185, 129, 0.45);
+    }
+  }
+
+  .salawat-title-ar {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Scheherazade New", "Amiri", serif;
+    font-size: 1.75rem;
+    font-weight: 800;
+    line-height: 1.4;
+    color: #065f46;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  [data-mode="dark"] .salawat-title-ar,
+  html[data-mode="dark"] .salawat-title-ar {
+    color: #34d399;
+    text-shadow: 0 0 20px rgba(52, 211, 153, 0.35);
+  }
+
+  .salawat-duaa-ar {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Scheherazade New", "Amiri", serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.7;
+    color: #1f2937;
+    margin-bottom: 1.25rem;
+    padding: 0.6rem 0.9rem;
+    background: rgba(16, 185, 129, 0.06);
+    border-radius: 10px;
+    border: 1px dashed rgba(16, 185, 129, 0.25);
+  }
+
+  [data-mode="dark"] .salawat-duaa-ar,
+  html[data-mode="dark"] .salawat-duaa-ar {
+    color: #f0f6fc;
+    background: rgba(16, 185, 129, 0.1);
+    border-color: rgba(52, 211, 153, 0.3);
+  }
+
+  .salawat-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.35), transparent);
+    margin: 1.15rem auto;
+    width: 75%;
+  }
+
+  .salawat-title-en {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 0.35rem;
+    letter-spacing: -0.01em;
+  }
+
+  [data-mode="dark"] .salawat-title-en,
+  html[data-mode="dark"] .salawat-title-en {
+    color: #f3f4f6;
+  }
+
+  .salawat-subtitle-en {
+    font-size: 0.88rem;
+    color: #4b5563;
+    line-height: 1.5;
+    margin-bottom: 1.6rem;
+  }
+
+  [data-mode="dark"] .salawat-subtitle-en,
+  html[data-mode="dark"] .salawat-subtitle-en {
+    color: #9ca3af;
+  }
+
+  .salawat-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.85rem 1.5rem;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff !important;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 8px 20px -4px rgba(16, 185, 129, 0.4);
+    transition: all 0.2s ease;
+    text-decoration: none !important;
+  }
+
+  .salawat-btn-primary:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -4px rgba(16, 185, 129, 0.55);
+  }
+
+  .salawat-btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .salawat-close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid rgba(156, 163, 175, 0.3);
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+  }
+
+  .salawat-close-btn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border-color: #ef4444;
+  }
+
+  [data-mode="dark"] .salawat-close-btn {
+    color: #9ca3af;
+    border-color: rgba(75, 85, 99, 0.4);
+  }
+
+  [data-mode="dark"] .salawat-close-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+    border-color: #f87171;
+  }
+
+  @media (max-width: 576px) {
+    #salawat-modal-card {
+      padding: 1.75rem 1.25rem 1.5rem;
+    }
+    .salawat-title-ar {
+      font-size: 1.5rem;
+    }
+    .salawat-duaa-ar {
+      font-size: 1.02rem;
+    }
+  }
+</style>
+
+<div id="salawat-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="salawat-modal-title">
+  <div id="salawat-modal-card">
+    <button type="button" class="salawat-close-btn" id="salawat-close-btn" aria-label="Close modal">&times;</button>
+    <div class="salawat-glow"></div>
+    <div class="salawat-content">
+      <div class="salawat-icon-wrapper" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2l2.4 5.3 5.6.8-4 4.1 1 5.8-5-2.8-5 2.8 1-5.8-4-4.1 5.6-.8z"></path>
+        </svg>
+      </div>
+
+      <div id="salawat-modal-title" class="salawat-title-ar">صلِّ على سيدنا محمد ﷺ</div>
+      <div class="salawat-duaa-ar" dir="rtl">
+        اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَى سَيِّدِنَا وَنَبِيِّنَا مُحَمَّدٍ، وَعَلَى آلِهِ وَصَحْبِهِ أَجْمَعِينَ
+      </div>
+
+      <div class="salawat-divider"></div>
+
+      <div class="salawat-title-en">Peace & Blessings Upon Prophet Muhammad</div>
+      <div class="salawat-subtitle-en">
+        Take a blessed moment to send prayers and blessings upon Prophet Muhammad ﷺ before exploring the research & roadmaps.
+      </div>
+
+      <button type="button" class="salawat-btn-primary" id="salawat-action-btn">
+        <span dir="rtl">اللهم صلِّ وسلم وبارك عليه</span>
+        <span>&bull;</span>
+        <span>Acknowledge & Continue</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* First-visit Salawat popup script: strictly runs once per visitor using localStorage */
+  (function () {
+    var STORAGE_KEY = 'salawat_welcomed_v1';
+
+    function dismissModal() {
+      try {
+        localStorage.setItem(STORAGE_KEY, 'true');
+      } catch (e) {
+        /* In case localStorage is blocked in private browsing */
+      }
+      var backdrop = document.getElementById('salawat-modal-backdrop');
+      var card = document.getElementById('salawat-modal-card');
+      if (backdrop && card) {
+        backdrop.style.opacity = '0';
+        card.style.transform = 'scale(0.92) translateY(12px)';
+        setTimeout(function () {
+          backdrop.style.display = 'none';
+        }, 360);
+      }
+    }
+
+    function initSalawatModal() {
+      var alreadySeen = false;
+      try {
+        alreadySeen = localStorage.getItem(STORAGE_KEY) === 'true';
+      } catch (e) {
+        alreadySeen = false;
+      }
+
+      /* If already acknowledged, do not show ever again */
+      if (alreadySeen) {
+        return;
+      }
+
+      var backdrop = document.getElementById('salawat-modal-backdrop');
+      var card = document.getElementById('salawat-modal-card');
+      var closeBtn = document.getElementById('salawat-close-btn');
+      var actionBtn = document.getElementById('salawat-action-btn');
+
+      if (!backdrop || !card) return;
+
+      /* Gentle delay after initial page render so it does not interfere with load performance */
+      setTimeout(function () {
+        /* Re-check before showing in case another tab dismissed it */
+        try {
+          if (localStorage.getItem(STORAGE_KEY) === 'true') return;
+        } catch (e) {}
+
+        backdrop.style.display = 'flex';
+        /* Trigger CSS transition */
+        requestAnimationFrame(function () {
+          backdrop.style.opacity = '1';
+          card.style.transform = 'scale(1) translateY(0)';
+        });
+      }, 700);
+
+      if (closeBtn) {
+        closeBtn.addEventListener('click', dismissModal);
+      }
+      if (actionBtn) {
+        actionBtn.addEventListener('click', dismissModal);
+      }
+
+      /* Close if user clicks outside the modal card */
+      backdrop.addEventListener('click', function (e) {
+        if (e.target === backdrop) {
+          dismissModal();
+        }
+      });
+
+      /* Close on Escape key */
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && backdrop.style.display === 'flex') {
+          dismissModal();
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initSalawatModal);
+    } else {
+      initSalawatModal();
+    }
+  })();
+</script>

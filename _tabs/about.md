@@ -7,7 +7,7 @@ permalink: /about/
 
 # Abdulrahman M. Fathi
 
-**0x3bdo** | Cyber Security Engineer &amp; Penetration Tester  
+**Abdulrahman M. Fathi (0x3bdo)** | Cyber Security Engineer &amp; Penetration Tester  
 Cairo, Egypt
 
 [LinkedIn](https://www.linkedin.com/in/3bdo-fathi){:target="_blank" rel="noopener noreferrer"} • [GitHub](https://github.com/3bdo-fathi){:target="_blank" rel="noopener noreferrer"} • [Email](mailto:abdulrahmanmohamedfathi@gmail.com) • [Contact]({{ '/contact-me/' | relative_url }})

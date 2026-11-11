@@ -14,14 +14,18 @@ timezone: Africa/Cairo
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: 0x3bdo # the main title
+title: Abdulrahman M. Fathi # the main title
 
 tagline: Cyber Security Engineer | Penetration Tester # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
-  Personal cybersecurity blog covering penetration testing, security research,
-  Active Directory, Android security, OSINT, automation, malware analysis,
-  and practical hands-on writeups.
+  Abdulrahman M. Fathi (0x3bdo) — Personal cybersecurity research blog covering penetration testing,
+  Android security internals, reverse engineering, Active Directory exploitation, OSINT,
+  malware analysis, and practical security engineering writeups.
+
+keywords: >-
+  Abdulrahman M. Fathi, 0x3bdo, cybersecurity, penetration testing, reverse engineering,
+  Android security internals, Active Directory, malware analysis, OSINT, exploit development, security research
 
 # Fill in the protocol & hostname for your site.
 # E.g. 'https://username.github.io', note that it does not end with a '/'.
@@ -37,7 +41,7 @@ twitter:
 social:
   # Change to your full name.
   # It will be displayed as the default author of the posts and the copyright owner in the Footer
-  name: Abdulrahman Mohamed
+  name: Abdulrahman M. Fathi
   email: abdulrahmanmohamedfathi@gmail.com # change to your email address
   fediverse_handle: # fill in your fediverse handle. E.g. "@username@domain.com"
   links:

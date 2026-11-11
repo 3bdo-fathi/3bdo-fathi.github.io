@@ -1,3 +1,7 @@
+<!-- Global Author & Technical SEO Meta Tags -->
+<meta name="author" content="{{ site.social.name | default: 'Abdulrahman M. Fathi' }}">
+{% if site.keywords %}<meta name="keywords" content="{{ site.keywords | strip }}">{% endif %}
+
 <!-- Google Structured Data (JSON-LD) for TechArticle & BlogPosting -->
 {% if page.layout == 'post' %}
 <script type="application/ld+json">
@@ -18,19 +22,50 @@
   },
   "author": {
     "@type": "Person",
-    "name": "{{ site.social.name | default: 'Abdulrahman Mohamed' }}",
+    "name": "{{ site.social.name | default: 'Abdulrahman M. Fathi' }}",
     "jobTitle": "Cyber Security Engineer & Penetration Tester",
     "url": "https://www.linkedin.com/in/3bdo-fathi"
   },
   "publisher": {
     "@type": "Person",
-    "name": "{{ site.title | default: '0x3bdo' }}",
+    "name": "{{ site.title | default: 'Abdulrahman M. Fathi' }}",
     "url": "{{ site.url }}"
   }{% if page.image %},
   "image": {
     "@type": "ImageObject",
     "url": "{{ page.image.path | default: page.image | absolute_url }}"
   }{% endif %}
+}
+</script>
+{% elsif page.layout == 'home' or page.url == '/' %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "{{ site.title | default: 'Abdulrahman M. Fathi' }}",
+  "url": "{{ site.url }}",
+  "description": {{ site.description | jsonify }},
+  "author": {
+    "@type": "Person",
+    "name": "Abdulrahman M. Fathi",
+    "alternateName": ["0x3bdo", "Abdulrahman Mohamed"],
+    "jobTitle": "Cyber Security Engineer & Penetration Tester",
+    "url": "{{ site.url }}",
+    "sameAs": [
+      "https://github.com/3bdo-fathi",
+      "https://www.linkedin.com/in/3bdo-fathi",
+      "https://twitter.com/3bdofathii"
+    ],
+    "knowsAbout": [
+      "Cybersecurity",
+      "Penetration Testing",
+      "Reverse Engineering",
+      "Android Security",
+      "Active Directory Security",
+      "Threat Research",
+      "Vulnerability Assessment"
+    ]
+  }
 }
 </script>
 {% endif %}
