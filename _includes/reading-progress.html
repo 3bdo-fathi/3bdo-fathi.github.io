@@ -47,6 +47,20 @@
 
       const progress = Math.max(0, Math.min(100, ((scrollY - articleTop) / totalScrollable) * 100));
       bar.style.width = progress + '%';
+      
+      /* Save to localStorage for sidebar Continue Reading Tracker */
+      try {
+        var roundPct = Math.round(progress);
+        var headingElem = document.querySelector('h1[data-toc-skip]') || document.querySelector('header h1') || document.querySelector('article h1');
+        var articleTitle = headingElem ? headingElem.innerText.trim() : document.title;
+        localStorage.setItem('recent_reading_tracker', JSON.stringify({
+          title: articleTitle,
+          url: window.location.pathname,
+          progress: roundPct,
+          timestamp: Date.now()
+        }));
+      } catch (err) {}
+
       ticking = false;
     }
 

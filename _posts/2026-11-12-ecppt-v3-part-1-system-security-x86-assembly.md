@@ -3,7 +3,7 @@ title: "eCPPT Deep-Dive: Part 1 - System Security & x86 Assembly Fundamentals"
 date: 2026-11-12 08:00:00 +0300
 categories: [Cyber Security, Penetration Testing]
 tags: [ecppt, system-security, x86, assembly, memory-management, stack-frame, calling-conventions, reverse-engineering]
-description: "الدليل الشامل للجزء الأول من مسار eCPPT: تشريح معمارية المعالج x86، سجلات الذاكرة، إدارة الذاكرة الظاهرية، تحليل بنية المكدس (Stack Frame)، واتفاقيات الاستدعاء (Calling Conventions)."
+description: "An exhaustive technical breakdown of Part 1 of the eCPPT curriculum: x86 processor architecture, IA-32 register sets, process virtual memory layout, stack frame mechanics (EBP/ESP), and calling conventions (__cdecl, __stdcall, __fastcall)."
 image:
   path: /assets/images/posts/ecppt/part-1-cover.png
   alt: "eCPPT Masterclass Part 1 - System Security & x86 Assembly Fundamentals"
@@ -14,271 +14,290 @@ schema:
   author: Abdulrahman M. Fathi
 ---
 
-مرحبًا بكم في أولى مقالات السلسلة الشاملة لتغطية منهج واختبار **eCPPT (eLearnSecurity Certified Professional Penetration Tester)** الصادر عن **INE Security**. في هذا الدليل المعمق، لن نكتفي بمجرد المرور السريع على الشرائح التعليمية، بل سنفكك المفاهيم الهندسية من أدنى المستويات البرمجية (Low-Level Architecture) وصولاً إلى الممارسات العملية المتقدمة التي يحتاجها مختبر الاختراق المحترف.
+Welcome to the inaugural article of our comprehensive, production-grade masterclass covering the **eCPPT (eLearnSecurity Certified Professional Penetration Tester)** curriculum by **INE Security**. Rather than providing superficial slide summaries, this series deconstructs offensive tradecraft from the lowest architectural layers of computer hardware to advanced enterprise Active Directory attacks, multi-tier pivoting, and evasive command-and-control operations.
 
-تعتبر وحدة **أمن الأنظمة (System Security)** والتعامل مع **لغة التجميع x86 (Assembly Language)** الحجر الأساس لكافة تقنيات تطوير الثغرات، استغلال طفحان الذاكرة (Buffer Overflows)، وتخطي آليات الحماية الحديثة في أنظمة التشغيل.
+In this first installment, we dissect the foundational pillars of **System Security and x86 Assembly Language**. Mastering the execution cycle of the central processing unit (CPU), memory virtualization, stack frame mechanics, and compiler calling conventions is an absolute prerequisite for binary exploitation, custom exploit development, and bypassing modern operating system mitigations.
 
 ---
 
-### جدول التنقل في السلسلة (Series Navigation)
+### Series Navigation
 
-| **المقال السابق** | **المقال الحالي** | **المقال القادم** |
+| **Previous Part** | **Current Part** | **Next Part** |
 | :---: | :---: | :---: |
-| *بداية السلسلة* | **الجزء 1: أمن الأنظمة وأساسيات x86** | [الجزء 2: تطوير الثغرات وطفحان الذاكرة (Buffer Overflows)](/posts/ecppt-v3-part-2-exploit-development-buffer-overflows/) |
+| *Series Beginning* | **Part 1: System Security & x86 Assembly** | [Part 2: Exploit Development: Stack & SEH Overflows](/posts/ecppt-v3-part-2-exploit-development-buffer-overflows/) |
 
 ---
 
-## أبرز النقاط الرئيسية (Key Takeaways)
+## Key Takeaways
 
-* **معمارية المعالج (CPU Architecture)**: تتكون وحدة المعالجة المركزية من وحدة التحكم (CU)، ووحدة الحساب والمنطق (ALU)، ومجموعة السجلات (Registers). يعمل المعالج بدورة محكمة: جلب التعليمة (Fetch)، فك التشفير (Decode)، ثم التنفيذ (Execute).
-* **سجلات معمارية IA-32**: تنقسم سجلات 32-بت إلى سجلات عامة (`EAX`, `EBX`, `ECX`, `EDX`)، وسجلات الفهرسة والإشارة (`ESI`, `EDI`, `ESP`, `EBP`)، وسجل مؤشر التعليمات الحرج (`EIP`)، وسجل الرايات (`EFLAGS`).
-* **خريطة ذاكرة العمليات (Process Memory Layout)**: تقسم الذاكرة الظاهرية للعملية إلى قطاعات رئيسية: قطاع الشيفرة البرمجية (`.text`)، قطاع البيانات المهيأة (`.data`)، قطاع المتغيرات غير المهيأة (`.bss`)، كومة الذاكرة الديناميكية (`Heap`) التي تنمو لأعلى، والمكدس (`Stack`) الذي ينمو لأسفل نحو العناوين الأقل.
-* **إطار المكدس (Stack Frame)**: تحافظ دالتا الدخول والخروج (`Prologue` و `Epilogue`) على حدود الدوال المحلية، حيث يشير `EBP` إلى قاعدة الإطار بينما يشير `ESP` إلى قمته.
-* **اتفاقيات الاستدعاء (Calling Conventions)**: تختلف طريقة تمرير المتغيرات ومسؤولية تنظيف المكدس بين `__cdecl` (المنظف هو الدالة المستدعية)، و `__stdcall` (المنظف هو الدالة المستدعاة)، و `__fastcall` (التمرير عبر السجلات).
+* **Processor Architecture**: The Central Processing Unit (CPU) executes code via a continuous hardware cycle: **Fetch** (retrieving instructions from the address pointed to by `EIP`), **Decode** (parsing opcodes and operands), and **Execute** (performing ALU operations, branch jumps, or memory reads/writes).
+* **IA-32 Architecture Registers**: 32-bit x86 systems feature 8 general-purpose registers (`EAX`, `EBX`, `ECX`, `EDX`, `ESI`, `EDI`, `ESP`, `EBP`), the critical instruction pointer (`EIP`), and the processor status word register (`EFLAGS`).
+* **Process Virtual Memory Layout**: In a 32-bit protected mode process, 4 GB of addressable space is segmented into the Code (`.text`) segment, Initialized Data (`.data`), Uninitialized Data (`.bss`), the dynamically growing Heap (grows toward higher memory addresses), and the Call Stack (grows downward toward lower memory addresses).
+* **Stack Frame Lifecycle**: Subroutine boundaries are created and torn down via the standard **Function Prologue** (`push ebp; mov ebp, esp; sub esp, X`) and **Function Epilogue** (`mov esp, ebp; pop ebp; ret`). Overwriting the `Saved EIP` on the stack allows an attacker to hijack the instruction pointer upon return.
+* **Calling Conventions**: In `__cdecl`, the caller cleans the stack; in `__stdcall`, the callee cleans its own stack arguments via `ret X`; in `__fastcall`, leading arguments are passed directly within CPU registers (`ECX`, `EDX`) for maximum execution speed.
+* **Byte Ordering (Endianness)**: The x86 architecture is strictly Little-Endian; multibyte numerical values and memory addresses are stored in memory with the Least Significant Byte (LSB) at the lowest memory address.
 
 ---
 
-## 1. معمارية المعالج ودورة تنفيذ التعليمات (CPU Internals)
+## 1. CPU Internals and the Instruction Execution Cycle
 
-لفهم كيفية استغلال البرمجيات والسيطرة على مسار تنفيذ العمليات، يجب أولاً إدراك كيفية تفاعل المعالج مع الذاكرة العشوائية (RAM).
+The Central Processing Unit (CPU) is the core computational engine of any modern computer system. To construct reliable exploits, an offensive security researcher must maintain an exact mental model of how instructions travel through silicon pipelines.
 
 ```mermaid
 flowchart LR
     subgraph CPU ["Central Processing Unit (CPU)"]
-        CU["Control Unit (CU)"]
-        ALU["Arithmetic Logic Unit (ALU)"]
-        REG["Registers (EAX, ESP, EIP, etc.)"]
+        CU["Control Unit (CU)<br/>• Instruction Decoder<br/>• Microcode Sequencer"]
+        ALU["Arithmetic Logic Unit (ALU)<br/>• Integer Operations (+, -, *, /)<br/>• Bitwise Logic (AND, OR, XOR)"]
+        REG["Register File<br/>• General Purpose (EAX..EDX)<br/>• Pointers (ESP, EBP, EIP)<br/>• Flags (EFLAGS)"]
     end
     
-    BUS["System Bus (Data / Address / Control)"]
-    RAM[("Physical Memory / RAM")]
+    BUS["System Bus (Control, Address, Data Buses)"]
+    RAM[("Physical RAM & Virtual Memory Pages")]
     
     CPU <--> BUS <--> RAM
 ```
 
-تتولى وحدة **Control Unit (CU)** توجيه حركة البيانات وجلب التعليمات من قطاع التعليمات في الذاكرة وتفكيك شفرتها. بينما تقوم وحدة **Arithmetic Logic Unit (ALU)** بتنفيذ العمليات الحسابية (الجمع، الطرح) والمنطقية (AND, OR, XOR). يتم تبادل البيانات والعناوين عبر مسارات التوصيل (Buses).
+The CPU executes compiled machine instructions through three continuous, microarchitectural phases:
 
-تنفذ وحدة المعالجة المركزية التعليمات عبر دورة مستمرة:
-1. **Fetch**: قراءة التعليمة من عنوان الذاكرة المخزن في سجل مؤشر التعليمات (`EIP`).
-2. **Decode**: تحليل الأمر وفهم المعاملات (Opcodes & Operands).
-3. **Execute**: تنفيذ العملية الحسابية أو المنطقية، أو القفز إلى عنوان ذاكرة آخر، وتحديث الرايات (`EFLAGS`).
+1. **Instruction Fetch (IF)**: The Control Unit references the address currently stored in the Instruction Pointer (`EIP`), transmits a read request across the memory address bus, and fetches the machine code bytes into the instruction queue.
+2. **Instruction Decode (ID)**: The decoder translates binary opcodes into discrete CPU control signals, determines operand addressing modes (immediate values, register contents, or memory dereferences), and prepares execution pipelines.
+3. **Execution (EX)**: The ALU performs arithmetic or bitwise manipulations, updates the status condition bits in `EFLAGS`, and commits results to target registers or memory locations. Finally, `EIP` is incremented to reference the next instruction in sequence.
 
 ---
 
-## 2. تشريح سجلات الذاكرة في معمارية x86 (IA-32 Registers)
+## 2. IA-32 Architecture Register File Breakdown
 
-في معمارية x86 ذات 32-بت، يمتلك المعالج 8 سجلات عامة الحجم، طول كل منها 32 بت (4 بايت). يمكن تقسيم بعض هذه السجلات للوصول إلى أجزاء 16-بت أو 8-بت للتوافق العكسي:
+In 32-bit x86 architecture, the CPU provides 8 primary registers, each 32 bits (4 bytes) wide. To maintain backward compatibility with 16-bit 8086 and 8-bit 8080 processors, the lower portions of several registers can be addressed independently:
 
 ```mermaid
 classDiagram
     class EAX {
-        32-bit: EAX
-        16-bit: AX
-        8-bit High: AH
-        8-bit Low: AL
+        32-bit: EAX (Bits 0-31)
+        16-bit: AX (Bits 0-15)
+        8-bit High: AH (Bits 8-15)
+        8-bit Low: AL (Bits 0-7)
     }
     class EBX {
-        32-bit: EBX
-        16-bit: BX
-        8-bit High: BH
-        8-bit Low: BL
+        32-bit: EBX (Bits 0-31)
+        16-bit: BX (Bits 0-15)
+        8-bit High: BH (Bits 8-15)
+        8-bit Low: BL (Bits 0-7)
     }
     class ECX {
-        32-bit: ECX
-        16-bit: CX
-        8-bit High: CH
-        8-bit Low: CL
+        32-bit: ECX (Bits 0-31)
+        16-bit: CX (Bits 0-15)
+        8-bit High: CH (Bits 8-15)
+        8-bit Low: CL (Bits 0-7)
     }
     class EDX {
-        32-bit: EDX
-        16-bit: DX
-        8-bit High: DH
-        8-bit Low: DL
+        32-bit: EDX (Bits 0-31)
+        16-bit: DX (Bits 0-15)
+        8-bit High: DH (Bits 8-15)
+        8-bit Low: DL (Bits 0-7)
     }
 ```
 
-### السجلات العامة وتخصصاتها القياسية:
+### General-Purpose Registers and Architectural Conventions:
 
-1. **`EAX` (Extended Accumulator Register)**: يُستخدم افتراضيًا لتخزين نتائج العمليات الحسابية وقيم الإرجاع (Return Values) من الدوال.
-2. **`EBX` (Extended Base Register)**: يُستخدم كمؤشر لقاعدة البيانات في العمليات الحسابية أو كمؤشر ثابت للمصفوفات.
-3. **`ECX` (Extended Counter Register)**: يُستخدم كعداد في الحلقات التكرارية (Loops) وعمليات السلاسل النصية (`REP`, `LOOP`).
-4. **`EDX` (Extended Data Register)**: مكمل لـ `EAX` في عمليات الضرب والقسمة الكبيرة (I/O operations).
-5. **`ESI` (Extended Source Index)**: مؤشر إلى البيانات المصدرية في عمليات معالجة الكتل النصية.
-6. **`EDI` (Extended Destination Index)**: مؤشر إلى البيانات الهدف في عمليات النسخ والنقل.
+* **`EAX` (Accumulator Register)**: Used natively for arithmetic computations, logical comparisons, and storing function return values upon exit from a subroutine.
+* **`EBX` (Base Register)**: Historically utilized as a base pointer for memory data segmentation; frequently utilized by compilers as a persistent scratchpad register across loops.
+* **`ECX` (Counter Register)**: Serves as the dedicated architectural loop and string counter. Instructions such as `LOOP`, `REP MOVS`, and shift operations (`SHL`, `SHR`) natively decrement or reference `CL`/`ECX`.
+* **`EDX` (Data Register)**: Serves as an extension of `EAX` during large multiplication and division instructions (such as `MUL` and `DIV`), storing high-order bits of 64-bit mathematical results.
+* **`ESI` (Source Index Register)**: Serves as the source memory pointer in bulk block memory and string transfer operations (`MOVSB`, `LODSB`).
+* **`EDI` (Destination Index Register)**: Serves as the destination pointer in bulk memory copy operations (`MOVSB`, `STOSB`).
 
-### السجلات الخاصة بالتحكم بالمكدس والمسار:
+### Stack and Control Registers:
 
-* **`ESP` (Extended Stack Pointer)**: يشير دائمًا إلى أعلى عنوان مشغول حاليًا في قمة المكدس (Top of the Stack). تتغير قيمته تلقائيًا عند استدعاء `PUSH` أو `POP`.
-* **`EBP` (Extended Base Pointer)**: يُعرف بمؤشر إطار الدالة (Frame Pointer)، ويبقى ثابتًا طوال تنفيذ الدالة الحالية لتسهيل الوصول إلى المتغيرات المحلية والمعاملات عبر الإزاحات (Offsets مثل `[ebp-4]`).
-* **`EIP` (Extended Instruction Pointer)**: السجل الذهبي في عالم استغلال الثغرات؛ حيث يحمل دائمًا عنوان الذاكرة للتعليمة التالية المراد تنفيذها. إن السيطرة على قيمة `EIP` تعني السيطرة الكاملة على مسار تدفق البرنامج (Arbitrary Code Execution).
+* **`ESP` (Extended Stack Pointer)**: Points to the current top of the call stack (the lowest numerical address currently utilized by active stack data). Its value is modified automatically by `PUSH`, `POP`, `CALL`, and `RET` instructions.
+* **`EBP` (Extended Base Pointer / Frame Pointer)**: Remains static throughout the lifetime of a function call, anchoring the base of the current stack frame. Local variables (`[ebp - offset]`) and function parameters (`[ebp + offset]`) are indexed relative to `EBP`.
+* **`EIP` (Extended Instruction Pointer)**: Contains the absolute virtual memory address of the next instruction waiting to be fetched and executed by the CPU. **Controlling `EIP` is the holy grail of memory corruption exploitation.**
 
-### سجل الرايات (EFLAGS):
-يتكون من رايات ثنائية (Bits) تُحدّث تلقائيًا بحسب نتائج العمليات:
-* **`ZF` (Zero Flag)**: يُضبط على 1 إذا كانت نتيجة العملية الحسابية السابقة تساوي صفرًا.
-* **`CF` (Carry Flag)**: يُضبط على 1 في حال حدوث تجاوز حسابي غير مرمز (Unsigned Overflow).
-* **`SF` (Sign Flag)**: يُضبط على 1 إذا كانت نتيجة العملية سالبة (البت الأكثر أهمية = 1).
-* **`OF` (Overflow Flag)**: يُضبط على 1 في حال حدوث تجاوز في العمليات الحسابية المرمزة (Signed Overflow).
+### Status and Control Flags (`EFLAGS`):
+
+The `EFLAGS` register contains 32 single-bit condition flags updated automatically by comparison and arithmetic instructions:
+
+| Flag | Name | Semantic Trigger | Exploitation Relevance |
+| :--- | :--- | :--- | :--- |
+| **`ZF`** | Zero Flag | Set to `1` if an ALU operation yields zero (e.g., `CMP EAX, EAX`). | Governs conditional jumps like `JE` (Jump if Equal) and `JZ`. |
+| **`CF`** | Carry Flag | Set to `1` if an arithmetic operation causes an unsigned overflow. | Detects unsigned integer wrap-around vulnerabilities. |
+| **`SF`** | Sign Flag | Set to `1` if the most significant bit (MSB) of the result is `1` (negative). | Governs signed conditional jumps (`JL`, `JLE`). |
+| **`OF`** | Overflow Flag | Set to `1` if signed integer operations exceed register capacity. | Critical for signed integer overflow and underflow exploitation. |
 
 ---
 
-## 3. خريطة ذاكرة العمليات (Process Virtual Memory Layout)
+## 3. Process Virtual Memory Architecture
 
-عندما يُشغّل نظام التشغيل (سواء Linux أو Windows) ملفًا تنفيذيًا، يخصص له فضاء ذاكرة افتراضية بحجم 4 جيجابايت في أنظمة 32-بت (من العنوان `0x00000000` حتى `0xFFFFFFFF`).
+In a 32-bit x86 operating system (Windows or Linux), every running process is allocated an isolated 4 Gigabyte virtual address space spanning from `0x00000000` to `0xFFFFFFFF`. The Operating System Kernel and Memory Management Unit (MMU) use page tables to map these virtual addresses to physical RAM:
 
 ```mermaid
 flowchart TD
-    subgraph Memory ["32-bit Virtual Memory Space"]
+    subgraph VirtualMemory ["32-bit Process Virtual Memory Space (4 GB)"]
         direction TB
-        High["0xFFFFFFFF - مساحة نواة النظام (Kernel Space - 1GB to 2GB)"]
-        Stack["0xBFFFFFFF - المكدس (Stack) ينخفض للأسفل ⬇️"]
-        Empty["فضاء حر (Unallocated Memory)"]
-        Heap["0x08048000 - الكومة (Heap) تنمو للأعلى ⬆️"]
-        BSS["قطاع المتغيرات غير المهيأة (.bss)"]
-        Data["قطاع البيانات المهيأة (.data)"]
-        Text["0x00010000 - قطاع الشيفرة والتعليمات (.text) - للقراءة والتنفيذ فقط"]
-        Low["0x00000000 - مساحة محجوزة للحماية (NULL Pointer Trap)"]
+        KernelSpace["0xFFFFFFFF<br/>Kernel Land (1 GB on Linux / 2 GB on Windows)<br/>Privilege Level Ring 0 (Hardware, Drivers, Syscalls)"]
+        StackSegment["0xBFFFFFFF<br/>Stack Segment (Call Frames, Locals, Return Addresses)<br/>⬇️ Grows Downward to Lower Addresses"]
+        Unallocated["Free Unmapped Memory Space<br/>(Guard Pages / Dynamic Virtual Allocations)"]
+        HeapSegment["0x08048000<br/>Heap Segment (Dynamic Memory: malloc, HeapAlloc, new)<br/>⬆️ Grows Upward to Higher Addresses"]
+        BSSSegment["Uninitialized Data Segment (.bss)<br/>Global & Static variables initialized to 0"]
+        DataSegment["Initialized Data Segment (.data)<br/>Global variables with predefined values (e.g. char *str = 'hello')"]
+        TextSegment["0x08048000 (Linux) / 0x00400000 (Windows)<br/>Text Segment (.text)<br/>Compiled Assembly Machine Code (Read & Execute ONLY)"]
+        NullPage["0x00000000<br/>NULL Pointer Trap Page (Non-readable / Non-writable)"]
     end
-    High --- Stack --- Empty --- Heap --- BSS --- Data --- Text --- Low
+    
+    KernelSpace --- StackSegment --- Unallocated --- HeapSegment --- BSSSegment --- DataSegment --- TextSegment --- NullPage
 ```
 
-### قطاعات الذاكرة بالتفصيل:
-* **قطاع الشيفرة (.text / Code Segment)**: يحتوي على تعليمات التجميع المترجمة القابلة للتنفيذ. يكون مضبوطًا بصلاحيات قراءة وتنفيذ فقط (`R-X`) لمنع التعديل على البرنامج أثناء التشغيل.
-* **قطاع البيانات (.data)**: يحتوي على المتغيرات العامة والساكنة (Global / Static Variables) التي تم تهيئتها بقيم أولية مسبقة.
-* **قطاع المتغيرات غير المهيأة (.bss)**: يحتوي على المتغيرات العامة التي لم تُعطَ قيمًا أولية ويتم حجزها تلقائيًا بصفر عند بدء التشغيل.
-* **الكومة (Heap)**: مساحة مخصصة للذاكرة الديناميكية المحجوزة في زمن التشغيل بواسطة دوال مثل `malloc()` أو `new`. تنمو من العناوين الأقل إلى العناوين الأعلى.
-* **المكدس (Stack)**: مساحة مخصصة لإدارة استدعاءات الدوال، المتغيرات المحلية، وعناوين العودة. ينمو بعكس الكومة، أي من العناوين العليا إلى العناوين الدنيا.
+### Segment Characteristics:
+
+* **Text Segment (`.text`)**: Contains executable binary instructions. Compilers mark this segment as Read-Only and Executable (`R-X`) to prevent code self-modification during execution.
+* **Data Segment (`.data`)**: Stores initialized global and static variables allocated prior to runtime.
+* **BSS Segment (`.bss`)**: Stores uninitialized global variables. When the program binary loads, the kernel zero-fills this entire memory page.
+* **Heap (`Heap`)**: Dynamically allocated memory requested at runtime via API calls (`malloc`, `calloc`, `HeapAlloc`). It expands upward from lower memory addresses toward higher addresses.
+* **Stack (`Stack`)**: Fast, compiler-managed contiguous memory that allocates local function variables, preserves return addresses, and orchestrates subroutine execution. It expands downward from higher memory addresses toward lower addresses.
 
 ---
 
-## 4. تشريح إطار المكدس وعمليات الاستدعاء (Stack Anatomy & Calling Conventions)
+## 4. Stack Anatomy, Stack Frames, and Call Mechanics
 
-يعمل المكدس بمبدأ **LIFO** (Last In, First Out). عند تنفيذ عملية `PUSH`، يتم إنقاص مؤشر المكدس `ESP` بمقدار 4 بايت ثم تخزين القيمة. وعند تنفيذ `POP`، يتم استرجاع القيمة ثم زيادة `ESP` بمقدار 4 بايت.
+The stack operates strictly as a **LIFO (Last In, First Out)** data structure. The pointer register `ESP` tracks the current top of the stack:
 
 ```text
-الذاكرة العليا (High Memory)
+High Memory Addresses (0xBFFFFFFF)
 +---------------------------------------+
-|  معاملات الدالة (Function Arguments)   |  arg2, arg1
+| Function Parameter 2 (Arg2)           | [ebp + 12]
 +---------------------------------------+
-|  عنوان العودة (Return Address / EIP)  |  (المخزن بواسطة تعليمة CALL)
+| Function Parameter 1 (Arg1)           | [ebp + 8]
 +---------------------------------------+
-|  قيمة EBP القديمة (Saved EBP)         |  <--- يشير EBP الجديد هنا
+| Return Address (Saved EIP)            | [ebp + 4]  <-- Pushed by CALL
 +---------------------------------------+
-|  المتغيرات المحلية (Local Variables)   |  buffer, int x, etc.
+| Saved Frame Pointer (Old EBP)         | [ebp]      <-- Pointed to by EBP
 +---------------------------------------+
-|  قمة المكدس الحالية (Top of Stack)    |  <--- يشير ESP هنا
+| Local Variable 1 (char buffer[64])    | [ebp - 4]  ... [ebp - 64]
 +---------------------------------------+
-الذاكرة الدنيا (Low Memory)
+| Current Top of Stack (ESP)            | <-- Pointed to by ESP
++---------------------------------------+
+Low Memory Addresses (0x00000000)
 ```
 
-### دورة حياة إطار الدالة (Function Frame Lifecycle):
+### Subroutine Lifecycle Deconstruction:
 
-عند استدعاء أي دالة في لغة C عبر التجميع، ينفذ المعالج تسلسلاً دقيقًا:
+When a function executes, the CPU coordinates a standardized set of prologue and epilogue instructions:
 
-#### 1. ديباجة الدالة (Function Prologue):
+#### 1. Function Prologue:
+Prior to executing a function's business logic, the new stack frame is established:
+
 ```nasm
-push ebp         ; حفظ مؤشر إطار الدالة القديمة على المكدس
-mov  ebp, esp    ; جعل EBP الحالي يشير إلى قمة المكدس لإنشاء إطار جديد
-sub  esp, 0x20   ; حجز 32 بايت على المكدس للمتغيرات المحلية للدالة
+push ebp          ; 1. Preserve the caller's base pointer onto the stack
+mov  ebp, esp     ; 2. Establish a new base pointer anchor matching current ESP
+sub  esp, 0x40    ; 3. Allocate 64 bytes of local stack memory by decrementing ESP
 ```
 
-#### 2. خاتمة الدالة (Function Epilogue):
+#### 2. Function Epilogue:
+Upon completion, the function tears down its local frame and restores the caller's context:
+
 ```nasm
-mov  esp, ebp    ; تحرير الذاكرة المحجوزة للمتغيرات المحلية
-pop  ebp         ; استعادة مؤشر إطار الدالة السابقة
-ret              ; سحب عنوان العودة من المكدس ووضعه في EIP
-```
-
-تعليمة `ret` البرمجية تكافئ تمامًا: `POP EIP`. وهنا يكمن جوهر ثغرات طفحان الذاكرة: فإذا استطاع المهاجم تجاوز حدود المتغير المحلي (Buffer) والكتابة فوق `Saved EIP` على المكدس، فعندما تنفذ الدالة تعليمة `ret`، سيقفز المعالج مباشرة إلى العنوان الذي حدده المهاجم!
-
----
-
-## 5. مقارنة اتفاقيات الاستدعاء (Calling Conventions)
-
-تحدد اتفاقيات الاستدعاء كيفية تمرير المعاملات إلى الدوال، وترتيب وضعها على المكدس، والطرف المسؤول عن استعادة وتنظيف مساحة المكدس:
-
-| الخاصية | `__cdecl` | `__stdcall` | `__fastcall` |
-| :--- | :--- | :--- | :--- |
-| **الاستخدام الشائع** | برامج C / C++ القياسية على Linux | واجهات برمجة تطبيقات Windows (Win32 API) | البرمجيات التي تتطلب سرعة فائقة |
-| **ترتيب المعاملات** | من اليمين إلى اليسار (Right-to-Left) | من اليمين إلى اليسار (Right-to-Left) | أول معاملين في `ECX`, `EDX`، والباقي على المكدس |
-| **تنظيف المكدس** | **الدالة المستدعية (Caller)** | **الدالة المستدعاة (Callee)** | **الدالة المستدعاة (Callee)** |
-| **تعليمة العودة** | `ret` (يتبعها `add esp, N` في المستدعي) | `ret N` (حيث N هو حجم البايتات للمنظف) | `ret N` |
-
-### مثال عملي في Assembly:
-
-#### في `__cdecl`:
-```nasm
-; استدعاء الدالة add_numbers(10, 20)
-push 20          ; المعامل الثاني
-push 10          ; المعامل الأول
-call add_numbers ; استدعاء الدالة (يضع عنوان العودة على المكدس)
-add  esp, 8      ; المستدعي ينظف المعاملين (4 بايت + 4 بايت)
-```
-
-#### في `__stdcall`:
-```nasm
-push 20
-push 10
-call add_numbers ; الدالة تنتهي بـ ret 8 لتنظيف المعاملات ذاتيًا
-; لا توجد تعليمة add esp بعد الاستدعاء
-```
-
----
-
-## 6. ترتيب البايتات في الذاكرة (Endianness)
-
-تعتمد معمارية Intel x86 نظام **Little-Endian**. في هذا النظام، يُخزن البايت الأقل أهمية (Least Significant Byte - LSB) في العنوان الأدنى للذاكرة، بينما يُخزن البايت الأكثر أهمية (MSB) في العنوان الأعلى.
-
-على سبيل المثال، القيمة الست عشرية ذات 4 بايت: `0x12345678`:
-
-```text
-قيمة السجل (Register):     0x12 34 56 78
-العناوين في الذاكرة:
-العنوان الأدنى 0x00:       0x78  (LSB)
-العنوان التالي  0x01:       0x56
-العنوان التالي  0x02:       0x34
-العنوان الأعلى 0x03:       0x12  (MSB)
+mov  esp, ebp     ; 1. Collapse local variable allocations by restoring ESP to EBP
+pop  ebp          ; 2. Restore the caller's original base pointer from the stack
+ret               ; 3. Pop the saved return address from stack directly into EIP!
 ```
 
 > [!IMPORTANT]
-> عند كتابة ثغرات طفحان الذاكرة وكتابة عنوان العودة لاستبدال `EIP`، يجب عكس ترتيب البايتات دائمًا وفق Little-Endian. فإذا كان عنوان تعليمة `JMP ESP` هو `0x625011AF` في مكتبة DLL، فيجب إرساله في الحمولة على النحو التالي: `\xaf\x11\x50\x62`.
+> The `ret` instruction is mechanically equivalent to `pop eip`. If an attacker overflows a local variable buffer on the stack and overwrites the `Saved EIP` slot, the instant `ret` executes, the CPU unconditionally pivots execution to the attacker-supplied memory address.
 
 ---
 
-## 7. بيئة الفحص والتحليل العكسي (Debugging Environment)
+## 5. Comparative Analysis of Calling Conventions
 
-خلال تدريبات eCPPT، ستحتاج إلى إتقان التعامل مع منقحات الأخطاء (Debuggers). في بيئة Linux نعتمد على **GDB** المزود بإضافة **GEF (GDB Enhanced Features)**، بينما في Windows نعتمد على **x64dbg / x32dbg** أو **Immunity Debugger**.
+Calling conventions define how compilers serialize function arguments, which registers are preserved across calls, and whether the caller or the callee cleans up the stack:
 
-### أوامر GDB الأساسية لفحص الذاكرة:
+| Property | `__cdecl` (C Declaration) | `__stdcall` (Standard Call) | `__fastcall` (Fast Register Call) |
+| :--- | :--- | :--- | :--- |
+| **Primary Domain** | Standard C/C++ Linux & GCC Binaries | Microsoft Win32 API (`kernel32.dll`) | Performance-critical math/graphics libraries |
+| **Argument Ordering** | Right-to-Left (Pushed onto Stack) | Right-to-Left (Pushed onto Stack) | First 2 args in `ECX`, `EDX`; rest pushed R-to-L |
+| **Stack Cleanup Duty** | **Caller** (via `add esp, N`) | **Callee** (via `ret N`) | **Callee** (via `ret N`) |
+| **Variable Arg Support** | Supported (e.g., `printf(...)`) | Not Supported | Not Supported |
+
+### Code Comparison:
+
+#### `__cdecl` Routine:
+```nasm
+; Invoking add_numbers(10, 20) under __cdecl:
+push 20           ; Push second argument
+push 10           ; Push first argument
+call add_numbers  ; Push return address & jump
+add  esp, 8       ; Caller cleans up 8 bytes (2 arguments * 4 bytes)
+```
+
+#### `__stdcall` Routine:
+```nasm
+; Invoking add_numbers(10, 20) under __stdcall:
+push 20
+push 10
+call add_numbers  ; The function exits via 'ret 8', self-cleaning the stack
+; No 'add esp' is executed by the caller!
+```
+
+---
+
+## 6. Endianness: Physical Byte Ordering in Memory
+
+Intel x86 and x64 architectures are strictly **Little-Endian**. In this memory representation scheme, the **Least Significant Byte (LSB)** is stored at the lowest numerical memory address, while the **Most Significant Byte (MSB)** is stored at the highest address.
+
+Consider the 32-bit hexadecimal pointer `0x625011AF`:
+
+```text
+Dword Value:          0x 62   50   11   AF
+Byte Classification:     MSB  ...  ...  LSB
+
+Physical Memory Placement:
+Address 0x0012FB00:   \xaf  (Least Significant Byte)
+Address 0x0012FB01:   \x11
+Address 0x0012FB02:   \x50
+Address 0x0012FB03:   \x62  (Most Significant Byte)
+```
+
+When building an exploit payload targeting an address such as `0x625011AF` (e.g., a `JMP ESP` gadget), the byte sequence must be serialized in reverse order:
+`b"\xaf\x11\x50\x62"`.
+
+---
+
+## 7. Offensive Debugging Environment & Tooling
+
+To inspect memory structures, analyze binary control flow, and trace stack state during exploitation, professional penetration testers rely on standard low-level debuggers:
+
+* **Linux**: GDB enhanced with plugins such as **GEF (GDB Enhanced Features)** or **PEDA (Python Exploit Development Assistance)**.
+* **Windows**: **x64dbg / x32dbg**, **Immunity Debugger** (with `mona.py`), or **WinDbg**.
+
+### Essential GDB/GEF Memory Inspection Commands:
 
 ```bash
-# تشغيل الملف الثنائي داخل GDB
-gdb -q ./vuln_binary
+# Launch a compiled binary in GDB without verbose banners
+gdb -q ./vulnerable_elf
 
-# تعيين نقطة توقف عند الدالة main
-gef➤ b main
+# Set a breakpoint at function main
+gef➤ break main
 
-# تشغيل البرنامج
-gef➤ r
+# Execute the binary with arbitrary arguments
+gef➤ run $(python3 -c "print('A'*100)")
 
-# فحص السجلات
+# Inspect CPU registers and EFLAGS status
 gef➤ info registers
 
-# فحص 16 كلمة في قمة المكدس بصيغة Hex
+# Dereference and display 16 dwords on the top of the stack
 gef➤ x/16wx $esp
 
-# فحص التعليمات القادمة (Disassemble)
+# Disassemble the next 10 instructions from the instruction pointer
 gef➤ x/10i $eip
 ```
 
 ---
 
-## المراجع والمصادر الخارجية (References & Further Reading)
+## References & Further Reading
 
-1. **Intel 64 and IA-32 Architectures Software Developer’s Manual**: الدليل المرجعي الرسمي لمطوري المعالجات من Intel.
-2. **HackerSploit System Security & Assembly Fundamentals**: الشروحات التأسيسية الرسمية لدورة INE PTP.
-3. **Smashing The Stack For Fun And Profit (Phrack Issue 49)**: الورقة البحثية التاريخية لـ Aleph One التي وضعت أسس استغلال المكدس.
-4. **GEF - GDB Enhanced Features Documentation**: [https://hugsy.github.io/gef/](https://hugsy.github.io/gef/)
-5. **NASM - The Netwide Assembler Project**: [https://www.nasm.us/](https://www.nasm.us/)
+1. **Intel 64 and IA-32 Architectures Software Developer’s Manual**: Volumes 1, 2, and 3 (Intel Corporation).
+2. **Phrack Magazine Issue 49**: *Smashing The Stack For Fun And Profit* by Aleph One (1996).
+3. **GEF (GDB Enhanced Features) Official Documentation**: [https://hugsy.github.io/gef/](https://hugsy.github.io/gef/)
+4. **NASM (Netwide Assembler) Manual**: [https://www.nasm.us/doc/](https://www.nasm.us/doc/)
+5. **Practical Malware Analysis**: *The Hands-On Guide to Dissecting Malicious Software* by Michael Sikorski & Andrew Honig.
 
 ---
 

