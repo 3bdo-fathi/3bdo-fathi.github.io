@@ -572,6 +572,39 @@ permalink: /roadmaps/
   <!-- Roadmaps Grid (100% English & External Direct Links Only) -->
   <div class="roadmaps-grid" id="roadmaps-grid">
 
+    <!-- 0. eCPPT Penetration Testing Masterclass (Featured) -->
+    <div class="roadmap-card is-featured" data-category="offensive" data-featured="true" data-keywords="ecppt ine certified professional penetration tester x86 assembly buffer overflow active directory pivoting c2 web pentesting client side powershell privilege escalation">
+      <div>
+        <div class="roadmap-card-top">
+          <div class="roadmap-icon-box" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.35);">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <div class="card-badges-wrap">
+            <span class="rm-badge rm-badge-featured" style="background: rgba(239, 68, 68, 0.18); color: #ef4444; border-color: rgba(239, 68, 68, 0.4);"><i class="fas fa-certificate"></i> 10-Part Series</span>
+            <span class="rm-badge rm-badge-category">Offensive</span>
+          </div>
+        </div>
+        <h2 class="roadmap-card-title">eCPPT Penetration Testing Masterclass</h2>
+        <p class="roadmap-card-desc">
+          An exhaustive, 10-part hands-on guide covering the entire eCPPT syllabus: x86 assembly, stack-based & SEH buffer overflows, network attacks, Active Directory Kerberos exploitation, privilege escalation, multi-tier pivoting (Ligolo-ng), C2 infrastructure, web attacks, client-side weaponization, and PowerShell AMSI evasion.
+        </p>
+        <div class="roadmap-skills-wrap">
+          <span class="skill-pill">x86 & Buffer Overflows</span>
+          <span class="skill-pill">Active Directory & Kerberos</span>
+          <span class="skill-pill">Multi-Tier Pivoting</span>
+          <span class="skill-pill">C2 & Starkiller</span>
+          <span class="skill-pill">Privilege Escalation</span>
+          <span class="skill-pill">AMSI Memory Patching</span>
+        </div>
+      </div>
+      <div class="roadmap-card-actions">
+        <a href="/posts/ecppt-v3-part-1-system-security-x86-assembly/" class="rm-external-link-btn" style="border-color: rgba(239, 68, 68, 0.4); color: #ef4444;">
+          <span>Explore 10-Part eCPPT Guide</span>
+          <i class="fas fa-arrow-right small"></i>
+        </a>
+      </div>
+    </div>
+
     <!-- 1. Cybersecurity Essentials Roadmap (Featured) -->
     <div class="roadmap-card is-featured" data-category="foundations" data-featured="true" data-keywords="essentials foundations networking tcp ip linux cli bash windows internals dns osi security">
       <div>

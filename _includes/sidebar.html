@@ -1,7 +1,8 @@
-<!-- The Side Bar -->
+<!-- The Side Bar (Restyled Executive Dark Theme) -->
 
-<aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end">
-  <header class="profile-wrapper">
+<aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column">
+  <!-- Profile & Branding Section -->
+  <header class="profile-wrapper w-100">
     <a href="{{ '/' | relative_url }}" id="avatar" class="rounded-circle d-block">
       {% if site.avatar != empty and site.avatar %}
         {% capture avatar_url %}
@@ -13,24 +14,30 @@
             {{ site.avatar | relative_url }}
           {%- endif -%}
         {% endcapture %}
-        <img src="{{ avatar_url | strip }}" width="112" height="112" alt="avatar" onerror="this.style.display='none'">
+        <img src="{{ avatar_url | strip }}" width="100" height="100" alt="avatar" onerror="this.style.display='none'">
       {% endif %}
     </a>
 
     <h1 class="site-title">
       <a href="{{ '/' | relative_url }}">{{ site.title }}</a>
     </h1>
-    <p class="site-subtitle fst-italic mb-0">{{ site.tagline }}</p>
+    
+    <div class="site-subtitle-wrapper">
+      <span class="site-role-primary">Cyber Security Engineer</span>
+      <span class="site-role-divider">&bull;</span>
+      <span class="site-role-secondary">Penetration Tester</span>
+    </div>
   </header>
   <!-- .profile-wrapper -->
 
-  <nav class="flex-column flex-grow-1 w-100 ps-0">
+  <!-- Navigation Links Section -->
+  <nav class="flex-column w-100 ps-0">
     <ul class="nav">
       <!-- home -->
       <li class="nav-item{% if page.layout == 'home' %} active{% endif %}">
         <a href="{{ '/' | relative_url }}" class="nav-link">
           <i class="fa-fw fas fa-home"></i>
-          <span>{{ site.data.locales[lang].tabs.home | default: 'HOME' | upcase }}</span>
+          <span>{{ site.data.locales[lang].tabs.home | default: 'Home' }}</span>
         </a>
       </li>
       <!-- the real tabs -->
@@ -39,7 +46,8 @@
         <li class="nav-item{% if tab.url == page.url %} active{% endif %}">
           <a href="{{ tab.url | relative_url }}" class="nav-link">
             <i class="fa-fw {{ tab.icon }}"></i>
-            <span>{{ tab.title | default: tab.name | upcase }}</span>
+            {%- assign tab_key = tab.title | default: tab.name | downcase -%}
+            <span>{{ site.data.locales[lang].tabs[tab_key] | default: tab.title | default: tab.name }}</span>
           </a>
         </li>
       {% endfor %}
@@ -47,189 +55,468 @@
   </nav>
 
   <style>
+    /* ==========================================================================
+       Sidebar Restyling - Dark & Light Responsive Consistency
+       ========================================================================== */
+    #sidebar {
+      padding-top: 1.75rem !important;
+      padding-bottom: 1.25rem !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      box-sizing: border-box !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+
+    /* 1. Profile Header: Perfectly Centered */
+    #sidebar .profile-wrapper {
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      padding-left: 1rem !important;
+      padding-right: 1rem !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      width: 100% !important;
+      text-align: center !important;
+      box-sizing: border-box !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
     #sidebar #avatar {
-      border: 2px solid var(--border-color, rgba(255, 255, 255, 0.12)) !important;
-      transition: transform 0.25s ease, border-color 0.25s ease !important;
+      width: 96px !important;
+      height: 96px !important;
+      margin: 0 auto 0.75rem !important;
+      display: block !important;
+      border: 2px solid rgba(255, 255, 255, 0.15) !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease !important;
       overflow: hidden !important;
     }
+
     #sidebar #avatar:hover {
       transform: scale(1.03) !important;
       border-color: #58a6ff !important;
+      box-shadow: 0 4px 20px rgba(88, 166, 255, 0.25) !important;
     }
 
-    /* Minimalist Unified Bottom Dock */
-    #sidebar .sidebar-bottom {
-      padding: 0.5rem 0.6rem !important;
-      margin-bottom: 1.25rem !important;
+    #sidebar .site-title {
+      font-size: 1.15rem !important;
+      font-weight: 700 !important;
+      line-height: 1.25 !important;
+      margin: 0 0 0.35rem 0 !important;
+      text-align: center !important;
+      letter-spacing: -0.015em !important;
+    }
+
+    #sidebar .site-title a {
+      color: #f0f6fc !important;
+      text-decoration: none !important;
+      font-weight: 700 !important;
+      transition: color 180ms ease !important;
+    }
+
+    #sidebar .site-title a:hover {
+      color: #58a6ff !important;
+    }
+
+    .site-subtitle-wrapper {
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
-      gap: 0.35rem !important;
+      flex-wrap: wrap !important;
+      gap: 0.3rem !important;
+      font-size: 0.8rem !important;
+      font-weight: 500 !important;
+      color: #8b949e !important;
+      line-height: 1.35 !important;
+      letter-spacing: -0.01em !important;
+      padding: 0 0.5rem !important;
     }
 
+    .site-role-divider {
+      opacity: 0.45 !important;
+      font-size: 0.7rem !important;
+    }
+
+    /* 2. Spacing: Reduced Gap between Profile Header and Menu (24-32px) */
+    #sidebar nav {
+      margin-top: 26px !important;
+      margin-bottom: auto !important;
+      padding: 0 1rem !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+    #sidebar nav .nav {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 4px !important;
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      list-style: none !important;
+    }
+
+    #sidebar ul li.nav-item,
+    #sidebar nav .nav-item {
+      margin: 0 !important;
+      padding: 0 !important;
+      width: 100% !important;
+      list-style: none !important;
+    }
+
+    /* 3. Nav Items: Identical Height, Width, and Typography */
+    #sidebar ul li.nav-item a.nav-link,
+    #sidebar nav .nav-link {
+      display: flex !important;
+      align-items: center !important;
+      height: 42px !important;
+      min-height: 42px !important;
+      max-height: 42px !important;
+      width: 100% !important;
+      padding: 0 14px !important;
+      border-radius: 8px !important;
+      box-sizing: border-box !important;
+      border-left: 3px solid transparent !important;
+      background: transparent !important;
+      color: #c9d1d9 !important;
+      text-decoration: none !important;
+      white-space: nowrap !important;
+      transition: background 180ms ease, color 180ms ease, border-color 180ms ease, transform 180ms ease !important;
+    }
+
+    /* 4. Icon + Label Alignment (vertically centered, fixed width 20px, 12px gap) */
+    #sidebar ul li.nav-item a.nav-link i,
+    #sidebar nav .nav-link i {
+      width: 20px !important;
+      min-width: 20px !important;
+      max-width: 20px !important;
+      height: auto !important;
+      text-align: center !important;
+      margin: 0 12px 0 0 !important;
+      font-size: 15px !important;
+      line-height: 1 !important;
+      color: #8b949e !important;
+      opacity: 0.9 !important;
+      flex-shrink: 0 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      transition: color 180ms ease, transform 180ms ease !important;
+    }
+
+    #sidebar ul li.nav-item a.nav-link span,
+    #sidebar nav .nav-link span {
+      font-size: 15px !important;
+      font-weight: 500 !important;
+      line-height: 1 !important;
+      letter-spacing: 0.01em !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      flex-grow: 1 !important;
+      transition: color 180ms ease !important;
+    }
+
+    /* 5. Hover State */
+    #sidebar ul li.nav-item a.nav-link:hover,
+    #sidebar nav .nav-link:hover {
+      color: #ffffff !important;
+      background: rgba(255, 255, 255, 0.06) !important;
+      transform: translateX(2px) !important;
+    }
+
+    #sidebar ul li.nav-item a.nav-link:hover i,
+    #sidebar nav .nav-link:hover i {
+      color: #58a6ff !important;
+      opacity: 1 !important;
+      transform: scale(1.08) !important;
+    }
+
+    #sidebar ul li.nav-item a.nav-link:hover span,
+    #sidebar nav .nav-link:hover span {
+      color: #ffffff !important;
+    }
+
+    /* 6. Active State (Home / Active Page): 10-12% accent bg, 3px left accent bar, accent text & icon */
+    #sidebar ul li.nav-item.active a.nav-link,
+    #sidebar nav .nav-item.active .nav-link {
+      background: rgba(88, 166, 255, 0.11) !important;
+      border-left: 3px solid #58a6ff !important;
+      color: #58a6ff !important;
+      font-weight: 600 !important;
+      transform: none !important;
+    }
+
+    #sidebar ul li.nav-item.active a.nav-link i,
+    #sidebar nav .nav-item.active .nav-link i {
+      color: #58a6ff !important;
+      opacity: 1 !important;
+    }
+
+    #sidebar ul li.nav-item.active a.nav-link span,
+    #sidebar nav .nav-item.active .nav-link span {
+      color: #58a6ff !important;
+      font-weight: 600 !important;
+    }
+
+    /* 7. Bottom Dock & Divider */
+    #sidebar .sidebar-bottom-wrapper {
+      width: 100% !important;
+      margin-top: 1.5rem !important;
+      padding: 0 1rem !important;
+      box-sizing: border-box !important;
+    }
+
+    .sidebar-dock-divider {
+      width: 100% !important;
+      height: 1px !important;
+      background: rgba(255, 255, 255, 0.09) !important;
+      margin-bottom: 14px !important;
+    }
+
+    #sidebar .sidebar-bottom {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      width: 100% !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      box-sizing: border-box !important;
+    }
+
+    /* 8. Social Icons & Theme Toggle: Unified Dimensions, Muted Border, Identical Color */
     #sidebar .dock-btn {
-      width: 2rem !important;
-      height: 2rem !important;
-      min-width: 2rem !important;
-      min-height: 2rem !important;
+      width: 34px !important;
+      height: 34px !important;
+      min-width: 34px !important;
+      min-height: 34px !important;
       padding: 0 !important;
       margin: 0 !important;
       display: inline-flex !important;
       align-items: center !important;
       justify-content: center !important;
       border-radius: 8px !important;
-      font-size: 0.9rem !important;
-      color: var(--text-muted-color, #8b949e) !important;
-      background: rgba(255, 255, 255, 0.03) !important;
-      border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1)) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      background: rgba(255, 255, 255, 0.02) !important;
+      color: #8b949e !important;
+      font-size: 14px !important;
+      box-shadow: none !important;
       cursor: pointer !important;
       outline: none !important;
       text-decoration: none !important;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      transition: all 180ms ease !important;
+      box-sizing: border-box !important;
     }
 
     #sidebar .dock-btn:hover {
-      color: #58a6ff !important;
-      border-color: rgba(88, 166, 255, 0.4) !important;
-      background: rgba(88, 166, 255, 0.1) !important;
+      color: #ffffff !important;
+      border-color: rgba(255, 255, 255, 0.28) !important;
+      background: rgba(255, 255, 255, 0.08) !important;
       transform: translateY(-2px) !important;
     }
 
-    #sidebar .dock-divider {
-      width: 1px !important;
-      height: 16px !important;
-      margin: 0 0.2rem !important;
-      background: var(--border-color, rgba(255, 255, 255, 0.15)) !important;
+    /* Mode Toggle specific: Identical to social buttons (No bright yellow filled circle!) */
+    #sidebar #mode-toggle {
+      border-radius: 8px !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      background: rgba(255, 255, 255, 0.02) !important;
+      color: #8b949e !important;
     }
 
-    /* Minimal Mode Toggle Icon States */
-    #mode-toggle {
-      position: relative !important;
-      cursor: pointer !important;
+    #sidebar #mode-toggle:hover {
+      border-color: rgba(255, 255, 255, 0.28) !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+      color: #ffffff !important;
+      transform: translateY(-2px) !important;
     }
 
+    #sidebar #mode-toggle i,
     #mode-toggle i {
-      transition: transform 0.3s ease !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      font-size: 14px !important;
+      line-height: 1 !important;
+      color: inherit !important;
+      transition: transform 250ms ease, color 180ms ease !important;
       pointer-events: none;
     }
 
-    #mode-toggle:active i {
+    #sidebar #mode-toggle:active i {
       transform: rotate(180deg) scale(0.9) !important;
     }
 
-    #mode-toggle .icon-sun {
-      display: inline-flex;
-      color: #e3b341;
-    }
-    #mode-toggle .icon-moon {
-      display: none;
-    }
-
-    html[data-mode="dark"] #mode-toggle .icon-sun,
-    html[data-bs-theme="dark"] #mode-toggle .icon-sun {
-      display: inline-flex !important;
-      color: #e3b341 !important;
-    }
-    html[data-mode="dark"] #mode-toggle .icon-moon,
-    html[data-bs-theme="dark"] #mode-toggle .icon-moon {
-      display: none !important;
+    /* Subtle hairline vertical divider */
+    .dock-vsep {
+      width: 1px !important;
+      height: 18px !important;
+      background: rgba(255, 255, 255, 0.12) !important;
+      margin: 0 2px !important;
     }
 
-    html[data-mode="light"] #mode-toggle .icon-sun,
-    html[data-bs-theme="light"] #mode-toggle .icon-sun {
-      display: none !important;
+    /* ==========================================================================
+       Light Theme Adaptations (Clean Crisp Editorial Consistency)
+       ========================================================================== */
+    html[data-mode="light"] #sidebar .site-title a,
+    html[data-bs-theme="light"] #sidebar .site-title a {
+      color: #1f2328 !important;
     }
-    html[data-mode="light"] #mode-toggle .icon-moon,
-    html[data-bs-theme="light"] #mode-toggle .icon-moon {
-      display: inline-flex !important;
+    html[data-mode="light"] #sidebar .site-title a:hover,
+    html[data-bs-theme="light"] #sidebar .site-title a:hover {
+      color: #0969da !important;
+    }
+    html[data-mode="light"] .site-subtitle-wrapper,
+    html[data-bs-theme="light"] .site-subtitle-wrapper {
+      color: #57606a !important;
+    }
+
+    html[data-mode="light"] #sidebar ul li.nav-item a.nav-link,
+    html[data-mode="light"] #sidebar nav .nav-link,
+    html[data-bs-theme="light"] #sidebar ul li.nav-item a.nav-link,
+    html[data-bs-theme="light"] #sidebar nav .nav-link {
+      color: #24292f !important;
+    }
+    html[data-mode="light"] #sidebar ul li.nav-item a.nav-link i,
+    html[data-mode="light"] #sidebar nav .nav-link i,
+    html[data-bs-theme="light"] #sidebar ul li.nav-item a.nav-link i,
+    html[data-bs-theme="light"] #sidebar nav .nav-link i {
+      color: #656d76 !important;
+    }
+
+    html[data-mode="light"] #sidebar ul li.nav-item a.nav-link:hover,
+    html[data-mode="light"] #sidebar nav .nav-link:hover,
+    html[data-bs-theme="light"] #sidebar ul li.nav-item a.nav-link:hover,
+    html[data-bs-theme="light"] #sidebar nav .nav-link:hover {
+      color: #0969da !important;
+      background: rgba(9, 105, 218, 0.06) !important;
+    }
+    html[data-mode="light"] #sidebar ul li.nav-item a.nav-link:hover i,
+    html[data-mode="light"] #sidebar nav .nav-link:hover i,
+    html[data-bs-theme="light"] #sidebar ul li.nav-item a.nav-link:hover i,
+    html[data-bs-theme="light"] #sidebar nav .nav-link:hover i {
+      color: #0969da !important;
+    }
+    html[data-mode="light"] #sidebar ul li.nav-item a.nav-link:hover span,
+    html[data-mode="light"] #sidebar nav .nav-link:hover span,
+    html[data-bs-theme="light"] #sidebar ul li.nav-item a.nav-link:hover span,
+    html[data-bs-theme="light"] #sidebar nav .nav-link:hover span {
       color: #0969da !important;
     }
 
+    html[data-mode="light"] #sidebar ul li.nav-item.active a.nav-link,
+    html[data-mode="light"] #sidebar nav .nav-item.active .nav-link,
+    html[data-bs-theme="light"] #sidebar ul li.nav-item.active a.nav-link,
+    html[data-bs-theme="light"] #sidebar nav .nav-item.active .nav-link {
+      background: rgba(9, 105, 218, 0.1) !important;
+      border-left-color: #0969da !important;
+      color: #0969da !important;
+    }
+    html[data-mode="light"] #sidebar ul li.nav-item.active a.nav-link i,
+    html[data-mode="light"] #sidebar nav .nav-item.active .nav-link i,
+    html[data-bs-theme="light"] #sidebar ul li.nav-item.active a.nav-link i,
+    html[data-bs-theme="light"] #sidebar nav .nav-item.active .nav-link i {
+      color: #0969da !important;
+    }
+    html[data-mode="light"] #sidebar ul li.nav-item.active a.nav-link span,
+    html[data-mode="light"] #sidebar nav .nav-item.active .nav-link span,
+    html[data-bs-theme="light"] #sidebar ul li.nav-item.active a.nav-link span,
+    html[data-bs-theme="light"] #sidebar nav .nav-item.active .nav-link span {
+      color: #0969da !important;
+    }
+
+    html[data-mode="light"] .sidebar-dock-divider,
+    html[data-bs-theme="light"] .sidebar-dock-divider {
+      background: rgba(0, 0, 0, 0.08) !important;
+    }
+
     html[data-mode="light"] #sidebar .dock-btn,
-    html[data-bs-theme="light"] #sidebar .dock-btn {
-      background: #ffffff !important;
-      border: 1px solid #d0d7de !important;
+    html[data-bs-theme="light"] #sidebar .dock-btn,
+    html[data-mode="light"] #sidebar #mode-toggle,
+    html[data-bs-theme="light"] #sidebar #mode-toggle {
+      border: 1px solid rgba(0, 0, 0, 0.12) !important;
+      background: rgba(0, 0, 0, 0.02) !important;
       color: #57606a !important;
     }
 
     html[data-mode="light"] #sidebar .dock-btn:hover,
-    html[data-bs-theme="light"] #sidebar .dock-btn:hover {
-      background: #f3f4f6 !important;
-      border-color: #0969da !important;
+    html[data-bs-theme="light"] #sidebar .dock-btn:hover,
+    html[data-mode="light"] #sidebar #mode-toggle:hover,
+    html[data-bs-theme="light"] #sidebar #mode-toggle:hover {
       color: #0969da !important;
+      border-color: rgba(9, 105, 218, 0.35) !important;
+      background: rgba(9, 105, 218, 0.06) !important;
     }
 
-    #sidebar .site-title {
-      font-size: 1.25rem !important;
-      font-weight: 800 !important;
-      line-height: 1.25 !important;
-      margin-top: 0.85rem !important;
-      margin-bottom: 0.35rem !important;
-      text-align: center;
-      letter-spacing: -0.01em;
+    html[data-mode="light"] .dock-vsep,
+    html[data-bs-theme="light"] .dock-vsep {
+      background: rgba(0, 0, 0, 0.1) !important;
     }
 
-    #sidebar .site-title a {
-      color: var(--site-title-color, var(--heading-color, #ffffff)) !important;
-      text-decoration: none !important;
-      font-weight: 800 !important;
-      transition: color 0.2s ease !important;
-    }
-
-    #sidebar .site-title a:hover {
-      color: var(--link-color, #58a6ff) !important;
+    /* 9. Mobile Responsiveness */
+    @media (max-width: 849.98px) {
+      #sidebar {
+        padding-top: 1.5rem !important;
+      }
+      #sidebar nav {
+        margin-top: 20px !important;
+      }
     }
   </style>
 
-  <div class="sidebar-bottom w-100">
-    <!-- Clean Minimalist Theme Mode Toggle -->
-    <button type="button" class="dock-btn" aria-label="Toggle Theme" id="mode-toggle" title="Toggle Theme">
-      <i class="fas fa-sun icon-sun"></i>
-      <i class="fas fa-moon icon-moon"></i>
-    </button>
-    <ul class="dropdown-menu d-none" style="display:none!important" aria-hidden="true"></ul>
+  <!-- Bottom Dock Section with Divider -->
+  <div class="sidebar-bottom-wrapper">
+    <div class="sidebar-dock-divider"></div>
+    <div class="sidebar-bottom">
+      {% for entry in site.data.contact %}
+        {% capture url %}
+          {%- if entry.type == 'github' -%}
+            https://github.com/{{ site.github.username }}
+          {%- elsif entry.type == 'twitter' -%}
+            https://twitter.com/{{ site.twitter.username }}
+          {%- elsif entry.type == 'email' -%}
+            {% assign email = site.social.email | default: site.email %}
+            mailto:{{ email }}
+          {%- else -%}
+            {{ entry.url }}
+          {%- endif -%}
+        {% endcapture %}
 
-    <span class="dock-divider"></span>
+        {% if url %}
+          <a
+            href="{{ url | strip }}"
+            aria-label="{{ entry.type }}"
+            title="{{ entry.type | capitalize }}"
+            class="dock-btn"
+            {% assign link_types = '' %}
+            {% unless entry.noblank %}
+              target="_blank"
+              {% assign link_types = 'noopener noreferrer' %}
+            {% endunless %}
+            {% if entry.type == 'mastodon' %}
+              {% assign link_types = link_types | append: ' me' | strip %}
+            {% endif %}
+            {% unless link_types == empty %}
+              rel="{{ link_types }}"
+            {% endunless %}
+          >
+            <i class="{{ entry.icon }}"></i>
+          </a>
+        {% endif %}
+      {% endfor %}
 
-    <!-- Social links in same clean dock -->
-    {% for entry in site.data.contact %}
-      {% capture url %}
-        {%- if entry.type == 'github' -%}
-          https://github.com/{{ site.github.username }}
-        {%- elsif entry.type == 'twitter' -%}
-          https://twitter.com/{{ site.twitter.username }}
-        {%- elsif entry.type == 'email' -%}
-          {% assign email = site.social.email | default: site.email %}
-          mailto:{{ email }}
-        {%- else -%}
-          {{ entry.url }}
-        {%- endif -%}
-      {% endcapture %}
+      <span class="dock-vsep"></span>
 
-      {% if url %}
-        <a
-          href="{{ url | strip }}"
-          aria-label="{{ entry.type }}"
-          title="{{ entry.type | capitalize }}"
-          class="dock-btn"
-          {% assign link_types = '' %}
-          {% unless entry.noblank %}
-            target="_blank"
-            {% assign link_types = 'noopener noreferrer' %}
-          {% endunless %}
-          {% if entry.type == 'mastodon' %}
-            {% assign link_types = link_types | append: ' me' | strip %}
-          {% endif %}
-          {% unless link_types == empty %}
-            rel="{{ link_types }}"
-          {% endunless %}
-        >
-          <i class="{{ entry.icon }}"></i>
-        </a>
-      {% endif %}
-    {% endfor %}
+      <!-- Theme Mode Toggle Button -->
+      <button type="button" class="dock-btn" aria-label="Toggle Theme" id="mode-toggle" title="Toggle Theme">
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
   </div>
-  <!-- .sidebar-bottom -->
+  <!-- .sidebar-bottom-wrapper -->
 </aside>
 <!-- #sidebar -->
 
