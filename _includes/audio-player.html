@@ -859,7 +859,7 @@
      Supports Auto Language Detection (Arabic/English), Keep-Alive, Drag Seeking,
      Volume/Mute, Speed Cycling, Voice Customization & Keyboard Shortcuts
      ========================================================================== */
-  (function () {
+  function initAudioWidget() {
     const card = document.getElementById('article-audio-player');
     if (!card) return;
 
@@ -938,8 +938,10 @@
     } else {
       audioMode = 'tts';
       if (!synth) {
-        card.style.display = 'none';
-        return;
+        const engineBadge = document.getElementById('audio-engine-badge');
+        if (engineBadge) {
+          engineBadge.innerHTML = '<i class="fas fa-info-circle me-1"></i>Web Audio';
+        }
       }
       initTTS();
     }
@@ -977,11 +979,8 @@
     // ------------------------------------------------------------------------
     function initTTS() {
       extractArticleChunks();
-
-      // If page has almost no text (taxonomy list, empty tab, etc.), quietly hide player
-      if (textChunks.length === 0 || totalWordCount < 50) {
-        card.style.display = 'none';
-        return;
+      if (textChunks.length === 0) {
+        setTimeout(extractArticleChunks, 400);
       }
 
       // Populate Voices
@@ -1463,6 +1462,12 @@
     }
     window.addEventListener('beforeunload', cleanup);
     window.addEventListener('pagehide', cleanup);
-  })();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAudioWidget);
+  } else {
+    initAudioWidget();
+  }
 </script>
 {% endunless %}
