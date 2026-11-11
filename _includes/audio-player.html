@@ -1,0 +1,936 @@
+{% unless page.audio == false %}
+<!-- ==========================================================================
+     AI Audio Narration / Voice Player Widget
+     Executive High-Fidelity Audio Experience for Articles
+     ========================================================================== -->
+
+<div id="article-audio-player" class="audio-player-card my-4" data-audio-src="{{ page.audio | default: '' }}">
+  <div class="audio-player-inner">
+    <!-- Header: Badge & Status -->
+    <div class="audio-player-header d-flex justify-content-between align-items-center mb-2">
+      <div class="audio-badge d-inline-flex align-items-center">
+        <span class="audio-icon-wrap me-2">
+          <i class="fas fa-headphones-alt audio-main-icon"></i>
+          <span class="audio-wave-anim d-none">
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+          </span>
+        </span>
+        <span class="audio-label fw-bold">Listen to Article</span>
+        <span class="audio-engine-pill ms-2" id="audio-engine-badge">
+          <i class="fas fa-robot me-1"></i>AI Narration
+        </span>
+      </div>
+
+      <div class="audio-meta-wrap d-flex align-items-center gap-2">
+        <span class="audio-speed-btn" id="audio-speed-toggle" title="Playback Speed" role="button" tabindex="0">1.0x</span>
+        <button type="button" class="audio-btn-icon" id="audio-voice-select-btn" title="Select Voice" aria-label="Select Voice">
+          <i class="fas fa-volume-up"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Voice Selection Dropdown (Hidden by default) -->
+    <div class="audio-voice-dropdown d-none mb-2" id="audio-voice-dropdown">
+      <div class="d-flex justify-content-between align-items-center mb-1">
+        <span class="voice-picker-title"><i class="fas fa-sliders-h me-1"></i>Voice Model</span>
+        <button type="button" class="btn-close-voice" id="btn-close-voice" aria-label="Close">&times;</button>
+      </div>
+      <select id="audio-voice-select" class="form-select form-select-sm" aria-label="Select AI Voice"></select>
+    </div>
+
+    <!-- Controls Row: Play/Pause, Scrubber, Time -->
+    <div class="audio-controls-row d-flex align-items-center gap-3">
+      <!-- Main Play/Pause Button -->
+      <button type="button" class="audio-play-btn" id="audio-main-play-btn" aria-label="Play Narration">
+        <i class="fas fa-play" id="audio-play-icon"></i>
+      </button>
+
+      <!-- Skip Buttons -->
+      <button type="button" class="audio-skip-btn" id="audio-skip-back" title="Rewind 10 seconds" aria-label="Rewind 10s">
+        <i class="fas fa-undo-alt"></i>
+        <span class="skip-num">10</span>
+      </button>
+      <button type="button" class="audio-skip-btn" id="audio-skip-forward" title="Fast Forward 10 seconds" aria-label="Forward 10s">
+        <i class="fas fa-redo-alt"></i>
+        <span class="skip-num">10</span>
+      </button>
+
+      <!-- Scrubber Track & Times -->
+      <div class="audio-scrubber-wrap flex-grow-1">
+        <div class="audio-time-row d-flex justify-content-between mb-1">
+          <span class="audio-time-current" id="audio-time-current">00:00</span>
+          <span class="audio-time-total" id="audio-time-total">--:--</span>
+        </div>
+        <div class="audio-progress-container" id="audio-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="audio-progress-track">
+            <div class="audio-progress-fill" id="audio-progress-fill" style="width: 0%;"></div>
+            <div class="audio-progress-thumb" id="audio-progress-thumb" style="left: 0%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Floating Mini Player (Visible when scrolling past main card while active) -->
+<div id="audio-floating-bar" class="audio-floating-bar d-none">
+  <div class="audio-floating-inner container d-flex align-items-center justify-content-between gap-3">
+    <div class="d-flex align-items-center gap-2 overflow-hidden">
+      <button type="button" class="audio-play-btn-mini" id="audio-mini-play-btn" aria-label="Play/Pause">
+        <i class="fas fa-play" id="audio-mini-play-icon"></i>
+      </button>
+      <div class="mini-text-wrap text-truncate">
+        <div class="mini-title text-truncate fw-bold">{{ page.title }}</div>
+        <div class="mini-time" id="mini-time-display">00:00 / --:--</div>
+      </div>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <span class="audio-speed-btn" id="mini-speed-toggle" role="button" tabindex="0">1.0x</span>
+      <button type="button" class="audio-btn-icon-mini" id="audio-close-floating" title="Hide Mini Player" aria-label="Close">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ==========================================================================
+     Audio Player Styling - Carbon OLED & Light Mode
+     ========================================================================== */
+  .audio-player-card {
+    background: #0d1117;
+    border: 1px solid rgba(88, 166, 255, 0.22);
+    border-radius: 12px;
+    padding: 1.15rem 1.35rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .audio-player-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #58a6ff, #10b981, #58a6ff);
+    background-size: 200% 100%;
+    animation: audioGradientFlow 8s ease infinite;
+    opacity: 0.85;
+  }
+
+  @keyframes audioGradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  html[data-mode="light"] .audio-player-card,
+  html[data-bs-theme="light"] .audio-player-card {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
+  }
+
+  .audio-label {
+    font-size: 0.94rem;
+    color: #f0f6fc;
+    letter-spacing: -0.01em;
+  }
+
+  html[data-mode="light"] .audio-label,
+  html[data-bs-theme="light"] .audio-label {
+    color: #0f172a;
+  }
+
+  .audio-icon-wrap {
+    color: #58a6ff;
+    font-size: 1.05rem;
+  }
+
+  html[data-mode="light"] .audio-icon-wrap,
+  html[data-bs-theme="light"] .audio-icon-wrap {
+    color: #0969da;
+  }
+
+  /* Soundwave Animation */
+  .audio-wave-anim {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 14px;
+    margin-left: 4px;
+  }
+
+  .wave-bar {
+    width: 3px;
+    background: #58a6ff;
+    border-radius: 2px;
+    animation: waveBounce 1.2s ease-in-out infinite;
+  }
+
+  .wave-bar:nth-child(1) { height: 6px; animation-delay: 0.1s; }
+  .wave-bar:nth-child(2) { height: 12px; animation-delay: 0.25s; }
+  .wave-bar:nth-child(3) { height: 8px; animation-delay: 0.4s; }
+
+  @keyframes waveBounce {
+    0%, 100% { transform: scaleY(0.4); }
+    50% { transform: scaleY(1); }
+  }
+
+  /* Engine Badge */
+  .audio-engine-pill {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.15rem 0.55rem;
+    border-radius: 12px;
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  /* Speed & Voice Buttons */
+  .audio-speed-btn {
+    font-size: 0.76rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #c9d1d9;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+  }
+
+  .audio-speed-btn:hover {
+    background: rgba(88, 166, 255, 0.15);
+    border-color: #58a6ff;
+    color: #58a6ff;
+  }
+
+  html[data-mode="light"] .audio-speed-btn,
+  html[data-bs-theme="light"] .audio-speed-btn {
+    background: #e2e8f0;
+    border-color: #cbd5e1;
+    color: #334155;
+  }
+
+  html[data-mode="light"] .audio-speed-btn:hover,
+  html[data-bs-theme="light"] .audio-speed-btn:hover {
+    background: #dbeafe;
+    border-color: #0969da;
+    color: #0969da;
+  }
+
+  .audio-btn-icon {
+    background: transparent;
+    border: none;
+    color: #8b949e;
+    font-size: 0.92rem;
+    cursor: pointer;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    transition: color 0.2s ease;
+  }
+
+  .audio-btn-icon:hover {
+    color: #58a6ff;
+  }
+
+  html[data-mode="light"] .audio-btn-icon:hover,
+  html[data-bs-theme="light"] .audio-btn-icon:hover {
+    color: #0969da;
+  }
+
+  /* Voice Dropdown */
+  .audio-voice-dropdown {
+    background: rgba(22, 27, 34, 0.95);
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 0.65rem 0.85rem;
+  }
+
+  html[data-mode="light"] .audio-voice-dropdown,
+  html[data-bs-theme="light"] .audio-voice-dropdown {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+  }
+
+  .voice-picker-title {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #8b949e;
+  }
+
+  .btn-close-voice {
+    background: none;
+    border: none;
+    color: #8b949e;
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  /* Main Play Button */
+  .audio-play-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #58a6ff;
+    color: #0d1117;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(88, 166, 255, 0.35);
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .audio-play-btn:hover {
+    transform: scale(1.06);
+    background: #79b8ff;
+    box-shadow: 0 6px 18px rgba(88, 166, 255, 0.5);
+  }
+
+  .audio-play-btn.is-playing {
+    background: #10b981;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+  }
+
+  html[data-mode="light"] .audio-play-btn,
+  html[data-bs-theme="light"] .audio-play-btn {
+    background: #0969da;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(9, 105, 218, 0.3);
+  }
+
+  html[data-mode="light"] .audio-play-btn:hover,
+  html[data-bs-theme="light"] .audio-play-btn:hover {
+    background: #085cc0;
+  }
+
+  html[data-mode="light"] .audio-play-btn.is-playing,
+  html[data-bs-theme="light"] .audio-play-btn.is-playing {
+    background: #059669;
+  }
+
+  /* Skip Buttons */
+  .audio-skip-btn {
+    background: transparent;
+    border: none;
+    color: #8b949e;
+    font-size: 0.95rem;
+    cursor: pointer;
+    position: relative;
+    padding: 0.3rem;
+    transition: color 0.2s ease, transform 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .audio-skip-btn:hover {
+    color: #58a6ff;
+    transform: scale(1.1);
+  }
+
+  .audio-skip-btn .skip-num {
+    position: absolute;
+    font-size: 0.55rem;
+    font-weight: 800;
+    top: 52%;
+    left: 50%;
+    transform: translate(-50%, -48%);
+  }
+
+  html[data-mode="light"] .audio-skip-btn {
+    color: #64748b;
+  }
+
+  html[data-mode="light"] .audio-skip-btn:hover {
+    color: #0969da;
+  }
+
+  /* Time & Scrubber */
+  .audio-time-row {
+    font-size: 0.74rem;
+    font-weight: 600;
+    font-family: var(--font-family-monospace, monospace);
+    color: #8b949e;
+  }
+
+  html[data-mode="light"] .audio-time-row {
+    color: #64748b;
+  }
+
+  .audio-progress-container {
+    width: 100%;
+    height: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  .audio-progress-track {
+    width: 100%;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    position: relative;
+    transition: height 0.15s ease;
+  }
+
+  .audio-progress-container:hover .audio-progress-track {
+    height: 7px;
+  }
+
+  html[data-mode="light"] .audio-progress-track {
+    background: #cbd5e1;
+  }
+
+  .audio-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #58a6ff, #10b981);
+    border-radius: 3px;
+    width: 0%;
+    position: relative;
+  }
+
+  html[data-mode="light"] .audio-progress-fill {
+    background: linear-gradient(90deg, #0969da, #059669);
+  }
+
+  .audio-progress-thumb {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    pointer-events: none;
+  }
+
+  .audio-progress-container:hover .audio-progress-thumb {
+    opacity: 1;
+  }
+
+  /* Floating Mini Player */
+  .audio-floating-bar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 40px);
+    max-width: 640px;
+    background: rgba(13, 17, 23, 0.94);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(88, 166, 255, 0.28);
+    border-radius: 32px;
+    padding: 0.65rem 1.15rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    z-index: 1050;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  html[data-mode="light"] .audio-floating-bar {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+  }
+
+  .audio-play-btn-mini {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #58a6ff;
+    color: #0d1117;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  html[data-mode="light"] .audio-play-btn-mini {
+    background: #0969da;
+    color: #ffffff;
+  }
+
+  .mini-title {
+    font-size: 0.82rem;
+    color: #f0f6fc;
+  }
+
+  html[data-mode="light"] .mini-title {
+    color: #0f172a;
+  }
+
+  .mini-time {
+    font-size: 0.7rem;
+    font-family: var(--font-family-monospace, monospace);
+    color: #8b949e;
+  }
+
+  .audio-btn-icon-mini {
+    background: none;
+    border: none;
+    color: #8b949e;
+    font-size: 0.88rem;
+    cursor: pointer;
+  }
+
+  .audio-btn-icon-mini:hover {
+    color: #f85149;
+  }
+
+  @media (max-width: 576px) {
+    .audio-player-card {
+      padding: 1rem;
+    }
+    .audio-skip-btn {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  /* ==========================================================================
+     Dual-Mode Audio Engine: In-Browser Neural TTS & Audio Streamer
+     ========================================================================== */
+  (function () {
+    const card = document.getElementById('article-audio-player');
+    if (!card) return;
+
+    const playBtn = document.getElementById('audio-main-play-btn');
+    const playIcon = document.getElementById('audio-play-icon');
+    const speedToggle = document.getElementById('audio-speed-toggle');
+    const skipBack = document.getElementById('audio-skip-back');
+    const skipFwd = document.getElementById('audio-skip-forward');
+    const timeCurrent = document.getElementById('audio-time-current');
+    const timeTotal = document.getElementById('audio-time-total');
+    const progressBar = document.getElementById('audio-progress-bar');
+    const progressFill = document.getElementById('audio-progress-fill');
+    const progressThumb = document.getElementById('audio-progress-thumb');
+    const voiceSelectBtn = document.getElementById('audio-voice-select-btn');
+    const voiceDropdown = document.getElementById('audio-voice-dropdown');
+    const voiceSelect = document.getElementById('audio-voice-select');
+    const btnCloseVoice = document.getElementById('btn-close-voice');
+    const waveAnim = card.querySelector('.audio-wave-anim');
+    const mainIcon = card.querySelector('.audio-main-icon');
+
+    // Mini Floating Elements
+    const floatingBar = document.getElementById('audio-floating-bar');
+    const miniPlayBtn = document.getElementById('audio-mini-play-btn');
+    const miniPlayIcon = document.getElementById('audio-mini-play-icon');
+    const miniTime = document.getElementById('mini-time-display');
+    const miniSpeedToggle = document.getElementById('mini-speed-toggle');
+    const closeFloating = document.getElementById('audio-close-floating');
+
+    const speeds = [1.0, 1.25, 1.5, 2.0, 0.8];
+    let currentSpeedIdx = 0;
+    let isPlaying = false;
+    let audioMode = 'tts'; // 'file' or 'tts'
+    let audioElement = null;
+
+    // SpeechSynthesis TTS State
+    let synth = window.speechSynthesis;
+    let availableVoices = [];
+    let selectedVoice = null;
+    let textChunks = [];
+    let currentChunkIdx = 0;
+    let totalEstimatedSeconds = 0;
+    let elapsedSeconds = 0;
+    let timerInterval = null;
+
+    // 1. Check if post has a dedicated audio file
+    const staticSrc = card.getAttribute('data-audio-src');
+    if (staticSrc && staticSrc.trim().length > 4) {
+      audioMode = 'file';
+      document.getElementById('audio-engine-badge').innerHTML = '<i class="fas fa-file-audio me-1"></i>Studio Audio';
+      initAudioElement(staticSrc.trim());
+    } else {
+      audioMode = 'tts';
+      initTTS();
+    }
+
+    // -------------------------------------------------------------
+    // Mode A: File Audio Element
+    // -------------------------------------------------------------
+    function initAudioElement(src) {
+      audioElement = new Audio(src);
+      audioElement.preload = 'metadata';
+
+      audioElement.addEventListener('loadedmetadata', () => {
+        timeTotal.innerText = formatTime(audioElement.duration);
+        updateProgress(0, audioElement.duration);
+      });
+
+      audioElement.addEventListener('timeupdate', () => {
+        timeCurrent.innerText = formatTime(audioElement.currentTime);
+        updateProgress(audioElement.currentTime, audioElement.duration);
+        if (miniTime) miniTime.innerText = `${formatTime(audioElement.currentTime)} / ${formatTime(audioElement.duration)}`;
+      });
+
+      audioElement.addEventListener('ended', () => {
+        stopPlayback();
+      });
+    }
+
+    // -------------------------------------------------------------
+    // Mode B: Intelligent Text Extraction for In-Browser TTS
+    // -------------------------------------------------------------
+    function initTTS() {
+      if (!('speechSynthesis' in window)) {
+        card.style.display = 'none';
+        return;
+      }
+
+      // Populate Voices
+      function populateVoices() {
+        availableVoices = synth.getVoices();
+        // Filter English voices
+        const englishVoices = availableVoices.filter(v => v.lang.startsWith('en'));
+        const voicesToUse = englishVoices.length > 0 ? englishVoices : availableVoices;
+
+        voiceSelect.innerHTML = '';
+        voicesToUse.forEach((v, i) => {
+          const opt = document.createElement('option');
+          opt.value = v.name;
+          opt.textContent = `${v.name} (${v.lang})`;
+          // Prefer natural / neural voices
+          if (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Samantha') || v.name.includes('Daniel')) {
+            if (!selectedVoice) selectedVoice = v;
+          }
+          voiceSelect.appendChild(opt);
+        });
+
+        if (!selectedVoice && voicesToUse.length > 0) {
+          selectedVoice = voicesToUse[0];
+        }
+
+        if (selectedVoice) {
+          voiceSelect.value = selectedVoice.name;
+        }
+      }
+
+      populateVoices();
+      if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = populateVoices;
+      }
+
+      voiceSelect.addEventListener('change', () => {
+        selectedVoice = availableVoices.find(v => v.name === voiceSelect.value);
+        if (isPlaying) {
+          restartFromCurrentChunk();
+        }
+      });
+
+      // Extract Clean Prose Text from Article
+      extractArticleChunks();
+    }
+
+    function extractArticleChunks() {
+      const contentElem = document.querySelector('.content') || document.querySelector('article');
+      if (!contentElem) return;
+
+      // Clone content node to sanitize without DOM modification
+      const clone = contentElem.cloneNode(true);
+
+      // Strip elements that shouldn't be read out loud
+      const removeSelectors = [
+        'pre', 'code', 'table', '.mermaid', 'svg', 
+        '.series-nav', '.series-nav-bottom', '#toc-bar', 
+        '.post-stats-bar', '.audio-player-card', '.audio-floating-bar',
+        '.post-tail-wrapper', 'figure', 'figcaption', 'script', 'style'
+      ];
+      removeSelectors.forEach(sel => {
+        clone.querySelectorAll(sel).forEach(el => el.remove());
+      });
+
+      // Extract paragraphs and headings
+      const nodes = clone.querySelectorAll('h1, h2, h3, h4, p, li, blockquote');
+      textChunks = [];
+      let totalWordCount = 0;
+
+      nodes.forEach(node => {
+        const text = node.innerText.trim();
+        if (text.length > 10 && !text.startsWith('---')) {
+          // Break into sentence chunks of max ~180 characters for TTS stability
+          const sentences = text.match(/[^.!?]+[.!?]+(\s|$)|[^.!?]+$/g) || [text];
+          sentences.forEach(s => {
+            const cleanS = s.trim();
+            if (cleanS.length > 3) {
+              textChunks.push(cleanS);
+              totalWordCount += cleanS.split(/\s+/).length;
+            }
+          });
+        }
+      });
+
+      // Estimate duration: ~150 words per minute average TTS speech
+      totalEstimatedSeconds = Math.max(30, Math.round((totalWordCount / 150) * 60));
+      timeTotal.innerText = formatTime(totalEstimatedSeconds);
+    }
+
+    function playTTSChunk(index) {
+      if (!synth || index >= textChunks.length) {
+        stopPlayback();
+        return;
+      }
+
+      currentChunkIdx = index;
+      synth.cancel(); // Stop ongoing utterance
+
+      const text = textChunks[currentChunkIdx];
+      const utterance = new SpeechSynthesisUtterance(text);
+      if (selectedVoice) utterance.voice = selectedVoice;
+      utterance.rate = speeds[currentSpeedIdx];
+      utterance.pitch = 1.0;
+
+      utterance.onend = () => {
+        if (isPlaying && currentChunkIdx < textChunks.length - 1) {
+          playTTSChunk(currentChunkIdx + 1);
+        } else if (currentChunkIdx >= textChunks.length - 1) {
+          stopPlayback();
+        }
+      };
+
+      utterance.onerror = (e) => {
+        if (e.error !== 'interrupted' && e.error !== 'canceled') {
+          console.warn('TTS Utterance error:', e);
+        }
+      };
+
+      synth.speak(utterance);
+    }
+
+    function restartFromCurrentChunk() {
+      if (isPlaying) {
+        synth.cancel();
+        playTTSChunk(currentChunkIdx);
+      }
+    }
+
+    // -------------------------------------------------------------
+    // Core Playback State Handlers
+    // -------------------------------------------------------------
+    function togglePlayback() {
+      if (isPlaying) {
+        pausePlayback();
+      } else {
+        startPlayback();
+      }
+    }
+
+    function startPlayback() {
+      isPlaying = true;
+      playIcon.className = 'fas fa-pause';
+      if (miniPlayIcon) miniPlayIcon.className = 'fas fa-pause';
+      playBtn.classList.add('is-playing');
+      waveAnim.classList.remove('d-none');
+      mainIcon.classList.add('d-none');
+
+      if (audioMode === 'file' && audioElement) {
+        audioElement.playbackRate = speeds[currentSpeedIdx];
+        audioElement.play();
+      } else {
+        if (synth.paused) {
+          synth.resume();
+        } else {
+          playTTSChunk(currentChunkIdx);
+        }
+        startTimer();
+      }
+    }
+
+    function pausePlayback() {
+      isPlaying = false;
+      playIcon.className = 'fas fa-play';
+      if (miniPlayIcon) miniPlayIcon.className = 'fas fa-play';
+      playBtn.classList.remove('is-playing');
+      waveAnim.classList.add('d-none');
+      mainIcon.classList.remove('d-none');
+
+      if (audioMode === 'file' && audioElement) {
+        audioElement.pause();
+      } else {
+        if (synth) synth.pause();
+        stopTimer();
+      }
+    }
+
+    function stopPlayback() {
+      isPlaying = false;
+      currentChunkIdx = 0;
+      elapsedSeconds = 0;
+      playIcon.className = 'fas fa-play';
+      if (miniPlayIcon) miniPlayIcon.className = 'fas fa-play';
+      playBtn.classList.remove('is-playing');
+      waveAnim.classList.add('d-none');
+      mainIcon.classList.remove('d-none');
+      timeCurrent.innerText = '00:00';
+      updateProgress(0, totalEstimatedSeconds);
+
+      if (audioMode === 'file' && audioElement) {
+        audioElement.pause();
+        audioElement.currentTime = 0;
+      } else {
+        if (synth) synth.cancel();
+        stopTimer();
+      }
+    }
+
+    function startTimer() {
+      stopTimer();
+      timerInterval = setInterval(() => {
+        if (isPlaying) {
+          elapsedSeconds++;
+          const effectiveTotal = Math.max(elapsedSeconds, Math.round(totalEstimatedSeconds / speeds[currentSpeedIdx]));
+          timeCurrent.innerText = formatTime(elapsedSeconds);
+          timeTotal.innerText = formatTime(effectiveTotal);
+          updateProgress(elapsedSeconds, effectiveTotal);
+          if (miniTime) miniTime.innerText = `${formatTime(elapsedSeconds)} / ${formatTime(effectiveTotal)}`;
+        }
+      }, 1000);
+    }
+
+    function stopTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+    }
+
+    function updateProgress(current, total) {
+      if (!total || total <= 0) return;
+      const pct = Math.min(100, Math.max(0, (current / total) * 100));
+      progressFill.style.width = `${pct}%`;
+      progressThumb.style.left = `${pct}%`;
+    }
+
+    function formatTime(seconds) {
+      if (isNaN(seconds) || seconds < 0) return '00:00';
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60);
+      return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    // -------------------------------------------------------------
+    // UI Event Listeners
+    // -------------------------------------------------------------
+    playBtn.addEventListener('click', togglePlayback);
+    if (miniPlayBtn) miniPlayBtn.addEventListener('click', togglePlayback);
+
+    // Speed Toggle
+    function cycleSpeed() {
+      currentSpeedIdx = (currentSpeedIdx + 1) % speeds.length;
+      const spd = speeds[currentSpeedIdx];
+      const label = `${spd.toFixed(1)}x`;
+      speedToggle.innerText = label;
+      if (miniSpeedToggle) miniSpeedToggle.innerText = label;
+
+      if (audioMode === 'file' && audioElement) {
+        audioElement.playbackRate = spd;
+      } else if (isPlaying) {
+        restartFromCurrentChunk();
+      }
+    }
+
+    speedToggle.addEventListener('click', cycleSpeed);
+    if (miniSpeedToggle) miniSpeedToggle.addEventListener('click', cycleSpeed);
+
+    // Skip Back / Forward
+    skipBack.addEventListener('click', () => {
+      if (audioMode === 'file' && audioElement) {
+        audioElement.currentTime = Math.max(0, audioElement.currentTime - 10);
+      } else {
+        currentChunkIdx = Math.max(0, currentChunkIdx - 2);
+        elapsedSeconds = Math.max(0, elapsedSeconds - 10);
+        if (isPlaying) restartFromCurrentChunk();
+      }
+    });
+
+    skipFwd.addEventListener('click', () => {
+      if (audioMode === 'file' && audioElement) {
+        audioElement.currentTime = Math.min(audioElement.duration, audioElement.currentTime + 10);
+      } else {
+        currentChunkIdx = Math.min(textChunks.length - 1, currentChunkIdx + 2);
+        elapsedSeconds += 10;
+        if (isPlaying) restartFromCurrentChunk();
+      }
+    });
+
+    // Scrubber click/seek
+    progressBar.addEventListener('click', (e) => {
+      const rect = progressBar.getBoundingClientRect();
+      const clickPos = (e.clientX - rect.left) / rect.width;
+      const targetPercent = Math.max(0, Math.min(1, clickPos));
+
+      if (audioMode === 'file' && audioElement && audioElement.duration) {
+        audioElement.currentTime = targetPercent * audioElement.duration;
+      } else if (textChunks.length > 0) {
+        currentChunkIdx = Math.floor(targetPercent * textChunks.length);
+        elapsedSeconds = Math.round(targetPercent * totalEstimatedSeconds);
+        if (isPlaying) {
+          restartFromCurrentChunk();
+        } else {
+          timeCurrent.innerText = formatTime(elapsedSeconds);
+          updateProgress(elapsedSeconds, totalEstimatedSeconds);
+        }
+      }
+    });
+
+    // Voice Picker Toggle
+    voiceSelectBtn.addEventListener('click', () => {
+      voiceDropdown.classList.toggle('d-none');
+    });
+
+    if (btnCloseVoice) {
+      btnCloseVoice.addEventListener('click', () => {
+        voiceDropdown.classList.add('d-none');
+      });
+    }
+
+    // Floating Mini Bar on Scroll
+    let observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        // If main card is not visible AND audio is playing, show floating mini bar
+        if (!entry.isIntersecting && isPlaying) {
+          floatingBar.classList.remove('d-none');
+        } else {
+          floatingBar.classList.add('d-none');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    observer.observe(card);
+
+    if (closeFloating) {
+      closeFloating.addEventListener('click', () => {
+        floatingBar.classList.add('d-none');
+      });
+    }
+
+    // Stop audio on page leave/unload
+    function handleUnload() {
+      if (synth) synth.cancel();
+      if (audioElement) audioElement.pause();
+    }
+    window.addEventListener('beforeunload', handleUnload);
+    window.addEventListener('pagehide', handleUnload);
+  })();
+</script>
+{% endunless %}
