@@ -12,7 +12,7 @@
 - id: "phrack"
   name: "Phrack Magazine"
   category: "Underground Low-Level & Reversing"
-  url: "http://phrack.org/"
+  url: "https://phrack.org/"
   badge: "Legendary"
   badge_color: "#f59e0b"
   icon: "fas fa-terminal"

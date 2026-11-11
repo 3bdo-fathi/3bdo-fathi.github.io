@@ -331,7 +331,7 @@ flowchart LR
 * **Microsoft Learn: x86 Calling Conventions**: [https://learn.microsoft.com/en-us/cpp/cpp/argument-passing-and-naming-conventions](https://learn.microsoft.com/en-us/cpp/cpp/argument-passing-and-naming-conventions).
 
 ### 2. Seminal Security Research & Whitepapers
-* **Phrack Magazine Issue 49**: *Smashing The Stack For Fun And Profit* by Aleph One (1996). [http://phrack.org/issues/49/14.html](http://phrack.org/issues/49/14.html).
+* **Phrack Magazine Issue 49**: *Smashing The Stack For Fun And Profit* by Aleph One (1996). [https://phrack.org/issues/49/14.html](https://phrack.org/issues/49/14.html).
 * **OpenSecurityTraining2**: *Architecture 1001: x86-64 Assembly* by Xeno Kovah. [https://ost2.fyi/](https://ost2.fyi/).
 
 ### 3. MITRE ATT&CK Enterprise Techniques
