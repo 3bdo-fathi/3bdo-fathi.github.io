@@ -17,13 +17,9 @@ layout: default
     {% endif %}
 
     <div class="page-content">
-      {% include audio-player.html %}
       {{ content }}
     </div>
   {% else %}
-    <div class="page-content">
-      {% include audio-player.html %}
-      {{ content }}
-    </div>
+    {{ content }}
   {% endif %}
 </div>
