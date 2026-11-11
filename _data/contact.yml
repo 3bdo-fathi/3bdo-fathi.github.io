@@ -15,7 +15,3 @@
 - type: facebook
   icon: "fab fa-facebook"
   url: "https://www.facebook.com/3bdo.fathi"
-
-- type: rss
-  icon: "fas fa-rss"
-  url: "/feed.xml"

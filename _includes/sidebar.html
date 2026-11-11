@@ -201,8 +201,6 @@
         {%- elsif entry.type == 'email' -%}
           {% assign email = site.social.email | default: site.email %}
           mailto:{{ email }}
-        {%- elsif entry.type == 'rss' -%}
-          {{ entry.url | default: '/feed.xml' | relative_url }}
         {%- else -%}
           {{ entry.url }}
         {%- endif -%}
