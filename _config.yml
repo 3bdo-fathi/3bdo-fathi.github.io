@@ -118,24 +118,6 @@ toc: true
 comments:
   # Global switch for the post-comment system. Keeping it empty means disabled.
   provider: # [disqus | utterances | giscus]
-  # The provider options are as follows:
-  disqus:
-    shortname: # fill with the Disqus shortname.
-  # utterances settings
-  utterances:
-    repo: # <gh-username>/<repo>
-    issue_term: # < url | pathname | title | ...>
-  # Giscus options
-  giscus:
-    repo: 3bdo-fathi/3bdo-fathi.github.io
-    repo_id: R_kgDOSq4_Jw
-    category: General
-    category_id: # fill when Discussions is enabled
-    mapping: pathname # optional, default to 'pathname'
-    strict: '0' # optional, default to '0'
-    input_position: bottom # optional, default to 'bottom'
-    lang: en # optional, default to the value of `site.lang`
-    reactions_enabled: '1' # optional, default to the value of `1`
 
 
 # Self-hosted static assets, optional › https://github.com/cotes2020/chirpy-static-assets
@@ -234,9 +216,3 @@ jekyll-archives:
   permalinks:
     tag: /tags/:name/
     category: /categories/:name/
-
-# Newsletter subscription settings (optional)
-newsletter:
-  enabled: false
-  provider: # [buttondown | mailchimp]
-  buttondown_username:
