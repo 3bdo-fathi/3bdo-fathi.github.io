@@ -211,18 +211,19 @@
 
       .series-nav-btn {
         display: flex;
-        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
         padding: 0.75rem 1rem;
         border-radius: 10px;
-        background: #000000;
+        background: #16181c;
         border: 1px solid #2f3336;
         text-decoration: none !important;
-        transition: all 0.2s ease;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       }
 
       .series-nav-btn:hover {
         border-color: #1d9bf0;
-        background: rgba(88, 166, 255, 0.08);
+        background: rgba(56, 189, 248, 0.08);
         transform: translateY(-2px);
       }
 
@@ -238,13 +239,55 @@
         background: #eef2fd !important;
       }
 
+      .series-nav-arrow {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 0.85rem;
+        background: rgba(56, 189, 248, 0.1);
+        border: 1px solid rgba(56, 189, 248, 0.25);
+        color: #58a6ff;
+        transition: all 0.2s ease;
+      }
+
+      html[data-mode="light"] .series-nav-arrow,
+      html[data-bs-theme="light"] .series-nav-arrow {
+        background: rgba(30, 63, 194, 0.08);
+        border: 1px solid rgba(30, 63, 194, 0.2);
+        color: #1e3fc2;
+      }
+
+      .series-nav-btn:hover .series-nav-arrow {
+        background: #1d9bf0;
+        color: #ffffff;
+        border-color: #1d9bf0;
+      }
+
+      html[data-mode="light"] .series-nav-btn:hover .series-nav-arrow,
+      html[data-bs-theme="light"] .series-nav-btn:hover .series-nav-arrow {
+        background: #1e3fc2;
+        color: #ffffff;
+        border-color: #1e3fc2;
+      }
+
+      .series-nav-content {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
       .series-nav-btn .direction {
-        font-size: 0.72rem;
+        font-size: 0.7rem;
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.04em;
+        letter-spacing: 0.05em;
         color: #1d9bf0;
-        margin-bottom: 0.25rem;
+        margin-bottom: 0.15rem;
       }
 
       html[data-mode="light"] .series-nav-btn .direction,
@@ -287,25 +330,37 @@
         <div class="series-nav-controls my-2">
           {% if prev_post %}
             <a href="{{ prev_post.url | relative_url }}" class="series-nav-btn text-start">
-              <span class="direction"><i class="fas fa-chevron-left me-1"></i> Previous Part</span>
-              <span class="target-title">{{ prev_post.title }}</span>
+              <div class="series-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+              <div class="series-nav-content">
+                <span class="direction">Previous Part</span>
+                <span class="target-title">{{ prev_post.title }}</span>
+              </div>
             </a>
           {% else %}
             <div class="series-nav-btn text-start opacity-50 pe-none">
-              <span class="direction text-muted"><i class="fas fa-flag me-1"></i> First Part</span>
-              <span class="target-title text-muted">You are at the start of this series</span>
+              <div class="series-nav-arrow"><i class="fas fa-flag"></i></div>
+              <div class="series-nav-content">
+                <span class="direction text-muted">First Part</span>
+                <span class="target-title text-muted">You are at the start of this series</span>
+              </div>
             </div>
           {% endif %}
 
           {% if next_post %}
             <a href="{{ next_post.url | relative_url }}" class="series-nav-btn text-end">
-              <span class="direction">Next Part <i class="fas fa-chevron-right ms-1"></i></span>
-              <span class="target-title">{{ next_post.title }}</span>
+              <div class="series-nav-content">
+                <span class="direction">Next Part</span>
+                <span class="target-title">{{ next_post.title }}</span>
+              </div>
+              <div class="series-nav-arrow"><i class="fas fa-arrow-right"></i></div>
             </a>
           {% else %}
             <div class="series-nav-btn text-end opacity-50 pe-none">
-              <span class="direction text-muted">Series Finale <i class="fas fa-check-circle ms-1"></i></span>
-              <span class="target-title text-muted">Latest published part in this series</span>
+              <div class="series-nav-content">
+                <span class="direction text-muted">Series Finale</span>
+                <span class="target-title text-muted">Latest published part in this series</span>
+              </div>
+              <div class="series-nav-arrow"><i class="fas fa-check-circle"></i></div>
             </div>
           {% endif %}
         </div>
