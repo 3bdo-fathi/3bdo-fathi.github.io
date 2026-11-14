@@ -80,8 +80,8 @@ and then we will be requested to enter the password.
 For windows – we will use xfreerdp with the command:
 ```bash
 xfreerdp /v:<Target IP> /u:<username> /p:<password>
-```
 /dynamic-resolution
+```
 
 Throughout the module, those steps will be referred as 'login to the
 Linux/Windows target machine'.
@@ -267,9 +267,8 @@ And here is the downloaded file.
 we will use the following python command:
 ```bash
 python3 -c 'import
+urllib.request;urllib.request.urlretrieve("http://`<target-IP>`/flag.txt", "flag.txt")'
 ```
-urllib.request;urllib.request.urlretrieve("http://<target-
-IP>/flag.txt", "flag.txt")'
 when downloaded, we can cat the flag:
 
 
@@ -383,9 +382,8 @@ python -m http.server 8080
 now we ssh login to the target machine, and download the flag using python:
 ```bash
 python3 -c 'import
+urllib.request;urllib.request.urlretrieve("http://`<attacker-IP>`:8080/flag.txt", "flag.txt")'
 ```
-urllib.request;urllib.request.urlretrieve("http://<attacker-
-IP>:8080/flag.txt", "flag.txt")'
 and confirm download on the target machine:
 
 
@@ -394,9 +392,8 @@ pwnbox. And on the pwnbox – we will use ruby to download the file (not
 before we remove the original flag on the pwnbox):
 ```bash
 ruby -e 'require "net/http"; File.write("flag.txt",
+Net::HTTP.get(URI.parse("http://`<target-IP>`:8080/flag.txt")))'
 ```
-Net::HTTP.get(URI.parse("http://<target-
-IP>:8080/flag.txt")))'
 
 ![Figure 10.1 — Lab execution and output verification (Page 10)](/assets/images/posts/htb-academy/file-transfers/p010_01.jpg)
 *_Figure 10.1 — Lab execution and output verification (Page 10)_*
@@ -423,8 +420,8 @@ we write 'myflag' .  Lets get it on the target machine.
 Lets mount it on the windows machine using 'xfreerdp' using the command:
 ```bash
 xfreerdp /v:<target-IP> /d:HTB /u:htb-student
-```
 /p:HTB_@cademy_stdnt! /drive:linux,/home/htb-ac-1099135/flag
+```
 where 'htb-ac-1099135' is the pwnbox user.
 when done, RDP window will be opened, lets open 'This PC':
 
@@ -461,8 +458,8 @@ and on the windows target machine, we open powershell on 'htb-
 student\Documents', and run the command:
 ```bash
 Import-Module bitstransfer; Start-BitsTransfer -Source
+"http://`<attacker-IP>`/flag.txt" -Destination ".\flag.txt"
 ```
-"http://<attacker-IP>/flag.txt" -Destination ".\flag.txt"
 
 
 

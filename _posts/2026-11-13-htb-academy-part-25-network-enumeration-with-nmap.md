@@ -223,7 +223,7 @@ sudo nmap <target-IP> -p 80 -sV --script vuln
 
 We see the existence of 'robots.txt' file (instructions page for web-crawlers).
 Lets take a look in it:
-http://<target-IP>/robots.txt
+`http://<target-IP>/robots.txt`
 
 ![Figure 6.1 — Lab execution and output verification (Page 6)](/assets/images/posts/htb-academy/network-enumeration-with-nmap/p006_01.jpg)
 *_Figure 6.1 — Lab execution and output verification (Page 6)_*
@@ -253,8 +253,8 @@ However we wish to perform stealthy scan to raise a little alert as possible, we
 will use the command:
 ```bash
 sudo nmap <target-IP> -p 22 -sV -D RND:5 --disable-arp-ping
-```
 -Pn -e tun0
+```
 
 ![Figure 7.1 — Lab execution and output verification (Page 7)](/assets/images/posts/htb-academy/network-enumeration-with-nmap/p007_01.png)
 *_Figure 7.1 — Lab execution and output verification (Page 7)_*
@@ -283,9 +283,8 @@ Basically we employ decoy tactics to make the real scan less suspicious.
 
 we will run the following command:
 ```bash
-sudo nmap -sU -p 53 -D RND:5 --disable-arp-ping -Pn --max-
+sudo nmap -sU -p 53 -D RND:5 --disable-arp-ping -Pn --max-retries 1 --host-timeout <target-IP> -sV
 ```
-retries 1 --host-timeout <target-IP> -sV
 
 
 In addition to the stealth parameters, we will scan for UDP ('-sU'), and for
@@ -295,8 +294,8 @@ The sequence of command will also work:
 ```bash
 sudo nmap --script-updatedb;
 sudo nmap -sV --script=dns-nsid -p 53 -Pn --max-retries 1 --
-```
 host-timeout 30s <target-IP> -sU;
+```
 
 
 *update the nmap script database*
@@ -327,8 +326,8 @@ and the question's hint suggestion to scan target port 50000 from our source
 port 53:
 ```bash
 sudo nmap <target-IP> -p 50000 -sS -Pn -n --disable-arp-ping
-```
 --packet-trace --source-port 53
+```
 
 
 *note – not including source port 53 will not work, due to the assumption the

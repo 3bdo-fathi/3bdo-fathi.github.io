@@ -224,9 +224,9 @@ We can observe the other flag is located in '/flag.txt' . lets get it:
 
 for this question we are provided with this encoded flag. Lets
 download it to the pwnbox:
-wget
-https://academy.hackthebox.com/storage/modules/110/encoded_f
-lag.zip
+```bash
+wget https://academy.hackthebox.com/storage/modules/110/encoded_flag.zip
+```
 
 ```bash
 unzip encoded_flag.zip
@@ -392,7 +392,7 @@ return 404 not found).
 After several minute – a path that is returning 200 will be displayed:
 
 The scan found a page – 2010, which means the URL:
-http://<target-IP>:<target-port>/admin/2010.html
+`http://<target-IP>:<target-port>/admin/2010.html`
 should be accessible, lets test it from the browser (here we will use the normal
 firefox browser):
 
@@ -419,7 +419,7 @@ firefox browser):
 *note – the ZAP wasn't installed properly on the pwnbox so I used
 burpsuite instead. *
 Upon entering
-http://<target-IP>:<target-port>/skills
+`http://<target-IP>:<target-port>/skills`
 for the first time, we receive a cookie from the server
 
 the screenshot is the intercepted response. It contains the property 'Set-
@@ -581,8 +581,7 @@ Lets enter the URL on browser:
 
 Its empty.
 We will add to the url ';cat /flag':
-http://<target-IP>:<target-
-port>/devtools/ping.php?ip=127.0.0.1;cat%20/flag.txt
+`http://<target-IP>:<target-port>/devtools/ping.php?ip=127.0.0.1;cat%20/flag.txt`
 
 ![Figure 23.1 — Lab execution and output verification (Page 23)](/assets/images/posts/htb-academy/using-web-proxies/p023_01.jpg)
 *_Figure 23.1 — Lab execution and output verification (Page 23)_*
@@ -608,7 +607,7 @@ port>/devtools/ping.php?ip=127.0.0.1;cat%20/flag.txt
 #### Technical Methodology & Exploit Execution:
 
 lets enter in the burpsuite browser:
-http://<target-IP>:<target-port>/lucky.php
+`http://<target-IP>:<target-port>/lucky.php`
 
 
 And there open web developer tools  →  Inspector:
@@ -659,7 +658,7 @@ After several attempts, we will get the flag:
 #### Technical Methodology & Exploit Execution:
 
 lets move to the next page
-http://<target-IP>:<target-port>/admin.php
+`http://<target-IP>:<target-port>/admin.php`
 
 
 Here is the intercepted request. Lets intercept the response as well (right click

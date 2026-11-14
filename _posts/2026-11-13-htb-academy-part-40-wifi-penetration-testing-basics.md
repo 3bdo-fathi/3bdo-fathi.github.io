@@ -75,8 +75,8 @@ This module covers the core fundamentals of Wi-Fi penetration testing. We config
 
 ```bash
 xfreerdp /v:<Target IP> /u:<username> /p:<password>
-```
 /dynamic-resolution
+```
 
 this operation will be referred throughout the writeup as 'RDP login'.
 the default credentials are 'wifi:wifi', unless specified otherwise.
@@ -328,7 +328,7 @@ sudo iw dev wlan0mon set channel 11
 ```
 
 ```bash
-sudo aireplay-ng –test wlan0mon
+sudo aireplay-ng --test wlan0mon
 ```
 
 
@@ -363,8 +363,8 @@ indicating they connected to that access point.
 we run the file decrypt using the command:
 ```bash
 sudo airdecap-ng -p 'Password123!!!!!!' -e "CyberNet-Secure"
-```
 /opt/decrypt.cap
+```
 
 
 We get an output file '/opt/decrypt-dec.cap'.
@@ -554,8 +554,8 @@ Method: we run run bruteforce from the wordlist '/opt/wordlist.txt', using the
 command:
 ```bash
 sudo mdk3 wlan0mon p -f /opt/wordlist.txt -t
-```
 d2:a3:32:1b:29:d5
+```
 
 ![Figure 16.1 — Lab execution and output verification (Page 16)](/assets/images/posts/htb-academy/wifi-penetration-testing-basics/p016_01.jpg)
 *_Figure 16.1 — Lab execution and output verification (Page 16)_*
@@ -704,8 +704,8 @@ and on new terminal, we send de-auth packets, using the mac address of the
 found client, to the BSSID of the HTB network:
 ```bash
 sudo aireplay-ng --deauth 10 -a D8:D6:3D:EB:29:D5 -c
-```
 02:00:00:00:02:00 wlan0mon
+```
 
 ![Figure 21.1 — Lab execution and output verification (Page 21)](/assets/images/posts/htb-academy/wifi-penetration-testing-basics/p021_01.jpg)
 *_Figure 21.1 — Lab execution and output verification (Page 21)_*

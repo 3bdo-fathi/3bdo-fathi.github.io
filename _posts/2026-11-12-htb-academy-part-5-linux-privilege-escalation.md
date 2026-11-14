@@ -291,8 +291,8 @@ it in the target machine under the name 'kernel exploit.c'.
 Step 3: compile it with the command 'gcc kernel_exploit.c -o kernel_exploit &&
 ```bash
 chmod +x kernel_exploit'
-```
 Step 4: run it with './kernel_exploit' and get root shell.
+```
 
 Shared Libraries:
 Question: Escalate privileges using LD_PRELOAD technique. Submit the
@@ -322,12 +322,12 @@ Step 6: now we have root shell and we can extract the flag.
 
 #### Technical Methodology & Exploit Execution:
 
-ldd –version
+ldd --version
 
 ```bash
 Python Library Hijacking:
-```
 Questions: Follow along with the examples in this section to escalate
+```
 privileges. Try to practice hijacking python libraries through the various
 methods discussed. Submit the contents of flag.txt under the root user as the
 answer .

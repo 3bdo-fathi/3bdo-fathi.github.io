@@ -283,9 +283,9 @@ When the configuration is complete – lets start with the virtual hosts
 bruteforce with the command:
 ```bash
 gobuster vhost -u http://inlanefreight.htb:58460 -w
-```
 /usr/share/seclists/Discovery/DNS/subdomains-top1million-
 110000.txt --append-domain
+```
 the command will brute force for Vhosts within the target of
 'inlanefreight.htb:58460', we can notice it is the port provided for us on the
 target machine.
@@ -459,7 +459,7 @@ and we can observe the result:
 
 back in 8th August 2018 the hackthebox domain was 'eu'.
 Lets go to
-https://web.archive.org/web/20180808080705/https://www.hackthebox.eu/
+`https://web.archive.org/web/20180808080705/https://www.hackthebox.eu/`
 (pay attention that the url contains the string '20180808' which means
 2018.08.08 in format YYYY-MM-DD), and search for the word 'labs':
 Somewhere in the page we will encounter this:
@@ -469,8 +469,7 @@ Question: How many members did HackTheBox have on the 10th June 2017?
 Answer with an integer, eg 1234.
 Answer: 3054
 Method: lets set the date to 10th June 2017:
-https://web.archive.org/web/20170610042300/https://www.hackthebox.eu/e
-n
+`https://web.archive.org/web/20170610042300/https://www.hackthebox.eu/en`
 looking for the keyword 'member' – we will eventually encounter this:
 
 ![Figure 12.1 — Lab execution and output verification (Page 12)](/assets/images/posts/htb-academy/information-gathering-web-edition/p012_01.png)
@@ -491,7 +490,7 @@ looking for the keyword 'member' – we will eventually encounter this:
 #### Technical Methodology & Exploit Execution:
 
 entering in the URL the address:
-https://web.archive.org/web/20020330205744/http://www.facebook.com
+`https://web.archive.org/web/20020330205744/http://www.facebook.com`
 (remember the '200203' dating format in the url)
 will direct us to:
 
@@ -501,7 +500,7 @@ you use to "beam money to anyone"? Answer with the product name, eg My
 Device, remove the ™ from your answer.
 Answer: Palm 0rganizer
 Method: lets go to:
-https://web.archive.org/web/19991013140707/http://paypal.com/
+`https://web.archive.org/web/19991013140707/http://paypal.com/`
 
 ![Figure 13.1 — Lab execution and output verification (Page 13)](/assets/images/posts/htb-academy/information-gathering-web-edition/p013_01.jpg)
 *_Figure 13.1 — Lab execution and output verification (Page 13)_*
@@ -521,7 +520,7 @@ https://web.archive.org/web/19991013140707/http://paypal.com/
 #### Technical Methodology & Exploit Execution:
 
 go to
-https://web.archive.org/web/19981111184551/http://google.com/
+`https://web.archive.org/web/19981111184551/http://google.com/`
 
 Go to the marked link:
 And we have the answer here:
@@ -531,7 +530,7 @@ Question: Going back to March 2000 on www.iana.org, when exacty was the
 site last updated? Answer with the date in the footer, eg 11-March-99
 Answer: 17-December-99
 Method:
-https://web.archive.org/web/20000303211237/http://www.iana.org/
+`https://web.archive.org/web/20000303211237/http://www.iana.org/`
 
 ![Figure 14.1 — Lab execution and output verification (Page 14)](/assets/images/posts/htb-academy/information-gathering-web-edition/p014_01.png)
 *_Figure 14.1 — Lab execution and output verification (Page 14)_*
@@ -550,7 +549,7 @@ https://web.archive.org/web/20000303211237/http://www.iana.org/
 
 #### Technical Methodology & Exploit Execution:
 
-https://web.archive.org/web/20010331173908/http://www.wikipedia.com/
+`https://web.archive.org/web/20010331173908/http://www.wikipedia.com/`
 
 ![Figure 15.1 — Lab execution and output verification (Page 15)](/assets/images/posts/htb-academy/information-gathering-web-edition/p015_01.jpg)
 *_Figure 15.1 — Lab execution and output verification (Page 15)_*
@@ -612,9 +611,9 @@ Answer: e963d863ee0e82ba7080fbf558ca0d3f
 Method: we will start by looking for subdomains, we will use the command:
 ```bash
 gobuster vhost -u http://inlanefreight.htb:<target-port> -w
-```
 /usr/share/seclists/Discovery/DNS/subdomains-top1million-
 110000.txt --append-domain
+```
 to bruteforce for subdomains within 'inlanefreight.htb' using provided wordlist
 ('top1million'):
 
@@ -666,10 +665,9 @@ curl web1337.inlanefreight.htb:<target-port>/admin_h1dd3n/
 
 let's look for subdomains within the 'web1337' subdomain:
 ```bash
-gobuster vhost -u http://web1337.inlanefreight.htb:<target-
-```
-port> -w /usr/share/seclists/Discovery/DNS/subdomains-
+gobuster vhost -u http://web1337.inlanefreight.htb:<target-port> -w /usr/share/seclists/Discovery/DNS/subdomains-
 top1million-110000.txt --append-domain
+```
 
 
 We found a subdomain 'dev.web1337.inlanefreight.htb'
@@ -678,8 +676,8 @@ Lets add it to '/etc/hosts':
 When that is complete – lets run a crawler:
 ```bash
 python3 ReconSpider3.py
-```
 http://dev.web1337.inlanefreight.htb:51972
+```
 using the same ReconSpider.py tool from 'Creepy Crawlies' section:
 
 when done, an output file 'results.json' will be created, inspecting it will reveal

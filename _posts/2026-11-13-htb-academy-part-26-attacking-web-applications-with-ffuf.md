@@ -81,10 +81,8 @@ In this module, we master the operation of `ffuf`. We learn how to structure hig
 we will use the wordlist 'directory-list-2.3-small.txt' and the ffuf
 command:
 ```bash
-ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-
+ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://<target-IP>:<target-port>/FUZZ -s
 ```
-list-2.3-small.txt:FUZZ -u http://<target-IP>:<target-
-port>/FUZZ -s
 using the '-s' flag to silence unnecessary output:
 
 We got the value 'forum'.
@@ -107,10 +105,8 @@ Method 1: we will use the wordlist 'web-extensions.txt' which
 contains extensions for webpages, on the parameter 'index' to see what
 extensions are out there:
 ```bash
-ffuf -w /usr/share/seclists/Discovery/Web-Content/web-
+ffuf -w /usr/share/seclists/Discovery/Web-Content/web-extensions.txt:FUZZ -u http://<target-IP>:<target-port>/indexFUZZ
 ```
-extensions.txt:FUZZ -u http://<target-IP>:<target-
-port>/indexFUZZ
 *we assume here the path-name is 'index' . *
 
 *
@@ -119,10 +115,8 @@ port>/indexFUZZ
 The extension 'php' returned status code 200 (success), lets make another scan
 for php pages in '/blog':
 ```bash
-ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-
+ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://<target-IP>:<target-port>/blog/FUZZ.php -s
 ```
-list-2.3-small.txt:FUZZ -u http://<target-IP>:<target-
-port>/blog/FUZZ.php -s
 
 ![Figure 2.1 — Lab execution and output verification (Page 2)](/assets/images/posts/htb-academy/attacking-web-applications-with-ffuf/p002_01.jpg)
 *_Figure 2.1 — Lab execution and output verification (Page 2)_*
@@ -138,7 +132,7 @@ port>/blog/FUZZ.php -s
 ### Going for the discovered URL on browser
 
 Going for the discovered URL on browser:
-http://<target-IP>:<target-port>/blog/home.php
+`http://<target-IP>:<target-port>/blog/home.php`
 
 
 
@@ -148,12 +142,10 @@ the need to assume the path-name '/index' in the original technique. However,
 due to the nature of 2 word-lists, the bruteforcing of this method is a far more
 lengthy process, taking approximately 10 minutes:
 ```bash
-ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-
-```
-list-2.3-small.txt:FUZZ1 -w
-/usr/share/seclists/Discovery/Web-Content/web-
-extensions.txt:FUZZ2 -u http://<target-IP>:<target-
+ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ1 -w
+/usr/share/seclists/Discovery/Web-Content/web-extensions.txt:FUZZ2 -u http://`<target-IP>`:<target-
 port>/blog/FUZZ1FUZZ2 -mc 200 -fs 0
+```
 
 
 *
@@ -181,18 +173,16 @@ port>/blog/FUZZ1FUZZ2 -mc 200 -fs 0
 
 lets run recursive search for php files using the command:
 ```bash
-ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-
-```
-list-2.3-small.txt:FUZZ -u http://<target-IP>:<target-
-port>/FUZZ -recursion -recursion-depth 1 -e .php -v -mc 200
+ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://<target-IP>:<target-port>/FUZZ -recursion -recursion-depth 1 -e .php -v -mc 200
 -fs  0
+```
 using death-1
 
 *
 *
 
 then, we enter the website:
-http://<target-IP>:<target-port>/forum/flag.php
+`http://<target-IP>:<target-port>/forum/flag.php`
 
 ![Figure 4.1 — Lab execution and output verification (Page 4)](/assets/images/posts/htb-academy/attacking-web-applications-with-ffuf/p004_01.jpg)
 *_Figure 4.1 — Lab execution and output verification (Page 4)_*
@@ -215,12 +205,10 @@ http://<target-IP>:<target-port>/forum/flag.php
 #### Technical Methodology & Exploit Execution:
 
 we will use the wordlist 'subdomains-top1million-5000.txt' which in
-the pwnbox is located at '/usr/share/seclists/Discovery/DNS/subdomains-
-top1million-5000.txt' . we will use the command:
+the pwnbox is located at '/usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt' . we will use the command:
 ```bash
-ffuf -w /usr/share/seclists/Discovery/DNS/subdomains-
+ffuf -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u https://FUZZ.inlanefreight.com/
 ```
-top1million-5000.txt:FUZZ -u https://FUZZ.inlanefreight.com/
 
 
 *
@@ -252,18 +240,16 @@ first, we will have to link the Vhost to the target IP in the file
 sudo nano /etc/hosts
 ```
 and in it
-<target-IP> academy.htb
+`<target-IP>` academy.htb
 
 
 
 Now, we would like to use the command
 ```bash
-ffuf -w /usr/share/seclists/Discovery/DNS/subdomains-
-```
-top1million-5000.txt:FUZZ -u http://academy.htb:<target-
-port>/ -H 'Host: FUZZ.academy.htb'
+ffuf -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://academy.htb:<target-port>/ -H 'Host: FUZZ.academy.htb'
 without filtering for a size (using the 'subdomains-top1million-5000.txt'
 wordlist) – however that will result in flooding of 'dummy' results:
+```
 
 ![Figure 6.1 — Lab execution and output verification (Page 6)](/assets/images/posts/htb-academy/attacking-web-applications-with-ffuf/p006_01.jpg)
 *_Figure 6.1 — Lab execution and output verification (Page 6)_*
@@ -281,10 +267,8 @@ wordlist) – however that will result in flooding of 'dummy' results:
 All of which has the size of 986 bytes.
 So lets filter that size:
 ```bash
-ffuf -w /usr/share/seclists/Discovery/DNS/subdomains-
+ffuf -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://academy.htb:<target-port>/ -H 'Host: FUZZ.academy.htb' -fs 986
 ```
-top1million-5000.txt:FUZZ -u http://academy.htb:<target-
-port>/ -H 'Host: FUZZ.academy.htb' -fs 986
 
 
 *
@@ -320,18 +304,16 @@ result.
 #### Technical Methodology & Exploit Execution:
 
 for this question we are provided with the URL:
-'http://admin.academy.htb:<target-port>/admin/admin.php'
+'http://admin.academy.htb:`<target-port>`/admin/admin.php'
 (don't forget to link the vhost subdomain in '/etc/hosts'
 
 )
 And we need to find acceptable parameter property. For that we will use the
 wordlist 'burp-parameter-names.txt' and the command:
 ```bash
-ffuf -w /usr/share/seclists/Discovery/Web-Content/burp-
+ffuf -w /usr/share/seclists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ -u
+http://admin.academy.htb:<target-port>/admin/admin.php?FUZZ=key -fs 798
 ```
-parameter-names.txt:FUZZ -u
-http://admin.academy.htb:<target-
-port>/admin/admin.php?FUZZ=key -fs 798
 *We will add '-fs 798' upfront to skip the lengthy process of finding the size to
 filter as we shown in the previous section. *
 
@@ -367,10 +349,9 @@ for i in $(seq 1 1000); do echo $i >> ids.txt; done
 when the file is ready, we will use it as wordlist for the POST request parameter
 bruteforce:
 ```bash
-ffuf -w ids.txt:FUZZ -u http://admin.academy.htb:<target-
-```
-port>/admin/admin.php -X POST -d 'id=FUZZ' -H 'Content-Type:
+ffuf -w ids.txt:FUZZ -u http://admin.academy.htb:<target-port>/admin/admin.php -X POST -d 'id=FUZZ' -H 'Content-Type:
 application/x-www-form-urlencoded' -fs 768
+```
 * do remember to keep the vhost subdomain linked to the IP in '/etc/hosts' .
 And also we set the '-fs' to 768 upfront.*
 
@@ -383,9 +364,9 @@ GET request, the web-server page is accepting POST requests. So we will use
 ```bash
 curl instead:
 curl http://admin.academy.htb:<target-IP>/admin/admin.php -X
-```
 POST -d 'id=73' -H 'Content-Type: application/x-www-form-
 urlencoded'
+```
 
 ![Figure 9.1 — Lab execution and output verification (Page 9)](/assets/images/posts/htb-academy/attacking-web-applications-with-ffuf/p009_01.jpg)
 *_Figure 9.1 — Lab execution and output verification (Page 9)_*
@@ -417,16 +398,14 @@ first lets link the vhost 'academy.htb' to the target IP in the
 sudo nano /etc/hosts
 ```
 →
-<target-IP> academy.htb
+`<target-IP>` academy.htb
 
 
 Now when that's link – lets run vhost subdomain bruteforce, using the usual
 'subdomains-top1million-5000.txt' wordlist:
 ```bash
-ffuf -w /usr/share/seclists/Discovery/DNS/subdomains-
+ffuf -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://academy.htb:<target-port>/ -H 'Host: FUZZ.academy.htb' -fs 985
 ```
-top1million-5000.txt:FUZZ -u http://academy.htb:<target-
-port>/ -H 'Host: FUZZ.academy.htb' -fs 985
 
 
 *
@@ -458,9 +437,9 @@ in '/etc/hosts/ as well:
 sudo nano /etc/hosts
 ```
 →
-<target-IP> test.academy.htb
-<target-IP> faculty.academy.htb
-<target-IP> archive.academy.htb
+`<target-IP>` test.academy.htb
+`<target-IP>` faculty.academy.htb
+`<target-IP>` archive.academy.htb
 
 
 
@@ -468,8 +447,8 @@ Now lets put the found subdomain in a file called 'found_subs.txt', along with
 the main 'academy' domain:
 ```bash
 echo 'academy
-```
 test
+```
 faculty
 archive' > found_subs.txt
 
@@ -486,10 +465,8 @@ archive' > found_subs.txt
 Now we are ready to run the ffuf:
 ```bash
 ffuf -w found_subs.txt:SUB -w
+/usr/share/seclists/Discovery/Web-Content/web-extensions.txt:EXT -u http://SUB.academy.htb:<target-port>/indexEXT
 ```
-/usr/share/seclists/Discovery/Web-Content/web-
-extensions.txt:EXT -u http://SUB.academy.htb:<target-
-port>/indexEXT
 *yes, we can use variables 'SUB' and 'EXT' instead of 'FUZZ' . *:
 
 *
@@ -522,10 +499,9 @@ first we will use recursive enumeration to find paths and sub-paths.
 Depth 2 will suffice:
 ```bash
 ffuf -w found_subs.txt:SUB -w
-```
 /usr/share/seclists/Discovery/Web-Content/directory-list-
-2.3-small.txt:FUZZ -u http://SUB.academy.htb:<target-
-port>/FUZZ -recursion -recursion-depth 2 -fs 0
+2.3-small.txt:FUZZ -u http://SUB.academy.htb:`<target-port>`/FUZZ -recursion -recursion-depth 2 -fs 0
+```
 
 
 *
@@ -548,8 +524,8 @@ We will put that path in a file called 'found_paths.txt', along with the main
 path:
 ```bash
 echo '/
-```
 courses/' > found_paths.txt
+```
 
 
 
@@ -557,8 +533,8 @@ Similarly, let's put the found extensions from the previous question to a file
 called 'found_exts.txt':
 ```bash
 echo 'php
-```
 phps
+```
 php7' > found_exts.txt
 
 
@@ -568,10 +544,10 @@ subdomains, paths, and extensions – we will scour the 'directory-list-2.3-
 small.txt' wordlist to find the correct file-name:
 ```bash
 ffuf -w found_subs.txt:SUB -w found_paths.txt:PATH -w
-```
 /usr/share/seclists/Discovery/Web-Content/directory-list-
 2.3-small.txt:FUZZ -w found_exts.txt:EXT -u
-http://SUB.academy.htb:<target-port>/PATHFUZZ.EXT -mc 200 -
+`http://SUB.academy.htb:<target-port>/PATHFUZZ.EXT -mc 200 -`
+```
 fs 0
 
 ![Figure 15.1 — Lab execution and output verification (Page 15)](/assets/images/posts/htb-academy/attacking-web-applications-with-ffuf/p015_01.jpg)
@@ -586,11 +562,10 @@ fs 0
 
 The scan found the filename 'linux-security' , along with the subdomain
 'faculty' , the path '/courses' and the extension 'php7' – lets visit that page:
-http://faculty.academy.htb:<target-port>/courses/linux-
-security.php7
+`http://faculty.academy.htb:<target-port>/courses/linux-security.php7`
 
 or to fit the answer format:
-http://faculty.academy.htb:PORT/courses/linux-security.php7
+`http://faculty.academy.htb:PORT/courses/linux-security.php7`
 
 ![Figure 16.1 — Lab execution and output verification (Page 16)](/assets/images/posts/htb-academy/attacking-web-applications-with-ffuf/p016_01.png)
 *_Figure 16.1 — Lab execution and output verification (Page 16)_*
@@ -618,12 +593,10 @@ http://faculty.academy.htb:PORT/courses/linux-security.php7
 we will bruteforce POST requests, using the 'burp-parameter-
 names.txt' wordlist:
 ```bash
-ffuf -w /usr/share/seclists/Discovery/Web-Content/burp-
-```
-parameter-names.txt:FUZZ -u
-http://faculty.academy.htb:<target-port>/courses/linux-
-security.php7 -X POST -d "FUZZ=key" -H 'Content-Type:
+ffuf -w /usr/share/seclists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ -u
+http://faculty.academy.htb:<target-port>/courses/linux-security.php7 -X POST -d "FUZZ=key" -H 'Content-Type:
 application/x-www-form-urlencoded' -fs 774
+```
 
 
 *
@@ -651,8 +624,8 @@ Finding the parameters names 'user' and 'username'.
 first lets put the 'user' and 'username' in 'found_parameters.txt':
 ```bash
 echo 'user
-```
 username' > found_parameters.txt
+```
 
 
 
@@ -688,11 +661,10 @@ sizes 780 and 781 (ignore those lines, and the 3 lines below them):
 
 ```bash
 ffuf -w found_parameters.txt:PARA -w allnames.txt:FUZZ -u
-```
-http://faculty.academy.htb:<target-port>/courses/linux-
-security.php7 -X POST -d 'PARA=FUZZ' -H 'Content-Type:
+http://faculty.academy.htb:<target-port>/courses/linux-security.php7 -X POST -d 'PARA=FUZZ' -H 'Content-Type:
 application/x-www-form-urlencoded' -mc 200 | sed -e '/Size:
 780/,+3d' -e '/Size: 781/,+3d'
+```
 
 
 
@@ -715,10 +687,9 @@ We found the values 'harry' or 'HARRY' fit to the parameter 'username'.
 All we have left to do, is to curl the flag using POST request, and all the
 obtained parameters and values:
 ```bash
-curl http://faculty.academy.htb:<target-port>/courses/linux-
-```
-security.php7 -X POST -d 'username=harry' -H 'Content-Type:
+curl http://faculty.academy.htb:<target-port>/courses/linux-security.php7 -X POST -d 'username=harry' -H 'Content-Type:
 application/x-www-form-urlencoded'
+```
 
 ![Figure 20.1 — Lab execution and output verification (Page 20)](/assets/images/posts/htb-academy/attacking-web-applications-with-ffuf/p020_01.jpg)
 *_Figure 20.1 — Lab execution and output verification (Page 20)_*

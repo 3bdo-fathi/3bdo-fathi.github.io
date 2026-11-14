@@ -80,23 +80,21 @@ This module provides a comprehensive technical walkthrough of web fuzzing tradec
 
 we will have to do directory fuzzing for that:
 ```bash
-ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-
-```
-list-2.3-medium.txt -u http://<target-IP>:<target-port>/FUZZ
+ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -u http://<target-IP>:<target-port>/FUZZ
 -fs 82 -s
+```
 where we are using the wordlist 'directory-list-2.3-medium.txt' located in the
-pwnbox under the path '/usr/share/seclists/Discovery/Web-Content/directory-
-list-2.3-medium.txt':
+pwnbox under the path '/usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt':
 
 We have found the path
-http://<target-IP>:<target-port>/w2ksvrus
+`http://<target-IP>:<target-port>/w2ksvrus`
 
 now lets fuzz for pages in it:
 ```bash
 ffuf -w /usr/share/seclists/Discovery/Web-Content/common.txt
-```
 -u http://<target-IP>:<target-port>/w2ksvrus/FUZZ.html -e
 .php,.html,.txt,.bak,.js -v -s
+```
 using the wordlist 'common.txt' found in the pwnbox uunder the path:
 '/usr/share/seclists/Discovery/Web-Content/common.txt':
 
@@ -114,15 +112,14 @@ using the wordlist 'common.txt' found in the pwnbox uunder the path:
 
 ```bash
 ffuf -w /usr/share/seclists/Discovery/Web-Content/common.txt
-```
--u http://<target-IP>:<target-
-port>/webfuzzing_hidden_path/FUZZ -e
+-u http://<target-IP>:<target-port>/webfuzzing_hidden_path/FUZZ -e
 .php,.html,.txt,.bak,.js -v -s
+```
 this time we will not look for .html only:
 
 
 We got the result 'flag' . Lets enter the URL:
-http://<target-IP>:<target-port>/webfuzzing_hidden_path/flag
+`http://<target-IP>:<target-port>/webfuzzing_hidden_path/flag`
 
 ![Figure 2.1 — Lab execution and output verification (Page 2)](/assets/images/posts/htb-academy/web-fuzzing/p002_01.jpg)
 *_Figure 2.1 — Lab execution and output verification (Page 2)_*
@@ -141,17 +138,15 @@ http://<target-IP>:<target-port>/webfuzzing_hidden_path/flag
 
 ```bash
 ffuf -w /usr/share/seclists/Discovery/Web-Content/common.txt
-```
--u http://<target-IP>:<target-
-port>/webfuzzing_hidden_path/flag/FUZZ -e
+-u http://<target-IP>:<target-port>/webfuzzing_hidden_path/flag/FUZZ -e
 .php,.html,.txt,.bak,.js -v -s
+```
 
 
 We got the page flag.html
 
 Lets enter it:
-http://<target-IP>:<target-
-port>/webfuzzing_hidden_path/flag/flag.html
+`http://<target-IP>:<target-port>/webfuzzing_hidden_path/flag/flag.html`
 
 ![Figure 3.1 — Lab execution and output verification (Page 3)](/assets/images/posts/htb-academy/web-fuzzing/p003_01.jpg)
 *_Figure 3.1 — Lab execution and output verification (Page 3)_*
@@ -172,16 +167,13 @@ port>/webfuzzing_hidden_path/flag/flag.html
 
 we will use the command:
 ```bash
-ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-
+ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -ic -v -u http://<target-IP>:<target-port>/recursive_fuzz/FUZZ -e .html -recursion -s
 ```
-list-2.3-medium.txt -ic -v -u http://<target-IP>:<target-
-port>/recursive_fuzz/FUZZ -e .html -recursion -s
 using the same wordlist from the previous question
 
 
 There is the path of:
-http://<target-IP>:<target-
-port>/recursive_fuzz/level1/level2/level3/threatcon_level2/
+`http://<target-IP>:<target-port>/recursive_fuzz/level1/level2/level3/threatcon_level2/`
 
 lets enter it:
 
@@ -205,9 +197,9 @@ lets enter it:
 we will run the ffuf command:
 ```bash
 ffuf -w /usr/share/seclists/Discovery/Web-Content/common.txt
-```
 -u "http://<target-IP>:<target-port>/get.php?x=FUZZ" -mc all
 -fc 404 -s
+```
 the page 'get.php' was provided for us by the section's guide, so does the
 parameter's name 'x' . And we will use the already used 'common.txt' from
 previous questions.
@@ -215,7 +207,7 @@ previous questions.
 We get the value 'OA_HTML'.
 
 Lets enter it:
-http://94.237.56.165:36394/get.php?x=OA_HTML
+`http://94.237.56.165:36394/get.php?x=OA_HTML`
 
 ![Figure 5.1 — Lab execution and output verification (Page 5)](/assets/images/posts/htb-academy/web-fuzzing/p005_01.jpg)
 *_Figure 5.1 — Lab execution and output verification (Page 5)_*
@@ -237,10 +229,10 @@ http://94.237.56.165:36394/get.php?x=OA_HTML
 we run the command:
 ```bash
 ffuf -u http://<target-IP>:<target-port>/post.php -X POST -H
-```
 "Content-Type: application/x-www-form-urlencoded" -d
 "y=FUZZ" -w /usr/share/seclists/Discovery/Web-
 Content/common.txt -mc 200 -v -s
+```
 
 
 
@@ -248,9 +240,9 @@ Now lets sent POST request with the parameter and value for that URL using
 ```bash
 curl tool, using the command:
 curl -X POST "http://<target-IP>:<target-port>/post.php" -H
-```
 "Content-Type: application/x-www-form-urlencoded" -d
 "y=SUNWmc"
+```
 
 ![Figure 6.1 — Lab execution and output verification (Page 6)](/assets/images/posts/htb-academy/web-fuzzing/p006_01.jpg)
 *_Figure 6.1 — Lab execution and output verification (Page 6)_*
@@ -276,16 +268,16 @@ sudo nano /etc/hosts
 ```
 
 and we will link the target IP to the vhost 'inlanefreight.htb':
-<target-IP> inlanefreight.htb
+`<target-IP>` inlanefreight.htb
 
 
 
 Now that's set – we run the gobuster command:
 ```bash
 gobuster vhost -u http://inlanefreight.htb:<target-port> -w
-```
 /usr/share/seclists/Discovery/Web-Content/common.txt --
 append-domain
+```
 
 ![Figure 7.1 — Lab execution and output verification (Page 7)](/assets/images/posts/htb-academy/web-fuzzing/p007_01.jpg)
 *_Figure 7.1 — Lab execution and output verification (Page 7)_*
@@ -304,9 +296,9 @@ append-domain
 we run the following gobuster command:
 ```bash
 gobuster dns -d inlanefreight.com -w
-```
 /usr/share/seclists/Discovery/DNS/subdomains-top1million-
 5000.txt
+```
 
 
 *
@@ -335,10 +327,10 @@ gobuster dns -d inlanefreight.com -w
 we will fuzz using ffuf and common.txt wordlist:
 ```bash
 ffuf -u http://<target-IP>:<target-port>/post.php -X POST -H
-```
 "Content-Type: application/x-www-form-urlencoded" -d
 "y=FUZZ" -w /usr/share/seclists/Discovery/Web-
 Content/common.txt -v -s
+```
 
 
 
@@ -346,9 +338,9 @@ Now lets run curl request on the URL with the found parameter's value to get
 the flag:
 ```bash
 curl -X POST "http://<target-IP>:<target-port>/post.php" -H
-```
 "Content-Type: application/x-www-form-urlencoded" -d
 "y=SUNWmc"
+```
 
 ![Figure 9.1 — Lab execution and output verification (Page 9)](/assets/images/posts/htb-academy/web-fuzzing/p009_01.jpg)
 *_Figure 9.1 — Lab execution and output verification (Page 9)_*
@@ -371,10 +363,8 @@ we will use the wordlist directory-list-2.3-medium.txt located in the
 pwnbox in the path - /usr/share/seclists/Discovery/Web-Content/directory-list-
 2.3-medium.txt, and the ffuf command:
 ```bash
-ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-
+ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -u http://<target-IP>:<target-port>/FUZZ/ -mc 200 -s
 ```
-list-2.3-medium.txt -u http://<target-IP>:<target-
-port>/FUZZ/ -mc 200 -s
 
 
 There is the directory – 'ur-hiddenmember'.
@@ -402,14 +392,14 @@ first lets intstall the tool 'webfuzz_api' and its dependencies:
 git clone https://github.com/PandaSt0rm/webfuzz_api.git;
 ```bash
 cd webfuzz_api;
-```
 pip3 install -r requirements.txt;
+```
 
 then we run the fuzzer on our endpoint:
 ```bash
 python3 api_fuzzer.py http://<target-IP>:<target-port> |
-```
 '\+'
+```
 
 
 There are 2 valid endpoints – lets curl the 'czcmdcvt':
@@ -440,9 +430,9 @@ curl http://<target-IP>:<target-port>/czcmdcvt
 First, lets fuzz for pages/directories:
 ```bash
 ffuf -w /usr/share/seclists/Discovery/Web-Content/common.txt
-```
 -u http://<target-IP>:<target-port>/FUZZ -e
 .php,.html,.txt,.bak,.js -v -s
+```
 
 
 *
@@ -452,9 +442,9 @@ There is the result 'admin', which is a directory.
 Lets fuzz it as well:
 ```bash
 ffuf -w /usr/share/seclists/Discovery/Web-Content/common.txt
-```
 -u http://<target-IP>:<target-port>/admin/FUZZ -e
 .php,.html,.txt,.bak,.js -v -s
+```
 
 
 *
@@ -479,22 +469,20 @@ There is the page of '/admin/panel.php'.
 ### Lets enter it
 
 Lets enter it:
-http://<target-IP>:<target-port>/admin/panel.php
+`http://<target-IP>:<target-port>/admin/panel.php`
 
 
 We get 'Invalid parameter' message, indication that there is a parameter
 'accessID' . We need to find its value:
 ```bash
 ffuf -w /usr/share/seclists/Discovery/Web-Content/common.txt
+-u http://<target-IP>:<target-port>/admin/panel.php?accessID=FUZZ -v -fs 58 -s
 ```
--u http://<target-IP>:<target-
-port>/admin/panel.php?accessID=FUZZ -v -fs 58 -s
 
 
 We get the value 'getaccess'.
 So lets enter the URL:
-http://<target-IP>:<target-
-port>/admin/panel.php?accessID=getaccess
+`http://<target-IP>:<target-port>/admin/panel.php?accessID=getaccess`
 
 
 We are instructed to keep looking in the vhost 'fuzzing_fun.htb'.
@@ -506,9 +494,9 @@ And run subdomain fuzzing on it – make sure to filter for results of status co
 200:
 ```bash
 gobuster vhost -u http://fuzzing_fun.htb:<target-port> -w
-```
 /usr/share/seclists/Discovery/Web-Content/common.txt --
 append-domain | grep 'Status: 200'
+```
 
 ![Figure 13.1 — Lab execution and output verification (Page 13)](/assets/images/posts/htb-academy/web-fuzzing/p013_01.jpg)
 *_Figure 13.1 — Lab execution and output verification (Page 13)_*
@@ -530,30 +518,29 @@ We get the sub-domain 'hidden.fuzzing_fun.htb' . first we will link it to the
 target IP in /etc/hosts:
 
 And enter it in the browser:
-http://hidden.fuzzing_fun.htb:<target-port>
+`http://hidden.fuzzing_fun.htb:<target-port>`
 
 
 We are instructed to look in '/godeep':
 ```bash
 ffuf -w /usr/share/seclists/Discovery/Web-Content/common.txt
-```
 -u http://hidden.fuzzing_fun.htb:<target-port>/godeep/FUZZ -
 e .php,.html,.txt,.bak,.js -v -s
+```
 
 
 * *
 
 Lets enter it:
-http://hidden.fuzzing_fun.htb:<target-port>/godeep/stoneedge
+`http://hidden.fuzzing_fun.htb:<target-port>/godeep/stoneedge`
 
 
 ->
 ```bash
 ffuf -w /usr/share/seclists/Discovery/Web-Content/common.txt
-```
--u http://hidden.fuzzing_fun.htb:<target-
-port>/godeep/stoneedge/FUZZ -e .php,.html,.txt,.bak,.js -v -
+-u http://hidden.fuzzing_fun.htb:<target-port>/godeep/stoneedge/FUZZ -e .php,.html,.txt,.bak,.js -v -
 s
+```
 
 ![Figure 14.1 — Lab execution and output verification (Page 14)](/assets/images/posts/htb-academy/web-fuzzing/p014_01.jpg)
 *_Figure 14.1 — Lab execution and output verification (Page 14)_*
@@ -580,24 +567,21 @@ s
 * *
 
 →
-http://hidden.fuzzing_fun.htb:<target-
-port>/godeep/stoneedge/bbclone
+`http://hidden.fuzzing_fun.htb:<target-port>/godeep/stoneedge/bbclone`
 
 
 →
 ```bash
 ffuf -w /usr/share/seclists/Discovery/Web-Content/common.txt
-```
--u http://hidden.fuzzing_fun.htb:<target-
-port>/godeep/stoneedge/bbclone/FUZZ -e
+-u http://hidden.fuzzing_fun.htb:<target-port>/godeep/stoneedge/bbclone/FUZZ -e
 .php,.html,.txt,.bak,.js -v -s
+```
 
 
 * *
 
 Lets enter it:
-http://hidden.fuzzing_fun.htb:<target-
-port>/godeep/stoneedge/bbclone/type3
+`http://hidden.fuzzing_fun.htb:<target-port>/godeep/stoneedge/bbclone/type3`
 
 ![Figure 15.1 — Lab execution and output verification (Page 15)](/assets/images/posts/htb-academy/web-fuzzing/p015_01.jpg)
 *_Figure 15.1 — Lab execution and output verification (Page 15)_*

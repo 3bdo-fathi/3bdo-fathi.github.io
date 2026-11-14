@@ -78,7 +78,7 @@ This module delivers a comprehensive technical guide to Hashcat operations. We e
 
 #### Technical Methodology & Exploit Execution:
 
-https://www.md5hashgenerator .com/
+`https://www.md5hashgenerator .com/`
 
 ![Figure 1.1 — Lab execution and output verification (Page 1)](/assets/images/posts/htb-academy/cracking-passwords-with-hashcat/p001_01.png)
 *_Figure 1.1 — Lab execution and output verification (Page 1)_*
@@ -150,9 +150,8 @@ which contains that keyword, and the line above it (-B 1):
 First, lets start with downloading the rockyou.txt wordlist to the
 pwnbox:
 ```bash
-wget https://github.com/brannondorsey/naive-
+wget https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt -q
 ```
-hashcat/releases/download/data/rockyou.txt -q
 
 now, according to this hash analyzer, the hash we need to crack is MD5:
 
@@ -345,7 +344,7 @@ using '-m 1000' for NTLM cracking:
 
 first, we will download the attached file and unzip it:
 wget
-https://academy.hackthebox.com/storage/modules/20/Misc_hashe
+`https://academy.hackthebox.com/storage/modules/20/Misc_hashe`
 s.zip -q
 
 ```bash
@@ -361,9 +360,9 @@ Upon extraction attempt, we will be required a password:
 
 So we need to extract the hash and crack it. We will use the tool '7z2hashcat' .
 We download it:
-wget
-https://raw.githubusercontent.com/philsmd/7z2hashcat/master/
-7z2hashcat.pl
+```bash
+wget https://raw.githubusercontent.com/philsmd/7z2hashcat/master/7z2hashcat.pl
+```
 
 ![Figure 10.1 — Lab execution and output verification (Page 10)](/assets/images/posts/htb-academy/cracking-passwords-with-hashcat/p010_01.jpg)
 *_Figure 10.1 — Lab execution and output verification (Page 10)_*
@@ -428,7 +427,7 @@ We can now extract the hashcat.7z for the flag:
 
 First, we will download and extract the 'corp_question1-01.cap' file:
 wget
-https://academy.hackthebox.com/storage/modules/20/Hashcat_wi
+`https://academy.hackthebox.com/storage/modules/20/Hashcat_wi`
 reless1.zip -q
 
 ```bash

