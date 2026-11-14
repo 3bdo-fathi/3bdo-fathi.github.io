@@ -692,7 +692,7 @@ Modern enterprise security programs must implement proactive, layered defense-in
 ## Authoritative References & Recommended Reading
 
 - [HTB Academy: Stack-Based Buffer Overflows on Linux x86](https://academy.hackthebox.com/module/31) — *Official Hack The Box curriculum track*
-- [Aleph One: Smashing The Stack For Fun And Profit](http://phrack.org/issues/49/14.html) — *Foundational Phrack paper on stack overflow mechanics*
+- [Aleph One: Smashing The Stack For Fun And Profit](https://phrack.org/issues/49/14.html) — *Foundational Phrack paper on stack overflow mechanics*
 - [GDB GEF / Pwndbg Exploit Development Plugins](https://github.com/hugsy/gef) — *GDB enhancements for vulnerability research*
 - [Corelan Team Exploit Writing Series](https://www.corelan.be/) — *Premier binary exploitation tutorials*
 

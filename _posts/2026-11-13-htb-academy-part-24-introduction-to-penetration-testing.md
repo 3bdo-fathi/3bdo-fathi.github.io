@@ -182,7 +182,7 @@ Modern enterprise security programs must implement proactive, layered defense-in
 ## Authoritative References & Recommended Reading
 
 - [HTB Academy: Introduction to Penetration Testing](https://academy.hackthebox.com/module/90) — *Official Hack The Box curriculum track*
-- [Penetration Testing Execution Standard (PTES)](http://www.pentest-standard.org/) — *Standard industry penetration testing workflow*
+- [Penetration Testing Execution Standard (PTES)](https://www.pentest-standard.org/) — *Standard industry penetration testing workflow*
 - [NIST SP 800-115: Technical Guide to Information Security Testing](https://csrc.nist.gov/publications/detail/sp/800-115/final) — *Federal testing standard*
 - [OSSTMM 3.0: Open Source Security Testing Methodology Manual](https://www.isecom.org/OSSTMM.3.pdf) — *Scientific security testing framework*
 

