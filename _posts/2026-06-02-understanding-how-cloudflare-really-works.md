@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "The Deep Infrastructure Architecture of Cloudflare"
 date: 2026-06-02 12:00:00 +0300
 categories: [Cyber Security, Network Security]
@@ -23,6 +24,11 @@ In this article, we'll move beyond the marketing terms and take a closer look at
 ---
 
 ## 1. Traffic Ingestion: BGP Anycast and Asymmetric Routing
+
+![Cloudflare Edge Reverse Proxy Architecture](/assets/images/posts/appsec/cloudflare-architecture.png)
+*Figure 1: Global Anycast routing, edge reverse proxy inspection pipeline (eBPF/XDP, DDoS mitigation, Pingora proxy engine), and secure origin server communication.*
+
+
 
 Cloudflare announces its IPv4 and IPv6 prefixes from all of its global data centers simultaneously using **BGP (Border Gateway Protocol) Anycast**. Every edge node advertises the exact same IP addresses.
 
@@ -63,6 +69,32 @@ To prevent this, Cloudflare processes packets at the lowest possible layer using
 **The L3/L4 Mitigation Layer:** Before the kernel allocates an `sk_buff` structure, custom eBPF programs running at the NIC driver level inspect packet headers. Volumetric floods, spoofed UDP packets, and malformed SYN floods are dropped *here* using minimal CPU cycles.
 
 ---
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Client as Visitor Browser
+    participant Edge as Cloudflare Anycast Edge (PoP)
+    participant WAF as L7 WAF & Bot Mitigation
+    participant Cache as Edge Cache Engine (Pingora)
+    actor Origin as Customer Origin Web Server
+
+    Client->>Edge: HTTPS Request (BGP Anycast Nearest PoP)
+    Edge->>Edge: L4 DDoS Mitigation (XDP / eBPF Drop)
+    Edge->>WAF: TLS Termination & Managed Ruleset Inspection
+    alt Malicious Request Detected
+        WAF-->>Client: 403 Forbidden / Managed Challenge
+    else Clean Request
+        WAF->>Cache: Cache Lookup (Static Assets)
+        alt Cache Hit
+            Cache-->>Client: 200 OK (Served from Edge RAM/SSD)
+        else Cache Miss
+            Cache->>Origin: TLS Forward to Protected Origin (Authenticated Origin Pull)
+            Origin-->>Cache: Upstream Response Stream
+            Cache-->>Client: Encrypted Response Delivered to Visitor
+        end
+    end
+```
 
 ## 3. The Application Layer: Transitioning to Pingora
 

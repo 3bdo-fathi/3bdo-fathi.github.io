@@ -1,6 +1,6 @@
 ---
 layout: page
-icon: fas fa-route
+icon: fas fa-compass
 order: 3
 title: Roadmaps
 permalink: /roadmaps/
@@ -571,6 +571,41 @@ permalink: /roadmaps/
 
   <!-- Roadmaps Grid (100% English & External Direct Links Only) -->
   <div class="roadmaps-grid" id="roadmaps-grid">
+
+    <!-- 0. Hack The Box Academy Masterclass & Flag Vault (Featured) -->
+    <div class="roadmap-card is-featured" data-category="offensive" data-featured="true" data-keywords="hack the box htb academy cpts certified penetration testing specialist active directory privilege escalation web attacks command injection file transfers footprinting flags writeups">
+      <div>
+        <div class="roadmap-card-top">
+          <div class="roadmap-icon-box" style="background: rgba(159, 239, 0, 0.15); color: #9fef00; border: 1px solid rgba(159, 239, 0, 0.35);">
+            <i class="fas fa-cube"></i>
+          </div>
+          <div class="card-badges-wrap">
+            <span class="rm-badge rm-badge-featured" style="background: rgba(159, 239, 0, 0.18); color: #9fef00; border-color: rgba(159, 239, 0, 0.4);"><i class="fas fa-flag"></i> 41-Part Series</span>
+            <span class="rm-badge rm-badge-category">HTB & CPTS</span>
+          </div>
+        </div>
+        <h2 class="roadmap-card-title">Hack The Box Academy Masterclass & Flag Vault</h2>
+        <p class="roadmap-card-desc">
+          The definitive 41-part technical field guide covering the entire Hack The Box Certified Penetration Testing Specialist (CPTS) and Web Exploitation syllabus: Getting Started, File Transfers, Web Recon, Footprinting, Linux/Windows Privilege Escalation, Login Brute Forcing, Broken Authentication, Command Injections, File Inclusion (LFI/RFI), Attacking Common Services & Applications, Active Directory Attacks, Enterprise Pivoting, Web Proxies, Shells & Payloads, SQLi Fundamentals & SQLMap, Password Attacks, Server-Side Attacks, API Exploitation, Metasploit, CrackMapExec, Linux/Windows x86 Buffer Overflows, WordPress CMS Hacking, File Uploads, XSS, Web Fuzzing, WSDL/SOAP Attacks, and Complete 802.11 / WEP / WPS Wireless Penetration Testing. Includes 700+ verified lab flags, exploit commands, and 3,600+ lab screenshots.
+        </p>
+        <div class="roadmap-skills-wrap">
+          <span class="skill-pill">HTB Academy & CPTS</span>
+          <span class="skill-pill">700+ Flags Solved</span>
+          <span class="skill-pill">Active Directory & Kerberos</span>
+          <span class="skill-pill">x86 Buffer Overflows</span>
+          <span class="skill-pill">Windows/Linux PrivEsc</span>
+          <span class="skill-pill">Enterprise Pivoting</span>
+          <span class="skill-pill">Web Exploitation & RCE</span>
+          <span class="skill-pill">Wireless Pentesting (WEP/WPS)</span>
+        </div>
+      </div>
+      <div class="roadmap-card-actions">
+        <a href="/posts/htb-academy-part-1-getting-started/" class="rm-external-link-btn" style="border-color: rgba(159, 239, 0, 0.4); color: #9fef00;">
+          <span>Explore 41-Part HTB Academy Guide</span>
+          <i class="fas fa-arrow-right small"></i>
+        </a>
+      </div>
+    </div>
 
     <!-- 0. eCPPT Penetration Testing Masterclass (Featured) -->
     <div class="roadmap-card is-featured" data-category="offensive" data-featured="true" data-keywords="ecppt ine certified professional penetration tester x86 assembly buffer overflow active directory pivoting c2 web pentesting client side powershell privilege escalation">

@@ -12,21 +12,33 @@ toc: true
 schema:
   type: Article
   author: Abdulrahman M. Fathi
+mermaid: true
 ---
 
 In modern offensive security assessments, long-term persistence and stealth cannot be maintained using fragile, single-stream interactive reverse shells. Terminal disconnections, user logouts, or network blips immediately terminate active sessions, while raw TCP connections stand out dramatically in perimeter NetFlow logs.
 
 Professional red teamers and **eCPPT (eLearnSecurity Certified Professional Penetration Tester)** operators rely on **Command and Control (C2) Frameworks**. In this deep dive, we explore C2 taxonomy, engineer a multi-tier resilient infrastructure with Apache `mod_rewrite` redirectors and Cloudflare **Domain Fronting**, evaluate modern frameworks via the C2 Matrix, and conduct full post-exploitation workflows using **PowerShell-Empire** and **Starkiller**.
 
----
-
-### Series Navigation
-
-| **Previous Part** | **Current Part** | **Next Part** |
-| :---: | :---: | :---: |
-| [Part 6: Lateral Movement & Pivoting](/posts/ecppt-v3-part-6-lateral-movement-and-pivoting/) | **Part 7: Command and Control (C2) Infrastructure** | [Part 8: Web Application Pentesting](/posts/ecppt-v3-part-8-web-application-penetration-testing/) |
-
----
+<div class="ff-series-nav">
+  <a href="/posts/ecppt-v3-part-6-lateral-movement-and-pivoting/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous Part</span>
+      <span class="ff-nav-title">Part 6: Lateral Movement & Pivoting</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> eCPPTv3 Series</span>
+    <span class="ff-center-part">Part 7 of 10</span>
+  </div>
+  <a href="/posts/ecppt-v3-part-8-web-application-penetration-testing/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next Part</span>
+      <span class="ff-nav-title">Part 8: Web Application Pentesting</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 
 ## Key Takeaways
 

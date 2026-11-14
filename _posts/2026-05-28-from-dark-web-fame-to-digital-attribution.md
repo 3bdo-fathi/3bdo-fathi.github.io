@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "From Dark Web Fame to Digital Attribution: The Story of How OPSEC Failures Can Destroy Years of Anonymity"
 date: 2026-05-28 12:14:00 +0300
 categories: [Cyber Security, Threat Intelligence]
@@ -46,6 +47,18 @@ The actor frequently collaborated with other threat actors, including CrowSteale
 | 10 May | Mansoura University | ~989,000 student records (2012-2026), photographs, internal documents |
 | 14 May | mutreasury Payment Gateway | Claimed breach affecting 28+ universities with zero-day vulnerability |
 | 17 May | pat.edu.eg | Compromised and defaced platform |
+
+```mermaid
+flowchart TD
+    subgraph Attribution_Pipeline["Threat Actor Digital Attribution Lifecycle"]
+        Breach["Dark Web Breach & Forum Activity<br/>(Handle: quellostanco)"] --> P1["Phase 1: Handle & Identifier Harvesting"]
+        P1 --> P2["Phase 2: Historical Infrastructure & Git Commits"]
+        P2 --> P3["Phase 3: OpSec Leak Analysis<br/>(Author Name, Public Email, PGP Keys)"]
+        P3 --> P4["Phase 4: Social Graph & Cross-Platform Pivoting"]
+        P4 --> P5["Phase 5: Digital Fingerprint Confirmation<br/>(Timezone, Stylometry, Technical Artifacts)"]
+        P5 --> Attribution["High-Confidence Attribution & Identity De-anonymization"]
+    end
+```
 
 ## The OSINT Methodology: How Attribution Really Works
 

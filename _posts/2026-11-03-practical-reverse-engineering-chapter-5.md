@@ -12,6 +12,7 @@ toc: true
 schema:
   type: Article
   author: Abdulrahman M. Fathi
+mermaid: true
 ---
 Welcome to the fifth and culminating chapter of our technical deep-dive series covering **"Practical Reverse Engineering"** by **Bruce Dang, Alexandre Gazet, Elias Bachaalany, and Sébastien Josse** (Wiley, 2014).
 
@@ -21,16 +22,27 @@ However, obfuscation does not mean mathematically unbreachable security. In the 
 
 In this chapter, we dissect: the formal theory of program obfuscation, data transformations (Mixed Boolean-Arithmetic, constant unfolding), control flow protections (opaque predicates, `PUSH-RET` indirection, CFG flattening), custom **Virtual Machine (VM) based protectors**, deobfuscation engines (Miasm, Metasm, symbolic execution with SMT solvers), and the complete walk-through solving the professional-grade **Quetz Keygenme**, followed by comprehensive solutions to the chapter exercises.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 4: Windows Debugging & Automation](/posts/practical-reverse-engineering-chapter-4/) | **Chapter 5: Software Obfuscation & Deobfuscation** | *End of Series* |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/practical-reverse-engineering-chapter-4/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 4: Windows Debugging & Automation</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Reverse Engineering</span>
+    <span class="ff-center-part">Chapter 5: Software Obfuscation & Deobfuscation</span>
+  </div>
+  <div class="ff-nav-btn ff-nav-disabled text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Series Complete</span>
+      <span class="ff-nav-title">Latest Chapter</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-check"></i></div>
+  </div>
+</div>
 ## Key Takeaways
 
 * **The White-Box Attack Context (WBAC)**: Unlike black-box cryptography where an attacker can only observe external inputs and outputs, a reverse engineer operates in a white-box environment. The analyst has unbounded access to process memory, execution traces, CPU registers, and instruction modification capabilities.
@@ -70,6 +82,11 @@ In practical binary analysis, obfuscation aims not for cryptographic impossibili
 ---
 
 ## 2. A Survey of Obfuscation Techniques
+
+![Rootkits and Kernel Hooking Architecture](/assets/images/posts/reverse-engineering/ch5-rootkits-kernel-hooks.png)
+*Figure 1: Ring 0 interception mechanisms (SSDT hooks, inline detours, IRP major function modification, and Direct Kernel Object Manipulation for process cloaking).*
+
+
 
 ### 2.1 Data-Based Obfuscations
 
@@ -126,6 +143,22 @@ jmp     real_continuation  ; ALWAYS TAKEN!
 ```
 
 ---
+
+```mermaid
+flowchart TD
+    subgraph Control_Flow_Flattening["Control Flow Flattening Architecture"]
+        Entry["Function Entry"] --> InitState["State Variable Initialized (state = 0x1)"]
+        InitState --> SwitchHead["Central Dispatcher (switch state)"]
+        
+        SwitchHead --> Case1["Case 0x1: Basic Block A<br/>state = 0x5"]
+        SwitchHead --> Case2["Case 0x2: Basic Block B<br/>state = 0x9"]
+        SwitchHead --> Case3["Case 0x5: Basic Block C<br/>state = 0x2"]
+        
+        Case1 --> SwitchHead
+        Case2 --> Exit["Function Exit"]
+        Case3 --> SwitchHead
+    end
+```
 
 ## 3. Advanced Obfuscation: CFG Flattening and Virtual Machines
 

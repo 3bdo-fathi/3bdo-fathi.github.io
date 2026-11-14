@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Android Security Internals: Chapter 7 - Credential Storage"
 date: 2026-11-01 15:00:00 +0300
 categories: [Cyber Security, Android Security]
@@ -21,16 +22,27 @@ Storing private cryptographic keys on a mobile device presents a classic securit
 
 Android resolves this through a multi-layered credential subsystem anchored by the native `/system/bin/keystore` daemon, user-derived master keys, hardware isolation powered by the Keymaster Hardware Abstraction Layer (HAL) running inside ARM TrustZone, and dedicated tamper-resistant **StrongBox** security chips.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 6: Network Security and PKI](/posts/android-security-internals-chapter-6/) | **Chapter 7: Credential Storage** | [Chapter 8: Online Account Management](/posts/android-security-internals-chapter-8/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/android-security-internals-chapter-6/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 6: Network Security and PKI</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Android Security</span>
+    <span class="ff-center-part">Chapter 7: Credential Storage</span>
+  </div>
+  <a href="/posts/android-security-internals-chapter-8/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 8: Online Account Management</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **The Insecurity of Software Storage**: Storing cryptographic secrets in `SharedPreferences`, SQLite databases, or hardcoded strings leaves them vulnerable to backup extraction, memory dumping, and root compromise.
@@ -40,6 +52,20 @@ Android resolves this through a multi-layered credential subsystem anchored by t
 * **Hardware-Backed Root of Trust**: Modern Android integrates Keymaster/KeyMint HAL modules running inside ARM TrustZone (TEE) or dedicated StrongBox microcontrollers. Private keys never enter Linux kernel or userspace RAM; cryptographic signing and decryption occur exclusively inside the secure enclave.
 
 ---
+
+```mermaid
+flowchart LR
+    subgraph Keystore_Hardware["Hardware-Backed Keymaster / KeyMint Architecture"]
+        direction TB
+        App["App Process (Normal World)"] -->|IPC| KeystoreDaemon["keystore2 Daemon (AIDL)"]
+        KeystoreDaemon -->|HAL Call| KeyMintHAL["KeyMint HIDL/AIDL Driver"]
+        KeyMintHAL -->|SMC / Secure Monitor Call| TrustZone["ARM TrustZone TEE (Secure OS)"]
+        KeyMintHAL -->|SPI Bus| StrongBox["StrongBox Dedicated Hardware Chip"]
+        
+        TrustZone --> MasterKey["Master Encryption Keys (Never Expose to RAM)"]
+        StrongBox --> MasterKey
+    end
+```
 
 ## 1. The Credential Storage Landscape
 

@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Building an Advanced Reconnaissance & DNS Enumeration Framework"
 date: 2026-05-20 12:06:00 +0300
 categories: [Scripts, Bash]
@@ -35,6 +36,25 @@ Running these tools manually while organizing outputs can quickly become ineffic
 To solve this problem, I started developing a Bash-based framework capable of automating the entire reconnaissance workflow while keeping results structured, organized, and easy to analyze.
 
 ---
+
+```mermaid
+flowchart TD
+    subgraph Recon_Workflow["Automated DNS Reconnaissance Pipeline"]
+        Target["Target Domain Definition<br/>(example.com)"] --> Scope["Validate Scope & CIDRs"]
+        Scope --> Passive["Passive OSINT Ingestion<br/>(crt.sh, VirusTotal, AlienVault)"]
+        Scope --> ActiveAXFR["Active Zone Transfer Probe (AXFR)"]
+        
+        Passive --> Combine["Merge Discovered Subdomains"]
+        ActiveAXFR -- "If Allowed" --> FullZone["Dump Complete DNS Zone"]
+        ActiveAXFR -- "If Refused" --> Combine
+        
+        Combine --> Wildcard["Probe Random Wildcard Subdomains"]
+        Wildcard --> FilterCatchAll["Deduplicate Catch-All Resolvers"]
+        FilterCatchAll --> MassResolve["Asynchronous Parallel DNS Resolution (A, AAAA, CNAME)"]
+        MassResolve --> TakeoverAudit["Subdomain Takeover & Dangling CNAME Check"]
+        TakeoverAudit --> Report["JSON / CSV Asset Inventory"]
+    end
+```
 
 ## Creating Structured Output Directories
 
@@ -92,6 +112,11 @@ This phase ensures the environment is properly configured before execution.
 ---
 
 ## DNS Enumeration
+
+![Automated DNS Reconnaissance and Resolution Pipeline](/assets/images/posts/automation/recon-dns-architecture.png)
+*Figure 1: High-throughput DNS reconnaissance pipeline: target scope normalization, passive OSINT ingestion, active zone transfer probing, wildcard filtering, and mass resolution.*
+
+
 
 The reconnaissance workflow begins with DNS and infrastructure analysis.
 

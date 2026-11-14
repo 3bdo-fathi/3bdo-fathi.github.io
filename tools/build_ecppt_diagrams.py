@@ -4,12 +4,25 @@ from PIL import Image, ImageDraw, ImageFont
 out_dir = "assets/images/posts/ecppt"
 os.makedirs(out_dir, exist_ok=True)
 
-# Linux system fonts
-FONT_TITLE = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 22)
-FONT_SUB = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 13)
-FONT_BOLD = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 14)
-FONT_REGULAR = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 12)
-FONT_CODE = ImageFont.truetype("/usr/share/fonts/truetype/liberation/LiberationMono-Bold.ttf", 11)
+# Robust cross-platform fonts
+def load_font(font_names, size):
+    for f in font_names:
+        if os.path.exists(f):
+            try:
+                return ImageFont.truetype(f, size)
+            except Exception:
+                pass
+        try:
+            return ImageFont.truetype(f, size)
+        except Exception:
+            pass
+    return ImageFont.load_default()
+
+FONT_TITLE = load_font(["C:/Windows/Fonts/segoeuib.ttf", "C:/Windows/Fonts/arialbd.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"], 22)
+FONT_SUB = load_font(["C:/Windows/Fonts/segoeui.ttf", "C:/Windows/Fonts/arial.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"], 13)
+FONT_BOLD = load_font(["C:/Windows/Fonts/segoeuib.ttf", "C:/Windows/Fonts/arialbd.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"], 14)
+FONT_REGULAR = load_font(["C:/Windows/Fonts/segoeui.ttf", "C:/Windows/Fonts/arial.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"], 12)
+FONT_CODE = load_font(["C:/Windows/Fonts/consolab.ttf", "C:/Windows/Fonts/courbd.ttf", "/usr/share/fonts/truetype/liberation/LiberationMono-Bold.ttf"], 11)
 
 def create_base(width, height, title, subtitle):
     img = Image.new("RGBA", (width, height), (13, 17, 23, 255))
@@ -42,9 +55,9 @@ def gen_part1():
     
     mem_segments = [
         ("0xFFFFFFFF - Kernel Space (1GB / 2GB)", "Ring 0 Drivers, Syscalls, Page Tables", (239, 68, 68)),
-        ("0xBFFFFFFF - Call Stack (Stack Segment)", "Grows DOWN ⬇️ (Local Vars, Saved EBP, Ret EIP)", (56, 189, 248)),
+        ("0xBFFFFFFF - Call Stack (Stack Segment)", "Grows DOWN [Local Vars, Saved EBP, Ret EIP]", (56, 189, 248)),
         ("Unallocated / Guard Pages", "Dynamically paged virtual address boundaries", (100, 116, 139)),
-        ("0x08048000 - Heap Segment", "Grows UP ⬆️ (Dynamic malloc, HeapAlloc)", (245, 158, 11)),
+        ("0x08048000 - Heap Segment", "Grows UP [Dynamic malloc, HeapAlloc]", (245, 158, 11)),
         ("Uninitialized Data (.bss)", "Global variables initialized to zero", (168, 85, 247)),
         ("Initialized Data (.data)", "Global & static variables with initial values", (16, 185, 129)),
         ("0x00400000 - Text Segment (.text)", "Machine Instructions (Read & Execute ONLY)", (59, 130, 246)),

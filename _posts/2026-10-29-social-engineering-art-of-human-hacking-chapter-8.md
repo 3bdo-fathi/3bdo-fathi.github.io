@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Book Summary: Social Engineering - The Art of Human Hacking (Chapter 8: Real-World Case Studies)"
 date: 2026-10-29 16:00:00 +0300
 categories: [Cyber Security, Social Engineering]
@@ -28,16 +29,27 @@ Hadnagy opens Chapter 8 with a guiding thought from Mati Aharoni:
 
 Let's dissect these six operations through the lens of the Social Engineering Framework.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 7: The Tools of the Social Engineer](/posts/social-engineering-art-of-human-hacking-chapter-7/) | **Chapter 8: Real-World Case Studies** | [Chapter 9: Prevention & Mitigation](/posts/social-engineering-art-of-human-hacking-chapter-9/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-7/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 7: The Tools of the Social Engineer</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Social Engineering</span>
+    <span class="ff-center-part">Chapter 8: Real-World Case Studies</span>
+  </div>
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-9/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 9: Prevention & Mitigation</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **Mitnick's Reverse Sting**: Taking over a state telephone switch to route law enforcement calls to a disposable burner phone, harvesting police credentials in real time.
@@ -49,6 +61,21 @@ Let's dissect these six operations through the lens of the Social Engineering Fr
 ![6 Landmark Social Engineering Case Studies Dissected](/assets/images/posts/social-engineering/ch8-case-studies-breakdown.png)
 
 ---
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Mitnick as Kevin Mitnick (Phone Pretext)
+    actor Operator as DMV Phone Clerk
+    actor Dispatch as Field Office Manager
+
+    Mitnick->>Operator: Calls posing as Regional Police Investigator
+    Mitnick->>Operator: Requests urgent vehicle registration owner lookup for ongoing pursuit
+    Operator->>Mitnick: Cites privacy rules; hesitates to disclose record
+    Mitnick->>Operator: Leverages Authority & Urgency: "An officer's safety is on the line right now!"
+    Operator-->>Mitnick: Overwhelmed by panic; reads confidential vehicle record
+    Mitnick->>Dispatch: Pivots with new record to obtain driver license photo via fax
+```
 
 ## 1. Kevin Mitnick Case Study 1: Hacking the DMV
 
@@ -183,16 +210,27 @@ By adopting the humble pretext of an inexperienced "n00b" hacker, John fed the i
 
 The intruder believed he had made a friend; the client received a comprehensive incident response dossier that eliminated the threat permanently.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 7: The Tools of the Social Engineer](/posts/social-engineering-art-of-human-hacking-chapter-7/) | **Chapter 8: Real-World Case Studies** | [Chapter 9: Prevention & Mitigation](/posts/social-engineering-art-of-human-hacking-chapter-9/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-7/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 7: The Tools of the Social Engineer</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Social Engineering</span>
+    <span class="ff-center-part">Chapter 8: Real-World Case Studies</span>
+  </div>
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-9/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 9: Prevention & Mitigation</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Next in the Series: Chapter 9 (Final Chapter) Preview
 
 In the final installment, **[Chapter 9: Prevention and Mitigation](/posts/social-engineering-art-of-human-hacking-chapter-9/)**, we will synthesize the entire book into an actionable defensive blueprint:

@@ -54,3 +54,12 @@
   icon: "fas fa-graduation-cap"
   description: "Comprehensive, zero-cost professional curricula for x86/ARM assembly, reversing, and vulnerability hunting."
 
+- id: "hacktricks"
+  name: "HackTricks Wiki"
+  category: "Offensive Security & Pentesting Methodology"
+  url: "https://hacktricks.wiki/"
+  badge: "Encyclopedia"
+  badge_color: "#06b6d4"
+  icon: "fas fa-book-dead"
+  description: "The global reference encyclopedia for penetration testing, Linux and Windows privilege escalation, Active Directory, and cloud security."
+

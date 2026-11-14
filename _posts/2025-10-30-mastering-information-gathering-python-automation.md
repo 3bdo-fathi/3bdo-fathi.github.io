@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Building a Python-Based System Information Gathering Tool"
 date: 2025-10-30 16:03:00 +0300
 categories: [Cyber Security, Network Security]
@@ -25,6 +26,25 @@ In today's interconnected world, cybersecurity has become a fundamental priority
 Automation tools play a critical role in making reconnaissance faster, more accurate, and efficient. This article introduces a Python-based tool I developed to streamline the network reconnaissance process. It simplifies the task of gathering detailed system and network information, transforming complex manual efforts into a seamless, automated workflow.
 
 ## Project Overview
+
+```mermaid
+flowchart LR
+    Target["Target Host / IP"] --> ReconScript["Python Recon Automation Engine"]
+    
+    subgraph Engine_Modules["Active Recon Modules"]
+        direction TB
+        M1["DNS Resolution & Reverse PTR"]
+        M2["WHOIS Ownership Registration"]
+        M3["Socket Banner Grabbing (Port 80/443/21/22)"]
+        M4["HTTP Response Header Analysis"]
+        M5["SSL/TLS Certificate X.509 Extraction"]
+    end
+    
+    ReconScript --> Engine_Modules
+    Engine_Modules --> Output["Structured Terminal & Log Output"]
+```
+
+
 
 The Python-based reconnaissance tool was designed with four key objectives in mind:
 1. **System Information Gathering**: Extracts critical details, including the operating system, machine type, processor specifications, and IP information.

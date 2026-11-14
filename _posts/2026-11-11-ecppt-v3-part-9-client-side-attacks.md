@@ -12,21 +12,33 @@ toc: true
 schema:
   type: Article
   author: Abdulrahman M. Fathi
+mermaid: true
 ---
 
 When enterprise perimeter firewalls are strictly hardened, zero inbound services are exposed to the public internet, and web applications are rigorously patched, organizations often consider themselves impervious to external compromise. Yet time and again, penetration testers and advanced threat actors breach these environments through the weakest link: **the human user behind the browser or email client**.
 
 In this deep dive covering Part 9 of the **eCPPT (eLearnSecurity Certified Professional Penetration Tester)** curriculum, we break down the operational mechanics of **Client-Side Attacks**. We examine social engineering psychological frameworks, configure enterprise phishing infrastructure using **GoPhish**, develop weaponized **Office VBA Macros**, execute **HTML Application (HTA)** attacks, and bypass perimeter security proxies using **HTML Smuggling** and **Mark-of-the-Web (MOTW)** evasion techniques.
 
----
-
-### Series Navigation
-
-| **Previous Part** | **Current Part** | **Next Part** |
-| :---: | :---: | :---: |
-| [Part 8: Web Application Pentesting](/posts/ecppt-v3-part-8-web-application-penetration-testing/) | **Part 9: Client-Side Attacks & Weaponization** | [Part 10: PowerShell for Pentesters & AMSI Evasion](/posts/ecppt-v3-part-10-powershell-for-pentesters/) |
-
----
+<div class="ff-series-nav">
+  <a href="/posts/ecppt-v3-part-8-web-application-penetration-testing/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous Part</span>
+      <span class="ff-nav-title">Part 8: Web Application Pentesting</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> eCPPTv3 Series</span>
+    <span class="ff-center-part">Part 9 of 10</span>
+  </div>
+  <a href="/posts/ecppt-v3-part-10-powershell-for-pentesters/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next Part</span>
+      <span class="ff-nav-title">Part 10: PowerShell & AMSI Evasion</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 
 ## Key Takeaways
 

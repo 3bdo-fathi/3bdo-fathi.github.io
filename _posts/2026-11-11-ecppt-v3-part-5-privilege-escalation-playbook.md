@@ -12,21 +12,33 @@ toc: true
 schema:
   type: Article
   author: Abdulrahman M. Fathi
+mermaid: true
 ---
 
 Securing an initial foothold—whether through web application command injection, a client-side phishing macro, or exploiting an unauthenticated daemon—typically lands an operator in a strictly unprivileged context (e.g., `www-data`, `local service`, or a low-rights standard user). In the **eCPPT (eLearnSecurity Certified Professional Penetration Tester)** examination, achieving local root (`NT AUTHORITY\SYSTEM` on Windows or `root` on Linux) is mandatory to extract password hashes from memory, establish reliable network pivots, and complete post-exploitation objectives.
 
 In this deep dive, we present an exhaustive field engineering playbook for **Windows and Linux Local Privilege Escalation**, detailing automated auditing workflows, core operating system security primitives, and reliable manual exploit techniques.
 
----
-
-### Series Navigation
-
-| **Previous Part** | **Current Part** | **Next Part** |
-| :---: | :---: | :---: |
-| [Part 4: Active Directory Pentesting & Kerberos](/posts/ecppt-v3-part-4-active-directory-penetration-testing/) | **Part 5: Windows & Linux Privilege Escalation** | [Part 6: Lateral Movement & Pivoting](/posts/ecppt-v3-part-6-lateral-movement-and-pivoting/) |
-
----
+<div class="ff-series-nav">
+  <a href="/posts/ecppt-v3-part-4-active-directory-penetration-testing/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous Part</span>
+      <span class="ff-nav-title">Part 4: Active Directory Pentesting</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> eCPPTv3 Series</span>
+    <span class="ff-center-part">Part 5 of 10</span>
+  </div>
+  <a href="/posts/ecppt-v3-part-6-lateral-movement-and-pivoting/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next Part</span>
+      <span class="ff-nav-title">Part 6: Lateral Movement & Pivoting</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 
 ## Key Takeaways
 
@@ -324,6 +336,7 @@ flowchart LR
 * **GTFOBins**: Curated list of Unix binaries used to bypass local security restrictions. [https://gtfobins.github.io/](https://gtfobins.github.io/).
 * **LOLBAS Project**: Living Off The Land Binaries, Scripts, and Libraries for Windows. [https://lolbas-project.github.io/](https://lolbas-project.github.io/).
 * **PayloadsAllTheThings**: Comprehensive privilege escalation cheatsheets. [https://github.com/swisskyrepo/PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings).
+* **HackTricks Privilege Escalation**: Industry-standard Windows and Linux local privilege escalation methodologies by Carlos Polop. [https://hacktricks.wiki/](https://hacktricks.wiki/).
 
 ### 2. Exploit Source Code & Research
 * **PrintSpoofer by itm4n**: Named pipe impersonation exploit targeting `SeImpersonatePrivilege`. [https://github.com/itm4n/PrintSpoofer](https://github.com/itm4n/PrintSpoofer).

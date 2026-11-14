@@ -12,6 +12,7 @@ toc: true
 schema:
   type: Article
   author: Abdulrahman M. Fathi
+mermaid: true
 ---
 Welcome to the second installment of our deep-dive series covering **"Practical Reverse Engineering"** by **Bruce Dang, Alexandre Gazet, Elias Bachaalany, and Sébastien Josse** (Wiley, 2014).
 
@@ -19,16 +20,27 @@ While x86 and x64 dominate traditional desktop and server workloads, **ARM (Adva
 
 In this post, we dissect the ARM architecture: privilege modes, banked registers, the ARM vs. Thumb-2 execution states, the zero-cycle hardware barrel shifter, coprocessor interactions (`CP15`), AAPCS calling conventions, memory synchronization primitives, cache coherency in self-modifying code, the complete decompilation of the Chapter 2 **`unk_function`** walk-through, and comprehensive solutions to all chapter exercises.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 1: x86 and x64 Architecture](/posts/practical-reverse-engineering-chapter-1/) | **Chapter 2: ARM Architecture & Assembly** | [Chapter 3: The Windows Kernel & Rootkits](/posts/practical-reverse-engineering-chapter-3/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/practical-reverse-engineering-chapter-1/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 1: x86 and x64 Architecture</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Reverse Engineering</span>
+    <span class="ff-center-part">Chapter 2: ARM Architecture & Assembly</span>
+  </div>
+  <a href="/posts/practical-reverse-engineering-chapter-3/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 3: The Windows Kernel & Rootkits</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **Load-Store Architecture**: In ARM, data-processing instructions (`ADD`, `SUB`, `AND`, `ORR`) operate strictly on registers. Memory can never be directly modified in place; operands must be explicitly loaded into registers via `LDR`, manipulated, and committed back using `STR`.
@@ -89,6 +101,11 @@ UND Mode:             R0 - R12,  [SP_und, LR_und], PC, CPSR, SPSR_und
 
 ## 2. Register Sets and Status Flags
 
+![ARM Instruction Set Architecture (AArch32 and AArch64)](/assets/images/posts/reverse-engineering/ch2-arm-architecture.png)
+*Figure 1: Core register banks for AArch32 and AArch64 architectures, highlighting parameter passing, link registers, and CPSR execution status flags.*
+
+
+
 ARM features 16 core 32-bit registers accessible in user mode:
 
 ```
@@ -127,6 +144,25 @@ ARM features 16 core 32-bit registers accessible in user mode:
 * **Mode bits `M[4:0]`**: Encodes current CPU operating mode (`10000` = USR, `10011` = SVC).
 
 ---
+
+```mermaid
+flowchart LR
+    subgraph ARM_Execution["ARM Execution States"]
+        A32["ARM Mode<br/>(32-bit Fixed Width Instructions)"]
+        T32["Thumb Mode<br/>(16-bit / Thumb-2 Variable Width)"]
+        
+        A32 -- "BX Rm (Bit 0 = 1)" --> T32
+        T32 -- "BX Rm (Bit 0 = 0)" --> A32
+    end
+
+    subgraph CPSR_Flags["CPSR Condition Flags"]
+        direction TB
+        N["N: Negative Flag (Bit 31)"]
+        Z["Z: Zero Flag (Bit 30)"]
+        C["C: Carry Flag (Bit 29)"]
+        V["V: Overflow Flag (Bit 28)"]
+    end
+```
 
 ## 3. The Hardware Barrel Shifter
 

@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Android Security Internals: Chapter 3 - Package Management"
 date: 2026-11-01 11:00:00 +0300
 categories: [Cyber Security, Android Security]
@@ -19,16 +20,27 @@ In [Chapter 2](/posts/android-security-internals-chapter-2/), we analyzed the An
 
 We will deconstruct the anatomy of the APK archive, trace how `PackageManagerService` orchestrates installations with the native `installd` daemon, inspect the Java JAR signing architecture (`MANIFEST.MF`, `CERT.SF`, `CERT.RSA`), contrast it with modern **v2, v3, and v4 APK Signature Schemes**, and examine the mechanics behind historic signature tampering exploits including **FakeID (CVE-2014-4451)** and **Janus (CVE-2017-13156)**.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 2: Permissions Architecture](/posts/android-security-internals-chapter-2/) | **Chapter 3: Package Management** | [Chapter 4: User Management](/posts/android-security-internals-chapter-4/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/android-security-internals-chapter-2/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 2: Permissions Architecture</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Android Security</span>
+    <span class="ff-center-part">Chapter 3: Package Management</span>
+  </div>
+  <a href="/posts/android-security-internals-chapter-4/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 4: User Management</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **The APK Container**: An Android application package (`.apk`) is a standard ZIP 32 archive containing compiled Dalvik Executable bytecode (`classes.dex`), binary XML manifests, compiled resources (`resources.arsc`), native ELF shared libraries (`lib/`), and cryptographic signature blocks.
@@ -38,6 +50,18 @@ We will deconstruct the anatomy of the APK archive, trace how `PackageManagerSer
 * **Historic Exploitation**: The divergence between ZIP central directory parsers and signature verifiers led to catastrophic vulnerabilities: the **Master Key** bug (CVE-2013-4787), **FakeID** (CVE-2014-4451), and **Janus** (CVE-2017-13156).
 
 ---
+
+```mermaid
+flowchart LR
+    subgraph APK_Verification["APK Signature Verification Evolution"]
+        V1["v1 Scheme (JAR Signing)<br/>Verifies individual ZIP entry digests in META-INF"]
+        V2["v2 Scheme (Whole APK Signing)<br/>Verifies SHA-256 digest of entire ZIP file"]
+        V3["v3 Scheme (Key Rotation)<br/>Embeds cryptographic signing lineage proof"]
+        V4["v4 Scheme (Incremental Streaming)<br/>Merkle tree hashing for streaming app installation"]
+        
+        V1 --> V2 --> V3 --> V4
+    end
+```
 
 ## 1. Anatomy of an APK Package
 

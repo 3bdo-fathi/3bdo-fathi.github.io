@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Android Security Internals: Chapter 9 - Enterprise Security"
 date: 2026-11-01 17:00:00 +0300
 categories: [Cyber Security, Android Security]
@@ -21,16 +22,27 @@ Enterprise mobile security demands strict controls: enforcing complex PINs, prev
 
 In this deep dive, we dissect the **Device Administration API**, examine how `DevicePolicyManagerService` enforces hardware policies, explore the containerization models of **Samsung KNOX** and **Managed Profiles**, and analyze how Android ransomware abused these enterprise APIs to hold user devices hostage.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 8: Online Account Management](/posts/android-security-internals-chapter-8/) | **Chapter 9: Enterprise Security** | [Chapter 10: Device Security](/posts/android-security-internals-chapter-10/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/android-security-internals-chapter-8/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 8: Online Account Management</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Android Security</span>
+    <span class="ff-center-part">Chapter 9: Enterprise Security</span>
+  </div>
+  <a href="/posts/android-security-internals-chapter-10/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 10: Device Security</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **The Device Administration API**: Introduced in Android 2.2, this framework allows authorized applications to enforce system-wide security policies including PIN complexity, screen lock timeouts, and remote wiping.
@@ -40,6 +52,19 @@ In this deep dive, we dissect the **Device Administration API**, examine how `De
 * **Malicious Abuse by Ransomware**: Historically, Android ransomware leveraged Device Admin privileges to block uninstallation, override the screen lock PIN, and render devices unusable until a ransom was paid.
 
 ---
+
+```mermaid
+flowchart TD
+    subgraph Enterprise_Knox["Android Enterprise & Knox Container Architecture"]
+        PersonalSpace["Personal Profile (Parent User)<br/>Apps, Personal Media, Private Storage"]
+        WorkProfile["Managed Work Profile (Work User)<br/>Enterprise Apps, Corporate Email, VPN"]
+        
+        DPMS["DevicePolicyManagerService (DPMS)"] -->|Enforces Security Policies| WorkProfile
+        DPMS -->|Remote Wipe, Passcode Rules, Disallow Camera| PersonalSpace
+        
+        Knox["Samsung Knox Real-Time Kernel Protection (RKP)"] -->|Monitors Page Tables & Kernel Text| DPMS
+    end
+```
 
 ## 1. The Device Administration Architecture
 

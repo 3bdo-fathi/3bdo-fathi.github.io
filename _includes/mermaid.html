@@ -1,0 +1,236 @@
+<!-- Modern High-Performance Mermaid Loader with Dynamic Theme Switching & Error Recovery -->
+<style>
+  .mermaid-wrapper {
+    margin: 2rem 0 !important;
+    padding: 1.25rem 1rem !important;
+    border-radius: 12px !important;
+    text-align: center !important;
+    overflow-x: auto !important;
+    transition: background-color 0.25s ease, border-color 0.25s ease !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Dark mode */
+  html:not([data-mode="light"]):not([data-bs-theme="light"]) .mermaid-wrapper,
+  html[data-mode="dark"] .mermaid-wrapper,
+  html[data-bs-theme="dark"] .mermaid-wrapper {
+    background: #000000 !important;
+    border: 1px solid #2f3336 !important;
+    box-shadow: 0 4px 16px rgba(1, 4, 9, 0.4) !important;
+  }
+
+  /* Light mode */
+  html[data-mode="light"] .mermaid-wrapper,
+  html[data-bs-theme="light"] .mermaid-wrapper {
+    background: #ffffff !important;
+    border: 1px solid #dde2ea !important;
+    box-shadow: 0 2px 8px rgba(140, 149, 159, 0.12) !important;
+  }
+
+  .mermaid-wrapper svg {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    margin: 0 auto !important;
+    font-family: 'Atkinson Hyperlegible', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  }
+
+  /* Smooth loading pulse */
+  .mermaid-wrapper.is-rendering {
+    opacity: 0.6;
+    filter: blur(1px);
+  }
+</style>
+
+<script type="text/javascript">
+(function() {
+  let mermaidLoaded = false;
+  let renderIdCounter = 0;
+
+  function isDarkMode() {
+    const html = document.documentElement;
+    if (html.getAttribute('data-mode') === 'dark' || html.getAttribute('data-bs-theme') === 'dark') {
+      return true;
+    }
+    if (html.getAttribute('data-mode') === 'light' || html.getAttribute('data-bs-theme') === 'light') {
+      return false;
+    }
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+
+  function getMermaidConfig(dark) {
+    if (dark) {
+      return {
+        startOnLoad: false,
+        theme: 'dark',
+        securityLevel: 'loose',
+        fontFamily: "'Atkinson Hyperlegible', sans-serif",
+        themeVariables: {
+          darkMode: true,
+          background: '#000000',
+          mainBkg: '#000000',
+          nodeBorder: '#2f3336',
+          lineColor: '#1d9bf0',
+          primaryColor: '#16181c',
+          primaryTextColor: '#f4f6fa',
+          primaryBorderColor: '#1d9bf0',
+          secondaryColor: '#000000',
+          secondaryTextColor: '#f4f6fa',
+          secondaryBorderColor: '#2f3336',
+          tertiaryColor: '#000000',
+          tertiaryTextColor: '#e7e9ea',
+          tertiaryBorderColor: '#2f3336',
+          actorBkg: '#16181c',
+          actorBorder: '#1d9bf0',
+          actorTextColor: '#f4f6fa',
+          actorLineColor: '#1d9bf0',
+          signalColor: '#1d9bf0',
+          signalTextColor: '#f4f6fa',
+          labelBoxBkgColor: '#000000',
+          labelBoxBorderColor: '#2f3336',
+          labelTextColor: '#f4f6fa',
+          loopTextColor: '#f4f6fa',
+          noteBkgColor: '#16181c',
+          noteBorderColor: '#1d9bf0',
+          noteTextColor: '#f4f6fa',
+          activationBorderColor: '#16181c',
+          activationBorderColor: '#1d9bf0',
+          sequenceNumberColor: '#000000'
+        }
+      };
+    } else {
+      return {
+        startOnLoad: false,
+        theme: 'default',
+        securityLevel: 'loose',
+        fontFamily: "'Atkinson Hyperlegible', sans-serif",
+        themeVariables: {
+          darkMode: false,
+          background: '#ffffff',
+          mainBkg: '#f4f6fa',
+          nodeBorder: '#dde2ea',
+          lineColor: '#1e3fc2',
+          primaryColor: '#f4f6fa',
+          primaryTextColor: '#1d2128',
+          primaryBorderColor: '#1e3fc2',
+          secondaryColor: '#ffffff',
+          secondaryTextColor: '#1d2128',
+          secondaryBorderColor: '#dde2ea',
+          tertiaryColor: '#ffffff',
+          tertiaryTextColor: '#4b5563',
+          tertiaryBorderColor: '#dde2ea',
+          actorBkg: '#eef2fd',
+          actorBorder: '#1e3fc2',
+          actorTextColor: '#1d2128',
+          actorLineColor: '#1e3fc2',
+          signalColor: '#1e3fc2',
+          signalTextColor: '#1d2128',
+          labelBoxBkgColor: '#ffffff',
+          labelBoxBorderColor: '#dde2ea',
+          labelTextColor: '#1d2128',
+          loopTextColor: '#1d2128',
+          noteBkgColor: '#eef2fd',
+          noteBorderColor: '#1e3fc2',
+          noteTextColor: '#1d2128',
+          activationBkgColor: '#eef2fd',
+          activationBorderColor: '#1e3fc2',
+          sequenceNumberColor: '#ffffff'
+        }
+      };
+    }
+  }
+
+  async function renderAllMermaid() {
+    if (typeof mermaid === 'undefined') {
+      return;
+    }
+
+    const dark = isDarkMode();
+    mermaid.initialize(getMermaidConfig(dark));
+
+    // Find all raw mermaid code blocks
+    const codeBlocks = document.querySelectorAll('pre code.language-mermaid, div.language-mermaid pre code');
+    
+    for (let i = 0; i < codeBlocks.length; i++) {
+      const el = codeBlocks[i];
+      let pre = el.closest('pre');
+      if (!pre) continue;
+
+      let wrapper = pre.nextElementSibling;
+      let rawSource = '';
+
+      if (wrapper && wrapper.classList.contains('mermaid-wrapper')) {
+        rawSource = wrapper.getAttribute('data-mermaid-src');
+      } else {
+        rawSource = el.textContent.trim();
+        // Create wrapper and insert after pre
+        wrapper = document.createElement('div');
+        wrapper.className = 'mermaid-wrapper';
+        wrapper.setAttribute('data-mermaid-src', rawSource);
+        pre.style.display = 'none';
+        pre.after(wrapper);
+      }
+
+      if (!rawSource) continue;
+
+      wrapper.classList.add('is-rendering');
+      const uniqueId = 'mermaid-svg-' + (renderIdCounter++);
+      try {
+        const renderResult = await mermaid.render(uniqueId, rawSource);
+        wrapper.innerHTML = renderResult.svg;
+      } catch (err) {
+        console.warn('Mermaid rendering failed for block', i, err);
+        // Fallback: restore pre visibility if render fails
+        pre.style.display = 'block';
+        wrapper.remove();
+      } finally {
+        wrapper.classList.remove('is-rendering');
+      }
+    }
+  }
+
+  function ensureMermaidAndRender() {
+    if (typeof mermaid !== 'undefined') {
+      renderAllMermaid();
+      return;
+    }
+
+    // Dynamic loader if not already injected
+    if (!mermaidLoaded) {
+      mermaidLoaded = true;
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js';
+      script.crossOrigin = 'anonymous';
+      script.onload = function() {
+        renderAllMermaid();
+      };
+      document.head.appendChild(script);
+    }
+  }
+
+  // Initial render on DOM load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', ensureMermaidAndRender);
+  } else {
+    ensureMermaidAndRender();
+  }
+
+  // Theme switch listeners
+  window.addEventListener('message', function(e) {
+    if (e.data && (e.data.id === 'theme-updated' || (e.data.direction && e.data.direction.indexOf('ModeToggle') !== -1))) {
+      setTimeout(renderAllMermaid, 50);
+    }
+  });
+
+  // MutationObserver for html[data-mode]
+  const observer = new MutationObserver(function(mutations) {
+    for (let m of mutations) {
+      if (m.attributeName === 'data-mode' || m.attributeName === 'data-bs-theme') {
+        setTimeout(renderAllMermaid, 50);
+        break;
+      }
+    }
+  });
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-mode', 'data-bs-theme'] });
+})();
+</script>

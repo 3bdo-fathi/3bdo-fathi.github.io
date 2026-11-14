@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Android Security Internals: Chapter 1 - Android's Security Model"
 date: 2026-11-01 09:00:00 +0300
 categories: [Cyber Security, Android Security]
@@ -19,16 +20,27 @@ Android is the most widely deployed operating system on the planet, running on b
 
 In this chapter, we dissect the foundational pillars of the Android security model: the modified Linux kernel, userspace privilege separation, Dalvik/ART runtime isolation, the low-level mechanics of the Binder Inter-Process Communication (IPC) subsystem, and the kernel memory vulnerabilities that threaten this boundary.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| *First Chapter in Series* | **Chapter 1: Android's Security Model** | [Chapter 2: Permissions Architecture](/posts/android-security-internals-chapter-2/) |
-
----
-
+<div class="ff-series-nav">
+  <div class="ff-nav-btn ff-nav-disabled text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-flag"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Series Inception</span>
+      <span class="ff-nav-title">First Chapter</span>
+    </div>
+  </div>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Android Security</span>
+    <span class="ff-center-part">Chapter 1: Android's Security Model</span>
+  </div>
+  <a href="/posts/android-security-internals-chapter-2/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 2: Permissions Architecture</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **Defense in Depth**: Android implements multi-tiered security boundaries. A compromise at the application layer must bypass runtime controls, Binder IPC authentication, Linux UID/GID boundaries, and SELinux mandatory access controls before reaching the kernel.
@@ -39,6 +51,17 @@ In this chapter, we dissect the foundational pillars of the Android security mod
 * **Offensive Reality**: Because the Binder driver runs inside Ring 0 (kernel space), memory safety bugs within `drivers/android/binder.c` (such as CVE-2019-2215) represent the premier pathway for full local privilege escalation (LPE) and container escapes.
 
 ---
+
+```mermaid
+flowchart TD
+    subgraph Multi_Tier_Isolation["Android Multi-Tier Sandbox Architecture"]
+        Apps["Untrusted 3rd-Party Applications<br/>(UID: 10000+, untrusted_app SELinux domain)"] --> ART["ART / Dalvik Virtual Machine Execution"]
+        ART --> LinuxBoundary["Linux Kernel DAC Boundary<br/>(Unique UID / GID per installed package)"]
+        LinuxBoundary --> MAC["SELinux Mandatory Access Control<br/>(Strict type enforcement rules)"]
+        MAC --> Kernel["Linux Kernel Subsystems<br/>(/dev/binder, ashmem, paranoid network routing)"]
+        Kernel --> Hardware["Secure World Hardware<br/>(ARM TrustZone / TEE / StrongBox)"]
+    end
+```
 
 ## 1. Architectural Overview: Multi-Tier Isolation
 

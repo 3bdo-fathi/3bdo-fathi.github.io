@@ -12,21 +12,33 @@ toc: true
 schema:
   type: Article
   author: Abdulrahman M. Fathi
+mermaid: true
 ---
 
 Active Directory (AD) is the central identity and access management architecture utilized by over 90% of Fortune 500 enterprises. Consequently, the **eCPPT (eLearnSecurity Certified Professional Penetration Tester)** curriculum places significant emphasis on assessing Windows domain environments—transitioning from an initial domain foothold to full **Domain Admin** escalation and establishing persistent control.
 
 In this deep dive, we break down Active Directory architecture, analyze the internal workings of the **Kerberos** authentication protocol, evaluate domain relationships via **BloodHound**, execute ticket-based attacks (**Kerberoasting** and **AS-REP Roasting**), and establish domain persistence using **Golden and Silver Tickets**.
 
----
-
-### Series Navigation
-
-| **Previous Part** | **Current Part** | **Next Part** |
-| :---: | :---: | :---: |
-| [Part 3: Network Penetration Testing & MITM](/posts/ecppt-v3-part-3-network-penetration-testing/) | **Part 4: Active Directory Pentesting & Kerberos** | [Part 5: Windows & Linux Privilege Escalation](/posts/ecppt-v3-part-5-privilege-escalation-playbook/) |
-
----
+<div class="ff-series-nav">
+  <a href="/posts/ecppt-v3-part-3-network-penetration-testing/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous Part</span>
+      <span class="ff-nav-title">Part 3: Network Penetration Testing</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> eCPPTv3 Series</span>
+    <span class="ff-center-part">Part 4 of 10</span>
+  </div>
+  <a href="/posts/ecppt-v3-part-5-privilege-escalation-playbook/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next Part</span>
+      <span class="ff-nav-title">Part 5: Privilege Escalation Playbook</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 
 ## Key Takeaways
 
@@ -273,6 +285,7 @@ flowchart LR
 
 ### 2. Industry-Standard Offensive AD Tooling
 * **BloodHound by SpecterOps**: Six Degrees of Domain Admin graph analysis. [https://github.com/SpecterOps/BloodHound](https://github.com/SpecterOps/BloodHound).
+* **HackTricks Active Directory Methodology**: Comprehensive enumeration, Kerberos ticket abuse, ACL exploitation, and domain escalation paths. [https://hacktricks.wiki/](https://hacktricks.wiki/).
 * **Rubeus by HarmJ0y (Will Schroeder)**: C# toolset for raw Kerberos interaction. [https://github.com/GhostPack/Rubeus](https://github.com/GhostPack/Rubeus).
 * **Mimikatz by Benjamin Delpy**: Extraction of plaintext passwords, hashes, and ticket forging. [https://github.com/gentilkiwi/mimikatz](https://github.com/gentilkiwi/mimikatz).
 

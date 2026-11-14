@@ -12,21 +12,33 @@ toc: true
 schema:
   type: Article
   author: Abdulrahman M. Fathi
+mermaid: true
 ---
 
 In real-world enterprise penetration tests and specifically within the **eCPPT (eLearnSecurity Certified Professional Penetration Tester)** practical exam, target database servers, Active Directory domain controllers, and internal file repositories are never directly exposed to the internet. Instead, they reside behind strict stateful firewalls and deeply segmented network layers (DMZs, corporate subnets, and isolated database enclaves).
 
 To compromise an entire network, a penetration tester must master **Pivoting, Port Forwarding, and Lateral Movement**. In this deep dive, we explore how to transform a single dual-homed host into a high-performance routing bridge, compare traditional SSH tunnels with modern Layer-3 routing via **Ligolo-ng**, and execute lateral movement using native Windows administration protocols.
 
----
-
-### Series Navigation
-
-| **Previous Part** | **Current Part** | **Next Part** |
-| :---: | :---: | :---: |
-| [Part 5: Windows & Linux Privilege Escalation](/posts/ecppt-v3-part-5-privilege-escalation-playbook/) | **Part 6: Lateral Movement & Pivoting** | [Part 7: Command and Control (C2) Infrastructure](/posts/ecppt-v3-part-7-command-and-control-c2/) |
-
----
+<div class="ff-series-nav">
+  <a href="/posts/ecppt-v3-part-5-privilege-escalation-playbook/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous Part</span>
+      <span class="ff-nav-title">Part 5: Privilege Escalation Playbook</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> eCPPTv3 Series</span>
+    <span class="ff-center-part">Part 6 of 10</span>
+  </div>
+  <a href="/posts/ecppt-v3-part-7-command-and-control-c2/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next Part</span>
+      <span class="ff-nav-title">Part 7: Command & Control (C2)</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 
 ## Key Takeaways
 

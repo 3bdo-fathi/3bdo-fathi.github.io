@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Book Summary: Social Engineering - The Art of Human Hacking (Chapter 7: The Tools of the Social Engineer)"
 date: 2026-10-29 15:00:00 +0300
 categories: [Cyber Security, Social Engineering]
@@ -28,16 +29,27 @@ However, Hadnagy immediately attaches a crucial caveat: **tools do not make the 
 
 In this chapter, we dissect the complete physical and digital arsenal: from **lockpicks and shove knives** to **Maltego, SET, Asterisk caller ID spoofing, and password profilers.**
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 6: Influence & Persuasion](/posts/social-engineering-art-of-human-hacking-chapter-6/) | **Chapter 7: The Tools of the Social Engineer** | [Chapter 8: Real-World Case Studies](/posts/social-engineering-art-of-human-hacking-chapter-8/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-6/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 6: Influence & Persuasion</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Social Engineering</span>
+    <span class="ff-center-part">Chapter 7: The Tools of the Social Engineer</span>
+  </div>
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-8/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 8: Real-World Case Studies</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **The Physical Bypass Arsenal**: Mechanics of pin-tumbler lock picking (tension wrenches, rakes), bump keys, padlock shims, and shove knives for rapid facility access.
@@ -50,6 +62,17 @@ In this chapter, we dissect the complete physical and digital arsenal: from **lo
 ![The Social Engineer's Physical & Digital Arsenal](/assets/images/posts/social-engineering/ch7-tools-arsenal.png)
 
 ---
+
+```mermaid
+flowchart LR
+    subgraph Tools_Matrix["Social Engineering Operational Arsenal"]
+        direction TB
+        Bypass["Bypass & Lockpicking<br/>(Under-Door Tools, Crash Bar Latches, Bump Keys)"]
+        RFID["RFID & Proximity Cloning<br/>(Proxmark3 RDV4, Long-Range T5577 Sniffers)"]
+        Hardware["Hardware Payloads<br/>(USB Rubber Ducky, Bash Bunny, WiFi Pineapple)"]
+        Surveillance["Covert Surveillance<br/>(Pinhole Cameras, Micro Audio Recorders)"]
+    end
+```
 
 ## 1. Physical Infiltration Tools
 
@@ -193,16 +216,27 @@ Instead of testing billions of random strings, CUPP generates permutations (`Sal
 ### Custom Wordlist Generator (CeWL)
 Developed by Robin Wood (`digininja`), CeWL spiders an organization's website, extracts unique industry vocabulary, technical terminology, and client names, and outputs a custom dictionary tailored to that specific company's culture.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 6: Influence & Persuasion](/posts/social-engineering-art-of-human-hacking-chapter-6/) | **Chapter 7: The Tools of the Social Engineer** | [Chapter 8: Real-World Case Studies](/posts/social-engineering-art-of-human-hacking-chapter-8/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-6/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 6: Influence & Persuasion</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Social Engineering</span>
+    <span class="ff-center-part">Chapter 7: The Tools of the Social Engineer</span>
+  </div>
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-8/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 8: Real-World Case Studies</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Next in the Series: Chapter 8 Preview
 
 In **[Chapter 8: Real-World Case Studies](/posts/social-engineering-art-of-human-hacking-chapter-8/)**, we see all the tools, pretexts, and psychological principles deployed in legendary real-world engagements:

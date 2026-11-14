@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "SAST vs DAST vs IAST vs RASP: AppSec Testing Guide"
 date: 2026-08-31
 categories: [Cyber Security, Application Security]
@@ -47,6 +48,19 @@ The challenge is not finding *a* security tool. The challenge is choosing the ri
 That is exactly the gap SAST, DAST, IAST, and RASP were designed to fill — each from a different angle. They still do not, by themselves, cover open-source risk, leaked credentials, cloud misconfiguration, or authorization bugs that only show up in API business logic. Those controls come later in this guide.
 
 ---
+
+```mermaid
+flowchart TD
+    subgraph SDLC_Pipeline["Continuous Application Security Testing (DevSecOps)"]
+        Code["Developer Code Commit"] --> SAST["SAST (Static Analysis)<br/>Scans Source Code & AST without execution"]
+        Code --> Build["Application Build & Packaging"]
+        Build --> IAST["IAST (Interactive Analysis)<br/>In-Process Agent monitors runtime execution in QA"]
+        Build --> Deploy["Deployment to Staging Environment"]
+        Deploy --> DAST["DAST (Dynamic Analysis)<br/>Black-Box vulnerability scanner attacks running app"]
+        Deploy --> Prod["Production Deployment"]
+        Prod --> RASP["RASP (Runtime Protection)<br/>In-Process Sensor intercepts and blocks live exploits"]
+    end
+```
 
 ## Quick Comparison
 

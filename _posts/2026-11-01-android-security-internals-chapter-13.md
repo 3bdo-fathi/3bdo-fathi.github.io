@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Android Security Internals: Chapter 13 - System Updates and Root Access"
 date: 2026-11-01 21:00:00 +0300
 categories: [Cyber Security, Android Security]
@@ -19,16 +20,27 @@ Over the preceding twelve chapters, we have analyzed Android from its deepest Li
 
 We will trace the boot sequence into the standalone **Recovery OS**, unpack the format and cryptographic verification of OTA update packages, review historical privilege escalation exploits, examine the four distinct eras of **`su` binary architecture**, and analyze the cat-and-mouse game between hardware attestation and modern root-hiding frameworks.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 12: SELinux in Android](/posts/android-security-internals-chapter-12/) | **Chapter 13: System Updates and Root Access** | *End of Series* |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/android-security-internals-chapter-12/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 12: SELinux in Android</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Android Security</span>
+    <span class="ff-center-part">Chapter 13: System Updates and Root Access</span>
+  </div>
+  <div class="ff-nav-btn ff-nav-disabled text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Series Complete</span>
+      <span class="ff-nav-title">Latest Chapter</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-check"></i></div>
+  </div>
+</div>
 ## Key Takeaways
 
 * **The Recovery OS**: Android devices host two independent operating systems: the primary Android OS (in `/boot`) and a lightweight, UI-less maintenance environment (in `/recovery`).
@@ -38,6 +50,17 @@ We will trace the boot sequence into the standalone **Recovery OS**, unpack the 
 * **Hardware Attestation & Play Integrity**: Modern banking and enterprise applications evaluate device trust via Google's Play Integrity API and hardware-backed key attestation, verifying bootloader locks directly with the Titan M/TEE enclave.
 
 ---
+
+```mermaid
+flowchart LR
+    subgraph AVB_Chain["Android Verified Boot (AVB 2.0) Chain of Trust"]
+        direction TB
+        BootROM["Primary Bootloader (Boot ROM)<br/>Hardcoded in Silicon Read-Only Memory"] --> XBL["Secondary Bootloader (eXtensible Boot Loader)"]
+        XBL --> ABL["Applications Bootloader (ABL / Fastboot)"]
+        ABL --> BootImage["boot.img (Linux Kernel & Initramfs)<br/>Cryptographically verified via vbmeta signature"]
+        BootImage --> System["system.img & vendor.img<br/>Cryptographically verified block-by-block via dm-verity"]
+    end
+```
 
 ## 1. Android Boot Flow & The Recovery OS
 

@@ -99,6 +99,10 @@ tail_includes:
     {% include series-nav-bottom.html %}
   </div>
 
+  {% if content contains 'class="language-mermaid"' or page.mermaid %}
+    {% include mermaid.html %}
+  {% endif %}
+
   <style>
     .post-btn-minimal {
       display: inline-flex;
@@ -238,11 +242,11 @@ tail_includes:
 
     <!-- Dedicated Knowledge & Ongoing Charity Tribute -->
     <div class="post-dedication-bar my-4">
-      <div class="post-dedication-primary">
+      <div class="post-dedication-primary" dir="rtl">
         اللهم اجعل هذا العمل علمًا نافعًا وصدقةً جارية، واكتب لي به الأجر والقبول، وانفع به كل من قرأه أو تعلّمه.<br>
         اللهم احفظ لي والديّ وأهلي، وبارك في أعمارهم وصحتهم، وأدم عليهم نعمة الصحة والعافية، ولا تريني فيهم بأسًا يبكيني.
       </div>
-      <div class="post-dedication-secondary">
+      <div class="post-dedication-secondary" dir="ltr">
         Dedicated as ongoing charity and beneficial knowledge. May Allah bless my parents and family, protect them, and grant them lasting health and happiness.
       </div>
     </div>

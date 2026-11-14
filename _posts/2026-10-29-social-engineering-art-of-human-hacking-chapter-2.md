@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Book Summary: Social Engineering - The Art of Human Hacking (Chapter 2: Information Gathering)"
 date: 2026-10-29 10:00:00 +0300
 categories: [Cyber Security, Social Engineering]
@@ -23,16 +24,27 @@ Today, we delve into **Chapter 2: Information Gathering**, where Hadnagy states 
 
 Without thorough, disciplined reconnaissance, even the most charismatic pretext or technical payload will collapse under the slightest scrutiny. In this chapter, Hadnagy outlines where data hides, how to harvest it, and how to construct rigorous **Communication Models** to ensure your delivery achieves compliance.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 1: The World of Social Engineering](/posts/social-engineering-art-of-human-hacking-chapter-1/) | **Chapter 2: Information Gathering** | [Chapter 3: Elicitation](/posts/social-engineering-art-of-human-hacking-chapter-3/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-1/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 1: The World of Social Engineering</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Social Engineering</span>
+    <span class="ff-center-part">Chapter 2: Information Gathering</span>
+  </div>
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-3/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 3: Elicitation</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **Napoleon's Principle**: *"War is ninety percent information."* No detail uncovered during reconnaissance is ever truly irrelevant.
@@ -44,6 +56,16 @@ Without thorough, disciplined reconnaissance, even the most charismatic pretext 
 ![Communication Modeling & OSINT Architecture](/assets/images/posts/social-engineering/ch2-communication-model.png)
 
 ---
+
+```mermaid
+flowchart TD
+    subgraph Recon_Funnel["Intelligence Gathering & Profiling Funnel"]
+        P1["Passive Recon: Domain Registration & Job Postings"] --> P2["OSINT Aggregation: LinkedIn, GitHub, Social Profiles"]
+        P2 --> P3["Technical Mapping: VPN Gateways, Mail Providers, Tech Stacks"]
+        P3 --> P4["Organizational Hierarchy: Executive Assistants & IT Helpdesk"]
+        P4 --> Target["High-Value Low-Defense Human Target Selected"]
+    end
+```
 
 ## 1. The Crux of Every Engagement
 
@@ -223,16 +245,27 @@ Hadnagy recommends **reversing the communication model** during audit planning:
 * **Pretext & Channel**: Email from the league platform announcing exclusive premium draft tracking features for the first 100 members who log in.
 * **Execution**: Targets click the link immediately to claim the benefit, triggering an automated client-side browser exploit.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 1: The World of Social Engineering](/posts/social-engineering-art-of-human-hacking-chapter-1/) | **Chapter 2: Information Gathering** | [Chapter 3: Elicitation](/posts/social-engineering-art-of-human-hacking-chapter-3/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-1/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 1: The World of Social Engineering</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Social Engineering</span>
+    <span class="ff-center-part">Chapter 2: Information Gathering</span>
+  </div>
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-3/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 3: Elicitation</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Next in the Series: Chapter 3 Preview
 
 In **[Chapter 3: Elicitation](/posts/social-engineering-art-of-human-hacking-chapter-3/)**, we will dissect:

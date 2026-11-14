@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Android Security Internals: Chapter 8 - Online Account Management"
 date: 2026-11-01 16:00:00 +0300
 categories: [Cyber Security, Android Security]
@@ -19,16 +20,27 @@ In [Chapter 7](/posts/android-security-internals-chapter-7/), we explored creden
 
 Rather than forcing every application to implement its own login screens, store raw user passwords, and handle OAuth token refresh loops independently, Android introduced the **`AccountManager`** framework. In this chapter, we dissect how `AccountManagerService` coordinates authenticators, manages SQLite token storage, and enforces security boundaries to prevent unauthorized token harvesting.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 7: Credential Storage](/posts/android-security-internals-chapter-7/) | **Chapter 8: Online Account Management** | [Chapter 9: Enterprise Security](/posts/android-security-internals-chapter-9/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/android-security-internals-chapter-7/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 7: Credential Storage</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Android Security</span>
+    <span class="ff-center-part">Chapter 8: Online Account Management</span>
+  </div>
+  <a href="/posts/android-security-internals-chapter-9/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 9: Enterprise Security</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **Centralized Identity**: Android decouples account authentication from third-party applications. Apps request authentication tokens through `AccountManager` without ever handling raw user passwords.
@@ -38,6 +50,23 @@ Rather than forcing every application to implement its own login screens, store 
 * **Attack Surfaces**: Flawed authenticators that leak tokens via unverified intents, expose exported components, or store plain-text passwords can lead to account hijacking across the device.
 
 ---
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor ClientApp as Client App (Third-Party)
+    participant AM as AccountManagerService
+    participant Auth as Authenticator (e.g. Google Services)
+    actor IdP as Remote Identity Provider (OAuth Server)
+
+    ClientApp->>AM: getAuthToken(account, "oauth2:scope", options)
+    AM->>AM: Check client app signature & user authorization
+    AM->>Auth: Authenticator.getAuthToken()
+    Auth->>IdP: Exchange Refresh Token for fresh Access Token
+    IdP-->>Auth: Return Access Token & Expiry
+    Auth-->>AM: Cache Token securely in accounts.db
+    AM-->>ClientApp: Return Bundle with Auth Token
+```
 
 ## 1. The `AccountManager` Architectural Framework
 

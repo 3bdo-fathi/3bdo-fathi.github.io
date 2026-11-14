@@ -12,6 +12,7 @@ toc: true
 schema:
   type: Article
   author: Abdulrahman M. Fathi
+mermaid: true
 ---
 Welcome to the inaugural post of our technical deep-dive series covering **"Practical Reverse Engineering: x86, x64, ARM, Windows Kernel, Reversing Tools, and Obfuscation"** by **Bruce Dang, Alexandre Gazet, Elias Bachaalany, and Sébastien Josse** (Wiley, 2014). This series dissects binary analysis from foundational silicon architecture to sophisticated kernel rootkits and program deobfuscation.
 
@@ -19,16 +20,27 @@ Reverse engineering compiled binaries requires an exact mental model of hardware
 
 In this first post, we dissect the foundational pillars of the **x86 and x64 processor architectures**: CPU execution rings, register sets, flags, arithmetic strength reduction, stack layouts across 32-bit and 64-bit calling conventions, physical memory translation via PAE/4-level paging, the complete reverse engineering of **Sample J (DllMain)**, and exhaustive solutions to the chapter exercises.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| *First Chapter in Series* | **Chapter 1: x86 and x64 Architecture** | [Chapter 2: ARM Architecture & Assembly](/posts/practical-reverse-engineering-chapter-2/) |
-
----
-
+<div class="ff-series-nav">
+  <div class="ff-nav-btn ff-nav-disabled text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-flag"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Series Inception</span>
+      <span class="ff-nav-title">First Chapter</span>
+    </div>
+  </div>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Reverse Engineering</span>
+    <span class="ff-center-part">Chapter 1: x86 and x64 Architecture</span>
+  </div>
+  <a href="/posts/practical-reverse-engineering-chapter-2/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 2: ARM Architecture & Assembly</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **Architectural Evolution**: The x86 architecture evolved from the 16-bit 8086 to 32-bit IA-32 (Protected Mode) and 64-bit AMD64/Intel 64 (Long Mode). In 64-bit mode, architectural registers doubled from 8 to 16, memory segmentation was effectively eliminated, and RIP-relative addressing became the default for Position-Independent Code (PIC).
@@ -72,6 +84,11 @@ Privilege checks are mediated by three parameters:
 ---
 
 ## 2. Register Architectures: x86 vs. x64
+
+![x86 and x64 Calling Conventions and Stack Frame Architecture](/assets/images/posts/reverse-engineering/ch1-x86-stack-frame.png)
+*Figure 1: Comprehensive architectural comparison of IA-32 standard stack frames versus AMD64 Microsoft FastCall ABI parameters, shadow space, and stack alignment boundaries.*
+
+
 
 ### 2.1 General Purpose Registers (GPRs)
 
@@ -129,6 +146,26 @@ In 32-bit x86, eight 32-bit general-purpose registers exist. In x64, these regis
 * **DR0 - DR7**: Hardware debug registers. `DR0-DR3` store linear addresses for hardware breakpoints. `DR6` is the debug status register, and `DR7` configures breakpoint conditions (execution, read, or write).
 
 ---
+
+```mermaid
+flowchart TD
+    subgraph Function_Prologue["Function Prologue Setup"]
+        P1["push ebp<br/>(Preserve caller frame pointer)"] --> P2["mov ebp, esp<br/>(Establish new stack frame base)"]
+        P2 --> P3["sub esp, 0x20<br/>(Allocate space for local variables)"]
+    end
+
+    subgraph Function_Execution["Execution Body"]
+        P3 --> E1["Local variable operations on [ebp-X]"]
+        E1 --> E2["Prepare function arguments: push or registers"]
+        E2 --> E3["call target_function<br/>(Pushes return address to stack)"]
+    end
+
+    subgraph Function_Epilogue["Function Epilogue Teardown"]
+        E3 --> EP1["mov esp, ebp<br/>(Deallocate local variable buffer)"]
+        EP1 --> EP2["pop ebp<br/>(Restore caller frame pointer)"]
+        EP2 --> EP3["ret<br/>(Pops saved EIP into instruction pointer)"]
+    end
+```
 
 ## 3. Instruction Semantics and Decompilation Patterns
 

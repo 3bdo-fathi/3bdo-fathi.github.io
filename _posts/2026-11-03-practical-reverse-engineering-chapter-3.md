@@ -12,6 +12,7 @@ toc: true
 schema:
   type: Article
   author: Abdulrahman M. Fathi
+mermaid: true
 ---
 Welcome to the third chapter of our deep-dive series covering **"Practical Reverse Engineering"** by **Bruce Dang, Alexandre Gazet, Elias Bachaalany, and Sébastien Josse** (Wiley, 2014).
 
@@ -19,16 +20,27 @@ In the Windows operating system, the boundary between user mode (Ring 3) and ker
 
 In this chapter, we dissect the internal mechanics of the **Windows Kernel**: processor control regions (`KPCR`/`KPRCB`), system call dispatching via `KiSystemCall64` and the SSDT, Interrupt Request Levels (`IRQL`), pool memory allocators, I/O Request Packet (`IRP`) flow, device driver architectures, IOCTL buffering mechanisms, the in-depth reverse engineering of **Sample A (x86 Rootkit)** and **Sample B (x64 Rootkit)**, and solutions to all chapter exercises.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 2: ARM Architecture & Assembly](/posts/practical-reverse-engineering-chapter-2/) | **Chapter 3: The Windows Kernel & Rootkits** | [Chapter 4: Windows Debugging & Automation](/posts/practical-reverse-engineering-chapter-4/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/practical-reverse-engineering-chapter-2/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 2: ARM Architecture & Assembly</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Reverse Engineering</span>
+    <span class="ff-center-part">Chapter 3: The Windows Kernel & Rootkits</span>
+  </div>
+  <a href="/posts/practical-reverse-engineering-chapter-4/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 4: Windows Debugging & Automation</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **The Virtual Address Space Split**: Windows partitions virtual memory into user space and kernel space. On 32-bit systems, this defaults to a 2GB/2GB split (or 3GB/1GB with the `/3GB` boot flag). On 64-bit systems, memory is mapped into canonical lower (user: `0x00000000'00000000` to `0x00007FFF'FFFFFFFF`) and canonical upper (kernel: `0xFFFF8000'00000000` to `0xFFFFFFFF'FFFFFFFF`) ranges separated by an unmapped 16-exabyte non-canonical gap.
@@ -68,6 +80,11 @@ PEPROCESS pCurrentProcess = (PEPROCESS)__readgsqword(0x188 + 0xB8); // IoGetInit
 ---
 
 ## 2. System Call Dispatching: The SSDT
+
+![Windows Kernel I/O Subsystem and IRP Dispatch Pipeline](/assets/images/posts/reverse-engineering/ch3-windows-kernel-irp.png)
+*Figure 1: Detailed lifecycle of an I/O Request Packet (IRP), showing transitions between User-Mode Win32 APIs, the I/O Manager, and Driver Object dispatch tables.*
+
+
 
 When a user-mode application calls a Windows API (such as `NtCreateFile` in `ntdll.dll`), the transition to Ring 0 occurs through the system call dispatcher:
 
@@ -110,6 +127,25 @@ extern PSERVICE_DESCRIPTOR_TABLE KeServiceDescriptorTable;
 ```
 
 ---
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor App as User-Mode App (Ring 3)
+    participant Ntdll as ntdll.dll (NtDeviceIoControlFile)
+    participant KExec as Kernel Executive (KiSystemCall64)
+    participant IO as I/O Manager (IoAllocateIrp)
+    participant Driver as Target Driver (DispatchDeviceControl)
+
+    App->>Ntdll: DeviceIoControl(hDevice, IOCTL_CODE, inBuf, outBuf)
+    Ntdll->>KExec: syscall (Index into SSDT)
+    KExec->>IO: Dispatch to I/O Subsystem
+    IO->>IO: Allocate and format IRP with IO_STACK_LOCATION
+    IO->>Driver: DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL](Device, Irp)
+    Note over Driver: Driver inspects buffer and accesses hardware
+    Driver-->>IO: IoCompleteRequest(Irp, IO_NO_INCREMENT)
+    IO-->>App: Unwind stack, return NTSTATUS to caller
+```
 
 ## 3. Interrupt Request Levels (IRQL)
 

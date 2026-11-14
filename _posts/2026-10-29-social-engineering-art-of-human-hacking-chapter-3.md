@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Book Summary: Social Engineering - The Art of Human Hacking (Chapter 3: Elicitation)"
 date: 2026-10-29 11:00:00 +0300
 categories: [Cyber Security, Social Engineering]
@@ -26,16 +27,27 @@ Hadnagy opens Chapter 3 with Sun Tzu's famous maxim:
 
 When done masterfully, elicitation leaves zero trace. The target never realizes an interrogation occurred, never suspects foul play, and often walks away feeling valued, respected, and happy with the interaction.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 2: Information Gathering](/posts/social-engineering-art-of-human-hacking-chapter-2/) | **Chapter 3: Elicitation** | [Chapter 4: Pretexting](/posts/social-engineering-art-of-human-hacking-chapter-4/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-2/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 2: Information Gathering</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Social Engineering</span>
+    <span class="ff-center-part">Chapter 3: Elicitation</span>
+  </div>
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-4/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 4: Pretexting</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **The NSA Definition**: Elicitation is *"the subtle extraction of information during an apparently normal and innocent conversation."*
@@ -47,6 +59,21 @@ When done masterfully, elicitation leaves zero trace. The target never realizes 
 ![The Elicitation Funnel & Psychological Triggers](/assets/images/posts/social-engineering/ch3-elicitation-funnel.png)
 
 ---
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Operative as Social Engineer
+    actor Target as Corporate Target (Employee)
+
+    Operative->>Target: Casual Interaction at Conference / Phone
+    Operative->>Target: Feigned Ignorance ("I heard your cloud migration failed completely?")
+    Note over Target: Ego Triggered: Compulsion to correct misconception
+    Target-->>Operative: Corrects error: "No, we migrated to AWS us-east-1 using Okta SSO!"
+    Operative->>Target: Subtle Validation: "That must have required custom IAM roles?"
+    Target-->>Operative: Volunteers internal infrastructure and naming conventions
+    Note over Operative: Critical intelligence extracted without asking direct questions!
+```
 
 ## 1. What Is Elicitation? (The Intelligence Perspective)
 
@@ -183,16 +210,27 @@ Questions structured on the assumption that the target already possesses the dat
 * Instead of asking: *"Do you have a database administrator onsite?"*
 * An assumptive operator asks: *"When does your database administrator step out for lunch so I don't disrupt his cluster maintenance?"*
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 2: Information Gathering](/posts/social-engineering-art-of-human-hacking-chapter-2/) | **Chapter 3: Elicitation** | [Chapter 4: Pretexting](/posts/social-engineering-art-of-human-hacking-chapter-4/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-2/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 2: Information Gathering</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Social Engineering</span>
+    <span class="ff-center-part">Chapter 3: Elicitation</span>
+  </div>
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-4/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 4: Pretexting</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Next in the Series: Chapter 4 Preview
 
 In **[Chapter 4: Pretexting - How to Become Anyone](/posts/social-engineering-art-of-human-hacking-chapter-4/)**, we will break down:

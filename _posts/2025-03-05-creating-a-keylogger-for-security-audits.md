@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Creating a Keylogger for Authorized Security Audits"
 date: 2025-03-05 12:02:00 +0300
 categories: [Scripts, Python]
@@ -57,6 +58,23 @@ Keylogger-Project/
 ```
 
 ![Project Structure](/assets/images/posts/automation/project-structure.png)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as Physical User (Keyboard)
+    participant Kernel as Windows Kernel (Win32k.sys)
+    participant Hook as LowLevelKeyboardProc (WH_KEYBOARD_LL)
+    participant Audit as Python Security Audit Logger
+    participant App as Active Foreground Application
+
+    User->>Kernel: Hardware Keystroke Event (WM_KEYDOWN)
+    Kernel->>Hook: Deliver KBDLLHOOKSTRUCT via SetWindowsHookEx
+    Hook->>Audit: Intercept vkCode, scanCode, and timestamp
+    Audit->>Audit: Write keystroke telemetry to encrypted log buffer
+    Hook->>Kernel: CallNextHookEx (Pass event along hook chain)
+    Kernel->>App: Deliver Keystroke to Target Foreground Window
+```
 
 ## Building the Keylogger
 

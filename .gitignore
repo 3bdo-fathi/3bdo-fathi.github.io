@@ -26,3 +26,6 @@ package-lock.json
 _sass/vendors
 assets/js/dist
 scratch/
+_htb_source/
+tools/htb_extracted_text/
+tools/test_parser.py

@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Book Summary: Social Engineering - The Art of Human Hacking (Chapter 1)"
 date: 2026-10-29 09:00:00 +0300
 categories: [Cyber Security, Social Engineering]
@@ -23,16 +24,27 @@ In this series, we will dissect Hadnagy's framework systematically. We will anal
 
 Let's dive into **Chapter 1: A Look into the World of Social Engineering**.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| *First Chapter in Series* | **Chapter 1: The World of Social Engineering** | [Chapter 2: Information Gathering](/posts/social-engineering-art-of-human-hacking-chapter-2/) |
-
----
-
+<div class="ff-series-nav">
+  <div class="ff-nav-btn ff-nav-disabled text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-flag"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Series Inception</span>
+      <span class="ff-nav-title">First Chapter</span>
+    </div>
+  </div>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Social Engineering</span>
+    <span class="ff-center-part">Chapter 1: The World of Social Engineering</span>
+  </div>
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-2/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 2: Information Gathering</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **Social Engineering Defined**: It is not merely "lying" or "acting." It is the science and art of skillfully maneuvering human beings into taking actions that may or may not be in their best interest.
@@ -42,6 +54,20 @@ Let's dive into **Chapter 1: A Look into the World of Social Engineering**.
 * **The "Security Through Education" Mantra**: Traditional security relies on software patches; human security relies on building an active, non-punitive awareness culture.
 
 ---
+
+```mermaid
+flowchart LR
+    subgraph Attack_Lifecycle["The Social Engineering Attack Cycle"]
+        direction TB
+        OSINT["Phase 1: Information Gathering<br/>(OSINT, Dumpster Diving, Social Media)"]
+        Pretext["Phase 2: Pretexting & Profiling<br/>(Fabricating Identity & Believable Context)"]
+        Hook["Phase 3: The Psychological Hook<br/>(Triggering Emotion, Trust, or Urgency)"]
+        Exploit["Phase 4: Exploitation & Data Theft<br/>(Eliciting Credentials, Physical Entry, Code Execution)"]
+        Exit["Phase 5: Seamless Disengagement<br/>(Leaving Target Unaware of Compromise)"]
+        
+        OSINT --> Pretext --> Hook --> Exploit --> Exit
+    end
+```
 
 ## 1. Demystifying Social Engineering
 
@@ -260,16 +286,27 @@ The framework models the lifecycle of a human-centric penetration test:
 [ Process Request ]
 ```
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| *First Chapter in Series* | **Chapter 1: The World of Social Engineering** | [Chapter 2: Information Gathering](/posts/social-engineering-art-of-human-hacking-chapter-2/) |
-
----
-
+<div class="ff-series-nav">
+  <div class="ff-nav-btn ff-nav-disabled text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-flag"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Series Inception</span>
+      <span class="ff-nav-title">First Chapter</span>
+    </div>
+  </div>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Social Engineering</span>
+    <span class="ff-center-part">Chapter 1: The World of Social Engineering</span>
+  </div>
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-2/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 2: Information Gathering</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Next in the Series: Chapter 2 Preview
 
 In the next installment of this series, we will examine [Chapter 2: Information Gathering](/posts/social-engineering-art-of-human-hacking-chapter-2/). We will explore:

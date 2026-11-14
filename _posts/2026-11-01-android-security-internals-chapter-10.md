@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Android Security Internals: Chapter 10 - Device Security"
 date: 2026-11-01 18:00:00 +0300
 categories: [Cyber Security, Android Security]
@@ -19,16 +20,27 @@ Operating system access controls (such as Linux UIDs and SELinux policies) only 
 
 To counter physical and hardware attacks, Android implements two formidable defenses: **Storage Encryption** (Full Disk Encryption via `dm-crypt` and File-Based Encryption via `fscrypt`), and **Verified Boot** via `dm-verity`.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 9: Enterprise Security](/posts/android-security-internals-chapter-9/) | **Chapter 10: Device Security** | [Chapter 11: NFC and Secure Elements](/posts/android-security-internals-chapter-11/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/android-security-internals-chapter-9/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 9: Enterprise Security</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Android Security</span>
+    <span class="ff-center-part">Chapter 10: Device Security</span>
+  </div>
+  <a href="/posts/android-security-internals-chapter-11/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 11: NFC and Secure Elements</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **The Physical Attack Threat**: Software sandboxes are irrelevant if an attacker can read raw flash memory sectors via chip-off forensics, JTAG debugging, or unauthorized bootloader flashing.
@@ -39,6 +51,17 @@ To counter physical and hardware attacks, Android implements two formidable defe
 * **Verified Boot & `dm-verity`**: While FDE/FBE ensures confidentiality of user data at rest, `dm-verity` guarantees the cryptographic integrity of the read-only `/system` partition using a tree of SHA-256 hashes (Merkle Tree). Any byte modified on `/system` halts the device immediately.
 
 ---
+
+```mermaid
+flowchart LR
+    subgraph Encryption_Models["Android Storage Encryption Architecture"]
+        FDE["Full Disk Encryption (FDE)<br/>Single Key encrypts entire /data block device<br/>(Deprecated in Android 10+)"]
+        FBE["File-Based Encryption (FBE)<br/>Individual files encrypted with distinct keys<br/>(Current Android Standard)"]
+        
+        FBE --> CE["Credential Encrypted (CE) Storage<br/>Accessible ONLY after user enters lockscreen passcode"]
+        FBE --> DE["Device Encrypted (DE) Storage<br/>Accessible immediately upon boot (Direct Boot mode)"]
+    end
+```
 
 ## 1. Physical Device Partition Layout
 

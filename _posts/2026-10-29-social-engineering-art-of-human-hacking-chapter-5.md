@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Book Summary: Social Engineering - The Art of Human Hacking (Chapter 5: Mind Tricks & Psychology)"
 date: 2026-10-29 13:00:00 +0300
 categories: [Cyber Security, Social Engineering]
@@ -28,16 +29,27 @@ As psychologist Carl Gustav Jung famously observed:
 
 Let's dissect the science of hacking the human cognitive operating system.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 4: Pretexting](/posts/social-engineering-art-of-human-hacking-chapter-4/) | **Chapter 5: Mind Tricks & Psychology** | [Chapter 6: Influence & Persuasion](/posts/social-engineering-art-of-human-hacking-chapter-6/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-4/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 4: Pretexting</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Social Engineering</span>
+    <span class="ff-center-part">Chapter 5: Mind Tricks & Psychology</span>
+  </div>
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-6/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 6: Influence & Persuasion</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **The 7 Universal Microexpressions**: Dr. Paul Ekman's FACS research proves that emotional facial contractions last 1/25th of a second and are biologically universal across all humans.
@@ -49,6 +61,18 @@ Let's dissect the science of hacking the human cognitive operating system.
 ![Microexpressions & The Human Buffer Overflow Equation](/assets/images/posts/social-engineering/ch5-human-buffer-overflow.png)
 
 ---
+
+```mermaid
+flowchart LR
+    subgraph Sensory_Modes["Cognitive Sensory Modalities"]
+        direction TB
+        Visual["Visual Dominant<br/>Predicate: 'I see what you mean'<br/>Pacing: Rapid, high pitch, eye deflections up"]
+        Auditory["Auditory Dominant<br/>Predicate: 'That sounds right to me'<br/>Pacing: Rhythmic, balanced, eye deflections horizontal"]
+        Kinesthetic["Kinesthetic Dominant<br/>Predicate: 'I feel comfortable with that'<br/>Pacing: Slower, deep breath, eye deflections down-right"]
+    end
+    
+    Operative["Social Engineer"] -->|Matches Pacing & Predicates| Target["Target Unconsciously Feels Rapport"]
+```
 
 ## 1. Cognitive Sensory Modes: Discerning the Target's Mind
 
@@ -207,16 +231,27 @@ Without rapport, social engineering fails. Hadnagy identifies three essential st
    * Auditor: *"It sounds like you're completely overwhelmed by how unpredictable things have been lately."*
    * This signals active listening, validates the target's emotions, and cements subconscious trust.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 4: Pretexting](/posts/social-engineering-art-of-human-hacking-chapter-4/) | **Chapter 5: Mind Tricks & Psychology** | [Chapter 6: Influence & Persuasion](/posts/social-engineering-art-of-human-hacking-chapter-6/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-4/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 4: Pretexting</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Social Engineering</span>
+    <span class="ff-center-part">Chapter 5: Mind Tricks & Psychology</span>
+  </div>
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-6/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 6: Influence & Persuasion</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Next in the Series: Chapter 6 Preview
 
 In **[Chapter 6: Influence - The Power of Persuasion](/posts/social-engineering-art-of-human-hacking-chapter-6/)**, we will explore:

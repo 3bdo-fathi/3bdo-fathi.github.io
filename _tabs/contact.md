@@ -1,6 +1,6 @@
 ---
 layout: page
-icon: fas fa-envelope
+icon: fas fa-paper-plane
 order: 7
 title: Contact Me
 permalink: /contact-me/
@@ -249,7 +249,7 @@ image: /assets/images/site/preview.jpg
   }
 
   .contact-field-group select option {
-    background: #0d1117;
+    background: #000000;
     color: #f0f6fc;
   }
 

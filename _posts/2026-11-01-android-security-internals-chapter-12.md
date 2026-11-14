@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Android Security Internals: Chapter 12 - SELinux in Android"
 date: 2026-11-01 20:00:00 +0300
 categories: [Cyber Security, Android Security]
@@ -21,16 +22,27 @@ Before Android 4.3, Android's security model relied entirely on Discretionary Ac
 
 SELinux dismantled this paradigm by introducing **Mandatory Access Control (MAC)**, enforcing strict containment rules that confine processes even if they run as root.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 11: NFC and Secure Elements](/posts/android-security-internals-chapter-11/) | **Chapter 12: SELinux in Android** | [Chapter 13: System Updates and Root Access](/posts/android-security-internals-chapter-13/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/android-security-internals-chapter-11/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 11: NFC and Secure Elements</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Android Security</span>
+    <span class="ff-center-part">Chapter 12: SELinux in Android</span>
+  </div>
+  <a href="/posts/android-security-internals-chapter-13/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 13: System Updates and Root Access</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **DAC vs. MAC**: Discretionary Access Control allows object owners to set permissions, meaning a compromised root process owns the system. Mandatory Access Control enforces a centralized policy compiled into the kernel that no userspace process—not even root—can alter or bypass.
@@ -40,6 +52,18 @@ SELinux dismantled this paradigm by introducing **Mandatory Access Control (MAC)
 * **Project Treble Split Policy**: In Android 8.0+, monolithic policies were split into `plat_sepolicy` (Google-maintained core) and `vendor_sepolicy` (OEM hardware drivers), preventing OEMs from weakening core platform security rules.
 
 ---
+
+```mermaid
+flowchart TD
+    subgraph SELinux_Decision["SELinux MAC Policy Evaluation Engine"]
+        Process["Subject (Process Context)<br/>u:r:untrusted_app:s0:c512,c768"] --> AVC["Access Vector Cache (AVC)"]
+        Resource["Object (File / Socket / Driver)<br/>u:object_r:binder_device:s0"] --> AVC
+        
+        AVC --> RuleCheck{"Policy Rule Allowed?<br/>allow untrusted_app binder_device:chr_file { ioctl read write };"}
+        RuleCheck -- "YES" --> Allow["Access Granted (Kernel Execution Continues)"]
+        RuleCheck -- "NO" --> Deny["Access Denied (avc: denied logged in dmesg)"]
+    end
+```
 
 ## 1. The Fall of DAC: Why Linux UIDs Were Not Enough
 

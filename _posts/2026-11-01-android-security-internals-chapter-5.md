@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Android Security Internals: Chapter 5 - Cryptographic Providers"
 date: 2026-11-01 13:00:00 +0300
 categories: [Cyber Security, Android Security]
@@ -19,16 +20,27 @@ In [Chapter 4](/posts/android-security-internals-chapter-4/), we explored multi-
 
 Cryptography on Android is built atop the **Java Cryptography Architecture (JCA)**. However, Android deviates significantly from standard desktop Oracle Java. In this deep dive, we examine how Android transitioned from Apache Harmony and Bouncy Castle to high-performance native OpenSSL/BoringSSL C engines, analyze how the system collects entropy, mathematically deconstruct the infamous 2013 Android PRNG flaw that resulted in the mass theft of Bitcoin wallets worldwide, and audit common mobile cryptographic anti-patterns.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 4: User Management](/posts/android-security-internals-chapter-4/) | **Chapter 5: Cryptographic Providers** | [Chapter 6: Network Security and PKI](/posts/android-security-internals-chapter-6/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/android-security-internals-chapter-4/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 4: User Management</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Android Security</span>
+    <span class="ff-center-part">Chapter 5: Cryptographic Providers</span>
+  </div>
+  <a href="/posts/android-security-internals-chapter-6/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 6: Network Security and PKI</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **JCA Provider Architecture**: Android decouples cryptographic APIs from their underlying implementations. Applications request primitives via engine classes (`Cipher`, `Signature`, `KeyStore`), and the framework delegates execution to registered security providers configured in `java.security`.
@@ -38,6 +50,17 @@ Cryptography on Android is built atop the **Java Cryptography Architecture (JCA)
 * **Common Cryptographic Pitfalls**: Mobile developers frequently compromise strong algorithms through insecure modes (AES in ECB mode), static Initialization Vectors (IVs), and hardcoded cryptographic keys inside decompiled DEX bytecode.
 
 ---
+
+```mermaid
+flowchart TD
+    subgraph JCA_Stack["Android Cryptographic Architecture"]
+        App["Application Layer (javax.crypto.Cipher)"] --> JCAEngine["JCA Engine Provider Resolution"]
+        JCAEngine --> AndroidKeyStore["AndroidKeyStore Provider<br/>(Hardware-backed key references)"]
+        JCAEngine --> Conscrypt["Conscrypt Provider<br/>(BoringSSL native assembly acceleration)"]
+        AndroidKeyStore --> KeyStoreDaemon["keystore2 / KeyMint HAL"]
+        KeyStoreDaemon --> TEE["ARM TrustZone TEE / StrongBox SE"]
+    end
+```
 
 ## 1. The Java Cryptography Architecture (JCA) in Android
 

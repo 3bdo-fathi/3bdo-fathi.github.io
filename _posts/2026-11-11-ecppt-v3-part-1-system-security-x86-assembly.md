@@ -12,21 +12,33 @@ toc: true
 schema:
   type: Article
   author: Abdulrahman M. Fathi
+mermaid: true
 ---
 
 Welcome to the inaugural article of our comprehensive, production-grade masterclass covering the **eCPPT (eLearnSecurity Certified Professional Penetration Tester)** curriculum by **INE Security**. Rather than providing superficial slide summaries, this series deconstructs offensive tradecraft from the lowest architectural layers of computer hardware to advanced enterprise Active Directory attacks, multi-tier pivoting, and evasive command-and-control operations.
 
 In this first installment, we dissect the foundational pillars of **System Security and x86 Assembly Language**. Mastering the execution cycle of the central processing unit (CPU), memory virtualization, stack frame mechanics, and compiler calling conventions is an absolute prerequisite for binary exploitation, custom exploit development, and bypassing modern operating system mitigations.
 
----
-
-### Series Navigation
-
-| **Previous Part** | **Current Part** | **Next Part** |
-| :---: | :---: | :---: |
-| *Series Beginning* | **Part 1: System Security & x86 Assembly** | [Part 2: Exploit Development: Stack & SEH Overflows](/posts/ecppt-v3-part-2-exploit-development-buffer-overflows/) |
-
----
+<div class="ff-series-nav">
+  <div class="ff-nav-btn ff-nav-disabled text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-flag"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Series Inception</span>
+      <span class="ff-nav-title">Part 1 - Start Chapter</span>
+    </div>
+  </div>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> eCPPTv3 Series</span>
+    <span class="ff-center-part">Part 1 of 10</span>
+  </div>
+  <a href="/posts/ecppt-v3-part-2-exploit-development-buffer-overflows/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next Part</span>
+      <span class="ff-nav-title">Part 2: Exploit Dev & Buffer Overflows</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 
 ## Key Takeaways
 
@@ -134,9 +146,9 @@ flowchart TD
     subgraph VirtualMemory ["32-bit Process Virtual Memory Space (4 GB)"]
         direction TB
         KernelSpace["0xFFFFFFFF<br/>Kernel Land (1 GB on Linux / 2 GB on Windows)<br/>Privilege Level Ring 0 (Hardware, Drivers, Syscalls)"]
-        StackSegment["0xBFFFFFFF<br/>Stack Segment (Call Frames, Locals, Return Addresses)<br/>⬇️ Grows Downward to Lower Addresses"]
+        StackSegment["0xBFFFFFFF<br/>Stack Segment (Call Frames, Locals, Return Addresses)<br/>[Grows Downward to Lower Addresses]"]
         Unallocated["Free Unmapped Memory Space<br/>(Guard Pages / Dynamic Virtual Allocations)"]
-        HeapSegment["0x08048000<br/>Heap Segment (Dynamic Memory: malloc, HeapAlloc, new)<br/>⬆️ Grows Upward to Higher Addresses"]
+        HeapSegment["0x08048000<br/>Heap Segment (Dynamic Memory: malloc, HeapAlloc, new)<br/>[Grows Upward to Higher Addresses]"]
         BSSSegment["Uninitialized Data Segment (.bss)<br/>Global & Static variables initialized to 0"]
         DataSegment["Initialized Data Segment (.data)<br/>Global variables with predefined values (e.g. char *str = 'hello')"]
         TextSegment["0x08048000 (Linux) / 0x00400000 (Windows)<br/>Text Segment (.text)<br/>Compiled Assembly Machine Code (Read & Execute ONLY)"]
@@ -274,19 +286,19 @@ To inspect memory structures, analyze binary control flow, and trace stack state
 gdb -q ./vulnerable_elf
 
 # Set a breakpoint at function main
-gef➤ break main
+gef> break main
 
 # Execute the binary with arbitrary arguments
-gef➤ run $(python3 -c "print('A'*100)")
+gef> run $(python3 -c "print('A'*100)")
 
 # Inspect CPU registers and EFLAGS status
-gef➤ info registers
+gef> info registers
 
 # Dereference and display 16 dwords on the top of the stack
-gef➤ x/16wx $esp
+gef> x/16wx $esp
 
 # Disassemble the next 10 instructions from the instruction pointer
-gef➤ x/10i $eip
+gef> x/10i $eip
 ```
 
 ---

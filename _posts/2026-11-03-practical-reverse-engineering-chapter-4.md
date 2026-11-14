@@ -12,6 +12,7 @@ toc: true
 schema:
   type: Article
   author: Abdulrahman M. Fathi
+mermaid: true
 ---
 Welcome to the fourth chapter of our comprehensive series covering **"Practical Reverse Engineering"** by **Bruce Dang, Alexandre Gazet, Elias Bachaalany, and Sébastien Josse** (Wiley, 2014).
 
@@ -21,16 +22,27 @@ In the Windows realm, Microsoft's **Debugging Tools for Windows (WinDbg, CDB, KD
 
 In this chapter, we dissect: WinDbg architecture, MASM vs. C++ expression evaluators, event filters, memory inspection commands, hardware breakpoints, pseudo-registers, writing complex loop-based DbgEng scripts, an automated **UPX unpacker script**, a live **File I/O monitor**, the **DbgEng C++ Extension SDK**, and complete solutions to the chapter exercises.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 3: The Windows Kernel & Rootkits](/posts/practical-reverse-engineering-chapter-3/) | **Chapter 4: Windows Debugging & Automation** | [Chapter 5: Software Obfuscation & Deobfuscation](/posts/practical-reverse-engineering-chapter-5/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/practical-reverse-engineering-chapter-3/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 3: The Windows Kernel & Rootkits</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Reverse Engineering</span>
+    <span class="ff-center-part">Chapter 4: Windows Debugging & Automation</span>
+  </div>
+  <a href="/posts/practical-reverse-engineering-chapter-5/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 5: Software Obfuscation & Deobfuscation</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **The DbgEng Architecture**: WinDbg, CDB (Command-line Debugger), and NTSD are GUI and console frontends sitting atop a common core dynamic link library: `dbgeng.dll`. Any script or extension written for DbgEng runs seamlessly across user-mode and kernel-mode targets.
@@ -42,6 +54,11 @@ In this chapter, we dissect: WinDbg architecture, MASM vs. C++ expression evalua
 ---
 
 ## 1. WinDbg Fundamentals and Core Command Syntax
+
+![Anti-Reversing, Code Obfuscation and Packer Unpacking](/assets/images/posts/reverse-engineering/ch4-anti-debugging-obfuscation.png)
+*Figure 1: Core anti-debugging detection vectors (PEB flags, hardware breakpoints, timing checks) and seven-stage executable unpacking pipeline.*
+
+
 
 ### 1.1 Configuring Symbols and Source Paths
 
@@ -76,6 +93,18 @@ unsigned int 0x480
 | **Symbols** | `module!symbol` | `module!class::member` |
 
 ---
+
+```mermaid
+flowchart TD
+    Start["Packed PE Image Launches"] --> S1["Packer Stub Initializes"]
+    S1 --> S2{"Anti-Debug Check:<br/>PEB->BeingDebugged?"}
+    S2 -- "Detected" --> Kill["Terminate or Alter Behavior"]
+    S2 -- "Clean" --> S3["Decrypt / Decompress Payload into Memory"]
+    S3 --> S4["Resolve Dynamic Imports via LoadLibrary / GetProcAddress"]
+    S4 --> S5["Apply Base Relocations"]
+    S5 --> S6["Tail Jump (jmp / call) to Original Entry Point (OEP)"]
+    S6 --> Payload["Real Unpacked Application Executes"]
+```
 
 ## 2. Process Control, Thread Switching, and Event Filtering
 

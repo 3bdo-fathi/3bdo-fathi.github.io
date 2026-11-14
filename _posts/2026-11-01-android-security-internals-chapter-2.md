@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Android Security Internals: Chapter 2 - Permissions Architecture"
 date: 2026-11-01 10:00:00 +0300
 categories: [Cyber Security, Android Security]
@@ -21,16 +22,27 @@ While users typically perceive permissions as interactive prompt dialogs, under 
 
 Let's dive into the technical internals of Android's permission framework.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 1: Android's Security Model](/posts/android-security-internals-chapter-1/) | **Chapter 2: Permissions Architecture** | [Chapter 3: Package Management](/posts/android-security-internals-chapter-3/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/android-security-internals-chapter-1/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 1: Android's Security Model</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Android Security</span>
+    <span class="ff-center-part">Chapter 2: Permissions Architecture</span>
+  </div>
+  <a href="/posts/android-security-internals-chapter-3/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 3: Package Management</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **Declaration vs. Request**: Applications define new permissions using `<permission>` tags and request access to existing permissions via `<uses-permission>` tags in `AndroidManifest.xml`.
@@ -41,6 +53,28 @@ Let's dive into the technical internals of Android's permission framework.
 * **Offensive Attack Surfaces**: Architectural permission vulnerabilities manifest through **Confused Deputy** bypasses, **PendingIntent hijacking**, and **StrandHogg task hijacking (CVE-2019-8660)**.
 
 ---
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor App as Client Application (Calling Process)
+    participant Binder as /dev/binder Kernel Driver
+    participant PMS as PackageManagerService (SystemServer)
+    actor Service as Protected System Service
+
+    App->>Binder: IPC Call: service.invokeProtectedAction()
+    Binder->>Binder: Injects authentic caller UID & PID tokens
+    Binder->>Service: Forward request with caller identity
+    Service->>PMS: checkPermission("android.permission.CAMERA", uid, pid)
+    PMS->>PMS: Check packages.xml granted permission bitmask
+    alt Permission Granted
+        PMS-->>Service: PERMISSION_GRANTED (0)
+        Service-->>App: Return operation result
+    else Permission Denied
+        PMS-->>Service: PERMISSION_DENIED (-1)
+        Service-->>App: Throw SecurityException
+    end
+```
 
 ## 1. Permission Declaration and Protection Levels
 

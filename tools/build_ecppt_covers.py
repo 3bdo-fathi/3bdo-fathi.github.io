@@ -4,13 +4,25 @@ from PIL import Image, ImageDraw, ImageFont
 out_dir = 'assets/images/posts/ecppt'
 os.makedirs(out_dir, exist_ok=True)
 
-# Select robust Linux fonts
-FONT_TITLE = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 38)
-FONT_SUB = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 20)
-FONT_BADGE = ImageFont.truetype('/usr/share/fonts/truetype/liberation/LiberationMono-Bold.ttf', 13)
-FONT_PILL = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 14)
-FONT_AUTHOR = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 17)
-FONT_AUTHOR_SUB = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 14)
+def load_font(font_names, size):
+    for f in font_names:
+        if os.path.exists(f):
+            try:
+                return ImageFont.truetype(f, size)
+            except Exception:
+                pass
+        try:
+            return ImageFont.truetype(f, size)
+        except Exception:
+            pass
+    return ImageFont.load_default()
+
+FONT_TITLE = load_font(['C:/Windows/Fonts/segoeuib.ttf', 'C:/Windows/Fonts/arialbd.ttf', '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'], 38)
+FONT_SUB = load_font(['C:/Windows/Fonts/segoeui.ttf', 'C:/Windows/Fonts/arial.ttf', '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'], 20)
+FONT_BADGE = load_font(['C:/Windows/Fonts/consolab.ttf', 'C:/Windows/Fonts/courbd.ttf', '/usr/share/fonts/truetype/liberation/LiberationMono-Bold.ttf'], 13)
+FONT_PILL = load_font(['C:/Windows/Fonts/segoeuib.ttf', 'C:/Windows/Fonts/arialbd.ttf', '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'], 14)
+FONT_AUTHOR = load_font(['C:/Windows/Fonts/segoeuib.ttf', 'C:/Windows/Fonts/arialbd.ttf', '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'], 17)
+FONT_AUTHOR_SUB = load_font(['C:/Windows/Fonts/segoeui.ttf', 'C:/Windows/Fonts/arial.ttf', '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'], 14)
 
 def wrap_text(text, font, max_width, draw):
     words = text.split()

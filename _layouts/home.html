@@ -81,7 +81,9 @@ layout: default
     gap: 0.45rem;
     padding: 0.42rem 0.9rem;
     border-radius: 20px;
-    background: #090d14;
+    background: #000000;
+    border: 1px solid #2f3336;
+    color: #71767b;
     border: 1px solid rgba(255, 255, 255, 0.08);
     color: #94a3b8;
     font-size: 0.8rem;
@@ -115,37 +117,38 @@ layout: default
   }
 
   .cat-pill:hover {
-    color: #38bdf8;
-    border-color: rgba(56, 189, 248, 0.35);
-    background: #0f172a;
+    color: #1d9bf0;
+    border-color: rgba(29, 155, 240, 0.35);
+    background: #16181c;
+    border-color: #1d9bf0;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   }
 
   .cat-pill:hover .cat-pill-icon {
-    color: #38bdf8;
+    color: #1d9bf0;
     opacity: 1;
   }
 
   .cat-pill:hover .cat-pill-count {
-    background: rgba(56, 189, 248, 0.15);
-    color: #38bdf8;
+    background: rgba(29, 155, 240, 0.15);
+    color: #1d9bf0;
   }
 
   .cat-pill.active {
-    background: rgba(56, 189, 248, 0.12) !important;
-    border-color: #38bdf8 !important;
+    background: rgba(29, 155, 240, 0.12) !important;
+    border-color: #1d9bf0 !important;
     color: #ffffff !important;
-    box-shadow: 0 0 16px rgba(56, 189, 248, 0.22), 0 2px 6px rgba(0, 0, 0, 0.5) !important;
+    box-shadow: 0 0 16px rgba(29, 155, 240, 0.22), 0 2px 6px rgba(0, 0, 0, 0.5) !important;
   }
 
   .cat-pill.active .cat-pill-icon {
-    color: #38bdf8 !important;
+    color: #1d9bf0 !important;
     opacity: 1 !important;
   }
 
   .cat-pill.active .cat-pill-count {
-    background: #38bdf8 !important;
+    background: #1d9bf0 !important;
     color: #030712 !important;
     font-weight: 800 !important;
   }
@@ -249,14 +252,14 @@ layout: default
     border-radius: 10px;
     overflow: hidden;
     margin-bottom: 1.25rem;
-    background: var(--card-bg, #0d1117);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--card-bg, #000000);
+    border: 1px solid #2f3336;
     transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease, border-color 0.2s ease;
   }
 
   .card-wrapper.card:hover {
     transform: translateY(-2px);
-    border-color: rgba(56, 189, 248, 0.35);
+    border-color: rgba(29, 155, 240, 0.35);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
   }
 
@@ -364,9 +367,13 @@ layout: default
     }
   }
 
+  .post-preview .col-md-5 {
+    background: #000000 !important;
+  }
+
   html[data-mode="light"] .post-preview .col-md-5,
   html[data-bs-theme="light"] .post-preview .col-md-5 {
-    background: #0d1117 !important;
+    background: #f6f8fa !important;
   }
 
   .card-wrapper:hover .post-preview .col-md-5 img {
@@ -387,7 +394,9 @@ layout: default
     gap: 0.35rem;
     padding: 0.35rem 0.6rem;
     border-radius: 30px;
-    background: #090d14;
+    background: #000000;
+    border: 1px solid #2f3336;
+    color: #71767b;
     border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
   }
@@ -426,16 +435,16 @@ layout: default
 
   .page-num-btn:hover:not(:disabled):not(.active),
   .page-nav-action:hover:not(:disabled) {
-    color: #38bdf8;
-    background: rgba(56, 189, 248, 0.08);
-    border-color: rgba(56, 189, 248, 0.25);
+    color: #1d9bf0;
+    background: rgba(29, 155, 240, 0.08);
+    border-color: rgba(29, 155, 240, 0.25);
   }
 
   .page-num-btn.active {
-    background: #38bdf8 !important;
+    background: #1d9bf0 !important;
     color: #030712 !important;
     font-weight: 800 !important;
-    box-shadow: 0 0 14px rgba(56, 189, 248, 0.45);
+    box-shadow: 0 0 14px rgba(29, 155, 240, 0.45);
     cursor: default;
   }
 
@@ -512,12 +521,14 @@ layout: default
         <span class="cat-pill-count">{{ posts.size }}</span>
       </button>
 
-      {% assign priority_order = "Android Security,Penetration Testing,Social Engineering,Reverse Engineering,Mobile Security,Network Security,Application Security,Threat Intelligence,Scripts,Python,Bash" | split: "," %}
+      {% assign priority_order = "Hack The Box,Android Security,Penetration Testing,Social Engineering,Reverse Engineering,Mobile Security,Network Security,Application Security,Threat Intelligence,Scripts,Python,Bash" | split: "," %}
       {% for cat_name in priority_order %}
         {% assign cat_posts_count = site.categories[cat_name].size | default: 0 %}
         {% if cat_posts_count > 0 %}
           <button type="button" class="cat-pill" data-filter="{{ cat_name | downcase }}" role="tab" aria-selected="false">
             {% case cat_name %}
+              {% when 'Hack The Box' %}
+                <i class="fas fa-cube cat-pill-icon"></i>
               {% when 'Android Security' %}
                 <i class="fab fa-android cat-pill-icon"></i>
               {% when 'Penetration Testing' %}

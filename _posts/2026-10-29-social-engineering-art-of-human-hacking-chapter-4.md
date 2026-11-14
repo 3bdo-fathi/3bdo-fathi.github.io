@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Book Summary: Social Engineering - The Art of Human Hacking (Chapter 4: Pretexting)"
 date: 2026-10-29 12:00:00 +0300
 categories: [Cyber Security, Social Engineering]
@@ -28,16 +29,27 @@ Hadnagy frames this chapter with comic Richard Jeni's biting quote:
 
 Let's dissect how professional social engineers construct believable realitiesâ€”and where the legal boundaries lie.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 3: Elicitation](/posts/social-engineering-art-of-human-hacking-chapter-3/) | **Chapter 4: Pretexting** | [Chapter 5: Mind Tricks & Psychology](/posts/social-engineering-art-of-human-hacking-chapter-5/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-3/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 3: Elicitation</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Social Engineering</span>
+    <span class="ff-center-part">Chapter 4: Pretexting</span>
+  </div>
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-5/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 5: Mind Tricks & Psychology</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **Pretexting Defined**: It is far more than a lie or a script; it is the comprehensive synthesis of backstory, dress, grooming, demeanor, and psychological conviction required to become the persona.
@@ -49,6 +61,16 @@ Let's dissect how professional social engineers construct believable realitiesâ€
 ![Pretexting Workflow & Case Studies](/assets/images/posts/social-engineering/ch4-pretexting-workflow.png)
 
 ---
+
+```mermaid
+flowchart TD
+    subgraph Pretext_Design["Pretexting Construction Blueprint"]
+        P1["1. Identify Engagement Objective<br/>(e.g., Physical Server Room Access)"] --> P2["2. Research Vocabulary & Jargon<br/>(HVAC Codes, Ticket IDs, Contractor Names)"]
+        P2 --> P3["3. Fabricate Supporting Props<br/>(Printed Work Orders, Lanyards, Branded Van)"]
+        P3 --> P4["4. Establish Believable Authority Hook<br/>(Emergency Maintenance from Regional Director)"]
+        P4 --> P5["5. Prepare Contingency Exit Strategy<br/>(Graceful retreat if verification is enforced)"]
+    end
+```
 
 ## 1. What Is Pretexting? (Beyond Acting)
 
@@ -155,16 +177,27 @@ In 2006, one of the most infamous corporate pretexting scandals erupted at **Hew
 
 > **Ethical Red Line for Pentesters**: An authorized penetration testing contract protects you when testing the client's internal personnel and assets. **It does not authorize you to impersonate law enforcement, commit perjury, or social engineer third-party telecommunications and banking infrastructure.**
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 3: Elicitation](/posts/social-engineering-art-of-human-hacking-chapter-3/) | **Chapter 4: Pretexting** | [Chapter 5: Mind Tricks & Psychology](/posts/social-engineering-art-of-human-hacking-chapter-5/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-3/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 3: Elicitation</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Social Engineering</span>
+    <span class="ff-center-part">Chapter 4: Pretexting</span>
+  </div>
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-5/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 5: Mind Tricks & Psychology</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Next in the Series: Chapter 5 Preview
 
 In **[Chapter 5: Mind Tricks - Psychological Principles Used in Social Engineering](/posts/social-engineering-art-of-human-hacking-chapter-5/)**, we will break down:

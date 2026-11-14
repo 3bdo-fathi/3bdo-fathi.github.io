@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Android Security Internals: Chapter 11 - NFC and Secure Elements"
 date: 2026-11-01 19:00:00 +0300
 categories: [Cyber Security, Android Security]
@@ -21,16 +22,27 @@ For years, contactless mobile transactions were trapped behind a formidable arch
 
 In this deep dive, we trace the evolution from hardware-bound Secure Elements (UICC and eSE) to Android 4.4's industry-disrupting innovation: **Host-based Card Emulation (HCE)**. We will analyze the ISO 7816-4 smart card protocol, trace how `NfcService` dispatches APDUs, and evaluate contactless attack surfaces like relay attacks and rogue AID registrations.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 10: Device Security](/posts/android-security-internals-chapter-10/) | **Chapter 11: NFC and Secure Elements** | [Chapter 12: SELinux in Android](/posts/android-security-internals-chapter-12/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/android-security-internals-chapter-10/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 10: Device Security</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Android Security</span>
+    <span class="ff-center-part">Chapter 11: NFC and Secure Elements</span>
+  </div>
+  <a href="/posts/android-security-internals-chapter-12/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 12: SELinux in Android</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **The Three Operating Modes**: Android's NFC subsystem operates in three distinct modes: Reader/Writer mode, Peer-to-Peer mode (Android Beam), and Card Emulation mode.
@@ -40,6 +52,23 @@ In this deep dive, we trace the evolution from hardware-bound Secure Elements (U
 * **Payment Tokenization Defenses**: Because software-emulated cards running in Android userspace are theoretically vulnerable to memory inspection on rooted devices, the payment industry adopted **Cloud-Based Tokenization (DPANs)** and single-use transaction cryptograms.
 
 ---
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor POS as Point of Sale NFC Terminal
+    participant Antenna as Hardware NFC Controller
+    participant NFCService as Android NfcService (HostCardEmulation)
+    participant PaymentApp as Banking / Card App (HostApduService)
+
+    POS->>Antenna: RF Field Activation & SELECT AID Command
+    Antenna->>NFCService: Deliver APDU Command Buffer
+    NFCService->>NFCService: Resolve AID to Registered HostApduService
+    NFCService->>PaymentApp: processCommandApdu(byte[] apdu, Bundle extras)
+    PaymentApp->>PaymentApp: Compute Dynamic Cryptogram in Memory
+    PaymentApp-->>NFCService: Return Response APDU (90 00 SUCCESS)
+    NFCService-->>POS: Transmit Contactless Response over RF Interface
+```
 
 ## 1. The Android NFC Architecture Stack
 

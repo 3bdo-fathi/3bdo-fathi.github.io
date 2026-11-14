@@ -1,6 +1,6 @@
 ---
 layout: page
-icon: fas fa-award
+icon: fas fa-heart
 order: 6
 title: Thanks & Recognition
 permalink: /thanks/
@@ -9,35 +9,34 @@ hide_stats: true
 
 <style>
   .thanks-container {
-    max-width: 820px;
-    margin: 0.5rem auto 3rem;
+    max-width: 860px;
+    margin: 0.25rem auto 3rem;
   }
 
-  /* ── Executive Header Banner ── */
+  /* ── Header Banner ── */
   .thanks-hero {
     position: relative;
-    padding: 2.25rem 2rem;
+    padding: 1.6rem 1.75rem;
     border-radius: 12px;
-    background: linear-gradient(145deg, rgba(88, 166, 255, 0.08) 0%, rgba(13, 17, 23, 0.95) 100%);
-    border: 1px solid rgba(88, 166, 255, 0.2);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
-    margin-bottom: 2rem;
-    overflow: hidden;
+    background: #000000;
+    border: 1px solid #2f3336;
+    box-shadow: 0 4px 18px rgba(1, 4, 9, 0.4);
+    margin-bottom: 1.75rem;
   }
 
   html[data-mode="light"] .thanks-hero,
   html[data-bs-theme="light"] .thanks-hero {
-    background: linear-gradient(145deg, rgba(9, 105, 218, 0.06) 0%, rgba(246, 248, 250, 0.95) 100%);
-    border-color: rgba(9, 105, 218, 0.2);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    background: #ffffff;
+    border-color: #d0d7de;
+    box-shadow: 0 2px 10px rgba(140, 149, 159, 0.15);
   }
 
   .thanks-motto {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 700;
     color: #58a6ff;
-    line-height: 1.6;
-    margin-bottom: 0.75rem;
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
     text-align: center;
     letter-spacing: -0.01em;
   }
@@ -48,145 +47,378 @@ hide_stats: true
   }
 
   .thanks-desc {
-    font-size: 0.95rem;
-    line-height: 1.75;
+    font-size: 0.88rem;
+    line-height: 1.65;
     color: var(--text-color, #c9d1d9);
     text-align: center;
     margin: 0;
   }
 
-  /* ── Status Banner (Coming Soon / Under Curation) ── */
-  .curation-badge-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    padding: 0.85rem 1.25rem;
-    border-radius: 8px;
-    background: rgba(245, 158, 11, 0.08);
-    border: 1px solid rgba(245, 158, 11, 0.28);
-    color: #f59e0b;
-    font-size: 0.88rem;
-    font-weight: 600;
-    margin-bottom: 2.25rem;
-    text-align: center;
-  }
-
-  html[data-mode="light"] .curation-badge-box,
-  html[data-bs-theme="light"] .curation-badge-box {
-    background: rgba(217, 119, 6, 0.08);
-    border-color: rgba(217, 119, 6, 0.3);
-    color: #b45309;
-  }
-
-  /* ── Categories of Gratitude Grid ── */
+  /* ── Pillars Grid ── */
   .pillars-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1.15rem;
-    margin-bottom: 2.5rem;
+    gap: 0.85rem;
+    margin-bottom: 2rem;
   }
 
-  @media (max-width: 820px) {
+  @media (max-width: 768px) {
     .pillars-grid {
       grid-template-columns: 1fr;
     }
   }
 
   .pillar-card {
-    padding: 1.4rem 1.25rem;
+    padding: 1rem 1.1rem;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    background: #000000;
+    border: 1px solid #2f3336;
+    transition: transform 0.2s ease, border-color 0.2s ease;
   }
 
   .pillar-card:hover {
     transform: translateY(-2px);
-    border-color: rgba(88, 166, 255, 0.3);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    border-color: #58a6ff;
   }
 
   html[data-mode="light"] .pillar-card,
   html[data-bs-theme="light"] .pillar-card {
     background: #ffffff;
     border-color: #d0d7de;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   }
 
   html[data-mode="light"] .pillar-card:hover,
   html[data-bs-theme="light"] .pillar-card:hover {
     border-color: #0969da;
-    box-shadow: 0 4px 14px rgba(9, 105, 218, 0.12);
   }
 
   .pillar-icon {
-    width: 38px;
-    height: 38px;
+    width: 32px;
+    height: 32px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
-    background: rgba(88, 166, 255, 0.12);
+    border-radius: 6px;
+    background: rgba(56, 189, 248, 0.1);
     color: #58a6ff;
-    font-size: 1.1rem;
-    margin-bottom: 0.85rem;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
   }
 
   html[data-mode="light"] .pillar-icon,
   html[data-bs-theme="light"] .pillar-icon {
-    background: rgba(9, 105, 218, 0.1);
+    background: rgba(9, 105, 218, 0.08);
     color: #0969da;
   }
 
   .pillar-title {
-    font-size: 1rem;
+    font-size: 0.92rem;
     font-weight: 700;
-    margin-bottom: 0.45rem;
+    margin-bottom: 0.3rem;
     color: var(--heading-color, #f0f6fc);
   }
 
   .pillar-desc {
-    font-size: 0.85rem;
+    font-size: 0.78rem;
     color: var(--text-muted-color, #8b949e);
-    line-height: 1.6;
+    line-height: 1.5;
     margin: 0;
   }
 
-  /* ── Placeholder Card Layout Ready for Names ── */
-  .placeholder-showcase {
-    border: 1px dashed rgba(255, 255, 255, 0.18);
-    border-radius: 12px;
-    padding: 2.25rem 1.5rem;
-    text-align: center;
-    background: rgba(255, 255, 255, 0.015);
+  /* ── Section Headers ── */
+  .thanks-section-header {
+    margin: 2rem 0 1rem;
   }
 
-  html[data-mode="light"] .placeholder-showcase,
-  html[data-bs-theme="light"] .placeholder-showcase {
-    border-color: rgba(0, 0, 0, 0.18);
-    background: rgba(0, 0, 0, 0.015);
-  }
-
-  .placeholder-showcase i {
-    font-size: 2rem;
-    color: #8b949e;
-    margin-bottom: 0.85rem;
-    opacity: 0.7;
-  }
-
-  .placeholder-showcase h3 {
-    font-size: 1.05rem;
+  .thanks-section-title {
+    font-size: 1.1rem;
     font-weight: 700;
-    margin-bottom: 0.45rem;
+    color: var(--heading-color, #f0f6fc);
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 
-  .placeholder-showcase p {
-    font-size: 0.88rem;
+  .thanks-section-subtitle {
+    font-size: 0.82rem;
     color: var(--text-muted-color, #8b949e);
-    line-height: 1.6;
-    max-width: 540px;
-    margin: 0 auto;
+  }
+
+  /* ── Compact Multi-Item Resources Grid ── */
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  @media (max-width: 600px) {
+    .resources-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .resource-card {
+    padding: 1.15rem 1.25rem;
+    border-radius: 10px;
+    background: #000000;
+    border: 1px solid #2f3336;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .resource-card:hover {
+    transform: translateY(-2px);
+    border-color: #58a6ff;
+    box-shadow: 0 6px 20px rgba(1, 4, 9, 0.6);
+  }
+
+  html[data-mode="light"] .resource-card,
+  html[data-bs-theme="light"] .resource-card {
+    background: #ffffff;
+    border-color: #d0d7de;
+    box-shadow: 0 1px 4px rgba(140, 149, 159, 0.12);
+  }
+
+  html[data-mode="light"] .resource-card:hover,
+  html[data-bs-theme="light"] .resource-card:hover {
+    border-color: #0969da;
+    box-shadow: 0 6px 16px rgba(140, 149, 159, 0.2);
+  }
+
+  .resource-card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .resource-icon-wrapper {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    color: #58a6ff;
+    font-size: 1.15rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  html[data-mode="light"] .resource-icon-wrapper,
+  html[data-bs-theme="light"] .resource-icon-wrapper {
+    background: rgba(9, 105, 218, 0.08);
+    border-color: rgba(9, 105, 218, 0.2);
+    color: #0969da;
+  }
+
+  .resource-meta {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .resource-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .resource-title {
+    font-size: 0.98rem;
+    font-weight: 700;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .resource-title a {
+    color: var(--heading-color, #f0f6fc) !important;
+    text-decoration: none !important;
+  }
+
+  .resource-title a:hover {
+    color: #58a6ff !important;
+  }
+
+  html[data-mode="light"] .resource-title a:hover,
+  html[data-bs-theme="light"] .resource-title a:hover {
+    color: #0969da !important;
+  }
+
+  .resource-badge {
+    background: rgba(46, 160, 67, 0.15);
+    color: #3fb950;
+    border: 1px solid rgba(46, 160, 67, 0.3);
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 0.1rem 0.45rem;
+    border-radius: 12px;
+    white-space: nowrap;
+  }
+
+  html[data-mode="light"] .resource-badge,
+  html[data-bs-theme="light"] .resource-badge {
+    background: rgba(31, 136, 61, 0.1);
+    color: #1a7f37;
+    border-color: rgba(31, 136, 61, 0.25);
+  }
+
+  .resource-author {
+    font-size: 0.8rem;
+    color: var(--text-muted-color, #8b949e);
+  }
+
+  .resource-author a {
+    color: #58a6ff !important;
+    text-decoration: none !important;
+    font-weight: 600;
+  }
+
+  html[data-mode="light"] .resource-author a,
+  html[data-bs-theme="light"] .resource-author a {
+    color: #0969da !important;
+  }
+
+  .resource-desc {
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: var(--text-color, #c9d1d9);
+    margin: 0 0 0.65rem;
+  }
+
+  .resource-quote {
+    background: rgba(88, 166, 255, 0.04);
+    border-left: 2px solid #58a6ff;
+    padding: 0.45rem 0.75rem;
+    border-radius: 2px 6px 6px 2px;
+    font-size: 0.78rem;
+    color: var(--text-color, #c9d1d9);
+    margin: 0 0 0.75rem;
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  html[data-mode="light"] .resource-quote,
+  html[data-bs-theme="light"] .resource-quote {
+    background: rgba(9, 105, 218, 0.04);
+    border-color: #0969da;
+    color: #24292f;
+  }
+
+  .resource-card-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #2f3336;
+    flex-wrap: wrap;
+  }
+
+  html[data-mode="light"] .resource-card-bottom,
+  html[data-bs-theme="light"] .resource-card-bottom {
+    border-top-color: #eaeef2;
+  }
+
+  .resource-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  .rtag {
+    display: inline-block;
+    padding: 0.12rem 0.45rem;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-weight: 500;
+    background: rgba(110, 118, 129, 0.12);
+    color: var(--text-muted-color, #8b949e);
+    border: 1px solid rgba(110, 118, 129, 0.18);
+  }
+
+  .resource-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    background: #16181c;
+    border: 1px solid #2f3336;
+    color: #f0f6fc !important;
+    font-size: 0.76rem;
+    font-weight: 600;
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+  }
+
+  .resource-btn:hover {
+    background: #2f3336;
+    color: #ffffff !important;
+    border-color: #8b949e;
+  }
+
+  html[data-mode="light"] .resource-btn,
+  html[data-bs-theme="light"] .resource-btn {
+    background: #f6f8fa;
+    border-color: #d0d7de;
+    color: #24292f !important;
+  }
+
+  html[data-mode="light"] .resource-btn:hover,
+  html[data-bs-theme="light"] .resource-btn:hover {
+    background: #eaeef2;
+    color: #0969da !important;
+  }
+
+  /* ── Companion Placeholder Slot ── */
+  .resource-card-placeholder {
+    padding: 1.15rem 1.25rem;
+    border-radius: 10px;
+    border: 1px dashed #2f3336;
+    background: rgba(22, 27, 34, 0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 190px;
+  }
+
+  html[data-mode="light"] .resource-card-placeholder,
+  html[data-bs-theme="light"] .resource-card-placeholder {
+    border-color: #d0d7de;
+    background: #fafbfc;
+  }
+
+  .resource-card-placeholder i {
+    font-size: 1.5rem;
+    color: #8b949e;
+    margin-bottom: 0.5rem;
+    opacity: 0.6;
+  }
+
+  .resource-card-placeholder h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--heading-color, #f0f6fc);
+  }
+
+  .resource-card-placeholder p {
+    font-size: 0.78rem;
+    color: var(--text-muted-color, #8b949e);
+    margin: 0;
+    max-width: 280px;
+    line-height: 1.45;
   }
 </style>
 
@@ -197,14 +429,8 @@ hide_stats: true
       "He who does not thank people does not thank Allah."
     </div>
     <p class="thanks-desc">
-      Cyber security engineering and offensive research are never solitary achievements. Growth is the product of generous mentorship, relentless peer discussions, and a community committed to open knowledge. This dedicated wall honors the teachers, colleagues, and researchers whose influence continues to shape my path.
+      Offensive security engineering and security research are community-driven disciplines. This dedicated wall honors the teachers, colleagues, and open-source creators whose contributions and shared knowledge continue to elevate our industry.
     </p>
-  </div>
-
-  <!-- Status Notification -->
-  <div class="curation-badge-box">
-    <i class="fas fa-tools"></i>
-    <span>Under Active Curation &mdash; Individual acknowledgments, mentor profiles, and contributor cards are currently being compiled and will be published here shortly.</span>
   </div>
 
   <!-- Pillars of Recognition -->
@@ -214,20 +440,20 @@ hide_stats: true
       <div class="pillar-icon">
         <i class="fas fa-graduation-cap"></i>
       </div>
-      <div class="pillar-title">Mentors & Instructors</div>
+      <div class="pillar-title">Mentors &amp; Instructors</div>
       <p class="pillar-desc">
-        Those who established rigorous foundational methodologies, nurtured curiosity, and inspired an ethical, engineering-first mindset in offensive security.
+        Those who established rigorous foundational methodologies and inspired an engineering-first offensive mindset.
       </p>
     </div>
 
     <!-- Peer Reviewers & Collaborators -->
     <div class="pillar-card">
       <div class="pillar-icon">
-        <i class="fas fa-user-friends"></i>
+        <i class="fas fa-user-shield"></i>
       </div>
-      <div class="pillar-title">Peers & Collaborators</div>
+      <div class="pillar-title">Peers &amp; Collaborators</div>
       <p class="pillar-desc">
-        Colleagues and researchers who shared intensive lab breakdowns, reviewed exploit architectures, and pressure-tested red teaming playbooks.
+        Colleagues who shared intensive lab breakdowns, reviewed exploit architectures, and pressure-tested playbooks.
       </p>
     </div>
 
@@ -238,17 +464,71 @@ hide_stats: true
       </div>
       <div class="pillar-title">InfoSec Community</div>
       <p class="pillar-desc">
-        Open-source creators and community educators whose tools, publications, and advisory breakdowns continually elevate practitioner standards worldwide.
+        Open-source educators whose tools, writeups, and curriculum guides elevate practitioner standards worldwide.
       </p>
     </div>
   </div>
 
-  <!-- Showcase Placeholder -->
-  <div class="placeholder-showcase">
-    <i class="fas fa-heart"></i>
-    <h3>Honor Roll & Dedications</h3>
-    <p>
-      Dedicated profile cards featuring honoree names, professional roles, portfolio links, and personalized appreciation statements will be populated right here.
-    </p>
+  <!-- Featured Community Resources & References -->
+  <div class="thanks-section-header">
+    <div class="thanks-section-title">
+      <i class="fas fa-bookmark"></i>
+      <span>Featured Community References</span>
+    </div>
+    <div class="thanks-section-subtitle">
+      Essential open-source curriculums, repositories, and technical resources curated for the community.
+    </div>
+  </div>
+
+  <div class="resources-grid">
+    <!-- Muhab Nasser - CPTS Arabic Explanation -->
+    <div class="resource-card">
+      <div>
+        <div class="resource-card-top">
+          <div class="resource-icon-wrapper">
+            <i class="fab fa-github"></i>
+          </div>
+          <div class="resource-meta">
+            <div class="resource-title-row">
+              <h3 class="resource-title">
+                <a href="https://github.com/Muhabzz/CPTS-Arabic-Explanation" target="_blank" rel="noopener noreferrer">
+                  CPTS Arabic Explanation
+                </a>
+              </h3>
+              <span class="resource-badge">HTB CPTS</span>
+            </div>
+            <div class="resource-author">
+              By <a href="https://github.com/Muhabzz" target="_blank" rel="noopener noreferrer">Muhab Nasser (@Muhabzz)</a>
+            </div>
+          </div>
+        </div>
+        <p class="resource-desc">
+          An exhaustive, community-driven breakdown of the Hack The Box Certified Penetration Tester Specialist (CPTS) curriculum, bridging Active Directory exploitation, pivoting, and reporting.
+        </p>
+        <div class="resource-quote">
+          Special recognition to <strong>Muhab Nasser</strong> for authoring this essential work and giving back to the offensive security community.
+        </div>
+      </div>
+      <div class="resource-card-bottom">
+        <div class="resource-tags">
+          <span class="rtag">Hack The Box</span>
+          <span class="rtag">CPTS</span>
+          <span class="rtag">Active Directory</span>
+        </div>
+        <a href="https://github.com/Muhabzz/CPTS-Arabic-Explanation" target="_blank" rel="noopener noreferrer" class="resource-btn">
+          <i class="fab fa-github"></i>
+          <span>Repository</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Slot ready for next resource -->
+    <div class="resource-card-placeholder">
+      <i class="fas fa-plus-circle"></i>
+      <h4>Curating Community References</h4>
+      <p>
+        Additional high-impact tools, research papers, and educational repositories are being actively compiled here.
+      </p>
+    </div>
   </div>
 </div>

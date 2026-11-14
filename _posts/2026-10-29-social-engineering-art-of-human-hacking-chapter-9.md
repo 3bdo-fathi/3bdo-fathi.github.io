@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Book Summary: Social Engineering - The Art of Human Hacking (Chapter 9: Prevention & Mitigation)"
 date: 2026-10-29 17:00:00 +0300
 categories: [Cyber Security, Social Engineering]
@@ -34,16 +35,27 @@ Hadnagy closes the book with Anton Chekhov's poignant insight:
 
 Let's examine the six strategic pillars of social engineering defense.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 8: Real-World Case Studies](/posts/social-engineering-art-of-human-hacking-chapter-8/) | **Chapter 9: Prevention & Mitigation** | *Series Concluded (See Master Index Below)* |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-8/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 8: Real-World Case Studies</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Social Engineering</span>
+    <span class="ff-center-part">Chapter 9: Prevention & Mitigation</span>
+  </div>
+  <div class="ff-nav-btn ff-nav-disabled text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Series Complete</span>
+      <span class="ff-nav-title">Latest Chapter</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-check"></i></div>
+  </div>
+</div>
 ## Key Takeaways
 
 * **The Fallacy of Annual Compliance Training**: A 45-minute slide presentation once a year creates zero behavioral retention. Security awareness must be a continuous organizational culture.
@@ -55,6 +67,16 @@ Let's examine the six strategic pillars of social engineering defense.
 ![The 6 Pillars of Social Engineering Defense](/assets/images/posts/social-engineering/ch9-mitigation-blueprint.png)
 
 ---
+
+```mermaid
+flowchart TD
+    subgraph Defense_Blueprint["Human-Centric Defensive Security Architecture"]
+        P1["Continuous Simulated Phishing & Vishing Assessments"] --> P2["Two-Person Rule for Financial & Credential Transfers"]
+        P2 --> P3["Clear Physical Verification & Escalation Paths"]
+        P3 --> P4["No-Fault Incident Reporting (Rewarding Prompt Discovery)"]
+        P4 --> P5["Hardware Security Keys (FIDO2 / WebAuthn eliminating credential harvest)"]
+    end
+```
 
 ## 1. Why Traditional Defensive Security Fails Against People
 

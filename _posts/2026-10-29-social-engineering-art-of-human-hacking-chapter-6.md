@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Book Summary: Social Engineering - The Art of Human Hacking (Chapter 6: Influence & Persuasion)"
 date: 2026-10-29 14:00:00 +0300
 categories: [Cyber Security, Social Engineering]
@@ -32,16 +33,27 @@ Hadnagy frames this chapter with Benjamin Franklin's immortal advice:
 
 Let's dissect the psychological mechanisms of influence, cognitive reality framing, and manipulation tactics.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 5: Mind Tricks & Psychology](/posts/social-engineering-art-of-human-hacking-chapter-5/) | **Chapter 6: Influence & Persuasion** | [Chapter 7: The Tools of the Social Engineer](/posts/social-engineering-art-of-human-hacking-chapter-7/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-5/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 5: Mind Tricks & Psychology</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Social Engineering</span>
+    <span class="ff-center-part">Chapter 6: Influence & Persuasion</span>
+  </div>
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-7/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 7: The Tools of the Social Engineer</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **The Five Fundamentals**: Setting definite outcomes, meeting the target in their emotional reality, maintaining sensory acuity, adapting flexibly like a willow branch, and mastering personal biases.
@@ -53,6 +65,18 @@ Let's dissect the psychological mechanisms of influence, cognitive reality frami
 ![Weapons of Influence & Reality Framing](/assets/images/posts/social-engineering/ch6-influence-weapons.png)
 
 ---
+
+```mermaid
+flowchart TD
+    subgraph Cialdini_Weapons["Cialdini's Core Weapons of Influence"]
+        R["Reciprocity: Giving a small favor compels repayment"]
+        C["Commitment & Consistency: Small initial agreement locks behavior"]
+        SP["Social Proof: Following the observed consensus of peers"]
+        A["Authority: Unconscious compliance with perceived credentials"]
+        L["Liking: High compliance with individuals who reflect similarities"]
+        S["Scarcity: Perceived limited time/resources triggers immediate panic"]
+    end
+```
 
 ## 1. The Five Fundamentals of Influence
 
@@ -178,16 +202,27 @@ Hadnagy explains that while influence aims for mutual benefit, manipulation seek
   * **Red**: Triggers excitement, passion, and urgency (ideal for emergency alerts, but risks hostility).
   * **Green**: Connotes safety and balance, but can provoke subconscious associations with greed or wealth.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 5: Mind Tricks & Psychology](/posts/social-engineering-art-of-human-hacking-chapter-5/) | **Chapter 6: Influence & Persuasion** | [Chapter 7: The Tools of the Social Engineer](/posts/social-engineering-art-of-human-hacking-chapter-7/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-5/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 5: Mind Tricks & Psychology</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Social Engineering</span>
+    <span class="ff-center-part">Chapter 6: Influence & Persuasion</span>
+  </div>
+  <a href="/posts/social-engineering-art-of-human-hacking-chapter-7/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 7: The Tools of the Social Engineer</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Next in the Series: Chapter 7 Preview
 
 In **[Chapter 7: The Tools of the Social Engineer](/posts/social-engineering-art-of-human-hacking-chapter-7/)**, we leave theoretical psychology and explore the physical and digital toolkit:

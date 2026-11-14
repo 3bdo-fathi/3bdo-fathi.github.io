@@ -1,5 +1,5 @@
 ---
-icon: fas fa-user
+icon: fas fa-shield-halved
 order: 5
 title: About Me
 permalink: /about/
@@ -33,6 +33,7 @@ Offensive security engineer and penetration tester focused on uncovering vulnera
 
 In-depth technical breakdowns and chapter-by-chapter reference analyses:
 
+- [**eCPPTv3 Penetration Testing Masterclass**]({{ '/categories/penetration-testing/' | relative_url }}) — 10-part production-grade series covering x86 buffer overflows, Active Directory exploitation, multi-tier pivoting (Ligolo-ng), PowerShell AMSI bypass, and enterprise C2 infrastructure.
 - [**Practical Reverse Engineering**]({{ '/categories/reverse-engineering/' | relative_url }}) — x86, x64, ARM, Windows kernel internals, WinDbg automation, and software deobfuscation.
 - [**Android Security Internals**]({{ '/categories/android-security/' | relative_url }}) — Linux sandbox, Binder IPC, package manager, and Android cryptographic framework.
 - [**Social Engineering: The Art of Human Hacking**]({{ '/categories/social-engineering/' | relative_url }}) — Psychological attack vectors, elicitation methodologies, and human defense engineering.
@@ -40,11 +41,11 @@ In-depth technical breakdowns and chapter-by-chapter reference analyses:
 ---
 
 <div class="post-dedication-bar my-4">
-  <div class="post-dedication-primary">
+  <div class="post-dedication-primary" dir="rtl">
     اللهم اجعل هذا العمل علمًا نافعًا وصدقةً جارية، واكتب لي به الأجر والقبول، وانفع به كل من قرأه أو تعلّمه.<br>
     اللهم احفظ لي والديّ وأهلي، وبارك في أعمارهم وصحتهم، وأدم عليهم نعمة الصحة والعافية، ولا تريني فيهم بأسًا يبكيني.
   </div>
-  <div class="post-dedication-secondary">
+  <div class="post-dedication-secondary" dir="ltr">
     Dedicated as ongoing charity and beneficial knowledge. May Allah bless my parents and family, protect them, and grant them lasting health and happiness.
   </div>
 </div>

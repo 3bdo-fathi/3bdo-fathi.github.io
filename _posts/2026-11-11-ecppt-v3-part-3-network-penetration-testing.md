@@ -12,21 +12,33 @@ toc: true
 schema:
   type: Article
   author: Abdulrahman M. Fathi
+mermaid: true
 ---
 
 Network penetration testing forms the bedrock of real-world security assessments and represents a critical evaluation pillar in the **eCPPT (eLearnSecurity Certified Professional Penetration Tester)** examination. Enterprise internal perimeters are rarely uniform; they comprise complex legacy systems, segmented subnets, Active Directory domain controllers, and protocols that trade security for backward compatibility.
 
 In this deep dive, we deconstruct the full network assessment lifecycle: executing multi-layered host discovery, analyzing Nmap packet exchanges at the wire level, auditing legacy network services, and weaponizing Man-in-the-Middle (MITM) attacks via **LLMNR/NBT-NS Poisoning** and **SMB Relaying**.
 
----
-
-### Series Navigation
-
-| **Previous Part** | **Current Part** | **Next Part** |
-| :---: | :---: | :---: |
-| [Part 2: Exploit Development: Stack & SEH Overflows](/posts/ecppt-v3-part-2-exploit-development-buffer-overflows/) | **Part 3: Network Penetration Testing & MITM** | [Part 4: Active Directory Pentesting & Kerberos](/posts/ecppt-v3-part-4-active-directory-penetration-testing/) |
-
----
+<div class="ff-series-nav">
+  <a href="/posts/ecppt-v3-part-2-exploit-development-buffer-overflows/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous Part</span>
+      <span class="ff-nav-title">Part 2: Exploit Dev & Buffer Overflows</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> eCPPTv3 Series</span>
+    <span class="ff-center-part">Part 3 of 10</span>
+  </div>
+  <a href="/posts/ecppt-v3-part-4-active-directory-penetration-testing/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next Part</span>
+      <span class="ff-nav-title">Part 4: Active Directory Pentesting</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 
 ## Key Takeaways
 

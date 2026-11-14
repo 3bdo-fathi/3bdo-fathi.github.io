@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Android Security Internals: Chapter 6 - Network Security and PKI"
 date: 2026-11-01 14:00:00 +0300
 categories: [Cyber Security, Android Security]
@@ -19,16 +20,27 @@ In [Chapter 5](/posts/android-security-internals-chapter-5/), we examined crypto
 
 As mobile security engineers and penetration testers, intercepting network traffic via Man-In-The-Middle (MITM) proxies is one of our most fundamental workflows. In this chapter, we explore the deep internal mechanics of Android's TLS stack, understand the difference between system and user CA stores, analyze flawed custom `TrustManager` implementations, deconstruct certificate pinning defenses, and deploy advanced Frida scripts to bypass pinning across Java, OkHttp, and Flutter native BoringSSL runtimes.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 5: Cryptographic Providers](/posts/android-security-internals-chapter-5/) | **Chapter 6: Network Security and PKI** | [Chapter 7: Credential Storage](/posts/android-security-internals-chapter-7/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/android-security-internals-chapter-5/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 5: Cryptographic Providers</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Android Security</span>
+    <span class="ff-center-part">Chapter 6: Network Security and PKI</span>
+  </div>
+  <a href="/posts/android-security-internals-chapter-7/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 7: Credential Storage</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **The Android TLS Stack**: Android transitioned from the legacy Apache `HttpClient` to `HttpURLConnection` powered by Conscrypt/OpenSSL, providing modern TLS protocol support, SNI (Server Name Indication), and optimized session resumption.
@@ -38,6 +50,29 @@ As mobile security engineers and penetration testers, intercepting network traff
 * **Certificate Pinning & Runtime Hooking**: Certificate and public key pinning prevent CA compromise from enabling MITM attacks. However, pinning can be bypassed dynamically in memory using Frida or Xposed by hooking validation methods in `TrustManagerImpl` or binary-patching native BoringSSL libraries in Flutter apps.
 
 ---
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor App as Android App (HTTPS Client)
+    participant Conscrypt as Conscrypt TLS Engine
+    participant NSC as Network Security Config (XML)
+    participant TrustStore as System & User CA Stores
+    actor Server as Remote Web Server
+
+    App->>Conscrypt: HttpsURLConnection.connect()
+    Conscrypt->>Server: ClientHello (SNI, Cipher Suites)
+    Server-->>Conscrypt: ServerHello, Certificate Chain
+    Conscrypt->>NSC: Evaluate domain certificate trust policy
+    NSC->>TrustStore: Enforce TrustAnchors (System CAs ONLY by default)
+    alt Trust Chain Valid
+        TrustStore-->>Conscrypt: Validated to root CA
+        Conscrypt-->>App: Established Encrypted Session
+    else Untrusted / Custom CA
+        TrustStore-->>Conscrypt: Reject User/Proxy Certificate
+        Conscrypt-->>App: Throw SSLHandshakeException
+    end
+```
 
 ## 1. The Android TLS/SSL Stack
 

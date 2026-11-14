@@ -1,4 +1,5 @@
 ---
+mermaid: true
 title: "Android Security Internals: Chapter 4 - User Management"
 date: 2026-11-01 12:00:00 +0300
 categories: [Cyber Security, Android Security]
@@ -21,16 +22,27 @@ When Google introduced multi-user functionality in Android 4.2 (initially for ta
 
 The solution was an elegant mathematical range allocation formula combined with kernel-level storage virtualization and Linux mount namespaces.
 
----
 
-### Series Navigation
-
-| **Previous Chapter** | **Current Chapter** | **Next Chapter** |
-| :---: | :---: | :---: |
-| [Chapter 3: Package Management](/posts/android-security-internals-chapter-3/) | **Chapter 4: User Management** | [Chapter 5: Cryptographic Providers](/posts/android-security-internals-chapter-5/) |
-
----
-
+<div class="ff-series-nav">
+  <a href="/posts/android-security-internals-chapter-3/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous</span>
+      <span class="ff-nav-title">Chapter 3: Package Management</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> Android Security</span>
+    <span class="ff-center-part">Chapter 4: User Management</span>
+  </div>
+  <a href="/posts/android-security-internals-chapter-5/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next</span>
+      <span class="ff-nav-title">Chapter 5: Cryptographic Providers</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 ## Key Takeaways
 
 * **The Multi-User Formula**: Android maps multiple human users to distinct Linux UID spaces using the deterministic formula: `UID = (User_ID * 100000) + App_ID`.
@@ -40,6 +52,18 @@ The solution was an elegant mathematical range allocation formula combined with 
 * **`UserManagerService`**: The centralized framework service running inside `system_server` that manages user creation, lifecycle transitions, state serialization (`/data/system/users/`), and restricted profile policy enforcement.
 
 ---
+
+```mermaid
+flowchart TD
+    subgraph UID_Calculation["Multi-User Linux UID Mapping Formula"]
+        Formula["UID = (userId * 100,000) + appId"]
+        User0["Primary User (Owner: 0)<br/>AppId: 10087<br/>Linux UID: 10087<br/>Storage: /data/user/0/<package>"]
+        User10["Work Profile (User: 10)<br/>AppId: 10087<br/>Linux UID: 1010087<br/>Storage: /data/user/10/<package>"]
+        
+        Formula --> User0
+        Formula --> User10
+    end
+```
 
 ## 1. The Multi-User UID Architecture
 

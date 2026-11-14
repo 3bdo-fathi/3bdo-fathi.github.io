@@ -12,21 +12,33 @@ toc: true
 schema:
   type: Article
   author: Abdulrahman M. Fathi
+mermaid: true
 ---
 
 In the vast majority of real-world assessments and specifically within the **eCPPT (eLearnSecurity Certified Professional Penetration Tester)** examination environment, web applications serve as the primary external gateway into an organization's internal network. Whether targeting custom enterprise portals, legacy PHP CMS installations, or internal administrative dashboards, web vulnerabilities provide the critical initial foothold required to pivot further into the enterprise.
 
 In this deep dive, we walk through the standardized testing framework defined by the **OWASP Web Security Testing Guide (WSTG v4.2)** and provide an in-depth technical breakdown of high-impact vulnerabilities: **SQL Injection (In-Band, Error-based, and Blind)**, escalating **Local File Inclusion (LFI) to Remote Code Execution (RCE)** via log poisoning, and bypassing restrictive **File Upload Filters**.
 
----
-
-### Series Navigation
-
-| **Previous Part** | **Current Part** | **Next Part** |
-| :---: | :---: | :---: |
-| [Part 7: Command and Control (C2) Infrastructure](/posts/ecppt-v3-part-7-command-and-control-c2/) | **Part 8: Web Application Pentesting** | [Part 9: Client-Side Attacks & Weaponization](/posts/ecppt-v3-part-9-client-side-attacks/) |
-
----
+<div class="ff-series-nav">
+  <a href="/posts/ecppt-v3-part-7-command-and-control-c2/" class="ff-nav-btn text-start">
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-left"></i></div>
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Previous Part</span>
+      <span class="ff-nav-title">Part 7: Command & Control (C2)</span>
+    </div>
+  </a>
+  <div class="ff-nav-center">
+    <span class="ff-center-badge"><i class="fas fa-layer-group"></i> eCPPTv3 Series</span>
+    <span class="ff-center-part">Part 8 of 10</span>
+  </div>
+  <a href="/posts/ecppt-v3-part-9-client-side-attacks/" class="ff-nav-btn text-end">
+    <div class="ff-nav-text">
+      <span class="ff-nav-kicker">Next Part</span>
+      <span class="ff-nav-title">Part 9: Client-Side Attacks</span>
+    </div>
+    <div class="ff-nav-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+</div>
 
 ## Key Takeaways
 
@@ -241,6 +253,7 @@ flowchart LR
 
 ### 2. Hands-on Training & Exploitation Dictionaries
 * **PortSwigger Web Security Academy**: Free, interactive web security labs and learning materials. [https://portswigger.net/web-security](https://portswigger.net/web-security).
+* **HackTricks Web Pentesting & Payloads**: Exhaustive methodology for SQLi, XSS, SSRF, Deserialization, and SSTI exploitation by Carlos Polop. [https://hacktricks.wiki/](https://hacktricks.wiki/).
 * **PayloadsAllTheThings - Web Exploitation Repository**: Curated cheat sheets for SQLi, LFI, SSRF, and file uploads. [https://github.com/swisskyrepo/PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings).
 * **SecLists Fuzzing Dictionaries by Daniel Miessler**: Comprehensive wordlists for directory discovery. [https://github.com/danielmiessler/SecLists](https://github.com/danielmiessler/SecLists).
 
