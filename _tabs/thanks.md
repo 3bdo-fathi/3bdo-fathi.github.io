@@ -522,6 +522,46 @@ hide_stats: true
       </div>
     </div>
 
+    <!-- Youssef El3anany - HTB Academy Lab Flag Solutions -->
+    <div class="resource-card">
+      <div>
+        <div class="resource-card-top">
+          <div class="resource-icon-wrapper">
+            <i class="fas fa-flag-checkered"></i>
+          </div>
+          <div class="resource-meta">
+            <div class="resource-title-row">
+              <h3 class="resource-title">
+                HTB Academy Lab Solutions &amp; Flags
+              </h3>
+              <span class="resource-badge">Lab Solver</span>
+            </div>
+            <div class="resource-author">
+              By <strong>Youssef El3anany (@YoussefEl3anany)</strong>
+            </div>
+          </div>
+        </div>
+        <p class="resource-desc">
+          The brilliant security researcher behind deciphering, solving, and validating the complex hands-on lab challenges and flags across the 41 Hack The Box Academy modules featured on this platform.
+        </p>
+        <div class="resource-quote">
+          Deepest gratitude and special recognition to <strong>Youssef El3anany</strong> for his technical dedication, relentless problem-solving, and verified flag captures that powered this entire masterclass series.
+        </div>
+      </div>
+      <div class="resource-card-bottom">
+        <div class="resource-tags">
+          <span class="rtag">Hack The Box</span>
+          <span class="rtag">Flag Verification</span>
+          <span class="rtag">CPTS</span>
+          <span class="rtag">Lab Master</span>
+        </div>
+        <span class="resource-btn" style="cursor: default;">
+          <i class="fas fa-award"></i>
+          <span>Core Contributor</span>
+        </span>
+      </div>
+    </div>
+
     <!-- Slot ready for next resource -->
     <div class="resource-card-placeholder">
       <i class="fas fa-plus-circle"></i>
